@@ -1,0 +1,756 @@
+# LANGUAGE translation of CakePHP Application
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2015-04-01 19:04+0000\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: Controller/QuestionnaireFrameSettingsController.php:188
+msgid "Contents list"
+msgstr ""
+
+#: Controller/QuestionnaireFrameSettingsController.php:191
+msgid "Display style set"
+msgstr ""
+
+#: Controller/QuestionnaireFrameSettingsController.php:194
+msgid "Display settings"
+msgstr ""
+
+#: Controller/QuestionnaireQuestionsController.php:91;295;361
+#: Controller/QuestionnairesController.php:171
+msgid "Invalid questionnaire"
+msgstr ""
+
+#: Controller/QuestionnaireQuestionsController.php:129
+msgid "Invalid key phrase"
+msgstr ""
+
+#: Controller/QuestionnaireQuestionsController.php:132
+msgid "Invalid key Image Auth"
+msgstr ""
+
+#: Controller/QuestionnaireQuestionsController.php:312
+msgid "Invalid answers"
+msgstr ""
+
+#: Controller/QuestionnaireQuestionsController.php:401
+#: Controller/QuestionnairesController.php:110
+msgid "annonymous person"
+msgstr ""
+
+#: Controller/QuestionnairesController.php:374
+#: View/Questionnaires/setting_list.ctp:143
+msgid "Edit"
+msgstr ""
+
+#: Controller/QuestionnairesController.php:377
+msgid "Create New"
+msgstr ""
+
+#: Controller/QuestionnairesController.php:420
+msgid "Questionnaire has been stopped."
+msgstr ""
+
+#: Controller/QuestionnairesController.php:431
+msgid "Questionnaire has been resumed."
+msgstr ""
+
+#: Controller/QuestionnairesController.php:439
+msgid "This Questionnaire has been deleted."
+msgstr ""
+
+#: Controller/Component/QuestionnairesComponent.php:472
+msgid "Single choice"
+msgstr ""
+
+#: Controller/Component/QuestionnairesComponent.php:473
+msgid "Multiple choice"
+msgstr ""
+
+#: Controller/Component/QuestionnairesComponent.php:474
+msgid "Single text"
+msgstr ""
+
+#: Controller/Component/QuestionnairesComponent.php:475
+msgid "Multiple text"
+msgstr ""
+
+#: Controller/Component/QuestionnairesComponent.php:476
+msgid "Single choice matrix"
+msgstr ""
+
+#: Controller/Component/QuestionnairesComponent.php:477
+msgid "Multiple choice matrix"
+msgstr ""
+
+#: Controller/Component/QuestionnairesComponent.php:478
+msgid "Date and time"
+msgstr ""
+
+#: Controller/Component/QuestionnairesComponent.php:479
+msgid "List select"
+msgstr ""
+
+#: Model/QuestionnaireAnswer.php:184
+msgid "Input required"
+msgstr ""
+
+#: Model/QuestionnaireAnswer.php:196
+msgid "Number required"
+msgstr ""
+
+#: Model/QuestionnaireAnswer.php:200
+msgid "Please enter more than %d"
+msgstr ""
+
+#: Model/QuestionnaireAnswer.php:219
+msgid "Invalid choice"
+msgstr ""
+
+#: Model/QuestionnaireAnswer.php:226
+msgid "Please enter something, if you chose the other item"
+msgstr ""
+
+#: Model/QuestionnaireEntity.php:254
+msgid "First Page"
+msgstr ""
+
+#: View/Elements/aggrigate_common_footer.ctp:15
+msgid "Note: Which may not be 100% because of rounding of numeric total."
+msgstr ""
+
+#: View/Elements/aggrigate_common_footer.ctp:19
+msgid "Note: Matrix if the number in parentheses is a percentage of the total number of responses."
+msgstr ""
+
+#: View/Elements/aggrigate_common_footer.ctp:25
+msgid "Note: If multiple selection is possible, total more than 100% to be."
+msgstr ""
+
+#: View/Elements/aggrigate_common_header.ctp:25
+msgid "Select one"
+msgstr ""
+
+#: View/Elements/aggrigate_common_header.ctp:28
+msgid "Select more than one"
+msgstr ""
+
+#: View/Elements/aggrigate_common_header.ctp:31
+msgid "Matrix (selection list)"
+msgstr ""
+
+#: View/Elements/aggrigate_common_header.ctp:34
+msgid "Matrix (multiple)"
+msgstr ""
+
+#: View/Elements/aggrigate_common_header.ctp:37
+msgid "List selection"
+msgstr ""
+
+#: View/Elements/aggrigate_common_header.ctp:40
+msgid "Not selection"
+msgstr ""
+
+#: View/Elements/aggrigate_common_header.ctp:45
+msgid "The total number of answers: "
+msgstr ""
+
+#: View/Elements/aggrigate_matrix_table.ctp:28
+#: View/Elements/aggrigate_table.ctp:28
+msgid "Item name"
+msgstr ""
+
+#: View/Elements/aggrigate_table.ctp:29
+msgid "Aggrigate value"
+msgstr ""
+
+#: View/Elements/aggrigate_table.ctp:30
+msgid "The percentage"
+msgstr ""
+
+#: View/Elements/answer_status.ctp:25
+msgid "Answer status"
+msgstr ""
+
+#: View/Elements/answer_status.ctp:29
+msgid "Unanswered"
+msgstr ""
+
+#: View/Elements/answer_status.ctp:30
+msgid "Answered"
+msgstr ""
+
+#: View/Elements/answer_status.ctp:33
+#: View/Helper/QuestionnaireUtilHelper.php:80
+msgid "Test"
+msgstr ""
+
+#: View/Elements/answer_status.ctp:43
+msgid "View all"
+msgstr ""
+
+#: View/Elements/answer_test_mode_header.ctp:19
+msgid "Edit this question"
+msgstr ""
+
+#: View/Elements/answer_test_mode_header.ctp:31
+msgid "Test Mode"
+msgstr ""
+
+#: View/Elements/answer_test_mode_header.ctp:34
+msgid "This questionnaire is being temporarily stored . You can questionnaire test before performed in this page . If you want to modify or change the questionnaire , you will be able to edit by pressing the [ Edit question ] button in the upper-right corner . Also, when you click on the bottom<span class=\"btn btn-primary questionnaire-btn-comment\"><span class=\"glyphicon glyphicon-comment\"></span></span> right of the screen , you can see the comments ."
+msgstr ""
+
+#: View/Elements/comment_form.ctp:16
+msgid "send"
+msgstr ""
+
+#: View/Elements/edit_flow_chart.ctp:13
+msgid "Set questions"
+msgstr ""
+
+#: View/Elements/edit_flow_chart.ctp:14
+msgid "Set aggregate graph display"
+msgstr ""
+
+#: View/Elements/edit_flow_chart.ctp:15
+msgid "Set questionnaire switch"
+msgstr ""
+
+#: View/Elements/edit_status_selector.ctp:13
+msgid "Edit status"
+msgstr ""
+
+#: View/Elements/question_setting_alternative.ctp:28
+msgid "randomaize choices"
+msgstr ""
+
+#: View/Elements/question_setting_alternative.ctp:39
+msgid "set page skip"
+msgstr ""
+
+#: View/Elements/question_setting_alternative.ctp:48
+#: View/Elements/question_setting_matrix_alternative.ctp:23;41
+msgid "Do you want to delete this choice ?"
+msgstr ""
+
+#: View/Elements/question_setting_alternative.ctp:62
+msgid "goto end"
+msgstr ""
+
+#: View/Elements/question_setting_alternative.ctp:74
+#: View/Elements/question_setting_matrix_alternative.ctp:57
+msgid "other choice"
+msgstr ""
+
+#: View/Elements/question_setting_alternative.ctp:75
+#: View/Elements/question_setting_matrix_alternative.ctp:58
+msgid "add another choice"
+msgstr ""
+
+#: View/Elements/question_setting_alternative.ctp:81
+msgid "new choice"
+msgstr ""
+
+#: View/Elements/question_setting_alternative.ctp:83
+msgid "add choices"
+msgstr ""
+
+#: View/Elements/question_setting_choice_element.ctp:17
+msgid "(This is [other] choice. Area to enter the text is automatically granted at the time of implementation.)"
+msgstr ""
+
+#: View/Elements/question_setting_date.ctp:21
+msgid "Date"
+msgstr ""
+
+#: View/Elements/question_setting_date.ctp:22
+msgid "Time"
+msgstr ""
+
+#: View/Elements/question_setting_date.ctp:23
+msgid "Date and Time"
+msgstr ""
+
+#: View/Elements/question_setting_date.ctp:37
+msgid "set range to answer date and time"
+msgstr ""
+
+#: View/Elements/question_setting_date.ctp:69
+#: View/QuestionnaireFrameSettings/content_list.ctp:47
+#: View/QuestionnaireFrameSettings/setting.ctp:113
+#: View/Questionnaires/create.ctp:108
+#: View/Questionnaires/index.ctp:94
+#: View/Questionnaires/setting.ctp:106
+#: View/Questionnaires/setting_list.ctp:67;119
+msgid " - "
+msgstr ""
+
+#: View/Elements/question_setting_matrix_alternative.ctp:16
+msgid "Line choices"
+msgstr ""
+
+#: View/Elements/question_setting_matrix_alternative.ctp:17
+msgid "new line choice"
+msgstr ""
+
+#: View/Elements/question_setting_matrix_alternative.ctp:19
+msgid "add line choices"
+msgstr ""
+
+#: View/Elements/question_setting_matrix_alternative.ctp:33
+msgid "Column choices"
+msgstr ""
+
+#: View/Elements/question_setting_matrix_alternative.ctp:34
+msgid "new column choice"
+msgstr ""
+
+#: View/Elements/question_setting_matrix_alternative.ctp:36
+msgid "add column choices"
+msgstr ""
+
+#: View/Elements/question_setting_text.ctp:23
+msgid "Numeric"
+msgstr ""
+
+#: View/Elements/question_setting_text.ctp:34
+msgid "minimum"
+msgstr ""
+
+#: View/Elements/question_setting_text.ctp:44
+msgid "maximum"
+msgstr ""
+
+#: View/Elements/question_single_select_box.ctp:27
+msgid "Please choose one"
+msgstr ""
+
+#: View/Elements/question_text.ctp:21
+msgid "Please %d <= enter <= %d"
+msgstr ""
+
+#: View/Elements/question_text.ctp:23
+msgid "Please %d <= enter"
+msgstr ""
+
+#: View/Elements/question_text.ctp:25
+msgid "Please enter <= %d"
+msgstr ""
+
+#: View/Helper/QuestionnaireUtilHelper.php:87;95
+msgid "Finished"
+msgstr ""
+
+#: View/Helper/QuestionnaireUtilHelper.php:89;98;102
+msgid "Answer"
+msgstr ""
+
+#: View/Helper/QuestionnaireUtilHelper.php:163
+#: View/Questionnaires/thanks.ctp:48
+msgid "Aggregate"
+msgstr ""
+
+#: View/QuestionnaireFrameSettings/content_list.ctp:20
+#: View/QuestionnaireFrameSettings/setting.ctp:20
+#: View/QuestionnaireFrameSettings/style.ctp:18
+#: View/QuestionnairePage/setting.ctp:16
+#: View/QuestionnaireQuestions/setting_list.ctp:27
+#: View/QuestionnaireQuestions/setting_total.ctp:27
+#: View/Questionnaires/create.ctp:30
+#: View/Questionnaires/setting.ctp:23
+#: View/Questionnaires/setting_list.ctp:23
+msgid "plugin_name"
+msgstr ""
+
+#: View/QuestionnaireFrameSettings/content_list.ctp:49
+#: View/Questionnaires/setting_list.ctp:69
+msgid "(All"
+msgstr ""
+
+#: View/QuestionnaireFrameSettings/content_list.ctp:51
+#: View/Questionnaires/setting_list.ctp:71
+msgid " items)"
+msgstr ""
+
+#: View/QuestionnaireFrameSettings/content_list.ctp:56
+#: View/QuestionnaireFrameSettings/setting.ctp:86
+msgid "Status"
+msgstr ""
+
+#: View/QuestionnaireFrameSettings/content_list.ctp:57
+#: View/QuestionnaireFrameSettings/setting.ctp:87
+msgid "Title"
+msgstr ""
+
+#: View/QuestionnaireFrameSettings/content_list.ctp:58
+msgid "Created"
+msgstr ""
+
+#: View/QuestionnaireFrameSettings/content_list.ctp:59
+msgid "Modified"
+msgstr ""
+
+#: View/QuestionnaireFrameSettings/content_list.ctp:60
+msgid "Answer download"
+msgstr ""
+
+#: View/QuestionnaireFrameSettings/setting.ctp:59
+msgid "Questionnaire display setting"
+msgstr ""
+
+#: View/QuestionnaireFrameSettings/setting.ctp:62
+msgid "Show only one questionnaire"
+msgstr ""
+
+#: View/QuestionnaireFrameSettings/setting.ctp:63
+msgid "Show questionnaires list"
+msgstr ""
+
+#: View/QuestionnaireFrameSettings/setting.ctp:74
+msgid "select display questionnaires."
+msgstr ""
+
+#: View/QuestionnaireFrameSettings/setting.ctp:78
+#: View/Questionnaires/create.ctp:96
+msgid "Narrow down"
+msgstr ""
+
+#: View/QuestionnaireFrameSettings/setting.ctp:79
+#: View/Questionnaires/create.ctp:97
+msgid "Refine by entering the part of the questionnaire name"
+msgstr ""
+
+#: View/QuestionnaireFrameSettings/setting.ctp:85
+msgid "Display"
+msgstr ""
+
+#: View/QuestionnaireFrameSettings/setting.ctp:88
+msgid "Implementation date"
+msgstr ""
+
+#: View/QuestionnaireFrameSettings/setting.ctp:89
+msgid "Aggregates"
+msgstr ""
+
+#: View/QuestionnaireFrameSettings/setting.ctp:104
+#: View/Questionnaires/setting_list.ctp:129
+msgid "Stopped"
+msgstr ""
+
+#: View/QuestionnaireFrameSettings/setting.ctp:109
+#: View/Questionnaires/create.ctp:104
+#: View/Questionnaires/setting_list.ctp:110
+msgid "Not limited"
+msgstr ""
+
+#: View/QuestionnaireFrameSettings/setting.ctp:119
+msgid "Yes"
+msgstr ""
+
+#: View/QuestionnaireQuestions/answer.ctp:44
+msgid "Error occurred. Please check your answer."
+msgstr ""
+
+#: View/QuestionnaireQuestions/confirm.ctp:29
+msgid "Please confirm your answers."
+msgstr ""
+
+#: View/QuestionnaireQuestions/confirm.ctp:92
+msgid "Start over"
+msgstr ""
+
+#: View/QuestionnaireQuestions/pre_answer.ctp:39
+msgid "This questionnaire has been guarded by the key phrase. Please enter the first key phrase To answer ."
+msgstr ""
+
+#: View/QuestionnaireQuestions/setting_list.ctp:61
+#: View/Questionnaires/create.ctp:81
+#: View/Questionnaires/index.ctp:40
+msgid "Questionnaire title"
+msgstr ""
+
+#: View/QuestionnaireQuestions/setting_list.ctp:64
+#: View/Questionnaires/create.ctp:82
+msgid "Please input questionnaire title"
+msgstr ""
+
+#: View/QuestionnaireQuestions/setting_list.ctp:70
+msgid "Do you want to delete this page?"
+msgstr ""
+
+#: View/QuestionnaireQuestions/setting_list.ctp:71
+msgid "delete"
+msgstr ""
+
+#: View/QuestionnaireQuestions/setting_list.ctp:74
+msgid "Move page"
+msgstr ""
+
+#: View/QuestionnaireQuestions/setting_list.ctp:77
+msgid "before {{move_page.page_title}}"
+msgstr ""
+
+#: View/QuestionnaireQuestions/setting_list.ctp:80
+msgid "move last"
+msgstr ""
+
+#: View/QuestionnaireQuestions/setting_list.ctp:101
+msgid "page title"
+msgstr ""
+
+#: View/QuestionnaireQuestions/setting_list.ctp:111
+msgid "Do you want to delete this question ?"
+msgstr ""
+
+#: View/QuestionnaireQuestions/setting_list.ctp:130
+msgid "question sentence"
+msgstr ""
+
+#: View/QuestionnaireQuestions/setting_list.ctp:152
+msgid "Required"
+msgstr ""
+
+#: View/QuestionnaireQuestions/setting_list.ctp:178
+msgid "Question type"
+msgstr ""
+
+#: View/QuestionnaireQuestions/setting_list.ctp:223
+msgid "New Question"
+msgstr ""
+
+#: View/QuestionnaireQuestions/setting_list.ctp:225
+msgid "Add Question"
+msgstr ""
+
+#: View/QuestionnaireQuestions/setting_list.ctp:233
+msgid "page"
+msgstr ""
+
+#: View/QuestionnaireQuestions/setting_list.ctp:234
+msgid "Add page"
+msgstr ""
+
+#: View/QuestionnaireQuestions/setting_total.ctp:57
+msgid "Aggregate results setting"
+msgstr ""
+
+#: View/QuestionnaireQuestions/setting_total.ctp:62
+msgid "Please edit return to create the question screen if you want to change the questionnaire title"
+msgstr ""
+
+#: View/QuestionnaireQuestions/setting_total.ctp:66
+msgid "Published aggregate results"
+msgstr ""
+
+#: View/QuestionnaireQuestions/setting_total.ctp:69
+msgid "not disclose the total result"
+msgstr ""
+
+#: View/QuestionnaireQuestions/setting_total.ctp:69
+msgid "publish aggregate result"
+msgstr ""
+
+#: View/QuestionnaireQuestions/setting_total.ctp:82
+msgid "Text to be displayed in the aggregate results page"
+msgstr ""
+
+#: View/QuestionnaireQuestions/setting_total.ctp:95
+msgid "Question you want to display the aggregate results"
+msgstr ""
+
+#: View/QuestionnaireQuestions/setting_total.ctp:108
+msgid "aggregate display"
+msgstr ""
+
+#: View/QuestionnaireQuestions/setting_total.ctp:111
+msgid "The results of this question will not be displayed"
+msgstr ""
+
+#: View/QuestionnaireQuestions/setting_total.ctp:112
+msgid "The results of this question will be displayed"
+msgstr ""
+
+#: View/QuestionnaireQuestions/setting_total.ctp:124
+msgid "display type"
+msgstr ""
+
+#: View/QuestionnaireQuestions/setting_total.ctp:127
+msgid "Bar Chart"
+msgstr ""
+
+#: View/QuestionnaireQuestions/setting_total.ctp:128
+msgid "Pie Chart"
+msgstr ""
+
+#: View/QuestionnaireQuestions/setting_total.ctp:129
+msgid "Table"
+msgstr ""
+
+#: View/QuestionnaireQuestions/setting_total.ctp:139
+msgid "graph color"
+msgstr ""
+
+#: View/QuestionnaireQuestions/total.ctp:71
+#: View/Questionnaires/thanks.ctp:44
+msgid "Back to top"
+msgstr ""
+
+#: View/Questionnaires/create.ctp:60
+msgid "You can create a new questionnaire."
+msgstr ""
+
+#: View/Questionnaires/create.ctp:77
+msgid "Create new questionnaire"
+msgstr ""
+
+#: View/Questionnaires/create.ctp:90
+msgid "Re-use past questionnaire"
+msgstr ""
+
+#: View/Questionnaires/create.ctp:110
+msgid "Implementation"
+msgstr ""
+
+#: View/Questionnaires/index.ctp:39
+msgid "Answers period"
+msgstr ""
+
+#: View/Questionnaires/index.ctp:41
+msgid "Answers and results"
+msgstr ""
+
+#: View/Questionnaires/index.ctp:55
+msgid "Undefined"
+msgstr ""
+
+#: View/Questionnaires/index.ctp:71
+msgid "Before public"
+msgstr ""
+
+#: View/Questionnaires/index.ctp:75
+msgid "End"
+msgstr ""
+
+#: View/Questionnaires/setting.ctp:53
+msgid "Questionnaire setting"
+msgstr ""
+
+#: View/Questionnaires/setting.ctp:63
+msgid "Please enter if there is a sub title"
+msgstr ""
+
+#: View/Questionnaires/setting.ctp:69
+msgid "Questionnaire answer period"
+msgstr ""
+
+#: View/Questionnaires/setting.ctp:81
+msgid "set the answer period"
+msgstr ""
+
+#: View/Questionnaires/setting.ctp:82
+msgid "After approval will be immediately published . Stop of the questionnaire to select the stop from the questionnaire data list ."
+msgstr ""
+
+#: View/Questionnaires/setting.ctp:130
+msgid "Counting result display start date"
+msgstr ""
+
+#: View/Questionnaires/setting.ctp:134
+msgid "set the aggregate display period"
+msgstr ""
+
+#: View/Questionnaires/setting.ctp:135
+msgid "If not set , it will be displayed after the respondent answers."
+msgstr ""
+
+#: View/Questionnaires/setting.ctp:162
+msgid "Result will display at this time."
+msgstr ""
+
+#: View/Questionnaires/setting.ctp:167
+msgid "Questionnaire method"
+msgstr ""
+
+#: View/Questionnaires/setting.ctp:174
+msgid "accept the non-members answer"
+msgstr ""
+
+#: View/Questionnaires/setting.ctp:185
+msgid "use key phrase"
+msgstr ""
+
+#: View/Questionnaires/setting.ctp:205
+msgid "anonymous answer"
+msgstr ""
+
+#: View/Questionnaires/setting.ctp:216
+msgid "forgive the repetition of the answer"
+msgstr ""
+
+#: View/Questionnaires/setting.ctp:227
+msgid "do image authentication"
+msgstr ""
+
+#: View/Questionnaires/setting.ctp:235
+msgid "Thanks page message settings"
+msgstr ""
+
+#: View/Questionnaires/setting.ctp:252
+msgid "Emergency stop of the questionnaire"
+msgstr ""
+
+#: View/Questionnaires/setting.ctp:253
+msgid "Release emergency stop"
+msgstr ""
+
+#: View/Questionnaires/setting.ctp:257
+msgid "Stop this questionnaire"
+msgstr ""
+
+#: View/Questionnaires/setting.ctp:262;271
+msgid "You can stop the questionnaire on going temporarily."
+msgstr ""
+
+#: View/Questionnaires/setting.ctp:266
+msgid "Resume this questionnaire"
+msgstr ""
+
+#: View/Questionnaires/setting.ctp:277;281
+msgid "Delete this questionnaire"
+msgstr ""
+
+#: View/Questionnaires/setting.ctp:286
+msgid "You can delete all data of this questionnaire."
+msgstr ""
+
+#: View/Questionnaires/setting_list.ctp:29
+msgid "Questionnaire edit"
+msgstr ""
+
+#: View/Questionnaires/setting_list.ctp:151
+msgid "Comment"
+msgstr ""
+
+#: View/Questionnaires/setting_list.ctp:156
+msgid "Author"
+msgstr ""
+
+#: View/Questionnaires/setting_list.ctp:158
+msgid "Last updated"
+msgstr ""
+
+#: View/Questionnaires/setting_list.ctp:159
+msgid "Modified by"
+msgstr ""
+
