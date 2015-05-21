@@ -1,4 +1,9 @@
-<?php 
+<?php
+/**
+ * Suppress all warnings from these two rules.
+ *
+ * @SuppressWarnings(PHPMD.LongVariable)
+ */
 class AppSchema extends CakeSchema {
 
 	public $connection = 'master';
@@ -22,7 +27,7 @@ class AppSchema extends CakeSchema {
 	public function after($event = array()) {
 	}
 
-	public $q_answer_summaries = array(
+	public $questionnaire_answer_summaries = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'key' => 'primary'),
 		'answer_status' => array('type' => 'integer', 'null' => true, 'default' => null, 'length' => 4, 'comment' => '回答状態 1ページずつ表示するようなアンケートの場合、途中状態か否か | 0:回答未完了 | 1:回答完了'),
 		'test_status' => array('type' => 'integer', 'null' => true, 'default' => null, 'length' => 4, 'comment' => 'テスト時の回答かどうか 0:本番回答 | 1:テスト時回答'),
@@ -42,7 +47,7 @@ class AppSchema extends CakeSchema {
 		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'InnoDB')
 	);
 
-	public $q_answers = array(
+	public $questionnaire_answers = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'key' => 'primary'),
 		'matrix_choice_id' => array('type' => 'integer', 'null' => true, 'default' => null, 'comment' => 'マトリクスの質問の場合のみ、選択肢IDを設定する | 選択肢IDはマトリクスの行側の選択肢のIDを入れる'),
 		'answer_value' => array('type' => 'text', 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '回答した文字列を設定する
@@ -68,9 +73,10 @@ class AppSchema extends CakeSchema {
 		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'InnoDB')
 	);
 
-	public $q_blocks_settings = array(
+	public $questionnaire_blocks_settings = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'key' => 'primary'),
 		'block_key' => array('type' => 'string', 'null' => false, 'default' => null, 'key' => 'index', 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+		'use_workflow' => array('type' => 'boolean', 'null' => false, 'default' => '1'),
 		'created_user' => array('type' => 'integer', 'null' => true, 'default' => null),
 		'created' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'modified_user' => array('type' => 'integer', 'null' => true, 'default' => null),
@@ -82,7 +88,7 @@ class AppSchema extends CakeSchema {
 		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'InnoDB')
 	);
 
-	public $q_choices = array(
+	public $questionnaire_choices = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'key' => 'primary'),
 		'key' => array('type' => 'string', 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
 		'language_id' => array('type' => 'integer', 'null' => false, 'default' => null),
@@ -113,9 +119,9 @@ class AppSchema extends CakeSchema {
 		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'InnoDB')
 	);
 
-	public $q_frame_display_qs = array(
+	public $questionnaire_frame_display_questionnaires = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'key' => 'primary'),
-		'questionnaire_frame_setting_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'key' => 'index'),
+		'frame_key' => array('type' => 'string', 'null' => false, 'default' => null, 'key' => 'index', 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
 		'questionnaire_origin_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'key' => 'index'),
 		'created_user' => array('type' => 'integer', 'null' => true, 'default' => null),
 		'created' => array('type' => 'datetime', 'null' => true, 'default' => null),
@@ -123,13 +129,13 @@ class AppSchema extends CakeSchema {
 		'modified' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'id', 'unique' => 1),
-			'fk_questionnaire_frame_display_questionnaires_questionnaire_idx' => array('column' => 'questionnaire_frame_setting_id', 'unique' => 0),
+			'fk_questionnaire_frame_display_questionnaires_questionnaire_idx' => array('column' => 'frame_key', 'unique' => 0),
 			'questionnaire_origin_id' => array('column' => 'questionnaire_origin_id', 'unique' => 0)
 		),
 		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'InnoDB')
 	);
 
-	public $q_frame_settings = array(
+	public $questionnaire_frame_settings = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'key' => 'primary'),
 		'display_type' => array('type' => 'integer', 'null' => true, 'default' => null, 'length' => 4, 'comment' => '0:単一表示(default)|1:リスト表示'),
 		'display_num_per_page' => array('type' => 'integer', 'null' => true, 'default' => null, 'length' => 3, 'comment' => 'リスト表示の場合、１ページ当たりに表示するアンケート件数'),
@@ -170,7 +176,7 @@ class AppSchema extends CakeSchema {
 		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'InnoDB')
 	);
 
-	public $q_questions = array(
+	public $questionnaire_questions = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'key' => 'primary'),
 		'key' => array('type' => 'string', 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
 		'language_id' => array('type' => 'integer', 'null' => false, 'default' => null),

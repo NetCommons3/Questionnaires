@@ -24,7 +24,7 @@ class QuestionnaireAnswerSummaryTest extends CakeTestCase {
 	public $fixtures = array(
 		'plugin.questionnaires.questionnaire_answer_summary',
 		'plugin.questionnaires.questionnaire',
-		'plugin.questionnaires.user',
+		'plugin.users.user',
 		'plugin.questionnaires.role',
 		'plugin.questionnaires.group',
 		'plugin.questionnaires.room',
@@ -62,6 +62,14 @@ class QuestionnaireAnswerSummaryTest extends CakeTestCase {
 		unset($this->QuestionnaireAnswerSummary);
 
 		parent::tearDown();
+	}
+
+/**
+ * testIndex method
+ *
+ * @return void
+ */
+	public function testIndex() {
 	}
 
 }
