@@ -461,27 +461,6 @@ class QuestionnairesComponent extends Component {
 	const QUESTIONNAIRE_SORT_END = 3;
 
 /**
- * このプラグインが配置されているページのURLを取得する
- *
- * @param int $frameId 当該フレームID
- * @return string 現在のフレームが設置されているページのURL
- */
-	public function getPageUrl($frameId) {
-		// FUJI:本当はフレームIDから、そのページのURLを
-		// frameId -> blockId -> box_id -> page_id -> slug
-		// と取り込んでそれを返すこと
-		$Frame = Classregistry::init('Frames.Frame');
-		$Page = Classregistry::init('Pages.Page');
-
-		$frames = $Frame->find('first',
-				array('conditions' => array('Frame.id' => $frameId)));
-		$pages = $Page->find('first',
-			array('conditions' => array('Page.id' => $frames['Box']['page_id'])));
-
-		return $pages['Page']['permalink'];
-	}
-
-/**
  * getDisplayNumberOptions
  *
  * @return array

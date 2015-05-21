@@ -10,23 +10,27 @@
  */
 ?>
 
-<?php echo $this->Form->hidden('QuestionnaireSetting.id', array(
-		'value' => isset($faqSetting['id']) ? (int)$faqSetting['id'] : null,
-	)); ?>
+<?php echo $this->Form->hidden('QuestionnaireBlocksSetting.id', array(
+'value' => isset($faqSetting['id']) ? (int)$faqSetting['id'] : null,
+)); ?>
 
-<?php echo $this->Form->hidden('QuestionnaireSetting.faq_key', array(
-		'value' => isset($faqSetting['faqKey']) ? $faqSetting['faqKey'] : null,
-	)); ?>
+<?php echo $this->Form->hidden('FaqSetting.faq_key', array(
+'value' => isset($faqSetting['faqKey']) ? $faqSetting['faqKey'] : null,
+)); ?>
 
 <?php echo $this->Form->hidden('Block.id', array(
-		'value' => $blockId,
-	)); ?>
+'value' => $blockId,
+)); ?>
 
-<?php echo $this->element('Blocks.content_role_setting', array(
-		'roles' => $roles,
-		'permissions' => isset($blockRolePermissions) ? $blockRolePermissions : null,
-		'useWorkflow' => array(
-			'name' => 'QuestionnaireSetting.use_workflow',
-			'value' => $questionnaireSetting['useWorkflow']
-		),
-	));
+<?php echo $this->element('Blocks.block_role_setting', array(
+'roles' => $roles,
+'model' => 'QuestionnaireBlocksSetting',
+'useWorkflow' => 'use_workflow',
+'creatablePermissions' => array(
+'contentCreatable' => __d('blocks', 'Content creatable roles'),
+),
+'options' => array(
+Block::NEED_APPROVAL => __d('blocks', 'Need approval'),
+Block::NOT_NEED_APPROVAL => __d('blocks', 'Not need approval'),
+),
+));

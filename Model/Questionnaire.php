@@ -25,6 +25,7 @@ class Questionnaire extends QuestionnairesAppModel {
 	public $actsAs = array(
 		'NetCommons.Publishable',
 		'NetCommons.OriginalKey',
+		'Questionnaires.QuestionnaireValidate',
 	);
 
 /**
@@ -234,7 +235,6 @@ class Questionnaire extends QuestionnairesAppModel {
 		]);
 
 		foreach ($results as &$val) {
-
 			// これらの場合はcount か deleteか
 			if (!isset($val['Questionnaire'])
 				|| (count($val['Questionnaire']) == 1 && isset($val['Questionnaire']['id']))) {
@@ -352,7 +352,8 @@ class Questionnaire extends QuestionnairesAppModel {
 		if (!empty($extra['type']) && $extra['type'] == 'getQListWithAnsCnt') {
 			//カスタム設定
 			$subQuery = $this->_getQuestionnairesCommonForAnswer($extra['sessionId'], $extra['userId']);
-			$params['joins'] = $subQuery;
+
+			$params['joins'] =	$subQuery;
 			$params['fields'] = array(
 				'Block.*',
 				'Questionnaire.*',
@@ -475,6 +476,7 @@ class Questionnaire extends QuestionnairesAppModel {
 			'QuestionnairePage' => 'Questionnaires.QuestionnairePage',
 			'Block' => 'Blocks.Block',
 			'Comment' => 'Comments.Comment',
+			'QuestionnaireFrameDisplayQuestionnaire' => 'Questionnaires.QuestionnaireFrameDisplayQuestionnaire',
 		]);
 
 		//トランザクションBegin
@@ -513,6 +515,11 @@ class Questionnaire extends QuestionnairesAppModel {
 				if (! $this->Comment->save(null, false)) {
 					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 				}
+			}
+
+			// フレーム内表示対象アンケートに登録する
+			if (!$this->QuestionnaireFrameDisplayQuestionnaire->saveFrameDisplayQuestionnaire($questionnaire['Frame']['id'], $questionnaireId)) {
+				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}
 
 			$dataSource->commit();

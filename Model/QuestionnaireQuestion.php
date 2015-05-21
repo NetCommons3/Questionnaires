@@ -26,6 +26,7 @@ class QuestionnaireQuestion extends QuestionnairesAppModel {
 	public $actsAs = array(
 		'NetCommons.Publishable',
 		'NetCommons.OriginalKey',
+		'Questionnaires.QuestionnaireValidate',
 	);
 
 /**
@@ -94,31 +95,19 @@ class QuestionnaireQuestion extends QuestionnairesAppModel {
 			'questionnaire_page_id' => array(
 				'numeric' => array(
 					'rule' => array('numeric'),
-					//'message' => 'Your custom message here',
-					//'allowEmpty' => false,
-					//'required' => false,
-					//'last' => false, // Stop validation after this rule
-					//'on' => 'create', // Limit validation to 'create' or 'update' operations
+					'message' => __d('net_commons', 'Invalid request.'),
 				),
 			),
 			'question_sequence' => array(
 				'numeric' => array(
 					'rule' => array('numeric'),
-					//'message' => 'Your custom message here',
-					//'allowEmpty' => false,
-					//'required' => false,
-					//'last' => false, // Stop validation after this rule
-					//'on' => 'create', // Limit validation to 'create' or 'update' operations
+					'message' => __d('net_commons', 'Invalid request.'),
 				),
 			),
 			'question_type' => array(
 				'inList' => array(
 					'rule' => array('inList', QuestionnairesComponent::$typesList),
 					'message' => __d('net_commons', 'Invalid request.'),
-					//'allowEmpty' => false,
-					//'required' => false,
-					//'last' => false, // Stop validation after this rule
-					//'on' => 'create', // Limit validation to 'create' or 'update' operations
 				),
 			),
 			'question_value' => array(
@@ -130,85 +119,51 @@ class QuestionnaireQuestion extends QuestionnairesAppModel {
 			'is_require' => array(
 				'boolean' => array(
 					'rule' => array('boolean'),
-					//'message' => 'Your custom message here',
-					//'allowEmpty' => false,
-					//'required' => false,
-					//'last' => false, // Stop validation after this rule
-					//'on' => 'create', // Limit validation to 'create' or 'update' operations
+					'message' => __d('net_commons', 'Invalid request.'),
 				),
 			),
 			'is_choice_random' => array(
 				'boolean' => array(
 					'rule' => array('boolean'),
-					//'message' => 'Your custom message here',
-					//'allowEmpty' => false,
-					//'required' => false,
-					//'last' => false, // Stop validation after this rule
-					//'on' => 'create', // Limit validation to 'create' or 'update' operations
+					'message' => __d('net_commons', 'Invalid request.'),
 				),
 			),
 			'is_skip' => array(
 				'boolean' => array(
 					'rule' => array('boolean'),
-					//'message' => 'Your custom message here',
-					//'allowEmpty' => false,
-					//'required' => false,
-					//'last' => false, // Stop validation after this rule
-					//'on' => 'create', // Limit validation to 'create' or 'update' operations
+					'message' => __d('net_commons', 'Invalid request.'),
 				),
 			),
 			'is_result_display' => array(
 				'boolean' => array(
 					'rule' => array('boolean'),
 					'message' => __d('net_commons', 'Invalid request.'),
-					//'allowEmpty' => false,
-					//'required' => false,
-					//'last' => false, // Stop validation after this rule
-					//'on' => 'create', // Limit validation to 'create' or 'update' operations
 				),
 				'checkRelationshipQuestionType' => array(
 					'rule' => array('checkRelationshipQuestionType'),
 					'message' => __d('net_commons', 'Invalid request.'),
-					//'allowEmpty' => false,
-					//'required' => false,
-					//'last' => false, // Stop validation after this rule
-					//'on' => 'create', // Limit validation to 'create' or 'update' operations
 				),
 			),
 			'result_display_type' => array(
 				'inList' => array(
 					'rule' => array('inList', QuestionnairesComponent::$resultDispTypesList),
 					'message' => __d('net_commons', 'Invalid request.'),
-					//'allowEmpty' => false,
-					//'required' => false,
-					//'last' => false, // Stop validation after this rule
-					//'on' => 'create', // Limit validation to 'create' or 'update' operations
+				),
+			),
+			'min' => array(
+				'checkMinMax' => array(
+					'rule' => array('checkMinMax'),
+					'message' => __d('questionnaires', 'Please enter both the maximum and minimum values.'),
+				),
+			),
+			'max' => array(
+				'checkMinMax' => array(
+					'rule' => array('checkMinMax'),
+					'message' => __d('questionnaires', 'Please enter both the maximum and minimum values.'),
 				),
 			),
 		));
 		return parent::beforeValidate($options);
-	}
-
-/**
- * checkRelationshipQuestionType
- * can not set result display ON when type of question is in text type or text-area type or date type
- *
- * @param bool $check post data
- * @return bool
- */
-	public function checkRelationshipQuestionType($check) {
-		// $check には array('is_result_display' => '入力値') が入る
-		if ($this->data['QuestionnaireQuestion']['question_type'] == QuestionnairesComponent::TYPE_TEXT
-			|| $this->data['QuestionnaireQuestion']['question_type'] == QuestionnairesComponent::TYPE_TEXT_AREA
-			|| $this->data['QuestionnaireQuestion']['question_type'] == QuestionnairesComponent::TYPE_DATE_AND_TIME
-		) {
-
-			if ($check == QuestionnairesComponent::EXPRESSION_SHOW) {
-				return false;
-			}
-		}
-
-		return true;
 	}
 
 /**

@@ -26,85 +26,6 @@ class QuestionnairesAppModel extends AppModel {
 	);
 
 /**
- * Checks if is_period is on, required start_period, end_period
- *
- * @param array $check check data array
- * @return bool
- */
-	public function requireTimes($check) {
-		if ($this->data['Questionnaire']['is_period'] == QuestionnairesComponent::USES_USE) {
-			if (empty($this->data['Questionnaire']['start_period']) && empty($this->data['Questionnaire']['end_time'])) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-/**
- * Checks if is_key_pass_use is on, required key_phrase
- *
- * @param array $check check data array
- * @return bool
- */
-	public function requireKeyPhrase($check) {
-		if ($this->data['Questionnaire']['is_key_pass_use'] == QuestionnairesComponent::USES_USE) {
-			if (empty($this->data['Questionnaire']['key_phrase'])) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-/**
- * Checks datetime null or datetime
- *
- * @param array $check check data array
- * @return bool
- */
-	public function checkDateTime($check) {
-		foreach ($check as $val) {
-			if (empty($val)) {
-				continue;
-			}
-			$ret = Validation::datetime($val);
-			if (!$ret) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-/**
- * Used to compare 2 datetime values.
- *
- * @param string|array $check datetime string
- * @param string $operator Can be either a word or operand
- *    is greater >, is less <, greater or equal >=
- *    less or equal <=, is less <, equal to ==, not equal !=
- * @param string $compare compare datetime string
- * @return bool Success
- */
-	public function checkDateComp($check, $operator, $compare) {
-		// 比較対象がないので比較する必要なし
-		if (empty($this->data['Questionnaire'][$compare])) {
-			return true;
-		}
-
-		$check2 = strtotime($this->data['Questionnaire'][$compare]);
-		foreach ($check as $val) {
-			if (empty($val)) {
-				continue;
-			}
-			$check1 = strtotime($val);
-			$ret = Validation::comparison($check1, $operator, $check2);
-			if (!$ret) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-/**
  * _getQuestionnairesCommonForAnswer アンケートに対する指定ユーザーの回答が存在するか
  *
  * @param string $sessionId セッションID
@@ -146,6 +67,14 @@ class QuestionnairesAppModel extends AppModel {
 			array('type' => 'left',
 				'table' => '(' . $answeredSummaryQuery . ') AS CountAnswerSummary',
 				'conditions' => 'Questionnaire.origin_id = CountAnswerSummary.questionnaire_origin_id'
+			),
+			array(
+				'table' => 'questionnaire_frame_display_questionnaires',
+				'alias' => 'QuestionnaireFrameDisplayQuestionnaires',
+				'type' => 'left',
+				'conditions' => array(
+					'Questionnaire.origin_id = QuestionnaireFrameDisplayQuestionnaires.questionnaire_origin_id'
+				)
 			)
 		);
 		return $subQueryArray;

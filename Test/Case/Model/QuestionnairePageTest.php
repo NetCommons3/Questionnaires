@@ -23,7 +23,7 @@ class QuestionnairePageTest extends CakeTestCase {
  */
 	public $fixtures = array(
 		'plugin.questionnaires.questionnaire_page',
-		'plugin.questionnaires.questionnaire_entity',
+		'plugin.questionnaires.questionnaire',
 		'plugin.questionnaires.user',
 		'plugin.questionnaires.role',
 		'plugin.questionnaires.group',

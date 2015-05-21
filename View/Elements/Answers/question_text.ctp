@@ -21,13 +21,7 @@
 		'value' => $answer[0]['answer_value'],
 		'disabled' => $readonly,
 		));?>
-	<?php if (!is_null($question['min']) && !is_null($question['max'])): ?>
-		<span class="help-block"><?php echo sprintf(__d('questionnaires', 'Please %d <= enter <= %d'), $question['min'], $question['max']); ?></span>
-	<?php elseif (!is_null($question['min'])): ?>
-	  <span class="help-block"><?php echo sprintf(__d('questionnaires', 'Please %d <= enter'), $question['min']); ?></span>
-	<?php elseif (!is_null($question['max'])): ?>
-	  <span class="help-block"><?php echo sprintf(__d('questionnaires', 'Please enter <= %d'), $question['max']); ?></span>
-	<?php endif ?>
+	<?php echo $this->element('Questionnaires.Answers/question_range_description', array('question' => $question)); ?>
 	<?php echo $this->Form->hidden('QuestionnaireAnswer.' . $index . '.matrix_choice_id', array(
 		'value' => null
 		)); ?>

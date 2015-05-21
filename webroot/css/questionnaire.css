@@ -71,39 +71,6 @@ table.table.questionnaire-table-vcenter tbody td {
    vertical-align: middle;
 }
 
-.questionnaire-btn-comment {
-  width: 30px;
-  height: 30px;
-  text-align: center;
-  padding: 6px 0;
-  font-size: 12px;
-  line-height: 1.428571429;
-  border-radius: 15px;
-}
-.questionnaire-btn-comment.btn-lg {
-  width: 50px;
-  height: 50px;
-  padding: 10px 16px;
-  font-size: 18px;
-  line-height: 1.33;
-  border-radius: 25px;
-}
-.questionnaire-btn-comment.btn-xl {
-  width: 70px;
-  height: 70px;
-  padding: 10px 16px;
-  font-size: 24px;
-  line-height: 1.33;
-  border-radius: 35px;
-}
-
-.questionnaire-comment-fixed {
-    position: fixed;  
-    right: 30px;  
-    bottom: 30px;  
-	z-index:1;
-} 
-
 .questionnaire-list-select {
     margin: 1em!important;
 }
@@ -154,7 +121,6 @@ margin:0!important;
 table.table.table-bordered.questionnaire-borderless tbody td{
                 margin-left: 20px;
             }
-
 }
 
 /*
@@ -180,3 +146,10 @@ table.table.table-bordered.questionnaire-borderless tbody td{
 .questionnaire-color-palette {float:left;width:1em;height:1em;margin:5px;boder:1px solid transparent;}
 .questionnaire-color-palette:hover {border-color:#cccccc;}
 
+/*
+ * 縦スクロールバー付き
+ */
+.questionnaire-list-wrapper {
+    height:200px;
+    overflow-y: scroll;
+}

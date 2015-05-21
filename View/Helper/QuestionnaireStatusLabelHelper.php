@@ -61,4 +61,17 @@ class QuestionnaireStatusLabelHelper extends AppHelper {
 		return '';
 	}
 
+/**
+ * Status label for management widget
+ *
+ * @param array $questionnaire questionnaire
+ * @return string
+ */
+	public function statusLabelManagementWidget($questionnaire) {
+		$label = $this->statusLabel($questionnaire);
+		if ($label == '') {
+			$label = __d('net_commons', 'Published');
+		}
+		return $label;
+	}
 }

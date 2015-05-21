@@ -113,6 +113,26 @@ class QuestionnaireAnswerValidation extends QuestionnairesAppModel {
 	}
 
 /**
+ * checkDateRange
+ *
+ * @param array $question question
+ * @param string $answer answer value
+ * @param string $type question type
+ * @return array error message
+ */
+	public function checkDateRange($question, $answer, $type) {
+		$errors = array();
+		if (!is_null($question['min']) && !is_null($question['max'])) {
+			if ($question['question_type_option'] != QuestionnairesComponent::TYPE_OPTION_TIME) {
+				if (!Validation::range(strtotime($answer), strtotime($question['min']) - 1, strtotime($question['max']) + 1)) {
+					$errors[] = sprintf(__d('questionnaires', 'Please enter the %s between %s and %s.', $type, $question['min'], $question['max']));
+				}
+			}
+		}
+		return $errors;
+	}
+
+/**
  * checkAnswerInList
  *
  * @param array $question question

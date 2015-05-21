@@ -34,6 +34,7 @@
 				?>
 				<div class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></div>
 			 </div>
+			<?php echo $this->element('Questionnaires.Answers/question_range_description', array('question' => $question)); ?>
 		</div>
 		<?php endif ?>
 
@@ -51,6 +52,7 @@
 				'ng-value' => "QuestionnaireDateTimeAnswer" . $question['id'] . " | date : 'yyyy-MM-dd HH:mm:ss'"
 				));
 				?>
+			<?php echo $this->element('Questionnaires.Answers/question_range_description', array('question' => $question)); ?>
 		</div>
 		<?php endif ?>
 
@@ -69,6 +71,7 @@
 					?>
 					<div class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></div>
 				</div>
+				<?php echo $this->element('Questionnaires.Answers/question_range_description', array('question' => $question)); ?>
 			</div>
 		<?php endif ?>
 

@@ -48,7 +48,7 @@
 			'value' => $multiAnswers,
 			'label' => false,
 			'disabled' => $readonly,
-			'hiddenField' => false
+			'hiddenField' => ($readonly) ? false : true
 		));
 		if ($afterLabel != '') {
 			echo $afterLabel;

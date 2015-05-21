@@ -29,7 +29,8 @@ class QuestionnaireFrameSettingsController extends BlocksController {
 		'Blocks.Block',
 		'Frames.Frame',
 		'Questionnaires.Questionnaire',
-		'Questionnaires.QuestionnaireFrameSettings'
+		'Questionnaires.QuestionnaireFrameSettings',
+		'Questionnaires.QuestionnaireFrameDisplayQuestionnaire',
 	);
 
 /**
@@ -38,6 +39,7 @@ class QuestionnaireFrameSettingsController extends BlocksController {
  * @var array
  */
 	public $components = array(
+		'Security',
 		'NetCommons.NetCommonsBlock', //Use Questionnaire model
 		'NetCommons.NetCommonsFrame',
 		'NetCommons.NetCommonsRoomRole' => array(
@@ -47,6 +49,7 @@ class QuestionnaireFrameSettingsController extends BlocksController {
 			),
 		),
 		'Questionnaires.Questionnaires',
+		'Paginator',
 	);
 
 /**
@@ -77,84 +80,30 @@ class QuestionnaireFrameSettingsController extends BlocksController {
 	}
 
 /**
- * content_list
- *
- * @return void
- */
-	/*
-	public function content_list() {
-		// 画面表示に纏わるパラメータをキャッシュより取り出す
-		$cache = $this->__getCache();
-
-		// 作成リストデータ準備
-		$questionnaire = array();
-
-		// 画面表示パラメータ準備
-		$filter = $cache['filter'];
-		$page = $cache['page'];
-
-		// 画面表示パラメータに対してGET指定があればパラメータを上書き
-		if (array_key_exists('status', $this->request->query)) {
-			if (strlen($this->request->query['status']) > 0) {
-				$filter['status'] = $this->request->query['status'];
-			} else {
-				unset($filter['status']);
-			}
-		}
-		if (array_key_exists('page', $this->request->query)) {
-			$page['currentPageNumber'] = $this->request->query['page'];
-		}
-		// オフセット
-		$offset = ($page['currentPageNumber'] - 1) * $page['displayNumPerPage'];
-
-		// 全件数カウント
-		$page['totalCount'] = $this->Questionnaire->getQuestionnairesCount(
-			$this->viewVars['roomId'],
-			$this->viewVars['contentEditable'],
-			$filter
-		);
-
-		// LIMIT件数 取り出し
-		$questionnaires['items'] = $this->Questionnaire->getQuestionnaires(
-			$this->viewVars['roomId'],
-			$this->viewVars['contentEditable'],
-			$filter,
-			$offset,
-			$page['displayNumPerPage']
-		);
-		$questionnaires['itemCount'] = count($questionnaires['items']);
-
-		$cache['filter'] = $filter;
-		$cache['page'] = $page;
-		$this->Session->write('Questionnaires.QuestionnaireFrameSettingsContentList', $cache);
-
-		$questionnaires['QuestionnaireFrameSettingsContentList'] = $cache;
-		$questionnaires['questionnaire'] = $questionnaire;
-
-		$this->set('tabLists', $this->__getTabLists('list'));
-		$this->set('questionnaires', $questionnaires);
-		$this->set('page', $page);
-		$this->set('filter', $filter);
-		$this->Session->write('Questionnaires.nowUrl', $this->request->url);
-	}
-	*/
-
-/**
  * edit method
  *
  * @return void
  */
 	public function edit() {
-		// 全件 取り出し
-		$questionnaires = $this->Questionnaire->getQuestionnairesList(
-			$this->viewVars,
-			$this->Session->id(),
-			$this->Auth->user('id'),
-			array(),
-			'modified DESC',
-			0,
-			1000
+		$conditions = array(
+			'block_id' => $this->viewVars['blockId'],
+			'is_latest' => true,
 		);
+		try {
+			$this->paginate = array(
+				'conditions' => $conditions,
+				'page' => 1,
+				'sort' => QuestionnairesComponent::DISPLAY_SORT_TYPE_NEW_ARRIVALS,
+				'limit' => 1000,
+				'direction' => 'desc',
+				'recursive' => -1,
+			);
+			$questionnaires = $this->paginate('Questionnaire');
+		} catch (NotFoundException $e) {
+			// NotFoundの例外
+			// アンケートデータが存在しないこととする
+			$questionnaires = array();
+		}
 
 		$frame = $this->QuestionnaireFrameSettings->find('first', array(
 			'conditions' => array(
@@ -163,17 +112,19 @@ class QuestionnaireFrameSettingsController extends BlocksController {
 			'order' => 'QuestionnaireFrameSettings.id DESC'
 		));
 		if (!$frame) {
-			$frame = array(
-				'QuestionnaireFrameSettings' => array(
-					'display_type' => QuestionnairesComponent::DISPLAY_TYPE_LIST,
-					'display_num_per_page' => QUESTIONNAIRE_DEFAULT_DISPLAY_NUM_PER_PAGE,
-					'sort_type' => QuestionnairesComponent::DISPLAY_SORT_TYPE_NEW_ARRIVALS,
-				)
-			);
+			$frame = $this->QuestionnaireFrameSettings->getDefaultFrameSetting();
 		}
 
-		$this->set('questionnaireFrameSettings', $frame['QuestionnaireFrameSettings']);
+		$displayQuestionnaire = $this->QuestionnaireFrameDisplayQuestionnaire->find('list', array(
+			'fields' => array(
+				'questionnaire_origin_id', 'questionnaire_origin_id'
+			),
+			'conditions' => array(
+				'frame_key' => $this->viewVars['frameKey'],
+			),
+		));
 		$this->set('questionnaires', $questionnaires);
-		$this->set('topUrl', $this->Questionnaires->getPageUrl($this->viewVars['frameId']));
+		$this->set('questionnaireFrameSettings', $frame['QuestionnaireFrameSettings']);
+		$this->set('displayQuestionnaire', $displayQuestionnaire);
 	}
 }

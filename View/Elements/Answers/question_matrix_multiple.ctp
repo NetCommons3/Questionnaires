@@ -74,6 +74,7 @@
 			)); ?>
 			<?php endif ?>
 		</th>
+		<?php $optCount = 0; ?>
 		<?php foreach ($options as $key => $opt): ?>
 		<td>
 			<?php
@@ -91,10 +92,11 @@
 			'options' => array($key => ''),
 			'label' => false,
 			'div' => false,
-			'hiddenField' => false,
+			'hiddenField' => ($readonly || $optCount != 0) ? false : true,
 			'value' => (is_array($multiAnswers) && isset($multiAnswers[$row['origin_id']])) ? $multiAnswers[$row['origin_id']] : null,
 			'disabled' => $readonly,
 			));
+			$optCount++;
 			?>
 		</td>
 		<?php endforeach; ?>	</tr>

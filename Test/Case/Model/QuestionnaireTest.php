@@ -23,7 +23,6 @@ class QuestionnaireTest extends CakeTestCase {
  */
 	public $fixtures = array(
 		'plugin.questionnaires.questionnaire',
-		'plugin.questionnaires.block',
 		'plugin.questionnaires.user',
 		'plugin.questionnaires.role',
 		'plugin.questionnaires.group',
@@ -31,6 +30,7 @@ class QuestionnaireTest extends CakeTestCase {
 		'plugin.questionnaires.space',
 		'plugin.questionnaires.box',
 		'plugin.questionnaires.top_page',
+		'plugin.questionnaires.block',
 		'plugin.questionnaires.page',
 		'plugin.questionnaires.language',
 		'plugin.questionnaires.groups_language',
@@ -39,8 +39,7 @@ class QuestionnaireTest extends CakeTestCase {
 		'plugin.questionnaires.user_attributes_user',
 		'plugin.questionnaires.user_select_attribute',
 		'plugin.questionnaires.user_select_attributes_user',
-		'plugin.questionnaires.questionnaire_answer_summary',
-		'plugin.questionnaires.questionnaire_entity'
+		'plugin.questionnaires.questionnaire_page'
 	);
 
 /**

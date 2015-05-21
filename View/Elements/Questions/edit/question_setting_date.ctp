@@ -63,6 +63,10 @@
 					'ng-value' => "question.min | date : 'yyyy-MM-dd HH:mm:ss'"
 					));
 					?>
+				<?php echo $this->element(
+				'Questionnaires.errors', array(
+				'errorArrayName' => 'errors.QuestionnairePage[pageIndex].QuestionnaireQuestion[qIndex].min',
+				)); ?>
 			</div>
 
 			<div class="col-sm-2"><p class="form-control-static text-center"><?php echo __d('questionnaires', ' - '); ?></p></div>
@@ -86,6 +90,10 @@
 				)
 				);
 				?>
+				<?php echo $this->element(
+				'Questionnaires.errors', array(
+				'errorArrayName' => 'errors.QuestionnairePage[pageIndex].QuestionnaireQuestion[qIndex].max',
+				)); ?>
 			</div>
 		</div>
 	</div>

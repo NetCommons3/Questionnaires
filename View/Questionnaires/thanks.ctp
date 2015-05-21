@@ -39,12 +39,15 @@
 	<hr>
 	<div class="text-center">
 		<?php echo $this->BackToPage->backToPageButton(__d('questionnaires', 'Back to page'), 'menu-up', 'lg'); ?>
-		<?php if ($questionnaire['Questionnaire']['is_total_show'] == QuestionnairesComponent::EXPRESSION_SHOW &&
-			(!isset($questionnaire['Questionnaire']['total_show_start_period']) || time() > $questionnaire['Questionnaire']['total_show_start_period'])): ?>
-		<?php echo $this->Html->link(__d('questionnaires', 'Aggregate'),
-			'/questionnaires/questionnaire_answer_summaries/result/' . $frameId . '/' . $questionnaire['Questionnaire']['origin_id'] . '/',
-			array('class' => 'btn btn-primary btn-lg',
-				'target' => '_self')); ?>
-		<?php endif ?>
+		<?php
+			/* この画面へ来るときはAnswerCountは取得してないSQLで来ている */
+			/* 集計ボタン表示Helperは回答数が１つはないと表示されない */
+			/* 今回答したのだから必ず回答は１つはある */
+			/* 強制的に一つ増やしておく */
+			$questionnaire['CountAnswerSummary'] = array('answer_summary_count' => 1);
+			echo $this->QuestionnaireUtil->getAggregateButtons($frameId, $questionnaire,
+				array('title' => __d('questionnaires', 'Aggregate'),
+						'class' => 'btn-primary btn-lg'));
+		?>
 	</div>
 </article>

@@ -170,33 +170,6 @@ class QuestionnaireAnswerSummary extends QuestionnairesAppModel {
 	}
 
 /**
- * getAnswerCount
- * It returns the number of responses in accordance with the conditions
- *
- * @param array $conditions conditions
- * @return int
- */
-	public function getAnswerCount($conditions) {
-		$cnt = $this->find('count', array(
-			'conditions' => $conditions,
-		));
-		return $cnt;
-		/*
-		$cnt = $this->find('count', array(
-			'conditions' => $conditions,
-			'joins' => array(
-				array('table' => 'questionnaire_answer_summaries',
-					'alias' => 'QuestionnaireAnswerSummary',
-					'type' => 'LEFT',
-					'conditions' => array(
-						'QuestionnaireAnswerSummary.id = QuestionnaireAnswer.questionnaire_answer_summary_id',
-					))
-			)
-		));
-		*/
-	}
-
-/**
  * forceGetAnswerSummary
  * get answer summary record if there is no summary , then create
  *

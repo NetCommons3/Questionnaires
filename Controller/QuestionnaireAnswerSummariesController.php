@@ -94,13 +94,11 @@ class QuestionnaireAnswerSummariesController extends QuestionnairesAppController
 
 		if (!$this->QuestionnaireAnswerSummary->isAbleToDisplayAggrigatedData(
 			$questionnaire,
-			$this->viewVars['contentEditable'],
-			$this->viewVars['roomRoleKey'],
 			$userId,
 			$this->Session->id())) {
 			throw new ForbiddenException(__d('net_commons', 'Permission denied'));
 		}
-
+		$this->log($questionnaire, 'debug');
 		//集計処理を行います。
 		$this->__aggrigateAnswer($questionnaire, $this->viewVars['contentEditable'], $questions);
 
@@ -186,7 +184,7 @@ class QuestionnaireAnswerSummariesController extends QuestionnairesAppController
 			$questionConditions = $baseConditions + array(
 				'QuestionnaireAnswer.questionnaire_question_origin_id' => $question['origin_id'],
 			);
-			$question['answer_total_cnt'] = $this->QuestionnaireAnswerSummary->getAnswerCount($questionConditions);
+			$question['answer_total_cnt'] = $this->QuestionnaireAnswer->getAnswerCount($questionConditions);
 
 			if ($question['question_type'] == QuestionnairesComponent::TYPE_MATRIX_SELECTION_LIST ||
 				$question['question_type'] == QuestionnairesComponent::TYPE_MATRIX_MULTIPLE) {
@@ -215,7 +213,7 @@ class QuestionnaireAnswerSummariesController extends QuestionnairesAppController
 							'QuestionnaireAnswer.matrix_choice_id' => $c['origin_id'],
 							'QuestionnaireAnswer.answer_value LIKE ' => '%' . QuestionnairesComponent::ANSWER_DELIMITER . $col['origin_id'] . QuestionnairesComponent::ANSWER_VALUE_DELIMITER . '%',
 						);
-					$cnt = $this->QuestionnaireAnswerSummary->getAnswerCount($conditions);
+					$cnt = $this->QuestionnaireAnswer->getAnswerCount($conditions);
 					$c['aggrigate_total'][$col['origin_id']] = $cnt;
 				}
 				$rowCnt++;
@@ -237,7 +235,7 @@ class QuestionnaireAnswerSummariesController extends QuestionnairesAppController
 			$conditions = $questionConditions + array(
 					'QuestionnaireAnswer.answer_value LIKE ' => '%' . QuestionnairesComponent::ANSWER_DELIMITER . $c['origin_id'] . QuestionnairesComponent::ANSWER_VALUE_DELIMITER . '%',
 				);
-			$cnt = $this->QuestionnaireAnswerSummary->getAnswerCount($conditions);
+			$cnt = $this->QuestionnaireAnswer->getAnswerCount($conditions);
 			$c['aggrigate_total']['aggrigate_not_matrix'] = $cnt;
 		}
 	}

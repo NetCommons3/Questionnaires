@@ -27,11 +27,11 @@ class QuestionnairesPreAnswerComponent extends Component {
 		$Questionnaire = ClassRegistry::init('Questionnaire');
 
 		// get conditions for finding specified Questionnaire
-		$conditions = $controller->getCondition(array('origin_id' => $questionnaireId));
+		$conditions = $controller->getConditionForAnswer(array('origin_id' => $questionnaireId));
 
 		// get the specified questionnaire
 		$questionnaire = $Questionnaire->find('first', array(
-			'conditions' => $conditions
+			'conditions' => $conditions,
 		));
 		if (!$questionnaire) {
 			throw new NotFoundException(__d('questionnaires', 'Invalid questionnaire'));

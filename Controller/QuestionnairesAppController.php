@@ -13,7 +13,32 @@ App::uses('AppController', 'Controller');
 
 class QuestionnairesAppController extends AppController {
 
+	public $uses = array(
+		'Questionnaires.QuestionnaireFrameSetting'
+	);
+
 	public $qValidationErrors = array();
+
+/**
+ * beforeFilter
+ *
+ * @return void
+ */
+	public function beforeFilter() {
+		parent::beforeFilter();
+		// このルームにすでにアンケートブロックが存在した場合で、
+		// かつ、現在フレームにまだブロックが結びついてない場合、
+		// すでに存在するブロックと現在フレームを結びつける
+		if (empty($this->viewVars['frameId'])) {
+			return;
+		}
+
+		$this->QuestionnaireFrameSetting->prepareBlock($this->viewVars['frameId']);
+
+		// フレームセッティング確認
+		// まだ該当のフレームセッティングがない場合新たに作成しておく
+		$this->QuestionnaireFrameSetting->prepareFrameSetting($this->viewVars['frameKey']);
+	}
 
 /**
  * _getComments method
@@ -51,24 +76,28 @@ class QuestionnairesAppController extends AppController {
  * @return array ソート後配列
  */
 	protected function _sorted($obj) {
+		// シーケンス順に並び替え、かつ、インデックス値は０オリジン連番に変更
 		$path = 'QuestionnairePage.{n}';
 
+		// ページ配列もないのでそのまま戻す
 		if (!Hash::check($obj, $path)) {
 			return $obj;
 		}
+		$obj = Hash::sort($obj, $path . '.page_sequence', 'asc', 'numeric');
 
-		if (!Hash::check($obj, $path . '.QuestionnaireQuestion.{n}')) {
-			return Hash::sort($obj, $path . '.page_sequence', 'asc', 'numeric');
+		foreach ($obj['QuestionnairePage'] as &$page) {
+
+			if (isset($page['QuestionnaireQuestion'])) {
+				$page['QuestionnaireQuestion'] = Hash::sort($page['QuestionnaireQuestion'], '{n}.question_sequence', 'asc', 'numeric');
+
+				foreach ($page['QuestionnaireQuestion'] as &$question) {
+					if (isset($question['QuestionnaireChoice'])) {
+						$question['QuestionnaireChoice'] = Hash::sort($question['QuestionnaireChoice'], '{n}.choice_sequence', 'asc', 'numeric');
+					}
+				}
+			}
 		}
-
-		$path .= '.QuestionnaireQuestion.{n}';
-
-		if (!Hash::check($obj, $path . '.QuestionnaireChoice')) {
-			return Hash::sort($obj, $path . '.question_sequence', 'asc', 'numeric');
-		}
-
-		$path .= '.QuestionnaireChoice.choice_sequence';
-		return Hash::sort($obj, $path, 'asc', 'numeric');
+		return $obj;
 	}
 
 /**
@@ -106,6 +135,23 @@ class QuestionnairesAppController extends AppController {
  * @return array
  */
 	public function getCondition($addConditions = array()) {
+		$conditions = $this->getConditionForAnswer($addConditions);
+		$conditions['NOT'] = array('QuestionnaireFrameDisplayQuestionnaires.id' => null);
+		$conditions['QuestionnaireFrameDisplayQuestionnaires.frame_key'] = $this->viewVars['frameKey'];
+
+		if ($addConditions) {
+			$conditions = array_merge($conditions, $addConditions);
+		}
+		return $conditions;
+	}
+
+/**
+ * get index sql condition method
+ *
+ * @param array $addConditions 追加条件
+ * @return array
+ */
+	public function getConditionForAnswer($addConditions = array()) {
 		$answerStatus = isset($this->params['named']['answer_status']) ? $this->params['named']['answer_status'] : QUESTIONNAIRE_ANSEWER_VIEW_ALL;
 
 		if ($answerStatus == QUESTIONNAIRE_ANSEWER_UNANSERERED) {
@@ -142,6 +188,7 @@ class QuestionnairesAppController extends AppController {
 		if ($this->viewVars['roomRoleKey'] == NetCommonsRoomRoleComponent::DEFAULT_ROOM_ROLE_KEY) {
 			$conditions['is_no_member_allow'] = QuestionnairesComponent::PERMISSION_PERMIT;
 		}
+
 		if ($addConditions) {
 			$conditions = array_merge($conditions, $addConditions);
 		}

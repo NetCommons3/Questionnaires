@@ -37,6 +37,8 @@ class BlockRolePermissionsController extends BlocksController {
 		'Blocks.Block',
 		'Blocks.BlockRolePermission',
 		'Rooms.RolesRoom',
+		'Questionnaires.Questionnaires',
+		'Questionnaires.QuestionnaireBlocksSetting'
 	);
 
 /**

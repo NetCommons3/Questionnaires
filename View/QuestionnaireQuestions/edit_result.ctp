@@ -73,7 +73,7 @@
 					)); ?>
 			</div>
 
-			<div ng-if="questionnaire.Questionnaire.is_total_show == <?php echo QuestionnairesComponent::EXPRESSION_SHOW; ?>">
+			<div ng-show="questionnaire.Questionnaire.is_total_show == <?php echo QuestionnairesComponent::EXPRESSION_SHOW; ?>">
 
 				<div class="form-group questionnaire-group">
 					<label><?php echo __d('questionnaires', 'Text to be displayed in the aggregate results page'); ?></label>
@@ -124,7 +124,7 @@
 								'errorArrayName' => 'errors.QuestionnairePage[pageIndex].QuestionnaireQuestion[qIndex].is_result_display',
 								)); ?>
 							</div>
-							<div ng-if="question.is_result_display == <?php echo QuestionnairesComponent::EXPRESSION_SHOW; ?>">
+							<div ng-show="question.is_result_display == <?php echo QuestionnairesComponent::EXPRESSION_SHOW; ?>">
 								<div class="form-group">
 									<label><?php echo __d('questionnaires', 'display type');?></label>
 									<?php echo $this->Form->input('QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.result_display_type',
@@ -145,10 +145,10 @@
 								'errorArrayName' => 'errors.QuestionnairePage[pageIndex].QuestionnaireQuestion[qIndex].result_display_type',
 								)); ?>
 
-								<div class="form-group" ng-if="question.result_display_type != <?php echo QuestionnairesComponent::RESULT_DISPLAY_TYPE_TABLE; ?>">
+								<div class="form-group" ng-show="question.result_display_type != <?php echo QuestionnairesComponent::RESULT_DISPLAY_TYPE_TABLE; ?>">
 									<label><?php echo __d('questionnaires', 'graph color');?></label>
 									<table class="table table-condensed" 
-										ng-if="question.question_type != <?php echo QuestionnairesComponent::TYPE_MATRIX_SELECTION_LIST; ?> 
+										ng-show="question.question_type != <?php echo QuestionnairesComponent::TYPE_MATRIX_SELECTION_LIST; ?>
 											&& question.question_type != <?php echo QuestionnairesComponent::TYPE_MATRIX_MULTIPLE; ?>">
 										<tr ng-repeat="(cIndex, choice) in question.QuestionnaireChoice">
 											<td>
@@ -168,7 +168,7 @@
 										</tr>
 									</table>
 									<table class="table table-condensed" 
-										ng-if="question.question_type == <?php echo QuestionnairesComponent::TYPE_MATRIX_SELECTION_LIST; ?> 
+										ng-show="question.question_type == <?php echo QuestionnairesComponent::TYPE_MATRIX_SELECTION_LIST; ?>
 										|| question.question_type == <?php echo QuestionnairesComponent::TYPE_MATRIX_MULTIPLE; ?>">
 										<tr ng-repeat="(cIndex, choice) in question.QuestionnaireChoice | filter : {matrix_type:<?php echo QuestionnairesComponent::MATRIX_TYPE_COLUMN; ?>}">
 											<td>

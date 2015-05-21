@@ -58,4 +58,5 @@ class QuestionnaireBlocksSetting extends QuestionnairesAppModel {
 			'order' => ''
 		)
 	);
+
 }

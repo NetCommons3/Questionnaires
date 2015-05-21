@@ -172,6 +172,7 @@ class QuestionnaireQuestionsController extends QuestionnairesAppController {
 	private function __validateQuestionnaireQuestionSetting($data) {
 		$this->QuestionnaireValidation->checkPage($data);
 		if ($this->QuestionnaireValidation->validationErrors) {
+			$this->log(print_r($this->QuestionnaireValidation->validationErrors, true), 'debug');
 			$this->qValidationErrors = $this->QuestionnaireValidation->validationErrors;
 			return false;
 		} else {

@@ -14,7 +14,9 @@
 <div id="nc-questionnaire-frame-settings-content-list-<?php echo (int)$frameId; ?>"
 	 ng-controller="QuestionnairesFrame"
 	 ng-init="initialize(<?php echo (int)$frameId; ?>,
-	 	<?php echo h(json_encode($questionnaires)); ?>)">
+	 	<?php echo h(json_encode($questionnaires)); ?>,
+	 	<?php echo h(json_encode($questionnaireFrameSettings)); ?>,
+	 	<?php echo h(json_encode($displayQuestionnaire)); ?>)">
 
 	<div class="modal-body">
 		<?php echo $this->element('NetCommons.setting_tabs', $settingTabs); ?>

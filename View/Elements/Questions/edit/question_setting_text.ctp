@@ -35,6 +35,10 @@
 			));
 			?>
 		</div>
+		<?php echo $this->element(
+		'Questionnaires.errors', array(
+		'errorArrayName' => 'errors.QuestionnairePage[pageIndex].QuestionnaireQuestion[qIndex].min',
+		)); ?>
 	</div>
 
 	<div class="col-sm-6">
@@ -48,6 +52,10 @@
 			));
 			?>
 		</div>
+		<?php echo $this->element(
+		'Questionnaires.errors', array(
+		'errorArrayName' => 'errors.QuestionnairePage[pageIndex].QuestionnaireQuestion[qIndex].max',
+		)); ?>
 	</div>
 </div>
 

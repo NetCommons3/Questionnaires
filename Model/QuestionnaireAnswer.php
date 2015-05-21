@@ -178,7 +178,7 @@ class QuestionnaireAnswer extends QuestionnairesAppModel {
 			$errors = array_merge($errors,
 				$this->QuestionnaireAnswerValidation->checkDatetimeType($question, $answer));
 			$errors = array_merge($errors,
-				$this->QuestionnaireAnswerValidation->checkRange($question, $answer, 'date'));
+				$this->QuestionnaireAnswerValidation->checkDateRange($question, $answer, 'date'));
 		}
 
 		//
@@ -239,21 +239,47 @@ class QuestionnaireAnswer extends QuestionnairesAppModel {
 			$this->__getAnswerValueOfSelect($this->data['QuestionnaireAnswer']['answer_values'], $answer);
 		}
 		if ($question['question_type'] == QuestionnairesComponent::TYPE_MULTIPLE_SELECTION) {
-			$this->data['QuestionnaireAnswer']['answer_values'] = array();
-			$this->data['QuestionnaireAnswer']['multi_answer_values'] = '';
-			foreach ($answer as $a) {
-				$this->__getAnswerValueOfSelect($this->data['QuestionnaireAnswer']['answer_values'], $a);
-				$this->data['QuestionnaireAnswer']['multi_answer_values'] .= $a;
-			}
+			$this->__setupAnswerValueMultiple($answer);
 		}
 		if ($question['question_type'] == QuestionnairesComponent::TYPE_MATRIX_SELECTION_LIST) {
 			$this->data['QuestionnaireAnswer']['matrix_answer_values'] = array();
 			$this->__getAnswerValueOfSelect($this->data['QuestionnaireAnswer']['matrix_answer_values'][$this->data['QuestionnaireAnswer']['matrix_choice_id']], $answer);
 		}
 		if ($question['question_type'] == QuestionnairesComponent::TYPE_MATRIX_MULTIPLE) {
-			$this->data['QuestionnaireAnswer']['matrix_answer_values'] = array();
-			$this->data['QuestionnaireAnswer']['multi_answer_values'] = '';
-			$matrixChoiceId = $this->data['QuestionnaireAnswer']['matrix_choice_id'];
+			$this->__setupAnswerValueMatrixMultiple($answer);
+		}
+	}
+
+/**
+ * __setupAnswerValueMultiple
+ * get answer value for selection question
+ *
+ * @param array $answer 分解された選択肢回答
+ * @return void
+ */
+	private function __setupAnswerValueMultiple($answer) {
+		$this->data['QuestionnaireAnswer']['answer_values'] = array();
+		$this->data['QuestionnaireAnswer']['multi_answer_values'] = '';
+		if (is_array($answer)) {
+			foreach ($answer as $a) {
+				$this->__getAnswerValueOfSelect($this->data['QuestionnaireAnswer']['answer_values'], $a);
+				$this->data['QuestionnaireAnswer']['multi_answer_values'] .= $a;
+			}
+		}
+	}
+
+/**
+ * __setupAnswerValueMatrixMultiple
+ * get answer value for selection question
+ *
+ * @param array $answer 分解された選択肢回答
+ * @return void
+ */
+	private function __setupAnswerValueMatrixMultiple($answer) {
+		$this->data['QuestionnaireAnswer']['matrix_answer_values'] = array();
+		$this->data['QuestionnaireAnswer']['multi_answer_values'] = '';
+		$matrixChoiceId = $this->data['QuestionnaireAnswer']['matrix_choice_id'];
+		if (is_array($answer)) {
 			foreach ($answer as $ans) {
 				$this->__getAnswerValueOfSelect($this->data['QuestionnaireAnswer']['matrix_answer_values'][$matrixChoiceId], $ans);
 				$this->data['QuestionnaireAnswer']['multi_answer_values'] .= $ans;
@@ -272,6 +298,28 @@ class QuestionnaireAnswer extends QuestionnairesAppModel {
 	private function __getAnswerValueOfSelect(&$data, $answer) {
 		$answers = explode(QuestionnairesComponent::ANSWER_VALUE_DELIMITER, trim($answer, QuestionnairesComponent::ANSWER_DELIMITER));
 		$data[$answers[0]] = isset($answers[1]) ? $answers[1] : '';
+	}
+
+/**
+ * getAnswerCount
+ * It returns the number of responses in accordance with the conditions
+ *
+ * @param array $conditions conditions
+ * @return int
+ */
+	public function getAnswerCount($conditions) {
+		$cnt = $this->find('count', array(
+			'conditions' => $conditions,
+			'joins' => array(
+				array('table' => 'questionnaire_answer_summaries',
+					'alias' => 'QuestionnaireAnswerSummary',
+					'type' => 'LEFT',
+					'conditions' => array(
+						'QuestionnaireAnswerSummary.id = QuestionnaireAnswer.questionnaire_answer_summary_id',
+					))
+			)
+		));
+		return $cnt;
 	}
 
 /**

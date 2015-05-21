@@ -31,9 +31,9 @@ class QuestionnaireFrameDisplayQuestionnaire extends QuestionnairesAppModel {
  * @var array
  */
 	public $validate = array(
-		'questionnaire_frame_setting_id' => array(
-			'numeric' => array(
-				'rule' => array('numeric'),
+		'frame_key' => array(
+			'notEmpty' => array(
+				'rule' => array('notEmpty'),
 				//'message' => 'Your custom message here',
 				//'allowEmpty' => false,
 				//'required' => false,
@@ -61,9 +61,9 @@ class QuestionnaireFrameDisplayQuestionnaire extends QuestionnairesAppModel {
  * @var array
  */
 	public $belongsTo = array(
-		'QuestionnaireFrameSetting' => array(
-			'className' => 'QuestionnaireFrameSetting',
-			'foreignKey' => 'questionnaire_frame_setting_id',
+		'Frame' => array(
+			'className' => 'Frame',
+			'foreignKey' => 'frame_key',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
@@ -76,4 +76,45 @@ class QuestionnaireFrameDisplayQuestionnaire extends QuestionnairesAppModel {
 			'order' => ''
 		)
 	);
+
+/**
+ * saveFrameDisplayQuestionnaire
+ * this function is called when you create new questionnaire
+ *
+ * @param int $frameId frame id
+ * @param int $questionnaireId questionnaire id
+ * @return bool
+ */
+	public function saveFrameDisplayQuestionnaire($frameId, $questionnaireId) {
+		$frame = $this->Frame->find('first', array(
+			'conditions' => array(
+				'Frame.id' => $frameId
+			)
+		));
+		if (!$frame) {
+			return false;
+		}
+		$questionnaire = $this->Questionnaire->find('first', array(
+			'conditions' => array(
+				'Questionnaire.id' => $questionnaireId
+			)
+		));
+		if (!$questionnaire) {
+			return false;
+		}
+
+		$saveData = array(
+			'frame_key' => $frame['Frame']['key'],
+			'questionnaire_origin_id' => $questionnaire['Questionnaire']['origin_id']);
+		if ($this->find('first', array(
+			'conditions' => $saveData
+		))) {
+			// あるならもう作らない
+			return true;
+		}
+		if (!$this->save($saveData)) {
+			return false;
+		}
+		return true;
+	}
 }

@@ -124,11 +124,7 @@ class QuestionnaireValidation extends QuestionnairesAppModel {
 			}
 
 			// 質問中の選択肢についてチェック
-			if ($question['question_type'] != QuestionnairesComponent::TYPE_TEXT
-			&& $question['question_type'] != QuestionnairesComponent::TYPE_TEXT_AREA
-			&& $question['question_type'] != QuestionnairesComponent::TYPE_DATE_AND_TIME) {
-				$this->checkChoice($questionnaire, $page, $question, $errors['QuestionnaireQuestion'][$qIndex]);
-			}
+			$this->checkChoice($questionnaire, $page, $question, $errors['QuestionnaireQuestion'][$qIndex]);
 			$qSeq++;
 		}
 		//
@@ -149,16 +145,20 @@ class QuestionnaireValidation extends QuestionnairesAppModel {
  * @return array error message
  */
 	public function checkChoice($questionnaire, $page, $question, &$errors) {
+		if ($question['question_type'] == QuestionnairesComponent::TYPE_TEXT
+			|| $question['question_type'] == QuestionnairesComponent::TYPE_TEXT_AREA
+			|| $question['question_type'] == QuestionnairesComponent::TYPE_DATE_AND_TIME) {
+			return;
+		}
+
 		$this->loadModels([
 			'QuestionnaireChoice' => 'Questionnaires.QuestionnaireChoice',
 		]);
 
 		// 少なくとも１選択肢は存在すること
-		if (empty($question['QuestionnaireChoice'])) {
-			$errors[] = __d('questionnaires', 'please set at least one choice.');
-			return false;
-		}
-		$cSeq = 0;
+		$this->__checkChoiceExists($question, $question['QuestionnaireChoice'], $errors);
+
+		$cSeqs = array_fill(0, count($question['QuestionnaireChoice']), false);
 		foreach ($question['QuestionnaireChoice'] as $cIndex => $choice) {
 			// それぞれの選択肢のフィールド確認
 			$this->QuestionnaireChoice->set($choice);
@@ -176,15 +176,15 @@ class QuestionnaireValidation extends QuestionnairesAppModel {
 			if ($this->QuestionnaireChoice->validationErrors) {
 				$errors['QuestionnaireChoice'][$cIndex]	= $this->QuestionnaireChoice->validationErrors;
 			}
-			// 選択肢のシーケンスが０始まりで連番になっているか
-			if ($cSeq != $choice['choice_sequence']) {
-				$errors['QuestionnaireChoice'][$cIndex][] = __d('questionnaires', 'Invalid choice sequence set. Please try again from the beginning.');
-				return false;
-			}
-
 			$this->__checkSkip($questionnaire, $page, $question, $choice, $errors['QuestionnaireChoice'][$cIndex]);
-			$cSeq++;
+			$cSeqs[$choice['choice_sequence']] = true;
 		}
+		// 選択肢のシーケンスが０始まりで連番になっているか
+		$invalidSeq = array_search(false, $cSeqs);
+		if ($invalidSeq) {
+			$errors['QuestionnaireChoice'][$invalidSeq] = __d('questionnaires', 'Invalid choice sequence set. Please try again from the beginning.');
+		}
+
 		if (!empty($this->validationErrors)) {
 			return false;
 		} else {
@@ -203,6 +203,9 @@ class QuestionnaireValidation extends QuestionnairesAppModel {
  * @return void
  */
 	private function __checkSkip($questionnaire, $page, $question, $choice, &$errors) {
+		if (!isset($question['is_skip'])) {
+			return;
+		}
 		// 質問がスキップ質問である場合
 		if ($question['is_skip'] == QuestionnairesComponent::SKIP_FLAGS_SKIP) {
 			// 選択肢にジャンプ先の設定があり、かつ、最後ページへの指定ではない場合（未設定時はデフォルトの次ページ移動となります）
@@ -219,4 +222,35 @@ class QuestionnaireValidation extends QuestionnairesAppModel {
 			}
 		}
 	}
+
+/**
+ * __checkChoiceExists
+ *
+ * @param array $question questionnaire question
+ * @param array $choices choice
+ * @param array &$errors error message array
+ * @return void
+ */
+	private function __checkChoiceExists($question, $choices, &$errors) {
+		// 少なくとも１選択肢は存在すること
+		if (empty($question['QuestionnaireChoice'])) {
+			$errors[] = __d('questionnaires', 'please set at least one choice.');
+			return;
+		}
+
+		if ($question['question_type'] == QuestionnairesComponent::TYPE_MATRIX_SELECTION_LIST
+			|| $question['question_type'] == QuestionnairesComponent::TYPE_MATRIX_MULTIPLE	) {
+			return;
+		}
+
+		// マトリクスタイプのときは、行、カラムの両方ともに最低一つは必要
+		$rows = Hash::extract($choices, '{n}[matrix_type=' . QuestionnairesComponent::MATRIX_TYPE_ROW_OR_NO_MATRIX . ']');
+		$cols = Hash::extract($choices, '{n}[matrix_type=' . QuestionnairesComponent::MATRIX_TYPE_COLUMN . ']');
+
+		if (empty($rows) || empty($cols)) {
+			$errors[] = __d('questionnaires', 'please set at least one choice at row and column.');
+			return;
+		}
+	}
+
 }

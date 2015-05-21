@@ -152,9 +152,10 @@ class QuestionnaireUtilHelper extends AppHelper {
  *
  * @param string $frameId フレームID
  * @param array $questionnaire 回答データ
+ * @param array $options option
  * @return string
  */
-	public function getAggregateButtons($frameId, $questionnaire) {
+	public function getAggregateButtons($frameId, $questionnaire, $options = array()) {
 		//
 		// 集計ボタン
 		// 集計表示しない＝ボタン自体ださない
@@ -198,11 +199,15 @@ class QuestionnaireUtilHelper extends AppHelper {
 			}
 		}
 
-		$html = <<<EOL
-<a class="btn btn-default questionnaire-listbtn {$disabled}" href="/questionnaires/questionnaire_answer_summaries/result/$frameId/$id/">
-<span class="glyphicon glyphicon-stats" aria-hidden="true"></span>
-</a>
-EOL;
+		$btnClass = isset($options['class']) ? $options['class'] : 'btn-default questionnaire-listbtn';
+		$html = '<a class="btn ' . $btnClass . ' ' . $disabled . '" href="/questionnaires/questionnaire_answer_summaries/result/' . $frameId . '/' . $id . '/">';
+		if (isset($options['title'])) {
+			$html .= $options['title'];
+		} else {
+			$html .= '<span class="glyphicon glyphicon-stats" aria-hidden="true"></span>';
+		}
+		$html .= '</a>';
+
 		return $html;
 	}
 

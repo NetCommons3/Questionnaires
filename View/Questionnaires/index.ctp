@@ -72,13 +72,6 @@
 										'questionnaire_questions/edit/' . $frameId . '/?questionnaire_id=' . $questionnaire['Questionnaire']['id']) ?>">
 										<span class="glyphicon glyphicon-edit" ></span>
 									</a>
-									<?php if($this->viewVars['contentPublishable'] == true): ?>
-									<a class="btn btn-warning"
-									   href="<?php echo $this->Html->url(
-										'questionnaire_answer_summaries/download/' . $frameId . '/?questionnaire_id=' . $questionnaire['Questionnaire']['origin_id']) ?>">
-										<span class="glyphicon glyphicon-download" ></span>
-									</a>
-									<?php endif ?>
 								</div>
 								<small>
 									<dl class="questionnaire-editor-dl">

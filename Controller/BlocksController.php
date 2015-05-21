@@ -36,6 +36,11 @@ class BlocksController extends QuestionnairesAppController {
 		'Frames.Frame',
 		'Questionnaires.Questionnaire',
 		'Questionnaires.QuestionnaireFrameSetting',
+		'Questionnaires.QuestionnairePage',
+		'Questionnaires.QuestionnaireQuestion',
+		'Questionnaires.QuestionnaireChoice',
+		'Questionnaires.QuestionnaireAnswerSummary',
+		'Comments.Comment',
 		'Categories.Category',
 	);
 
@@ -53,6 +58,8 @@ class BlocksController extends QuestionnairesAppController {
 				'blockEditable' => array('index', 'edit')
 			),
 		),
+		'Questionnaires.Questionnaires',
+		'Paginator',
 	);
 
 /**
@@ -87,59 +94,30 @@ class BlocksController extends QuestionnairesAppController {
  * @throws Exception
  */
 	public function index() {
-		$this->redirect('edit/' . $this->viewVars['frameId'] . '/' . $this->viewVars['blockId']);
-	}
-
-/**
- * edit
- *
- * @return void
- */
-	public function edit() {
-		if (! $this->NetCommonsBlock->validateBlockId()) {
-			$this->throwBadRequest();
-			return false;
+		// 条件設定値取得
+		$conditions = $this->getConditionForAnswer();
+		// データ取得
+		// Modelの方ではカスタムfindメソッドを装備している
+		// ここではtype属性を指定することでカスタムFindを呼び出すように指示している
+		try {
+			$this->paginate = array(
+				'conditions' => $conditions,
+				'page' => 1,
+				'sort' => QuestionnairesComponent::DISPLAY_SORT_TYPE_NEW_ARRIVALS,
+				'limit' => QUESTIONNAIRE_DEFAULT_DISPLAY_NUM_PER_PAGE,
+				'direction' => 'desc',
+				'recursive' => 0,
+				'type' => 'getQListWithAnsCnt',
+				'sessionId' => $this->Session->id(),
+				'userId' => $this->Auth->user('id')
+			);
+			$questionnaire = $this->paginate('Questionnaire');
+		} catch (NotFoundException $e) {
+			// NotFoundの例外
+			// アンケートデータが存在しないこととする
+			$questionnaire = array();
 		}
-		$this->set('blockId', (int)$this->params['pass'][1]);
-		/*
-		if (! $this->initQuestionnaire(['faqSetting'])) {
-			return;
-		}
-		$this->Categories->initCategories();
-
-		if ($this->request->isPost()) {
-			$data = $this->__parseRequestData();
-			$data['QuestionnaireSetting']['faq_key'] = $data['Questionnaire']['key'];
-
-			$this->Questionnaire->saveQuestionnaire($data);
-			if ($this->handleValidationError($this->Questionnaire->validationErrors)) {
-				if (! $this->request->is('ajax')) {
-					$this->redirect('/faqs/blocks/index/' . $this->viewVars['frameId']);
-				}
-				return;
-			}
-
-			$results = $this->camelizeKeyRecursive($data);
-			$this->set($results);
-		}
-		*/
-	}
-
-/**
- * Parse data from request
- *
- * @return array
- */
-	private function __parseRequestData() {
-		$data = $this->data;
-		if ($data['Block']['public_type'] === Block::TYPE_LIMITED) {
-			//$data['Block']['from'] = implode('-', $data['Block']['from']);
-			//$data['Block']['to'] = implode('-', $data['Block']['to']);
-		} else {
-			unset($data['Block']['from'], $data['Block']['to']);
-		}
-
-		return $data;
+		$this->set('questionnaires', $questionnaire);
 	}
 
 /**
@@ -149,8 +127,15 @@ class BlocksController extends QuestionnairesAppController {
  * @return void
  */
 	public function initTabs($activeTab) {
-		if (isset($this->params['pass'][1])) {
-			$blockId = (int)$this->params['pass'][1];
+		$block = $this->Block->find('first', array(
+			'conditions' => array(
+				'Block.room_id' => $this->viewVars['roomId'],
+				'Block.plugin_key' => 'questionnaires'
+			)
+		));
+
+		if (isset($block['Block']['id'])) {
+			$blockId = (int)$block['Block']['id'];
 		} else {
 			$blockId = null;
 		}

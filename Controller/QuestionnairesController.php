@@ -27,7 +27,6 @@ class QuestionnairesController extends QuestionnairesAppController {
 		'Questionnaires.QuestionnaireChoice',
 		'Questionnaires.QuestionnaireAnswerSummary',
 		'Comments.Comment',
-		'Questionnaires.QuestionnaireFrameSetting'
 	);
 
 /**
@@ -79,11 +78,25 @@ class QuestionnairesController extends QuestionnairesAppController {
  */
 	public function index() {
 		// 表示方法設定値取得
-		list($displayNum, $sort, $dir) =
+		list($displayType, $displayNum, $sort, $dir) =
 			$this->QuestionnaireFrameSetting->getQuestionnaireFrameSetting($this->viewVars['frameKey']);
 
 		// 条件設定値取得
 		$conditions = $this->getCondition();
+
+		// 単独表示が指定されていた場合
+		if ($displayType == QuestionnairesComponent::DISPLAY_TYPE_SINGLE) {
+			$questionnaires = $this->Questionnaire->getQuestionnairesList(
+				$this->viewVars,
+				$this->Session->id(),
+				$this->Auth->user('id'),
+				array());
+			if (!$questionnaires) {
+				$this->view = 'Questionnaires/noQuestionnaire';
+				return;
+			}
+			$this->redirect('questionnaire_answer/answer/' . $this->viewVars['frameId'] . '/' . $questionnaires['Questionnaire']['origin_id']);
+		}
 
 		// データ取得
 		// Modelの方ではカスタムfindメソッドを装備している
@@ -124,7 +137,7 @@ class QuestionnairesController extends QuestionnairesAppController {
  */
 	public function thanks($frameId = 0, $questionnaireId = 0) {
 		// 指定されたアンケート情報を取り出す
-		$conditions = $this->getCondition(array('origin_id' => $questionnaireId));
+		$conditions = $this->getConditionForAnswer(array('origin_id' => $questionnaireId));
 		$questionnaire = $this->Questionnaire->find('first', array(
 			'conditions' => $conditions
 		));
@@ -300,6 +313,9 @@ class QuestionnairesController extends QuestionnairesAppController {
 			if (! $this->Questionnaire->deleteQuestionnaire($this->request->data)) {
 				return;
 			}
+
+			// ブロックの後始末が必要
+			$this->QuestionnaireFrameSetting->cleanUpBlock($frameId);
 
 			// メッセージ表示
 			$this->Session->setFlash(__d('questionnaires', 'This Questionnaire has been deleted.'));
