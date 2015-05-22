@@ -33,7 +33,6 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
  * @var array
  */
 	public $components = array(
-		'Security',
 		'NetCommons.NetCommonsBlock', //Use Questionnaire model
 		'NetCommons.NetCommonsFrame',
 		'NetCommons.NetCommonsRoomRole',

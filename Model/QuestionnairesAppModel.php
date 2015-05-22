@@ -26,6 +26,21 @@ class QuestionnairesAppModel extends AppModel {
 	);
 
 /**
+ * Called during validation operations, before validation. Please note that custom
+ * validation rules can be defined in $validate.
+ *
+ * @param array $options Options passed from Model::save().
+ * @return bool True if validate operation should continue, false to abort
+ * @link http://book.cakephp.org/2.0/en/models/callback-methods.html#beforevalidate
+ * @see Model::save()
+ */
+	public function beforeValidate($options = array()) {
+		// この継承クラスたちがValidateロジックを走らせる前に必ずDBを切り替える
+		$this->setDataSource('master');
+		return parent::beforeValidate($options);
+	}
+
+/**
  * _getQuestionnairesCommonForAnswer アンケートに対する指定ユーザーの回答が存在するか
  *
  * @param string $sessionId セッションID
@@ -75,7 +90,15 @@ class QuestionnairesAppModel extends AppModel {
 				'conditions' => array(
 					'Questionnaire.origin_id = QuestionnaireFrameDisplayQuestionnaires.questionnaire_origin_id'
 				)
-			)
+			),
+			array(
+				'table' => 'blocks',
+				'alias' => 'Block',
+				'type' => 'left',
+				'conditions' => array(
+					'Questionnaire.block_id = Block.id'
+				)
+			),
 		);
 		return $subQueryArray;
 	}

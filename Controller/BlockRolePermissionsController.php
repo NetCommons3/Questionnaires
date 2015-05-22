@@ -92,11 +92,24 @@ class BlockRolePermissionsController extends BlocksController {
 			return false;
 		}
 		$this->set('blockId', (int)$this->params['pass'][1]);
-		/*
-		if (! $this->initFaq(['faqSetting'])) {
-			return;
+
+		$blockSetting = $this->QuestionnaireBlocksSetting->find('first', array(
+			'conditions' => array(
+				'block_key' => $this->viewVars['blockKey']
+			)
+		));
+		if (!$blockSetting) {
+			$this->QuestionnaireBlocksSetting->create();
+			$this->QuestionnaireBlocksSetting->save(
+				array(
+					'block_key' => $this->viewVars['blockKey'],
+					'use_workflow' => true
+				)
+			);
 		}
-		*/
+		$blockSetting = $this->camelizeKeyRecursive($blockSetting);
+		$this->set($blockSetting);
+
 		if (! $block = $this->Block->find('first', array(
 			'recursive' => -1,
 			'conditions' => array(
@@ -130,6 +143,7 @@ class BlockRolePermissionsController extends BlocksController {
 			'roles' => $permissions['Roles'],
 		);
 		$results = $this->camelizeKeyRecursive($results);
+
 		$this->set($results);
 	}
 }

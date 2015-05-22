@@ -20,13 +20,6 @@ App::uses('QuestionnairesAppModel', 'Questionnaires.Model');
 class QuestionnaireFrameSetting extends QuestionnairesAppModel {
 
 /**
- * Use database config
- *
- * @var string
- */
-	public $useDbConfig = 'master';
-
-/**
  * Validation rules
  *
  * @var array
@@ -126,6 +119,9 @@ class QuestionnaireFrameSetting extends QuestionnairesAppModel {
  * @throws InternalErrorException
  */
 	public function prepareBlock($frameId) {
+		$this->loadModels([
+			'Block' => 'Blocks.Block',
+		]);
 		// このルームにすでにアンケートブロックが存在した場合で、
 		// かつ、現在フレームにまだブロックが結びついてない場合、
 		// すでに存在するブロックと現在フレームを結びつける
@@ -150,6 +146,7 @@ class QuestionnaireFrameSetting extends QuestionnairesAppModel {
 			return;
 		}
 		$frame['Frame']['block_id'] = $block['Block']['id'];
+		$this->setDataSource('master');
 		$dataSource = $this->getDataSource();
 		$dataSource->begin();
 		try {
@@ -220,6 +217,7 @@ class QuestionnaireFrameSetting extends QuestionnairesAppModel {
 		if ($frameSetting) {
 			return;
 		}
+		$this->setDataSource('master');
 		$dataSource = $this->getDataSource();
 		$dataSource->begin();
 		try {

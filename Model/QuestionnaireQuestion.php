@@ -30,13 +30,6 @@ class QuestionnaireQuestion extends QuestionnairesAppModel {
 	);
 
 /**
- * Use database config
- *
- * @var string
- */
-	public $useDbConfig = 'master';
-
-/**
  * Validation rules
  *
  * @var array
@@ -231,6 +224,12 @@ class QuestionnaireQuestion extends QuestionnairesAppModel {
 		$this->loadModels([
 			'QuestionnaireChoice' => 'Questionnaires.QuestionnaireChoice',
 		]);
+		// QuestionnaireQuestionが単独でSaveされることはない
+		// 必ず上位のQuestionnaireのSaveの折に呼び出される
+		// なので、$this->setDataSource('master');といった
+		// 決まり処理は上位で行われる
+		// ここでは行わない
+
 		foreach ($questions as &$qq) {
 			$saveQuestion = $this->_setupSaveData($qq, $status);
 			$saveQuestion['questionnaire_page_id'] = $pageId;

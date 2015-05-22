@@ -13,6 +13,20 @@ App::uses('AppController', 'Controller');
 
 class QuestionnairesAppController extends AppController {
 
+/**
+ * use components
+ *
+ * @var array
+ */
+	public $components = array(
+		'Security',
+	);
+
+/**
+ * use models
+ *
+ * @var array
+ */
 	public $uses = array(
 		'Questionnaires.QuestionnaireFrameSetting'
 	);

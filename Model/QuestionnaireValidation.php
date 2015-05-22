@@ -16,13 +16,6 @@ App::uses('QuestionnairesAppModel', 'Questionnaires.Model');
 class QuestionnaireValidation extends QuestionnairesAppModel {
 
 /**
- * Use database config
- *
- * @var string
- */
-	public $useDbConfig = 'master';
-
-/**
  * Use table config
  *
  * @var bool
@@ -238,8 +231,8 @@ class QuestionnaireValidation extends QuestionnairesAppModel {
 			return;
 		}
 
-		if ($question['question_type'] == QuestionnairesComponent::TYPE_MATRIX_SELECTION_LIST
-			|| $question['question_type'] == QuestionnairesComponent::TYPE_MATRIX_MULTIPLE	) {
+		if ($question['question_type'] != QuestionnairesComponent::TYPE_MATRIX_SELECTION_LIST
+			&& $question['question_type'] != QuestionnairesComponent::TYPE_MATRIX_MULTIPLE	) {
 			return;
 		}
 

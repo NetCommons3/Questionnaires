@@ -11,7 +11,7 @@
 ?>
 
 <div class="inline-block">
-	<?php echo sprintf(__d('net_commons', 'Delete all data associated with the %s.'), __d('faqs', 'FAQ')); ?>
+	<?php echo sprintf(__d('net_commons', 'Delete all data associated with the %s.'), __d('questionnaires', 'QUESTIONNAIRES')); ?>
 </div>
 <?php echo $this->Form->hidden('Block.id', array(
 		'value' => isset($block['id']) ? $block['id'] : null,
@@ -25,5 +25,5 @@
 <?php echo $this->Form->button('<span class="glyphicon glyphicon-trash"> </span> ' . __d('net_commons', 'Delete'), array(
 		'name' => 'delete',
 		'class' => 'btn btn-danger pull-right',
-		'onclick' => 'return confirm(\'' . sprintf(__d('net_commons', 'Deleting the %s. Are you sure to proceed?'), __d('faqs', 'FAQ')) . '\')'
+		'onclick' => 'return confirm(\'' . sprintf(__d('net_commons', 'Deleting the %s. Are you sure to proceed?'), __d('questionnaires', 'QUESTIONNAIRES')) . '\')'
 	));

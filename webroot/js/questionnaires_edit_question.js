@@ -5,7 +5,7 @@
 
 NetCommonsApp.controller('Questionnaires.edit.question',
     function($scope, NetCommonsBase, NetCommonsWysiwyg,
-             NetCommonsUser, $timeout, dialogs) {
+             NetCommonsUser, $timeout) {
 
       /**
          * plugin

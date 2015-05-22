@@ -25,22 +25,21 @@ class QuestionnaireFrameDisplayQuestionnaireTest extends CakeTestCase {
 		'plugin.questionnaires.questionnaire_frame_display_questionnaire',
 		'plugin.questionnaires.questionnaire_frame_setting',
 		'plugin.questionnaires.questionnaire',
-		'plugin.questionnaires.user',
+		'plugin.users.user',
 		'plugin.questionnaires.role',
 		'plugin.questionnaires.group',
 		'plugin.questionnaires.room',
 		'plugin.questionnaires.space',
 		'plugin.questionnaires.box',
-		'plugin.questionnaires.top_page',
 		'plugin.questionnaires.block',
 		'plugin.questionnaires.page',
 		'plugin.questionnaires.language',
 		'plugin.questionnaires.groups_language',
 		'plugin.questionnaires.groups_user',
-		'plugin.questionnaires.user_attribute',
-		'plugin.questionnaires.user_attributes_user',
-		'plugin.questionnaires.user_select_attribute',
-		'plugin.questionnaires.user_select_attributes_user'
+		'plugin.users.user_attribute',
+		'plugin.users.user_attributes_user',
+		'plugin.users.user_select_attribute',
+		'plugin.users.user_select_attributes_user'
 	);
 
 /**
@@ -64,4 +63,11 @@ class QuestionnaireFrameDisplayQuestionnaireTest extends CakeTestCase {
 		parent::tearDown();
 	}
 
+/**
+ * testIndex method
+ *
+ * @return void
+ */
+	public function testIndex() {
+	}
 }

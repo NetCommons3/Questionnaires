@@ -202,7 +202,7 @@
 			array(
 			'label' => false,
 			'class' => 'form-control',
-			'ng-if' => 'questionnaires.Questionnaire.is_key_pass_use',
+			'ng-show' => 'questionnaires.Questionnaire.is_key_pass_use',
 			'ng-model' => 'questionnaires.Questionnaire.key_phrase'
 			)
 			);

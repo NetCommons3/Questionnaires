@@ -39,13 +39,12 @@
 	</div>
 
 	<?php echo $this->Form->create('QuestionnaireQuestion', array(
-	'name' => 'questionnaire_form_question',
 	'type' => 'post',
 	'novalidate' => true,
 	'ng-keydown' => 'handleKeydown($event)'
 	)); ?>
+	<?php $this->Form->unlockField('QuestionnairePage'); ?>
 
-	<?php echo $this->Form->hidden('id'); ?>
 	<?php echo $this->Form->hidden('Frame.id', array(
 	'value' => $frameId,
 	)); ?>
@@ -70,13 +69,13 @@
 			<?php echo $this->Form->hidden(
 			'Questionnaire.origin_id',
 			array(
-			'ng-value' => 'questionnaire.Questionnaire.origin_id',
+			'value' => $questionnaire['Questionnaire']['origin_id'],
 			));
 			?>
 			<?php echo $this->Form->hidden(
 			'Questionnaire.key',
 			array(
-			'ng-value' => 'questionnaire.Questionnaire.key',
+			'value' => $questionnaire['Questionnaire']['key'],
 			));
 			?>
 		</div>

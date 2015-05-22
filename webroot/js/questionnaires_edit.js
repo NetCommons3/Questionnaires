@@ -12,7 +12,7 @@ NetCommonsApp.requires.push('dialogs.main');
 
 NetCommonsApp.controller('Questionnaires.edit',
     function($scope, NetCommonsBase, NetCommonsWysiwyg,
-             NetCommonsUser, $timeout, $attrs, dialogs) {
+             NetCommonsUser, $timeout, $attrs) {
 
 
       /**

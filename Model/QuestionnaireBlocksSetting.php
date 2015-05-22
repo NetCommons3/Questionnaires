@@ -18,13 +18,6 @@ App::uses('QuestionnairesAppModel', 'Questionnaires.Model');
 class QuestionnaireBlocksSetting extends QuestionnairesAppModel {
 
 /**
- * Use database config
- *
- * @var string
- */
-	public $useDbConfig = 'master';
-
-/**
  * Validation rules
  *
  * @var array

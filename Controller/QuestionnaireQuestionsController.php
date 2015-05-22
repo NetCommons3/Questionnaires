@@ -54,6 +54,15 @@ class QuestionnaireQuestionsController extends QuestionnairesAppController {
 	);
 
 /**
+ * beforeFilter
+ *
+ * @return void
+ */
+	public function beforeFilter() {
+		parent::beforeFilter();
+	}
+
+/**
  * edit method
  *
  * @param int $frameId frame id

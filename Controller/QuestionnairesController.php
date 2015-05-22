@@ -183,13 +183,13 @@ class QuestionnairesController extends QuestionnairesAppController {
 						'fieldList' => array(	'title')))) {
 						// デフォルトデータをもとに新規作成
 						$questionnaire = $this->Questionnaire->getDefaultQuestionnaire();
-						$questionnaire['Questionnaire']['title'] = $this->data['title'];
+						$questionnaire['Questionnaire']['title'] = $this->data['Questionnaire']['title'];
 					}
 				} elseif ($this->data['create_option'] == QUESTIONNAIRE_CREATE_OPT_REUSE) {
 
-					if (isset($this->data['questionnaire_id'])) {
+					if (isset($this->data['past_questionnaire_id'])) {
 						// 過去のアンケートのコピー・クローンで作成
-						$questionnaire = $this->__getQuestionnaireCloneById($this->data['questionnaire_id']);
+						$questionnaire = $this->__getQuestionnaireCloneById($this->data['past_questionnaire_id']);
 					} else {
 						// Modelにはない属性のエラーを入れる
 						$this->validationErrors['Questionnaire']['past_questionnaire_id'] = __d('questionnaires', 'Please select past questionnaire.');

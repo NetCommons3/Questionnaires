@@ -21,56 +21,6 @@ QuestionnaireCommon.directive('selectChange', function() {
   return DDO;
 });
 
-QuestionnaireCommon.directive('commentPopoverOld',
-    ['$compile', function($compile) {
-      return {
-        restrict: 'A',
-        template: '<span>{{label}}</span>',
-        link: function(scope, el, attrs) {
-          var linkFn = $compile(attrs.popoverHtml);
-          var output = linkFn(scope);
-          scope.label = attrs.popoverLabel;
-          $(el).popover({
-            trigger: 'click',
-            html: true,
-            content: output,
-            placement: attrs.popoverPlacement
-          });
-        }
-      };
-    }]);
-
-QuestionnaireCommon.directive('commentPopover',
-    ['$compile', '$templateCache', function($compile, $templateCache) {
-      var getTemplate = function(num) {
-        var templateId = 'templateId.html';
-        var template = '';
-        template = $templateCache.get(templateId);
-        return template;
-      };
-      return {
-        scope: {
-          templateNumber: '=',
-          placement: '@',
-          popoverPlacement: '@',
-          comments: '='
-        },
-        restrict: 'AE',
-        link: function(scope, element, attrs) {
-          var popOverContent;
-          var html = getTemplate(scope.templateNumber);
-          popOverContent = $compile(html)(scope);
-          var options = {
-            content: popOverContent,
-            placement: scope.popoverPlacement,
-            html: true
-          };
-          $(element).popover(options);
-        }
-      };
-    }]);
-
-
 QuestionnaireCommon.directive('colorPalettePicker', [function() {
   var defaultColors = ['#f38631', '#e0e4cd', '#69d2e7', '#68e2a7', '#f64649',
     '#4d5361', '#47bfbd', '#7c4f6c', '#23313c', '#9c9b7f',

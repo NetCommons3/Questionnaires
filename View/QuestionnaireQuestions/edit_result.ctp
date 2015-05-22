@@ -37,6 +37,7 @@
 	'novalidate' => true,
 	'ng-keydown' => 'handleKeydown($event)'
 	)); ?>
+		<?php $this->Form->unlockField('QuestionnairePage'); ?>
 
 		<?php echo $this->Form->hidden('id'); ?>
 		<?php echo $this->Form->hidden('Frame.id', array(
@@ -162,8 +163,7 @@
 
 												</div>
 												<div class="col-sm-3">
-													<color-palette-picker selected='selected' name='QuestionnairePage[{{pageIndex}}][QuestionnaireQuestion][{{qIndex}}][QuestionnaireChoice][{{cIndex}}][graph_color]' ng-model='choice.graph_color'></color-palette-picker>
-												</div>
+													<color-palette-picker selected='selected' name='data[QuestionnairePage][{{pageIndex}}][QuestionnaireQuestion][{{qIndex}}][QuestionnaireChoice][{{cIndex}}][graph_color]' ng-model='choice.graph_color'></color-palette-picker>												</div>
 											</td>
 										</tr>
 									</table>

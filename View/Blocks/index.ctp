@@ -2,10 +2,8 @@
 	<?php echo $this->element('NetCommons.setting_tabs', $settingTabs); ?>
 
 	<div class="tab-content">
-		<div class="text-right">
-			<a class="btn btn-success" href="<?php echo $this->Html->url('/questionnaires/questionnaires/add/' . $frameId);?>">
-				<span class="glyphicon glyphicon-plus"> </span>
-			</a>
+		<div class="pull-right">
+			<?php echo $this->element('Questionnaires.Questionnaires/add_button'); ?>
 		</div>
 
 		<div id="nc-questionnaire-setting-<?php echo $frameId; ?>">

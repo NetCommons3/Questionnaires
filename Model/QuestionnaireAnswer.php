@@ -20,13 +20,6 @@ App::uses('QuestionnairesAppModel', 'Questionnaires.Model');
 class QuestionnaireAnswer extends QuestionnairesAppModel {
 
 /**
- * Use database config
- *
- * @var string
- */
-	public $useDbConfig = 'master';
-
-/**
  * Validation rules
  *
  * @var array
@@ -342,6 +335,7 @@ class QuestionnaireAnswer extends QuestionnairesAppModel {
 		]);
 
 		//トランザクションBegin
+		$this->setDataSource('master');
 		//$dataSource = $this->getDataSource();
 		//$dataSource->begin();
 

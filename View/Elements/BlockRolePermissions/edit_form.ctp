@@ -14,7 +14,7 @@
 'value' => isset($faqSetting['id']) ? (int)$faqSetting['id'] : null,
 )); ?>
 
-<?php echo $this->Form->hidden('FaqSetting.faq_key', array(
+<?php echo $this->Form->hidden('QuestionnaireBlocksSetting.block_key', array(
 'value' => isset($faqSetting['faqKey']) ? $faqSetting['faqKey'] : null,
 )); ?>
 

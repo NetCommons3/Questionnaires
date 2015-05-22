@@ -19,13 +19,6 @@ App::uses('QuestionnairesAppModel', 'Questionnaires.Model');
 class QuestionnaireFrameDisplayQuestionnaire extends QuestionnairesAppModel {
 
 /**
- * Use database config
- *
- * @var string
- */
-	public $useDbConfig = 'master';
-
-/**
  * Validation rules
  *
  * @var array

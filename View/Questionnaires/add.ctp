@@ -53,6 +53,9 @@
 				'novalidate' => true,
 				'ng-keydown' => 'handleKeydown($event)'
 				)); ?>
+				<?php $this->Form->unlockField('create_option'); ?>
+				<?php $this->Form->unlockField('past_questionnaire_id'); ?>
+
 				<?php echo $this->Form->hidden('Frame.id', array(
 				'value' => $frameId,
 				)); ?>
@@ -67,16 +70,12 @@
 						</label>
 					</div>
 					<div  collapse="createOption != '<?php echo QUESTIONNAIRE_CREATE_OPT_NEW; ?>'">
-						<label for="Questionnaire.title" >
-							<?php echo __d('questionnaires', 'Questionnaire title'); ?>
-							<?php echo $this->element('NetCommons.required'); ?>
-						</label>
-						<input type="text"
-							   class="form-control"
-							   id="Questionnaire.title"
-							   name="title"
-							   ng-model="newTitle"
-							   placeholder="<?php echo __d('questionnaires', 'Please input questionnaire title'); ?>">
+						<?php echo $this->Form->input('title', array(
+						'class' => 'form-control',
+						'label' => $this->element('NetCommons.required') . __d('questionnaires', 'Questionnaire title'),
+						'ng-model' => 'newTitle',
+						'placeholder' => __d('questionnaires', 'Please input questionnaire title')
+						)); ?>
 						<?php echo $this->element(
 						'NetCommons.errors', [
 						'errors' => $this->validationErrors,
@@ -122,7 +121,7 @@
 						'model' => 'Questionnaire',
 						'field' => 'past_questionnaire_id',
 						]) ?>
-						<input type="hidden" name="questionnaire_id" value="{{pastQuestionnaireSelect}}" />
+						<input type="hidden" name="past_questionnaire_id" value="{{pastQuestionnaireSelect}}" />
 					</div><!-- /input-group -->
 				</div><!-- /form-group 2-->
 

@@ -20,13 +20,6 @@ App::uses('QuestionnairesAppModel', 'Questionnaires.Model');
 class QuestionnaireAnswerSummary extends QuestionnairesAppModel {
 
 /**
- * Use database config
- *
- * @var string
- */
-	public $useDbConfig = 'master';
-
-/**
  * Validation rules
  *
  * @var array
@@ -185,6 +178,7 @@ class QuestionnaireAnswerSummary extends QuestionnairesAppModel {
 		));
 		// なければ作成
 		if (!$summary) {
+			$this->setDataSource('master');
 			$summary = $this->create();
 			$this->save(array(
 				'answer_status' => QuestionnairesComponent::ACTION_NOT_ACT,

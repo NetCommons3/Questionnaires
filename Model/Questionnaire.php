@@ -29,13 +29,6 @@ class Questionnaire extends QuestionnairesAppModel {
 	);
 
 /**
- * Use database config
- *
- * @var string
- */
-	public $useDbConfig = 'master';
-
-/**
  * Custom find methods
  *
  * @var array
@@ -480,6 +473,7 @@ class Questionnaire extends QuestionnairesAppModel {
 		]);
 
 		//トランザクションBegin
+		$this->setDataSource('master');
 		$dataSource = $this->getDataSource();
 		$dataSource->begin();
 
@@ -543,7 +537,7 @@ class Questionnaire extends QuestionnairesAppModel {
 		$this->loadModels([
 			'Comment' => 'Comments.Comment',
 		]);
-
+		$this->setDataSource('master');
 		$dataSource = $this->getDataSource();
 		$dataSource->begin();
 		try {
