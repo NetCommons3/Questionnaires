@@ -29,7 +29,7 @@ class QuestionnaireFrameSettingsController extends BlocksController {
 		'Blocks.Block',
 		'Frames.Frame',
 		'Questionnaires.Questionnaire',
-		'Questionnaires.QuestionnaireFrameSettings',
+		'Questionnaires.QuestionnaireFrameSetting',
 		'Questionnaires.QuestionnaireFrameDisplayQuestionnaire',
 	);
 
@@ -85,6 +85,17 @@ class QuestionnaireFrameSettingsController extends BlocksController {
  * @return void
  */
 	public function edit() {
+		// Postデータ登録
+		if ($this->request->isPost()) {
+			$this->QuestionnaireFrameSetting->saveFrameSettings($this->viewVars['frameKey'], $this->data);
+			if ($this->handleValidationError($this->QuestionnaireFrameSetting->validationErrors)) {
+				if (! $this->request->is('ajax')) {
+					$this->redirect('/questionnaires/blocks/index/' . $this->viewVars['frameId']);
+				}
+				return;
+			}
+		}
+
 		$conditions = array(
 			'block_id' => $this->viewVars['blockId'],
 			'is_latest' => true,
@@ -105,14 +116,14 @@ class QuestionnaireFrameSettingsController extends BlocksController {
 			$questionnaires = array();
 		}
 
-		$frame = $this->QuestionnaireFrameSettings->find('first', array(
+		$frame = $this->QuestionnaireFrameSetting->find('first', array(
 			'conditions' => array(
 				'frame_key' => $this->viewVars['frameKey'],
 			),
-			'order' => 'QuestionnaireFrameSettings.id DESC'
+			'order' => 'QuestionnaireFrameSetting.id DESC'
 		));
 		if (!$frame) {
-			$frame = $this->QuestionnaireFrameSettings->getDefaultFrameSetting();
+			$frame = $this->QuestionnaireFrameSetting->getDefaultFrameSetting();
 		}
 
 		$displayQuestionnaire = $this->QuestionnaireFrameDisplayQuestionnaire->find('list', array(
@@ -124,7 +135,7 @@ class QuestionnaireFrameSettingsController extends BlocksController {
 			),
 		));
 		$this->set('questionnaires', $questionnaires);
-		$this->set('questionnaireFrameSettings', $frame['QuestionnaireFrameSettings']);
+		$this->set('questionnaireFrameSettings', $frame['QuestionnaireFrameSetting']);
 		$this->set('displayQuestionnaire', $displayQuestionnaire);
 	}
 }

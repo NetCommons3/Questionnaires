@@ -26,7 +26,7 @@ msgstr ""
 
 #: /Controller/QuestionnaireAnswersController.php:83
 msgid "Invalid key phrase"
-msgstr "キーフレーズが不正です"
+msgstr "キーフレーズが間違っています"
 
 #: /Controller/QuestionnaireAnswersController.php:86
 msgid "Invalid key Image Auth"
@@ -52,11 +52,11 @@ msgstr "新規選択肢"
 
 #: /Controller/QuestionnaireQuestionsController.php:256
 msgid "new column choice"
-msgstr ""
+msgstr "新規選択肢（列）"
 
 #: /Controller/QuestionnaireQuestionsController.php:257
 msgid "other choice"
-msgstr ""
+msgstr "その他"
 
 #: /Controller/QuestionnairesController.php:195
 msgid "Please select past questionnaire."
@@ -143,47 +143,47 @@ msgstr "キーフレーズを使う場合、キーフレーズを設定してく
 
 #: /Model/QuestionnaireAnswerValidation.php:47
 msgid "Input required"
-msgstr ""
+msgstr "必須項目です"
 
 #: /Model/QuestionnaireAnswerValidation.php:66
 msgid "Number required"
-msgstr ""
+msgstr "数字を入力してください"
 
 #: /Model/QuestionnaireAnswerValidation.php:83
 msgid "Please enter a valid date in YY-MM-DD format."
-msgstr ""
+msgstr "日付を正しいフォーマット YY-MM-DD で入力してください。"
 
 #: /Model/QuestionnaireAnswerValidation.php:87
 msgid "Please enter the time."
-msgstr ""
+msgstr "時間を入力してください。"
 
 #: /Model/QuestionnaireAnswerValidation.php:91
 msgid "Please enter a valid date and time."
-msgstr ""
+msgstr "正しい日付と時間を設定してください。"
 
 #: /Model/QuestionnaireAnswerValidation.php:109;128
 msgid "Please enter the %s between %s and %s."
-msgstr ""
+msgstr "%sは%sから%sの範囲で入力してください。"
 
 #: /Model/QuestionnaireAnswerValidation.php:146;163;168
 msgid "Invalid choice"
-msgstr ""
+msgstr "選択が不正です"
 
 #: /Model/QuestionnaireAnswerValidation.php:189
 msgid "Please enter something, if you chose the other item"
-msgstr ""
+msgstr "その他を選択する場合は、内容を入力してください。"
 
 #: /Model/QuestionnaireAnswerValidation.php:212
 msgid "Please enter something in other item"
-msgstr ""
+msgstr "その他の内容を入力してください。"
 
 #: /Model/QuestionnaireChoice.php:76
 msgid "Please input choice text."
-msgstr ""
+msgstr "選択肢内容を入力してください。"
 
 #: /Model/QuestionnaireChoice.php:111
 msgid "First character is \"#\". And input the hexadecimal numbers by six digits."
-msgstr ""
+msgstr "最初の１文字目は\"#\"です。続けて16進数6桁で指定してください。"
 
 #: /Model/QuestionnairePage.php:155
 msgid "First Page"
@@ -191,7 +191,7 @@ msgstr ""
 
 #: /Model/QuestionnaireQuestion.php:116
 msgid "Please input question text."
-msgstr ""
+msgstr "質問文を入力してください。"
 
 #: /Model/QuestionnaireQuestion.php:156;162
 msgid "Please enter both the maximum and minimum values."
@@ -199,39 +199,39 @@ msgstr "上限値と下限値の両方を入力してください。"
 
 #: /Model/QuestionnaireValidation.php:45
 msgid "please set at least one page."
-msgstr ""
+msgstr "少なくとも1ページ以上必要です。"
 
 #: /Model/QuestionnaireValidation.php:64
 msgid "Invalid page sequence set. Please try again from the beginning."
-msgstr ""
+msgstr "ページの連番が不正です。最初からやり直してください。"
 
 #: /Model/QuestionnaireValidation.php:95
 msgid "please set at least one question."
-msgstr ""
+msgstr "少なくとも１つ以上の質問が必要です。"
 
 #: /Model/QuestionnaireValidation.php:122
 msgid "Invalid question sequence set. Please try again from the beginning."
-msgstr ""
+msgstr "質問の連番が不正です。最初からやり直してください。"
 
 #: /Model/QuestionnaireValidation.php:185
 msgid "Invalid choice sequence set. Please try again from the beginning."
-msgstr ""
+msgstr "選択肢の連番が不正です。最初からやり直してください。"
 
 #: /Model/QuestionnaireValidation.php:215
 msgid "Invalid skip page. Please set forward page."
-msgstr ""
+msgstr "スキップページが不正です。先のページを設定してください。"
 
 #: /Model/QuestionnaireValidation.php:220
 msgid "Invalid skip page. page does not exist."
-msgstr ""
+msgstr "スキップページが不正です。ページが存在しません。"
 
 #: /Model/QuestionnaireValidation.php:237
 msgid "please set at least one choice."
-msgstr ""
+msgstr "少なくとも１つの選択肢を設定してください。"
 
 #: /Model/QuestionnaireValidation.php:251
 msgid "please set at least one choice at row and column."
-msgstr ""
+msgstr "行と列には、それぞれ１つ以上の選択肢が必要です。"
 
 #: /View/Blocks/index.ctp:24
 #: /View/Elements/FrameSettings/edit_display_questionnaire.ctp:27
@@ -261,7 +261,7 @@ msgstr ""
 #: /View/Elements/questionnaire_status_label.ctp:15
 #: /View/Helper/QuestionnaireStatusLabelHelper.php:31
 msgid "Undefined"
-msgstr ""
+msgstr "未設定"
 
 #: /View/Elements/questionnaire_status_label.ctp:31
 #: /View/Helper/QuestionnaireStatusLabelHelper.php:49
@@ -328,23 +328,23 @@ msgstr ""
 
 #: /View/Elements/Answers/answer_test_mode_header.ctp:19
 msgid "Edit this question"
-msgstr ""
+msgstr "質問の作成へ"
 
 #: /View/Elements/Answers/answer_test_mode_header.ctp:31
 msgid "Test Mode"
-msgstr ""
+msgstr "一時保存（テストモード）"
 
 #: /View/Elements/Answers/answer_test_mode_header.ctp:34
 msgid "This questionnaire is being temporarily stored . You can questionnaire test before performed in this page . If you want to modify or change the questionnaire , you will be able to edit by pressing the [ Edit question ] button in the upper-right corner . Also, when you click on the bottom<span class=\"btn btn-primary questionnaire-btn-comment\"><span class=\"glyphicon glyphicon-comment\"></span></span> right of the screen , you can see the comments ."
-msgstr ""
+msgstr "このアンケートは一時保存中です。このページで実施前のアンケートテストをすることができます。<br />アンケートを修正・変更したい場合は、上部にある質問作成ボタンを押すと編集することができます。<br />また、<span class=\"btn btn-primary questionnaire-btn-comment\"><span class=\"glyphicon glyphicon-comment\"></span></span>&nbsp;ボタンをクリックするとコメントを書くこともできます。"
 
 #: /View/Elements/Answers/question_range_description.ctp:14
 msgid "Please %s <= enter <= %s"
-msgstr ""
+msgstr "次の範囲で入力してください %s <= 入力値 <= %s"
 
 #: /View/Elements/Answers/question_range_description.ctp:16
 msgid "Please %s <= enter"
-msgstr ""
+msgstr "入力してください %s <= enter"
 
 #: /View/Elements/Answers/question_range_description.ctp:18
 msgid "Please enter <= %s"
@@ -352,11 +352,11 @@ msgstr ""
 
 #: /View/Elements/Answers/question_single_select_box.ctp:29
 msgid "Please choose one"
-msgstr ""
+msgstr "一つ選択してください"
 
 #: /View/Elements/Blocks/delete_form.ctp:14;28
 msgid "QUESTIONNAIRES"
-msgstr ""
+msgstr "アンケート"
 
 #: /View/Elements/FrameSettings/edit_display_questionnaire.ctp:12
 msgid "select display questionnaires."
@@ -416,16 +416,16 @@ msgstr "全て表示"
 
 #: /View/Elements/Questionnaires/answer_status.ctp:18
 msgid "Unanswered"
-msgstr ""
+msgstr "未回答"
 
 #: /View/Elements/Questionnaires/answer_status.ctp:19
 msgid "Answered"
-msgstr ""
+msgstr "回答済"
 
 #: /View/Elements/Questionnaires/answer_status.ctp:22
 #: /View/Helper/QuestionnaireUtilHelper.php:119
 msgid "Test"
-msgstr ""
+msgstr "テスト"
 
 #: /View/Elements/Questions/edit/question_setting_alternative.ctp:20;88
 msgid "add choices"
@@ -441,15 +441,15 @@ msgstr "スキップロジックを設定する"
 
 #: /View/Elements/Questions/edit/question_setting_alternative.ctp:63
 msgid "goto end"
-msgstr ""
+msgstr "終了へ"
 
 #: /View/Elements/Questions/edit/question_setting_alternative.ctp:64
 msgid "(new page will be created)"
-msgstr ""
+msgstr "(新しいページはすでに作成されています)"
 
 #: /View/Elements/Questions/edit/question_setting_alternative.ctp:65
 msgid "create new page for this skip"
-msgstr ""
+msgstr "このスキップのためのページを作成する"
 
 #: /View/Elements/Questions/edit/question_setting_alternative.ctp:93
 #: /View/Elements/Questions/edit/question_setting_matrix_alternative.ctp:81
@@ -462,35 +462,35 @@ msgstr "(「その他」の選択肢です。)"
 
 #: /View/Elements/Questions/edit/question_setting_date.ctp:21
 msgid "Date"
-msgstr ""
+msgstr "日付"
 
 #: /View/Elements/Questions/edit/question_setting_date.ctp:22
 msgid "Time"
-msgstr ""
+msgstr "時間"
 
 #: /View/Elements/Questions/edit/question_setting_date.ctp:23
 msgid "Date and Time"
-msgstr ""
+msgstr "日付と時間"
 
 #: /View/Elements/Questions/edit/question_setting_date.ctp:40
 msgid "set range to answer date and time"
-msgstr ""
+msgstr "期間を設定する"
 
 #: /View/Elements/Questions/edit/question_setting_matrix_alternative.ctp:16
 msgid "Line choices"
-msgstr ""
+msgstr "行の選択肢"
 
 #: /View/Elements/Questions/edit/question_setting_matrix_alternative.ctp:20;39
 msgid "Add line choices"
-msgstr ""
+msgstr "行の選択肢を追加する"
 
 #: /View/Elements/Questions/edit/question_setting_matrix_alternative.ctp:44
 msgid "Column choices"
-msgstr ""
+msgstr "列の選択肢"
 
 #: /View/Elements/Questions/edit/question_setting_matrix_alternative.ctp:47;68
 msgid "Add column choices"
-msgstr ""
+msgstr "列の選択肢を追加する"
 
 #: /View/Elements/Questions/edit/question_setting_matrix_alternative.ctp:54
 msgid "Do you want to delete this choice ?"
@@ -510,7 +510,7 @@ msgstr "上限値"
 
 #: /View/Helper/QuestionnaireUtilHelper.php:126
 msgid "Answer"
-msgstr ""
+msgstr "回答"
 
 #: /View/Helper/QuestionnaireUtilHelper.php:141
 msgid "Unpublished"
@@ -522,27 +522,27 @@ msgstr ""
 
 #: /View/QuestionnaireAnswerSummaries/result.ctp:80
 msgid "Back to Top"
-msgstr ""
+msgstr "Topに戻る"
 
 #: /View/QuestionnaireAnswers/answer.ctp:44
 msgid "Error occurred. Please check your answer."
-msgstr ""
+msgstr "誤りがあります。回答内容を確認してください。"
 
 #: /View/QuestionnaireAnswers/confirm.ctp:29
 msgid "Please confirm your answers."
-msgstr ""
+msgstr "回答内容を確認してください。"
 
 #: /View/QuestionnaireAnswers/confirm.ctp:95
 msgid "Start over"
-msgstr ""
+msgstr "最初からやり直す"
 
 #: /View/QuestionnaireAnswers/pre_answer.ctp:40
 msgid "This questionnaire has been guarded by the key phrase. Please enter the first key phrase To answer ."
-msgstr ""
+msgstr "このアンケートはキーフレーズが使われています。回答のためのキーフレーズを入力してください。"
 
 #: /View/QuestionnaireBlocksSettings/edit.ctp:10
 msgid "Plugin name"
-msgstr ""
+msgstr "プラグイン名"
 
 #: /View/QuestionnaireBlocksSettings/edit.ctp:16
 msgid "Authority setting"
@@ -613,7 +613,7 @@ msgstr "ページの追加"
 
 #: /View/QuestionnaireQuestions/edit_result.ctp:54
 msgid "Results setting"
-msgstr ""
+msgstr "設定内容"
 
 #: /View/QuestionnaireQuestions/edit_result.ctp:59
 msgid "Please edit return to create the question screen if you want to change the questionnaire title"
@@ -677,7 +677,7 @@ msgstr "新しいアンケートを作成します。作成方法を選んでく
 
 #: /View/Questionnaires/add.ctp:66
 msgid "Create new questionnaire"
-msgstr "質問の作成"
+msgstr "新規にアンケート作成"
 
 #: /View/Questionnaires/add.ctp:93
 msgid "Re-use past questionnaire"
@@ -769,29 +769,29 @@ msgstr "このアンケートを削除してもよろしいですか？"
 
 #: /View/Questionnaires/index.ctp:78
 msgid "Author"
-msgstr ""
+msgstr "作成者"
 
 #: /View/Questionnaires/index.ctp:80
 msgid "Modified by"
-msgstr ""
+msgstr "修正者"
 
 #: /View/Questionnaires/index.ctp:86
 msgid "Pages"
-msgstr ""
+msgstr "ページ数"
 
 #: /View/Questionnaires/index.ctp:88
 msgid "Questions"
-msgstr ""
+msgstr "質問数"
 
 #: /View/Questionnaires/index.ctp:90
 msgid "Answers"
-msgstr ""
+msgstr "回答数"
 
 #: /View/Questionnaires/index.ctp:119
 #: /View/Questionnaires/noQuestionnaire.ctp:39
 #: /View/Questionnaires/thanks.ctp:41
 msgid "Back to page"
-msgstr ""
+msgstr "アンケート一覧に戻る"
 
 #: /View/Questionnaires/noQuestionnaire.ctp:29
 msgid "no questionnaire"
@@ -803,5 +803,5 @@ msgstr "+ボタンをクリックしてアンケートを作成してくださ�
 
 #: /View/Questionnaires/thanks.ctp:49
 msgid "Aggregate"
-msgstr ""
+msgstr "集計結果を表示する"
 

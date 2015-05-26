@@ -27,6 +27,7 @@ class QuestionnairesController extends QuestionnairesAppController {
 		'Questionnaires.QuestionnaireChoice',
 		'Questionnaires.QuestionnaireAnswerSummary',
 		'Comments.Comment',
+		'Questionnaires.QuestionnaireFrameDisplayQuestionnaire',
 	);
 
 /**
@@ -86,16 +87,28 @@ class QuestionnairesController extends QuestionnairesAppController {
 
 		// 単独表示が指定されていた場合
 		if ($displayType == QuestionnairesComponent::DISPLAY_TYPE_SINGLE) {
+			$displayQ = $this->QuestionnaireFrameDisplayQuestionnaire->find('first', array(
+				'frame_key' => $this->viewVars['frameKey'],
+			));
+			if (!$displayQ) {
+				$this->view = 'Questionnaires/noQuestionnaire';
+				return;
+			}
+
 			$questionnaires = $this->Questionnaire->getQuestionnairesList(
 				$this->viewVars,
 				$this->Session->id(),
 				$this->Auth->user('id'),
-				array());
+				array('origin_id' => $displayQ['QuestionnaireFrameDisplayQuestionnaire']['questionnaire_origin_id']));
 			if (!$questionnaires) {
 				$this->view = 'Questionnaires/noQuestionnaire';
 				return;
 			}
-			$this->redirect('questionnaire_answer/answer/' . $this->viewVars['frameId'] . '/' . $questionnaires['Questionnaire']['origin_id']);
+			//$this->redirect('questionnaire_answers/answer/' . $this->viewVars['frameId'] . '/' . $questionnaires[0]['Questionnaire']['origin_id']);
+			$ret = $this->requestAction('/questionnaires/questionnaire_answers/answer/' . $this->viewVars['frameId'] . '/' . $questionnaires[0]['Questionnaire']['origin_id'], array('return'));
+			$this->set('answer', $ret);
+			$this->view = 'Questionnaires/answer';
+			return;
 		}
 
 		// データ取得

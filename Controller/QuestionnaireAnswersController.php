@@ -149,10 +149,15 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 
 		// アンケート回答可否チェックとアンケート情報の取り出し
 		$questionnaire = $this->QuestionnairesPreAnswer->guardAnswer($this, $frameId, $questionnaireId);
+		if (!$questionnaire) {
+			$this->view = 'QuestionnaireAnswers/noMoreAnswer';
+			return;
+		}
 
 		// プレ回答をするべき状態にあるか
 		if ($this->QuestionnairesPreAnswer->isPreAnswer($this, $questionnaire)) {
-			$this->redirect('pre_answer/' . $frameId . '/' . $questionnaireId);
+			//$this->redirect('pre_answer/' . $frameId . '/' . $questionnaireId);
+			$this->setAction('pre_answer', $frameId, $questionnaireId);
 			return;
 		}
 
@@ -188,14 +193,15 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 
 		// 次のページが普通に存在する場合
 		// （すでに回答している場合もあるので、回答も合わせて取り出すこと）
-		$setAnswers = array();
 		if (count($errors) == 0) {
-			$answerSummary = $this->QuestionnaireAnswerSummary->getProgressiveSummaryOfThisUser($questionnaireId, $userId, $this->Session->id());
+			$summary = $this->QuestionnaireAnswerSummary->getProgressiveSummaryOfThisUser($questionnaireId, $userId, $this->Session->id());
+			$setAnswers = $this->QuestionnaireAnswerSummary->getProgressiveAnswerOfThisSummary($summary);
+			/*
 			if ($answerSummary) {
 				foreach ($answerSummary[0]['QuestionnaireAnswer'] as $answer) {
 					$setAnswers[$answer['questionnaire_question_origin_id']][] = $answer;
 				}
-			}
+			}*/
 		}
 		//$this->log(print_r($setAnswers, true), 'debug');
 		// 質問情報をView変数にセット
@@ -227,7 +233,6 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 		if (!$summary) {
 			throw new NotFoundException(__d('questionnaires', 'Invalid answers'));
 		}
-		$summary = $summary[0];
 
 		// POSTチェック
 		if ($this->request->isPost()) {
@@ -241,15 +246,9 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 		}
 
 		// 回答情報取得
-		$answers = $this->QuestionnaireAnswer->find('all', array(
-			'conditions' => array('questionnaire_answer_summary_id' => $summary['QuestionnaireAnswerSummary']['id'])
-		));
-
 		// 回答情報並べ替え
 		$setAnswers = array();
-		foreach ($answers as $answer) {
-			$setAnswers[$answer['QuestionnaireAnswer']['questionnaire_question_origin_id']][] = $answer['QuestionnaireAnswer'];
-		}
+		$setAnswers = $this->QuestionnaireAnswerSummary->getProgressiveAnswerOfThisSummary($summary);
 
 		// 質問情報をView変数にセット
 		$this->set('questionnaireId', $questionnaireId);

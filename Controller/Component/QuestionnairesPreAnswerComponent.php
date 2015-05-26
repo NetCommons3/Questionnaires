@@ -20,7 +20,6 @@ class QuestionnairesPreAnswerComponent extends Component {
  * @param int $frameId frame id
  * @param int $questionnaireId questionnaire id
  * @return mixed
- * @throws ForbiddenException
  * @throws NotFoundException
  */
 	public function guardAnswer($controller, $frameId, $questionnaireId) {
@@ -39,7 +38,8 @@ class QuestionnairesPreAnswerComponent extends Component {
 
 		// Guard Force URL hack
 		if (!$this->__isAbleToAnswer($controller, $questionnaire)) {
-			throw new ForbiddenException(__d('net_commons', 'Permission denied'));
+			//throw new ForbiddenException(__d('net_commons', 'Permission denied'));
+			return false;
 		}
 		/*
 		if ($controller->request->params['action'] != 'pre_answer') {

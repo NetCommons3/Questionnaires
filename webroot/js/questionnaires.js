@@ -70,7 +70,7 @@ NetCommonsApp.controller('QuestionnairesFrame',
         $scope.questionnaires = questionnaires;
         $scope.questionnaireFrameSettings = questionnaireFrameSettings;
         $scope.displayQuestionnaire = displayQuestionnaire;
-        $scope.allCheck = false;
+        $scope.WinBuf = {allCheck: false};
       };
       /**
        * Questionnaire Frame Setting AllCheckbox clicked
@@ -78,10 +78,12 @@ NetCommonsApp.controller('QuestionnairesFrame',
        * @return {void}
        */
       $scope.allCheckClicked = function() {
-        for (var i = 0; i < questionnaires.length; i++) {
-          var originId = questionnaires[i].origin_id;
-          if (!displayQuestionnaire[originId]) {
-            displayQuestionnaire.originId = originId;
+        for (var i = 0; i < $scope.questionnaires.length; i++) {
+          var originId = $scope.questionnaires[i].Questionnaire.origin_id;
+          if ($scope.WinBuf.allCheck == true) {
+            $scope.displayQuestionnaire[originId] = originId;
+          } else {
+            $scope.displayQuestionnaire[originId] = false;
           }
         }
       };

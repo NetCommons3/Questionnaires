@@ -14,7 +14,9 @@
 	'novalidate' => true,
 	)); ?>
 
-	<?php echo $this->Form->hidden('id'); ?>
+	<?php echo $this->Form->hidden('id', array(
+		'value' => $questionnaireFrameSettings['id'],
+		)); ?>
 	<?php echo $this->Form->hidden('Frame.id', array(
 		'value' => $frameId,
 		)); ?>
@@ -29,7 +31,7 @@
 				<?php echo $this->element('Questionnaires.FrameSettings/edit_display_type'); ?>
 			</div>
 
-			<div class="col-sm-12 form-group" ng-if="questionnaireFrameSettings.display_type == <?php echo QuestionnairesComponent::DISPLAY_TYPE_LIST; ?>">
+			<div class="col-sm-12 form-group" ng-show="questionnaireFrameSettings.display_type == <?php echo QuestionnairesComponent::DISPLAY_TYPE_LIST; ?>">
 				<?php echo $this->element('Questionnaires.FrameSettings/edit_list_display_option'); ?>
 			</div>
 

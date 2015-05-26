@@ -60,7 +60,7 @@
 		<div class="form-group questionnaire-group">
 			<?php echo $this->Form->input('sub_title',
 				array('class' => 'form-control',
-					'label' => 'Sub Title',
+					'label' => __d('questionnaires', 'Sub Title'),
 					'ng-model' => 'questionnaires.Questionnaire.sub_title',
 					'placeholder' => __d('questionnaires', 'Please enter if there is a sub title')
 					)

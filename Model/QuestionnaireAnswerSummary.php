@@ -127,11 +127,38 @@ class QuestionnaireAnswerSummary extends QuestionnairesAppModel {
 			'user_id' => $userId,
 			'session_value' => $sessionId);
 
-		$summary = $this->find('all', array(
-			'conditions' => $conditions
+		$summary = $this->find('first', array(
+			'conditions' => $conditions,
 		));
-
 		return $summary;
+	}
+
+/**
+ * getProgressiveAnswerOfThisSummary
+ *
+ * @param array $summary questionnaire summary ( one record )
+ * @return array
+ */
+	public function getProgressiveAnswerOfThisSummary($summary) {
+		$answers = array();
+		if (empty($summary)) {
+			return $answers;
+		}
+		$this->loadModels([
+			'QuestionnaireAnswer' => 'Questionnaires.QuestionnaireAnswer',
+		]);
+		$answer = $this->QuestionnaireAnswer->find('all', array(
+			'conditions' => array(
+				'questionnaire_answer_summary_id' => $summary['QuestionnaireAnswerSummary']['id']
+			),
+			'recursive' => -1
+		));
+		if (!empty($answer)) {
+			foreach ($answer as $ans) {
+				$answers[$ans['QuestionnaireAnswer']['questionnaire_question_origin_id']][] = $ans['QuestionnaireAnswer'];
+			}
+		}
+		return $answers;
 	}
 
 /**

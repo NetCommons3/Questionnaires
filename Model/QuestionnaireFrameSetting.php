@@ -233,4 +233,74 @@ class QuestionnaireFrameSetting extends QuestionnairesAppModel {
 			throw $ex;
 		}
 	}
+
+/**
+ * saveFrameSettings
+ *
+ * @param string $frameKey frame key
+ * @param array $data save data
+ * @return bool
+ * @throws InternalErrorException
+ */
+	public function saveFrameSettings($frameKey, $data) {
+		$this->loadModels([
+			'QuestionnaireFrameDisplayQuestionnaire' => 'Questionnaires.QuestionnaireFrameDisplayQuestionnaire',
+		]);
+
+		//トランザクションBegin
+		$this->setDataSource('master');
+		$dataSource = $this->getDataSource();
+		$dataSource->begin();
+		try {
+			$data['QuestionnairesFrameSetting']['frame_key'] = $frameKey;
+
+			// フレーム設定のバリデート
+			$this->set($data['QuestionnairesFrameSetting']);
+			if (! $this->validates($data)) {
+				return false;
+			}
+
+			// フレームに表示するアンケート一覧設定のバリデート
+			// 一覧表示タイプと単独表示タイプ
+			if ($data['QuestionnaireFrameSetting']['display_type'] == QuestionnairesComponent::DISPLAY_TYPE_LIST) {
+				$displayQs = $data['QuestionnaireFrameDisplayQuestionnaires']['List']['questionnaire_origin_id'];
+				$ret = $this->QuestionnaireFrameDisplayQuestionnaire->validateDisplayQuestionnaireForList($frameKey, $displayQs);
+			} else {
+				$displayQs = $data['QuestionnaireFrameDisplayQuestionnaires']['Single']['questionnaire_origin_id'];
+				$ret = !$this->QuestionnaireFrameDisplayQuestionnaire->validateDisplayQuestionnaireForSingle($frameKey, $displayQs);
+			}
+			if ($ret == false) {
+				$this->validationErrors = Hash::merge($this->validationErrors, $this->QuestionnaireFrameDisplayQuestionnaire->validationErrors);
+				return false;
+			}
+
+			// フレーム設定の登録
+			if (! $this->save($data, false)) {
+				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+			}
+
+			// フレームに表示するアンケート一覧設定の登録
+			// 一覧表示タイプと単独表示タイプ
+			if ($data['QuestionnaireFrameSetting']['display_type'] == QuestionnairesComponent::DISPLAY_TYPE_LIST) {
+				$displayQs = $data['QuestionnaireFrameDisplayQuestionnaires']['List']['questionnaire_origin_id'];
+				$ret = $this->QuestionnaireFrameDisplayQuestionnaire->saveDisplayQuestionnaireForList($frameKey, $displayQs);
+			} else {
+				$displayQs = $data['QuestionnaireFrameDisplayQuestionnaires']['Single']['questionnaire_origin_id'];
+				$ret = $this->QuestionnaireFrameDisplayQuestionnaire->saveDisplayQuestionnaireForSingle($frameKey, $displayQs);
+			}
+			if ($ret == false) {
+				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+			}
+
+			//トランザクションCommit
+			$dataSource->commit();
+		} catch (Exception $ex) {
+			//トランザクションRollback
+			$dataSource->rollback();
+			CakeLog::error($ex);
+			throw $ex;
+		}
+
+		return true;
+	}
 }

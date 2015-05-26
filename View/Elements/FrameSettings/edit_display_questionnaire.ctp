@@ -17,10 +17,7 @@
 			<th>
 				<?php echo __d('questionnaires', 'Display'); ?>
 				<div class="text-center" ng-if="questionnaireFrameSettings.display_type == <?php echo QuestionnairesComponent::DISPLAY_TYPE_LIST; ?>">
-					<?php echo $this->Form->checkbox('allCheckClicked', array(
-					'ng-model' => 'allCheck',
-					'ng-change' => 'allCheckClicked()'
-					)); ?>
+					<input type="checkbox" ng-model="WinBuf.allCheck" ng-change="allCheckClicked()"  />
 				</div>
 			</th>
 			<th>
@@ -39,37 +36,31 @@
 				<?php echo $this->Paginator->sort('Questionnaire.modified', __d('net_commons', 'Updated date')); ?>
 			</th>
 		</tr>
-		<?php $rowCount = 0; ?>
 		<?php foreach ($questionnaires as $quest): ?>
 		<tr class="animate-repeat btn-default">
 			<td>
-				<div class="text-center" ng-if="questionnaireFrameSettings.display_type == <?php echo QuestionnairesComponent::DISPLAY_TYPE_LIST; ?>">
-					<?php
-					/*echo $this->Form->input('QuestionnaireFrameDisplayQuestionnaires.questionnaire_origin_id', array(
-					'type' => 'select',
-					'multiple' => 'checkbox',
-					'options' => array($quest['Questionnaire']['origin_id'] => ''),
-					'label' => false,
-					'div' => 'text-center', // cakeではselect-multipleのとき無視されている
-					'hiddenField' => ($rowCount == 0) ? true : false,
-					'value' => (isset($displayQuestionnaire[$quest['Questionnaire']['origin_id']])) ? $quest['Questionnaire']['origin_id'] : null,
-					'ng-model' => 'displayQuestionnaire.' . $quest['Questionnaire']['origin_id'],
-					));
-					*/
-					echo $this->Form->checkbox('QuestionnaireFrameDisplayQuestionnaires.questionnaire_origin_id', array(
+				<div class="text-center" ng-show="questionnaireFrameSettings.display_type == <?php echo QuestionnairesComponent::DISPLAY_TYPE_LIST; ?>">
+					<?php echo $this->Form->checkbox('QuestionnaireFrameDisplayQuestionnaires.List.questionnaire_origin_id.' . $quest['Questionnaire']['origin_id'], array(
 					'options' => array($quest['Questionnaire']['origin_id'] => ''),
 					'label' => false,
 					'div' => false,
-					'hiddenField' => ($rowCount == 0) ? true : false,
+					'value' => $quest['Questionnaire']['origin_id'],
 					'checked' => (isset($displayQuestionnaire[$quest['Questionnaire']['origin_id']])) ? true : false,
 					'ng-true-value' => $quest['Questionnaire']['origin_id'],
 					'ng-model' => 'displayQuestionnaire.' . $quest['Questionnaire']['origin_id'],
 					));
-					$rowCount++;
 					?>
 				</div>
-				<div class="text-center"  ng-if="questionnaireFrameSettings.display_type == <?php echo QuestionnairesComponent::DISPLAY_TYPE_SINGLE; ?>">
-					<input type="radio" name="display">
+				<div class="text-center"  ng-show="questionnaireFrameSettings.display_type == <?php echo QuestionnairesComponent::DISPLAY_TYPE_SINGLE; ?>">
+					<?php echo $this->Form->radio('QuestionnaireFrameDisplayQuestionnaires.Single.questionnaire_origin_id',
+					array($quest['Questionnaire']['origin_id'] => ''), array(
+					'legend' => false,
+					'label' => false,
+					'div' => false,
+					'hiddenField' => false,
+					'checked' => (isset($displayQuestionnaire[$quest['Questionnaire']['origin_id']])) ? true : false,
+					));
+					?>
 				</div>
 			</td>
 			<td>

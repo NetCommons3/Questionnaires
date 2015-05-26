@@ -10,29 +10,7 @@
  */
 ?>
 
-<?php echo $this->Form->hidden('Frame.id', array(
-		'value' => $frameId,
-	)); ?>
-
-<?php echo $this->Form->hidden('Block.id', array(
-		'value' => $block['id'],
-	)); ?>
-
-<?php echo $this->Form->hidden('Block.key', array(
-		'value' => $block['key'],
-	)); ?>
-
-<?php echo $this->Form->hidden('Block.language_id', array(
-		'value' => $languageId,
-	)); ?>
-
-<?php echo $this->Form->hidden('Block.room_id', array(
-		'value' => $roomId,
-	)); ?>
-
-<?php echo $this->Form->hidden('Block.plugin_key', array(
-		'value' => $this->params['plugin'],
-	)); ?>
+<?php echo $this->element('Blocks.form_hidden'); ?>
 
 <?php echo $this->Form->hidden('Questionnaire.id', array(
 		'value' => isset($questionnaire['id']) ? (int)$questionnaire['id'] : null,
