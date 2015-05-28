@@ -51,37 +51,6 @@ class AddUseWorkflow extends CakeMigration {
 	);
 
 /**
- * recodes
- *
- * @var array $migration
- */
-	public $records = array(
-		'Plugin' => array(
-			array(
-				'language_id' => 2,
-				'key' => 'questionnaires',
-				'namespace' => 'netcommons/questionnaires',
-				'name' => 'QUESTIONNAIRE',
-				'type' => 1,
-			),
-		),
-
-		'PluginsRole' => array(
-			array(
-				'role_key' => 'room_administrator',
-				'plugin_key' => 'questionnaires'
-			),
-		),
-
-		'PluginsRoom' => array(
-			array(
-				'room_id' => '1',
-				'plugin_key' => 'questionnaires'
-			),
-		),
-	);
-
-/**
  * Before migration callback
  *
  * @param string $direction Direction of migration process (up or down)

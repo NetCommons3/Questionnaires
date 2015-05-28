@@ -10,6 +10,8 @@
  */
 
 App::uses('AppController', 'Controller');
+App::uses('Folder', 'Utility');
+App::uses('File', 'Utility');
 
 /**
  * BlocksController
@@ -40,6 +42,7 @@ class BlocksController extends QuestionnairesAppController {
 		'Questionnaires.QuestionnaireQuestion',
 		'Questionnaires.QuestionnaireChoice',
 		'Questionnaires.QuestionnaireAnswerSummary',
+		'Questionnaires.QuestionnaireAnswerSummaryCsv',
 		'Comments.Comment',
 		'Categories.Category',
 	);
@@ -55,7 +58,7 @@ class BlocksController extends QuestionnairesAppController {
 		'NetCommons.NetCommonsRoomRole' => array(
 			//コンテンツの権限設定
 			'allowedActions' => array(
-				'blockEditable' => array('index', 'edit')
+				'blockEditable' => array('index', 'download')
 			),
 		),
 		'Questionnaires.Questionnaires',
@@ -118,6 +121,95 @@ class BlocksController extends QuestionnairesAppController {
 			$questionnaire = array();
 		}
 		$this->set('questionnaires', $questionnaire);
+	}
+
+/**
+ * download
+ *
+ * @param int $frameId frame id
+ * @param int $questionnaireId questionnaire origin id
+ * @return void
+ */
+	public function download($frameId, $questionnaireId) {
+		$questionnaire = $this->Questionnaire->find('first', array(
+			'conditions' => array(
+				'origin_id' => $questionnaireId,
+				'is_active' => true,
+			)
+		));
+		if (empty($questionnaire)) {
+			$this->Session->setFlash(__d('questionnaires', 'download error'));
+			return;
+		}
+		$fileName = $questionnaire['Questionnaire']['title'] . '.csv';
+		$offset = 0;
+		// テンポラリファイルオープン
+		$folder = new Folder();
+		$folderName = TMP . 'Questionnaires' . DS . 'download' . DS . microtime(true);
+		$folder->create($folderName);
+		$folder->cd($folderName);
+
+		// フォルダ内のお掃除
+		$this->__cleanupDownloadFolder(TMP . 'Questionnaires' . DS . 'download');
+
+		$filePath = tempnam($folder->pwd(), 'csv') . '.csv';
+		$fp = fopen($filePath, 'w+');
+		do {
+			$datas = $this->QuestionnaireAnswerSummaryCsv->getAnswerSummaryCsv($questionnaire, QUESTIONNAIRE_CSV_UNIT_NUMBER, $offset);
+			// テンポラリファイルにCSV形式で書きこみ
+			foreach ($datas as $data) {
+				fputcsv($fp, $data);
+			}
+			$offset += count($datas);
+			$dataCount = count($datas);
+		} while ($dataCount == QUESTIONNAIRE_CSV_UNIT_NUMBER);
+		// ファイルクローズ
+		fclose($fp);
+
+		// 暗号圧縮？現時点ではコマンドでしか実行できない
+		if ($this->__compressFile($filePath)) {
+			$fileName = substr($fileName, 0, strrpos($fileName, '.')) . '.zip';
+		}
+
+		// 出力
+		$this->response->file($filePath, array('download' => true, 'name' => $fileName));
+		return $this->response;
+	}
+
+/**
+ * __cleanupDownloadFolder
+ *
+ * @param string $dir cleanup dir
+ * @return bool
+ */
+	private function __cleanupDownloadFolder($dir) {
+		return true;
+	}
+
+/**
+ * __compressFile
+ *
+ * @param string &$filePath input file path
+ * @return bool
+ */
+	private function __compressFile(&$filePath) {
+		$cmd = '/usr/bin/zip';
+		if (!file_exists($cmd)) {
+			return false;
+		}
+
+		$outputFilePath = $filePath . '.zip';
+
+		$execCmd = sprintf('%s -j -e -P %s %s %s', $cmd, $this->Auth->user('username'), $outputFilePath, $filePath);
+
+		// コマンドを実行する
+		exec(escapeshellcmd($execCmd));
+
+		// 入力ファイルを削除する
+		@unlink($filePath);
+
+		$filePath = $outputFilePath;
+		return true;
 	}
 
 /**

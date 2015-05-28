@@ -64,7 +64,7 @@
 							<?php if ($questionnaire['Questionnaire']['all_answer_count'] > 0): ?>
 							<a class="btn btn-warning"
 							   href="<?php echo $this->Html->url(
-										'download/' . $frameId . '/?questionnaire_id=' . $questionnaire['Questionnaire']['origin_id']) ?>">
+										'download/' . $frameId . '/' . $questionnaire['Questionnaire']['origin_id']) ?>">
 								<span class="glyphicon glyphicon-download" ></span>
 							</a>
 							<?php endif; ?>

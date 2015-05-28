@@ -507,4 +507,77 @@ class QuestionnairesComponent extends Component {
 			self::TYPE_SINGLE_SELECT_BOX => __d('questionnaires', 'List select')
 		);
 	}
+
+/**
+ * isSingleInputType
+ *
+ * @param int $type questionnaire type
+ * @return bool
+ */
+	public static function isOnlyInputType($type) {
+		// text, textarea, date などの単純入力タイプであるか
+		if ($type == self::TYPE_TEXT) {
+			return true;
+		}
+		if ($type == self::TYPE_TEXT_AREA) {
+			return true;
+		}
+		if ($type == self::TYPE_DATE_AND_TIME) {
+			return true;
+		}
+		return false;
+	}
+
+/**
+ * isSelectionInputType
+ *
+ * @param int $type questionnaire type
+ * @return bool
+ */
+	public static function isSelectionInputType($type) {
+		// 択一選択、複数選択、リスト選択 などの単純選択タイプであるか
+		if ($type == self::TYPE_SELECTION) {
+			return true;
+		}
+		if ($type == self::TYPE_MULTIPLE_SELECTION) {
+			return true;
+		}
+		if ($type == self::TYPE_SINGLE_SELECT_BOX) {
+			return true;
+		}
+		return false;
+	}
+
+/**
+ * isMatrixInputType
+ *
+ * @param int $type questionnaire type
+ * @return bool
+ */
+	public static function isMatrixInputType($type) {
+		// マトリクス選択タイプであるか
+		if ($type == self::TYPE_MATRIX_SELECTION_LIST) {
+			return true;
+		}
+		if ($type == self::TYPE_MATRIX_MULTIPLE) {
+			return true;
+		}
+		return false;
+	}
+
+/**
+ * getChoiceValueFromAnswerForSelection
+ *
+ * @param string $answerStr answer_value
+ * @return array
+ */
+	public static function getChoiceValueFromAnswerForSelection($answerStr) {
+		$answerStr = trim($answerStr, self::ANSWER_DELIMITER);
+		$answerArray = explode(self::ANSWER_DELIMITER, $answerStr);
+		$retArray = array();
+		foreach ($answerArray as $answer) {
+			$retArray[] = explode(self::ANSWER_VALUE_DELIMITER, $answer);
+		}
+		return $retArray;
+	}
 }

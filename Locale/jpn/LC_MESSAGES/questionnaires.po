@@ -30,7 +30,7 @@ msgstr "キーフレーズが間違っています"
 
 #: /Controller/QuestionnaireAnswersController.php:86
 msgid "Invalid key Image Auth"
-msgstr ""
+msgstr "画像認証の入力値が不正です"
 
 #: /Controller/QuestionnaireAnswersController.php:229
 msgid "Invalid answers"
@@ -72,15 +72,15 @@ msgstr ""
 
 #: /Controller/Component/QuestionnairesComponent.php:470;471;472;473;474;475
 msgid "item"
-msgstr ""
+msgstr "件"
 
 #: /Controller/Component/QuestionnairesComponent.php:486
 msgid "New Modified"
-msgstr ""
+msgstr "新着順"
 
 #: /Controller/Component/QuestionnairesComponent.php:487
 msgid "Registration order"
-msgstr ""
+msgstr "登録順"
 
 #: /Controller/Component/QuestionnairesComponent.php:488
 #: /Model/Questionnaire.php:141
@@ -91,7 +91,7 @@ msgstr "タイトル"
 
 #: /Controller/Component/QuestionnairesComponent.php:489
 msgid "End period"
-msgstr ""
+msgstr "期限順"
 
 #: /Controller/Component/QuestionnairesComponent.php:500
 msgid "Single choice"
@@ -236,7 +236,7 @@ msgstr "行と列には、それぞれ１つ以上の選択肢が必要です。
 #: /View/Blocks/index.ctp:24
 #: /View/Elements/FrameSettings/edit_display_questionnaire.ctp:27
 msgid "Status"
-msgstr ""
+msgstr "状態"
 
 #: /View/Elements/comment_form.ctp:16
 msgid "send"
@@ -275,27 +275,27 @@ msgstr ""
 
 #: /View/Elements/AnswerSummaries/aggrigate_common_footer.ctp:15
 msgid "Note: Which may not be 100% because of rounding of numeric total."
-msgstr ""
+msgstr "注: 四捨五入しているため、合計は必ずしも100%にはなりません。"
 
 #: /View/Elements/AnswerSummaries/aggrigate_common_footer.ctp:21
 msgid "Note: Matrix if the number in parentheses is a percentage of the total number of responses."
-msgstr ""
+msgstr "注: 表中の割合は、全回答数に占める割合です。"
 
 #: /View/Elements/AnswerSummaries/aggrigate_common_footer.ctp:27
 msgid "Note: If multiple selection is possible, total more than 100% to be."
-msgstr ""
+msgstr "注: 複数選択式の場合、合計が100%を超える場合があります。"
 
 #: /View/Elements/AnswerSummaries/aggrigate_common_header.ctp:21
 msgid "The total number of answers: "
-msgstr ""
+msgstr "全回答数:"
 
 #: /View/Elements/AnswerSummaries/aggrigate_common_header.ctp:29
 msgid "Select one"
-msgstr ""
+msgstr "単一回答"
 
 #: /View/Elements/AnswerSummaries/aggrigate_common_header.ctp:32
 msgid "Select more than one"
-msgstr ""
+msgstr "複数回答"
 
 #: /View/Elements/AnswerSummaries/aggrigate_common_header.ctp:35
 msgid "Matrix (selection list)"
@@ -303,11 +303,11 @@ msgstr ""
 
 #: /View/Elements/AnswerSummaries/aggrigate_common_header.ctp:38
 msgid "Matrix (multiple)"
-msgstr ""
+msgstr "マトリクス (複数回答)"
 
 #: /View/Elements/AnswerSummaries/aggrigate_common_header.ctp:41
 msgid "List selection"
-msgstr ""
+msgstr "リストから選択"
 
 #: /View/Elements/AnswerSummaries/aggrigate_common_header.ctp:44
 msgid "Not selection"
@@ -316,15 +316,15 @@ msgstr ""
 #: /View/Elements/AnswerSummaries/aggrigate_matrix_table.ctp:31
 #: /View/Elements/AnswerSummaries/aggrigate_table.ctp:30
 msgid "Item name"
-msgstr ""
+msgstr "アイテム名"
 
 #: /View/Elements/AnswerSummaries/aggrigate_table.ctp:31
 msgid "Aggrigate value"
-msgstr ""
+msgstr "回答数"
 
 #: /View/Elements/AnswerSummaries/aggrigate_table.ctp:32
 msgid "The percentage"
-msgstr ""
+msgstr "割合"
 
 #: /View/Elements/Answers/answer_test_mode_header.ctp:19
 msgid "Edit this question"
@@ -335,8 +335,8 @@ msgid "Test Mode"
 msgstr "一時保存（テストモード）"
 
 #: /View/Elements/Answers/answer_test_mode_header.ctp:34
-msgid "This questionnaire is being temporarily stored . You can questionnaire test before performed in this page . If you want to modify or change the questionnaire , you will be able to edit by pressing the [ Edit question ] button in the upper-right corner . Also, when you click on the bottom<span class=\"btn btn-primary questionnaire-btn-comment\"><span class=\"glyphicon glyphicon-comment\"></span></span> right of the screen , you can see the comments ."
-msgstr "このアンケートは一時保存中です。このページで実施前のアンケートテストをすることができます。<br />アンケートを修正・変更したい場合は、上部にある質問作成ボタンを押すと編集することができます。<br />また、<span class=\"btn btn-primary questionnaire-btn-comment\"><span class=\"glyphicon glyphicon-comment\"></span></span>&nbsp;ボタンをクリックするとコメントを書くこともできます。"
+msgid "This questionnaire is being temporarily stored . You can questionnaire test before performed in this page . If you want to modify or change the questionnaire , you will be able to edit by pressing the [ Edit question ] button in the upper-right corner ."
+msgstr "このアンケートは一時保存中です。このページで実施前のアンケートテストをすることができます。<br />アンケートを修正・変更したい場合は、上部にある質問作成ボタンを押すと編集することができます。"
 
 #: /View/Elements/Answers/question_range_description.ctp:14
 msgid "Please %s <= enter <= %s"
@@ -348,7 +348,7 @@ msgstr "入力してください %s <= enter"
 
 #: /View/Elements/Answers/question_range_description.ctp:18
 msgid "Please enter <= %s"
-msgstr ""
+msgstr "入力してください <= %s"
 
 #: /View/Elements/Answers/question_single_select_box.ctp:29
 msgid "Please choose one"
@@ -360,19 +360,19 @@ msgstr "アンケート"
 
 #: /View/Elements/FrameSettings/edit_display_questionnaire.ctp:12
 msgid "select display questionnaires."
-msgstr ""
+msgstr "表示したいアンケート"
 
 #: /View/Elements/FrameSettings/edit_display_questionnaire.ctp:18
 msgid "Display"
-msgstr ""
+msgstr "表示"
 
 #: /View/Elements/FrameSettings/edit_display_questionnaire.ctp:33
 msgid "Implementation date"
-msgstr ""
+msgstr "実施期間"
 
 #: /View/Elements/FrameSettings/edit_display_questionnaire.ctp:36
 msgid "Aggregates"
-msgstr ""
+msgstr "集計結果"
 
 #: /View/Elements/FrameSettings/edit_display_questionnaire.ctp:84
 #: /View/Elements/Questions/edit/question_setting_date.ctp:72
@@ -384,27 +384,27 @@ msgstr ""
 
 #: /View/Elements/FrameSettings/edit_display_questionnaire.ctp:90
 msgid "On"
-msgstr ""
+msgstr "表示"
 
 #: /View/Elements/FrameSettings/edit_display_type.ctp:12
 msgid "Questionnaire display setting"
-msgstr ""
+msgstr "アンケート表示設定"
 
 #: /View/Elements/FrameSettings/edit_display_type.ctp:16
 msgid "Show only one questionnaire"
-msgstr ""
+msgstr "アンケートを単独で表示"
 
 #: /View/Elements/FrameSettings/edit_display_type.ctp:17
 msgid "Show questionnaires list"
-msgstr ""
+msgstr "アンケートをリストで表示"
 
 #: /View/Elements/FrameSettings/edit_list_display_option.ctp:14
 msgid "Visible questionnaire row"
-msgstr ""
+msgstr "1ページの表示件数"
 
 #: /View/Elements/FrameSettings/edit_list_display_option.ctp:28
 msgid "Visible row order"
-msgstr ""
+msgstr "アンケートの表示順"
 
 #: /View/Elements/Questionnaires/answer_status.ctp:14
 msgid "Answer status"
@@ -546,7 +546,7 @@ msgstr "プラグイン名"
 
 #: /View/QuestionnaireBlocksSettings/edit.ctp:16
 msgid "Authority setting"
-msgstr ""
+msgstr "権限設定"
 
 #: /View/QuestionnaireBlocksSettings/edit.ctp:22
 msgid "Display change"
@@ -665,11 +665,11 @@ msgstr "円グラフ"
 
 #: /View/QuestionnaireQuestions/edit_result.ctp:134
 msgid "Table"
-msgstr "データテーブル"
+msgstr "表"
 
 #: /View/QuestionnaireQuestions/edit_result.ctp:149
 msgid "graph color"
-msgstr "グラフの色"
+msgstr "グラフ色設定"
 
 #: /View/Questionnaires/add.ctp:39
 msgid "You can create a new questionnaire. Please choose how to create."
@@ -693,7 +693,7 @@ msgstr "流用するアンケートを選んでください"
 
 #: /View/Questionnaires/add.ctp:114
 msgid "Implementation"
-msgstr ""
+msgstr "実施"
 
 #: /View/Questionnaires/edit.ctp:55
 msgid "Questionnaire setting"
@@ -804,4 +804,8 @@ msgstr "+ボタンをクリックしてアンケートを作成してくださ�
 #: /View/Questionnaires/thanks.ctp:49
 msgid "Aggregate"
 msgstr "集計結果を表示する"
+
+#: /View/Questionnaires/edit.ctp
+msgid "Sub Title"
+msgstr "サブタイトル"
 
