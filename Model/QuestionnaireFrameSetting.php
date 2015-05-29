@@ -115,10 +115,13 @@ class QuestionnaireFrameSetting extends QuestionnairesAppModel {
  * prepareBlock
  *
  * @param int $frameId frame id
- * @return void
+ * @return bool
  * @throws InternalErrorException
  */
 	public function prepareBlock($frameId) {
+		// 指定のフレームにブロックが結びついているときtrue
+		// まだ結びついてないときfalse
+		// エラー発生時error throw
 		$this->loadModels([
 			'Block' => 'Blocks.Block',
 		]);
@@ -134,7 +137,7 @@ class QuestionnaireFrameSetting extends QuestionnairesAppModel {
 			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 		}
 		if (!empty($frame['Frame']['block_id'])) {
-			return;
+			return true;
 		}
 		$block = $this->Block->find('first', array(
 			'conditions' => array(
@@ -142,8 +145,8 @@ class QuestionnaireFrameSetting extends QuestionnairesAppModel {
 				'Block.plugin_key' => 'questionnaires'
 			)
 		));
-		if ($block) {
-			return;
+		if (empty($block)) {
+			return false;
 		}
 		$frame['Frame']['block_id'] = $block['Block']['id'];
 		$this->setDataSource('master');
@@ -157,28 +160,27 @@ class QuestionnaireFrameSetting extends QuestionnairesAppModel {
 			CakeLog::error($ex);
 			throw $ex;
 		}
+		return true;
 	}
 
 /**
  * cleanUpBlock
  *
- * @param int $roomId room id
+ * @param int $frameId frame id
+ * @param int $blockId block id
  * @return void
  * @throws InternalErrorException
  */
-	public function cleanUpBlock($roomId) {
+	public function cleanUpBlock($frameId, $blockId) {
 		$this->loadModels([
 			'Block' => 'Blocks.Block',
 			'Questionnaire' => 'Questionnaires.Questionnaire',
+			'QuestionnaireBlocksSetting' => 'Questionnaires.QuestionnaireBlocksSetting',
 		]);
+
 		// 現在ルームのアンケートコンテンツ残量がいくつかをチェックし、
 		// その数が０個になっていたらブロックも消してしまう
-		$block = $this->Block->find('first', array(
-			'conditions' => array(
-				'Block.room_id' => $roomId,
-				'Block.plugin_key' => 'questionnaires'
-			)
-		));
+		$block = $this->Block->findById($blockId);
 		// すでにブロックが存在しない
 		if (!$block) {
 			return;
@@ -195,7 +197,13 @@ class QuestionnaireFrameSetting extends QuestionnairesAppModel {
 		}
 
 		// もうアンケートがないなら消してしまう
+		// ここでフレームとの関連もクリーンされる
 		$this->Block->deleteBlock($block['Block']['key']);
+
+		// questionnaireBlockSettingのレコードも削除する
+		$this->QuestionnaireBlocksSetting->deleteAll(array(
+			'block_key' => $block['Block']['block_key']
+		));
 	}
 
 /**
@@ -267,13 +275,12 @@ class QuestionnaireFrameSetting extends QuestionnairesAppModel {
 				$ret = $this->QuestionnaireFrameDisplayQuestionnaire->validateDisplayQuestionnaireForList($frameKey, $displayQs);
 			} else {
 				$displayQs = $data['QuestionnaireFrameDisplayQuestionnaires']['Single']['questionnaire_origin_id'];
-				$ret = !$this->QuestionnaireFrameDisplayQuestionnaire->validateDisplayQuestionnaireForSingle($frameKey, $displayQs);
+				$ret = $this->QuestionnaireFrameDisplayQuestionnaire->validateDisplayQuestionnaireForSingle($frameKey, $displayQs);
 			}
 			if ($ret == false) {
 				$this->validationErrors = Hash::merge($this->validationErrors, $this->QuestionnaireFrameDisplayQuestionnaire->validationErrors);
 				return false;
 			}
-
 			// フレーム設定の登録
 			if (! $this->save($data, false)) {
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));

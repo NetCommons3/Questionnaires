@@ -38,18 +38,67 @@ class QuestionnaireBlocksSetting extends QuestionnairesAppModel {
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
 /**
- * belongsTo associations
+ * Save questionnaire settings
  *
- * @var array
+ * @param array $data received post data
+ * @return bool True on success, false on failure
+ * @throws InternalErrorException
  */
-	public $belongsTo = array(
-		'Block' => array(
-			'className' => 'Block',
-			'foreignKey' => 'block_key',
-			'conditions' => '',
-			'fields' => '',
-			'order' => ''
-		)
-	);
+	public function saveQuestionnaireBlocksSetting($data) {
+		$this->loadModels([
+			'BlockRolePermission' => 'Blocks.BlockRolePermission',
+		]);
+
+		//トランザクションBegin
+		$this->setDataSource('master');
+		$dataSource = $this->getDataSource();
+		$dataSource->begin();
+
+		try {
+			if (! $this->validateQuestionnaireBlocksSetting($data)) {
+				return false;
+			}
+			foreach ($data[$this->BlockRolePermission->alias] as $value) {
+				if (! $this->BlockRolePermission->validateBlockRolePermissions($value)) {
+					$this->validationErrors = Hash::merge($this->validationErrors, $this->BlockRolePermission->validationErrors);
+					return false;
+				}
+			}
+
+			if (! $this->save(null, false)) {
+				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+			}
+			foreach ($data[$this->BlockRolePermission->alias] as $value) {
+				if (! $this->BlockRolePermission->saveMany($value, ['validate' => false])) {
+					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+				}
+			}
+
+			//トランザクションCommit
+			$dataSource->commit();
+		} catch (Exception $ex) {
+			//トランザクションRollback
+			$dataSource->rollback();
+			CakeLog::error($ex);
+			throw $ex;
+		}
+
+		return true;
+	}
+
+/**
+ * validate validateQuestionnaireSetting
+ *
+ * @param array $data received post data
+ * @return bool True on success, false on validation errors
+ */
+	public function validateQuestionnaireBlocksSetting($data) {
+		$this->set($data);
+		$this->validates();
+		if ($this->validationErrors) {
+			return false;
+		}
+		return true;
+	}
 
 }

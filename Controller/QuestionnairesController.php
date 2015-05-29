@@ -91,7 +91,7 @@ class QuestionnairesController extends QuestionnairesAppController {
 				'frame_key' => $this->viewVars['frameKey'],
 			));
 			if (!$displayQ) {
-				$this->view = 'Questionnaires/noQuestionnaire';
+				$this->view = 'QuestionnaireAnswers/noMoreAnswer';
 				return;
 			}
 
@@ -315,11 +315,9 @@ class QuestionnairesController extends QuestionnairesAppController {
 /**
  * delete method
  *
- * @param int $frameId frames.id
- * @param int $blockId blocks.id
  * @return void
  */
-	public function delete($frameId = 0, $blockId = 0) {
+	public function delete() {
 		if ($this->request->isPost()) {
 
 			// 削除処理
@@ -327,8 +325,11 @@ class QuestionnairesController extends QuestionnairesAppController {
 				return;
 			}
 
+			$frameId = $this->request->data['Frame']['id'];
+			$blockId = $this->request->data['Block']['id'];
+
 			// ブロックの後始末が必要
-			$this->QuestionnaireFrameSetting->cleanUpBlock($frameId);
+			$this->QuestionnaireFrameSetting->cleanUpBlock($frameId, $blockId);
 
 			// メッセージ表示
 			$this->Session->setFlash(__d('questionnaires', 'This Questionnaire has been deleted.'));

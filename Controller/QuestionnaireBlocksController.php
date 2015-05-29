@@ -1,6 +1,6 @@
 <?php
 /**
- * BlocksController
+ * QuestionnaireBlocksController
  *
  * @author Noriko Arai <arai@nii.ac.jp>
  * @author Ryo Ozawa <ozawa.ryo@withone.co.jp>
@@ -19,7 +19,7 @@ App::uses('File', 'Utility');
  * @author Ryo Ozawa <ozawa.ryo@withone.co.jp>
  * @package NetCommons\Questionnaires\Controller
  */
-class BlocksController extends QuestionnairesAppController {
+class QuestionnaireBlocksController extends QuestionnairesAppController {
 
 /**
  * layout
@@ -141,8 +141,10 @@ class BlocksController extends QuestionnairesAppController {
 			$this->Session->setFlash(__d('questionnaires', 'download error'));
 			return;
 		}
-		$fileName = $questionnaire['Questionnaire']['title'] . '.csv';
+		$downloadFileName = $questionnaire['Questionnaire']['title'] . '.csv';
+		$fileName = date('Ymd_his') . '.csv';
 		$offset = 0;
+
 		// テンポラリファイルオープン
 		$folder = new Folder();
 		$folderName = TMP . 'Questionnaires' . DS . 'download' . DS . microtime(true);
@@ -152,7 +154,7 @@ class BlocksController extends QuestionnairesAppController {
 		// フォルダ内のお掃除
 		$this->__cleanupDownloadFolder(TMP . 'Questionnaires' . DS . 'download');
 
-		$filePath = tempnam($folder->pwd(), 'csv') . '.csv';
+		$filePath = $folder->pwd() . DS . $fileName;
 		$fp = fopen($filePath, 'w+');
 		do {
 			$datas = $this->QuestionnaireAnswerSummaryCsv->getAnswerSummaryCsv($questionnaire, QUESTIONNAIRE_CSV_UNIT_NUMBER, $offset);
@@ -168,21 +170,36 @@ class BlocksController extends QuestionnairesAppController {
 
 		// 暗号圧縮？現時点ではコマンドでしか実行できない
 		if ($this->__compressFile($filePath)) {
-			$fileName = substr($fileName, 0, strrpos($fileName, '.')) . '.zip';
+			$downloadFileName = substr($downloadFileName, 0, strrpos($downloadFileName, '.')) . '.zip';
 		}
 
 		// 出力
-		$this->response->file($filePath, array('download' => true, 'name' => $fileName));
+		$this->response->file($filePath, array('download' => true, 'name' => $downloadFileName));
 		return $this->response;
 	}
 
 /**
  * __cleanupDownloadFolder
  *
- * @param string $dir cleanup dir
+ * @param string $folderPath download folder path
  * @return bool
  */
-	private function __cleanupDownloadFolder($dir) {
+	private function __cleanupDownloadFolder($folderPath) {
+		$folder = new Folder($folderPath);
+		$files = $folder->read(true, true, true);
+		// フォルダは返される配列の０番目の配列に設定されている
+		if (isset($files[0])) {
+			$nowTime = time();
+			foreach ($files[0] as $dir) {
+				// 作成時間を確認
+				$stat = stat($dir);
+				// 既定時間より以前に作成されたものなら消してしまう
+				if ($stat['mtime'] < ($nowTime - 60 * 10)) {
+					$delFolder = new Folder($dir);
+					$delFolder->delete();
+				}
+			}
+		}
 		return true;
 	}
 
@@ -206,7 +223,7 @@ class BlocksController extends QuestionnairesAppController {
 		exec(escapeshellcmd($execCmd));
 
 		// 入力ファイルを削除する
-		@unlink($filePath);
+		unlink($filePath);
 
 		$filePath = $outputFilePath;
 		return true;
@@ -225,7 +242,6 @@ class BlocksController extends QuestionnairesAppController {
 				'Block.plugin_key' => 'questionnaires'
 			)
 		));
-
 		if (isset($block['Block']['id'])) {
 			$blockId = (int)$block['Block']['id'];
 		} else {
@@ -238,7 +254,7 @@ class BlocksController extends QuestionnairesAppController {
 				'block_index' => array(
 					'url' => array(
 						'plugin' => $this->params['plugin'],
-						'controller' => 'blocks',
+						'controller' => 'questionnaire_blocks',
 						'action' => 'index',
 						$this->viewVars['frameId'],
 					)
@@ -255,7 +271,7 @@ class BlocksController extends QuestionnairesAppController {
 				'role_permissions' => array(
 					'url' => array(
 						'plugin' => $this->params['plugin'],
-						'controller' => 'block_role_permissions',
+						'controller' => 'questionnaire_block_role_permissions',
 						'action' => 'edit',
 						$this->viewVars['frameId'],
 						$blockId

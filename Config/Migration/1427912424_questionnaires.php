@@ -251,6 +251,8 @@ class Questionnaires extends CakeMigration {
 				'language_id' => 2,
 				'key' => 'questionnaires',
 				'namespace' => 'netcommons/questionnaires',
+				'default_action' => 'questionnaires/index',
+				'default_setting_action' => 'questionnaire_blocks/index',
 				'name' => 'アンケート',
 				'type' => 1,
 			),

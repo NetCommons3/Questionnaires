@@ -9,9 +9,9 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 
-App::uses('BlocksController', 'Questionnaires.Controller');
+App::uses('QuestionnaireBlocksController', 'Questionnaires.Controller');
 
-class QuestionnaireFrameSettingsController extends BlocksController {
+class QuestionnaireFrameSettingsController extends QuestionnaireBlocksController {
 
 /**
  * layout
@@ -90,7 +90,7 @@ class QuestionnaireFrameSettingsController extends BlocksController {
 			$this->QuestionnaireFrameSetting->saveFrameSettings($this->viewVars['frameKey'], $this->data);
 			if ($this->handleValidationError($this->QuestionnaireFrameSetting->validationErrors)) {
 				if (! $this->request->is('ajax')) {
-					$this->redirect('/questionnaires/blocks/index/' . $this->viewVars['frameId']);
+					$this->redirect('/questionnaires/questionnaire_blocks/index/' . $this->viewVars['frameId']);
 				}
 				return;
 			}

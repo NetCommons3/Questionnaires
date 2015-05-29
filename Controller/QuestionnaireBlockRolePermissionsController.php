@@ -1,6 +1,6 @@
 <?php
 /**
- * BlockRolePermissions Controller
+ * QuestionnaireBlockRolePermissions Controller
  *
  * @author Noriko Arai <arai@nii.ac.jp>
  * @author Shohei Nakajima <nakajimashouhei@gmail.com>
@@ -9,15 +9,15 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 
-App::uses('BlocksController', 'Questionnaires.Controller');
+App::uses('QuestionnaireBlocksController', 'Questionnaires.Controller');
 
 /**
- * BlockRolePermissions Controller
+ * QuestionnaireBlockRolePermissions Controller
  *
  * @author Shohei Nakajima <nakajimashouhei@gmail.com>
  * @package NetCommons\Questionnaires\Controller
  */
-class BlockRolePermissionsController extends BlocksController {
+class QuestionnaireBlockRolePermissionsController extends QuestionnaireBlocksController {
 
 /**
  * layout
@@ -38,7 +38,8 @@ class BlockRolePermissionsController extends BlocksController {
 		'Blocks.BlockRolePermission',
 		'Rooms.RolesRoom',
 		'Questionnaires.Questionnaires',
-		'Questionnaires.QuestionnaireBlocksSetting'
+		'Questionnaires.QuestionnaireFrameSetting',
+		'Questionnaires.QuestionnaireBlocksSetting',
 	);
 
 /**
@@ -87,6 +88,10 @@ class BlockRolePermissionsController extends BlocksController {
  * @return void
  */
 	public function edit() {
+		if (! $this->QuestionnaireFrameSetting->prepareBlock($this->viewVars['frameId'])) {
+			$this->view = 'QuestionnaireBlockRolePermissions/noQuestionnaireBlock';
+			return;
+		}
 		if (! $this->NetCommonsBlock->validateBlockId()) {
 			$this->throwBadRequest();
 			return false;
@@ -100,7 +105,7 @@ class BlockRolePermissionsController extends BlocksController {
 		));
 		if (!$blockSetting) {
 			$this->QuestionnaireBlocksSetting->create();
-			$this->QuestionnaireBlocksSetting->save(
+			$blockSetting = $this->QuestionnaireBlocksSetting->save(
 				array(
 					'block_key' => $this->viewVars['blockKey'],
 					'use_workflow' => true
@@ -126,18 +131,16 @@ class BlockRolePermissionsController extends BlocksController {
 			$this->viewVars['blockKey'],
 			['content_creatable', 'content_publishable']
 		);
-		/*
 		if ($this->request->isPost()) {
 			$data = $this->data;
-			$this->FaqSetting->saveFaqSetting($data);
-			if ($this->handleValidationError($this->FaqSetting->validationErrors)) {
+			$this->QuestionnaireBlocksSetting->saveQuestionnaireBlocksSetting($data);
+			if ($this->handleValidationError($this->QuestionnaireBlocksSetting->validationErrors)) {
 				if (! $this->request->is('ajax')) {
-					$this->redirect('/faqs/blocks/index/' . $this->viewVars['frameId']);
+					$this->redirect('/questionnaires/questionnaire_blocks/index/' . $this->viewVars['frameId']);
 				}
 				return;
 			}
 		}
-		*/
 		$results = array(
 			'BlockRolePermissions' => $permissions['BlockRolePermissions'],
 			'roles' => $permissions['Roles'],

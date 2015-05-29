@@ -1,10 +1,3 @@
-.pagination-bar-top {
-    text-align:right;
-}
-.pagination-label {
-    margin:20px 0px;
-}
-
 .tab-body {
     margin-bottom: 20px;
     padding: 6px 10px;
@@ -21,9 +14,6 @@
 
 /*--------------------------------------------------------------------------------------------*/
 
-.questionnaire-status-label {
-    margin-right:0.5em
-}
 .questionnaire-select-box {
     height:150px;
     overflow-y: scroll;
@@ -57,7 +47,6 @@
 
 .questionnaire-ttl { padding-bottom:1em;
 }
-
 .questionnaire-q { padding-top:1.7em ;padding-bottom:0.5em;
 }
 .questionnaire-group { margin-top:0.5em ;margin-bottom:1.5em;margin-left: 2em;
@@ -66,15 +55,12 @@ td.q-btn .questionnaire-listbtn {
 	margin-top: 0.2em;
 	margin-bottom: 0.2em;
 }
-
 table.table.questionnaire-table-vcenter tbody td {
    vertical-align: middle;
 }
-
 .questionnaire-list-select {
     margin: 1em!important;
 }
-
 .questionnaire-setting-ttl {
     padding: 10px 20px 0px;
 }
@@ -85,42 +71,34 @@ table.table.questionnaire-table-vcenter tbody td {
 
 /*480px以下のテーブルの見え方*/
 @media only screen and (max-width:480px){
-	
-table.table.table-bordered.questionnaire-borderless tbody td{
-     border: none;
-}
-
-table.table.table-bordered.questionnaire-borderless{
-border-collapse: separate;
-}
-
-table.table.table-bordered.questionnaire-borderless thead th{
+    table.table.table-bordered.questionnaire-borderless tbody td{
+         border: none;
+    }
+    table.table.table-bordered.questionnaire-borderless{
+        border-collapse: separate;
+    }
+    table.table.table-bordered.questionnaire-borderless thead th{
             display: none;
-        }
-
-table.table.table-bordered.questionnaire-borderless tbody{
-            display: block;
-        }
-
-table.table.table-bordered.questionnaire-borderless tbody tr{
-                display: block;
-            }
-			
-table.table.table-bordered.questionnaire-borderless tbody td{
-                display: list-item;
-				list-style-type: none;
-            }
-
-table.table.table-bordered.questionnaire-borderless tbody td.q-btn{
-text-align: center;
-border-bottom:solid 1px #E1E8ED;
-padding-bottom: 1.5em;
-margin:0!important;
-            }
-
-table.table.table-bordered.questionnaire-borderless tbody td{
-                margin-left: 20px;
-            }
+    }
+    table.table.table-bordered.questionnaire-borderless tbody{
+        display: block;
+    }
+    table.table.table-bordered.questionnaire-borderless tbody tr{
+        display: block;
+    }
+    table.table.table-bordered.questionnaire-borderless tbody td{
+        display: list-item;
+        list-style-type: none;
+    }
+    table.table.table-bordered.questionnaire-borderless tbody td.q-btn{
+        text-align: center;
+        border-bottom:solid 1px #E1E8ED;
+        padding-bottom: 1.5em;
+        margin:0!important;
+    }
+    table.table.table-bordered.questionnaire-borderless tbody td{
+        margin-left: 20px;
+    }
 }
 
 /*

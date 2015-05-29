@@ -25,7 +25,7 @@
 				'controller' => 'QuestionnaireFrameSettings',
 				'action' => h($this->request->params['action']) . '/' . $frameId . '/' . $blockId,
 				'callback' => 'Questionnaires.FrameSettings/edit_form',
-				'cancelUrl' => '/questionnaires/blocks/index/' . $frameId
+				'cancelUrl' => '/questionnaires/questionnaire_blocks/index/' . $frameId
 				)); ?>
 		</div>
 	</div>

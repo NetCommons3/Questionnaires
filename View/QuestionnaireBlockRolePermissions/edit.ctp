@@ -17,10 +17,10 @@
 	<div class="tab-content">
 
 		<?php echo $this->element('Blocks.edit_form', array(
-				'controller' => 'BlockRolePermission',
+				'controller' => 'QuestionnaireBlockRolePermission',
 				'action' => 'edit' . '/' . $frameId . '/' . $blockId,
-				'callback' => 'Questionnaires.BlockRolePermissions/edit_form',
-				'cancelUrl' => '/questionnaires/blocks/index/' . $frameId,
+				'callback' => 'Questionnaires.QuestionnaireBlockRolePermissions/edit_form',
+				'cancelUrl' => '/questionnaires/questionnaire_blocks/index/' . $frameId,
 			)); ?>
 	</div>
 </div>

@@ -205,7 +205,6 @@ class QuestionnaireAnswerSummaryCsv extends QuestionnairesAppModel {
 				}
 			}
 		}
-		$this->log($cols, 'debug');
 		return $cols;
 	}
 

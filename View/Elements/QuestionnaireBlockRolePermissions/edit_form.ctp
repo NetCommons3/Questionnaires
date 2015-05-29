@@ -1,6 +1,6 @@
 <?php
 /**
- * Faq edit template
+ * Questionnaire edit template
  *
  * @author Noriko Arai <arai@nii.ac.jp>
  * @author Shohei Nakajima <nakajimashouhei@gmail.com>
@@ -11,11 +11,11 @@
 ?>
 
 <?php echo $this->Form->hidden('QuestionnaireBlocksSetting.id', array(
-'value' => isset($faqSetting['id']) ? (int)$faqSetting['id'] : null,
+'value' => isset($questionnaireBlockSetting['id']) ? (int)$questionnaireBlockSetting['id'] : null,
 )); ?>
 
 <?php echo $this->Form->hidden('QuestionnaireBlocksSetting.block_key', array(
-'value' => isset($faqSetting['faqKey']) ? $faqSetting['faqKey'] : null,
+'value' => isset($questionnaireBlockSetting['blockKey']) ? $questionnaireBlockSetting['blockKey'] : null,
 )); ?>
 
 <?php echo $this->Form->hidden('Block.id', array(

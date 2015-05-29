@@ -98,7 +98,6 @@ class QuestionnaireAnswerSummariesController extends QuestionnairesAppController
 			$this->Session->id())) {
 			throw new ForbiddenException(__d('net_commons', 'Permission denied'));
 		}
-		$this->log($questionnaire, 'debug');
 		//集計処理を行います。
 		$this->__aggrigateAnswer($questionnaire, $this->viewVars['contentEditable'], $questions);
 

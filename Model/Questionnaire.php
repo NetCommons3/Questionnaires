@@ -251,6 +251,7 @@ class Questionnaire extends QuestionnairesAppModel {
 			// かつ、ページ数、質問数もカウントする
 			$val['Questionnaire']['page_count'] = 0;
 			$val['Questionnaire']['question_count'] = 0;
+			$this->log($val, 'debug');
 			$this->QuestionnairePage->setPageToQuestionnaire($val);
 
 			$val['Questionnaire']['all_answer_count'] = $this->QuestionnaireAnswerSummary->find('count', array(
@@ -486,6 +487,8 @@ class Questionnaire extends QuestionnairesAppModel {
 			//ブロックの登録をまず行う
 			if (empty($saveQuestionnaire['block_id'])) {
 				$block = $this->Block->saveByFrameId($questionnaire['Frame']['id'], false);
+				$block['Block']['plugin_key'] = 'questionnaires';
+				$this->Block->save($block);
 				$saveQuestionnaire['block_id'] = $block['Block']['id'];
 			}
 
@@ -536,6 +539,7 @@ class Questionnaire extends QuestionnairesAppModel {
 	public function deleteQuestionnaire($data) {
 		$this->loadModels([
 			'Comment' => 'Comments.Comment',
+			'QuestionnaireFrameDisplayQuestionnaire' => 'Questionnaires.QuestionnaireFrameDisplayQuestionnaire',
 		]);
 		$this->setDataSource('master');
 		$dataSource = $this->getDataSource();
@@ -547,6 +551,9 @@ class Questionnaire extends QuestionnairesAppModel {
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 				// @codeCoverageIgnoreEnd
 			}
+			$this->QuestionnaireFrameDisplayQuestionnaire->deleteAll(array(
+				'questionnaire_origin_id' => $data['Questionnaire']['origin_id']), true, true
+			);
 
 			$dataSource->commit();
 		} catch (Exception $ex) {
