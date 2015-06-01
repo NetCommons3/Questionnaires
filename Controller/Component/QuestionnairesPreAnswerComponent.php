@@ -158,7 +158,7 @@ class QuestionnairesPreAnswerComponent extends Component {
 		if ($questionnaire['Questionnaire']['is_image_authentication'] != QuestionnairesComponent::USES_USE) {
 			return true;
 		}
-		if ($controller->VisualCaptcha->check()) {
+		if ($controller->NetCommonsVisualCaptcha->check()) {
 			$controller->Session->write('Questionnaires.' . $questionnaire['Questionnaire']['origin_id'] . '.image_auth', true);
 			return true;
 		}

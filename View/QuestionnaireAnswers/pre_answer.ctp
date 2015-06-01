@@ -9,10 +9,24 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 ?>
-<?php echo $this->element('Questionnaires.scripts'); ?>
-<?php echo $this->Html->script('VisualCaptcha.visualcaptcha.jquery.js'); ?>
-<?php echo $this->Html->css('VisualCaptcha.visualcaptcha.css'); ?>
-<?php echo $this->element('Questionnaires.Answers/answer_test_mode_header'); ?>
+<?php
+echo $this->element('Questionnaires.scripts');
+echo $this->Html->script(
+	array('/components/visualcaptcha.jquery/visualcaptcha.jquery.js'),
+	array(
+		'plugin' => false,
+		'inline' => false
+	)
+);
+echo $this->Html->css(
+	'/components/visualcaptcha.jquery/visualcaptcha.css',
+	array(
+		'plugin' => false,
+		'inline' => false
+	)
+);
+echo $this->element('Questionnaires.Answers/answer_test_mode_header');
+?>
 
 <articel>
 
@@ -64,7 +78,7 @@
 
 	<?php if ($questionnaire['Questionnaire']['is_image_authentication'] == QuestionnairesComponent::USES_USE): ?>
 		<?php echo $this->element(
-			'VisualCaptcha.captcha', [
+			'NetCommons.visual_captcha', [
 			'elementId' => 'questionnaire-captcha',
 			'path' => 'questionnaires/questionnaire_answers/',
 			]) ?>

@@ -38,7 +38,7 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 		'NetCommons.NetCommonsRoomRole',
 		'Questionnaires.Questionnaires',
 		'Questionnaires.QuestionnairesPreAnswer',
-		'VisualCaptcha.VisualCaptcha',
+		'NetCommons.NetCommonsVisualCaptcha',
 	);
 
 /**
@@ -91,6 +91,9 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 			$this->redirect('answer/' . $frameId . '/' . $questionnaireId);
 		}
 
+		// もしも表示数を変えたいときは下記１行を有効にして、captcha関数でgenerateに引数を与える
+		//$this->set('imageDisplayCount', 10);
+
 		$this->set('questionnaire', $questionnaire);
 		$this->set('isDuringTest', $this->_isDuringTest($questionnaire));
 		$this->set('errors', $errors);
@@ -105,7 +108,7 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
  */
 	public function captcha($frameId) {
 		$this->autoRender = false;
-		echo $this->VisualCaptcha->generate();
+		echo $this->NetCommonsVisualCaptcha->generate();	// もしも表示数を変えたいときは引数に数値を設定
 	}
 
 /**
@@ -118,7 +121,7 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
  */
 	public function captcha_image($frameId, $index) {
 		$this->autoRender = false;
-		return $this->VisualCaptcha->image($index);
+		return $this->NetCommonsVisualCaptcha->image($index);
 	}
 
 /**
@@ -130,7 +133,7 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
  */
 	public function captcha_audio($frameId) {
 		$this->autoRender = false;
-		echo $this->VisualCaptcha->audio();
+		echo $this->NetCommonsVisualCaptcha->audio();
 	}
 
 /**

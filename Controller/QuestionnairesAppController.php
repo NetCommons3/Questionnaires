@@ -20,6 +20,7 @@ class QuestionnairesAppController extends AppController {
  */
 	public $components = array(
 		'Security',
+		'Pages.PageLayout',
 	);
 
 /**

@@ -1,38 +1,50 @@
 {
-    "name": "netcommons/questionnaires",
-    "description": "Questionnaires for NetCommons Plugin",
-    "homepage": "http://www.netcommons.org/",
+    "name":        "netcommons/questionnaires",
+    "description": "Questionnaires Plugin",
+    "type":        "cakephp-plugin",
+    "keywords":    ["cakephp", "questionnaires"],
+    "homepage":    "http://www.netcommons.org/",
+    "license":     "NetCommons License",
+    "authors": [
+        {
+            "name":     "NetCommons Community",
+            "homepage": "https://github.com/NetCommons3/Questionnaires/graphs/contributors"
+        }
+    ],
     "extra": {
         "installer-paths": {
             "app/Plugin/{$name}": ["type:cakephp-plugin"]
         }
     },
     "require": {
-        "cakephp/cakephp":              "~2.4",
-        "cakephp/debug_kit":            "~2.2",
-        "cakedc/migrations":            "~2.2",
-        "twbs/bootstrap":               "~3.1",
-        "components/jquery":            "~2.1"
+        "cakephp/cakephp":         "~2.4",
+        "cakephp/debug_kit":       "~2.2",
+        "cakedc/migrations":       "~2.2",
+        "components/jquery":            "~2.1",
+        "emotionloop/visualcaptcha":    "^0.0.4",
     },
     "require-dev": {
-        "mustangostang/spyc":           "dev-master",
-        "satooshi/php-coveralls":       "dev-master",
-        "netcommons/net-commons":       "dev-master",
+        "mustangostang/spyc":        "dev-master",
+        "satooshi/php-coveralls":    "dev-master",
+        "netcommons/auth":              "dev-master",
+        "netcommons/auth-general":      "dev-master",
+        "netcommons/blocks":            "dev-master",
+        "netcommons/boxes":             "dev-master",
+        "netcommons/comments":          "dev-master",
+        "netcommons/containers":        "dev-master",
         "netcommons/frames":            "dev-master",
+        "netcommons/install":           "dev-master",
+        "netcommons/likes":             "dev-master",
+        "netcommons/m17n":              "dev-master",
+        "netcommons/net-commons":       "dev-master",
         "netcommons/pages":             "dev-master",
+        "netcommons/plugin-manager":    "dev-master",
+        "netcommons/roles":             "dev-master",
+        "netcommons/rooms":             "dev-master",
         "netcommons/users":             "dev-master"
     },
-    "license": "NetCommons License",
-    "authors": [
-        {
-            "name": "NetCommons Community",
-            "homepage": "https://github.com/NetCommons3/Questionnaires/graphs/contributors"
-        }
-    ],
-    "type":        "cakephp-plugin",
-    "keywords":    ["cakephp", "questionnaires"],
     "config": {
-        "vendor-dir": "vendors"
+        "vendor-dir": "vendors",
+        "process-timeout": 3000
     }
 }
-
