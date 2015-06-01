@@ -21,7 +21,7 @@
         "cakephp/debug_kit":       "~2.2",
         "cakedc/migrations":       "~2.2",
         "components/jquery":            "~2.1",
-        "emotionloop/visualcaptcha":    "^0.0.4",
+        "emotionloop/visualcaptcha":    "^0.0.4"
     },
     "require-dev": {
         "mustangostang/spyc":        "dev-master",
