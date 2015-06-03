@@ -101,7 +101,7 @@ class QuestionnaireAnswerSummariesController extends QuestionnairesAppController
 		//集計処理を行います。
 		$this->__aggrigateAnswer($questionnaire, $this->viewVars['contentEditable'], $questions);
 
-		//ニックネームとuser_idを取り出す.　QuestinnaireControllerに合わせる。
+		//ニックネームとuser_idを取り出す.　QuestionnaireControllerに合わせる。
 		$username = CakeSession::read('Auth.User.username');
 		$username = empty($username) ? __d('questionnaires', 'annonymous person') : $username;
 		//$user_id = CakeSession::read('Auth.User.id');

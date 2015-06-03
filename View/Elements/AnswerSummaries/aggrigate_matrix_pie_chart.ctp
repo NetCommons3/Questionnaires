@@ -9,5 +9,13 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 ?>
-
-matrix pie  graph jisso chu
+<div class="questionnaire-chart-wrapper" >
+    <?php foreach ($question['QuestionnaireChoice'] as $choiceId => $choice): ?>
+    <?php if ($choice['matrix_type'] == QuestionnairesComponent::MATRIX_TYPE_ROW_OR_NO_MATRIX): ?>
+        <?php $dataStr = '[' . $questionId . '][' . $choice['origin_id'] . ']'; ?>
+                <nvd3 options='config<?php echo $dataStr; ?>'
+                      data='data<?php echo $dataStr; ?>'>
+                </nvd3>
+    <?php endif; ?>
+    <?php endforeach; ?>
+</div>

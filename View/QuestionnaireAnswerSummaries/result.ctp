@@ -11,12 +11,28 @@
 ?>
 
 <?php echo $this->element('Questionnaires.scripts'); ?>
+<?php
+	echo $this->Html->script(
+	array(
+	'/components/d3/d3.min.js',
+	'/components/nvd3/nv.d3.min.js',
+	'/components/angular-nvd3/dist/angular-nvd3.min.js',
+	),
+	array(
+	'plugin' => false,
+	'inline' => false
+	)
+	);
+	echo $this->Html->script('Questionnaires.questionnaires_graph.js');
+?>
+<?php echo $this->Html->css('/components/nvd3/nv.d3.css'); ?>
 
 <?php /* FUJI: 下のdivのidがnc-questionnaires-total-xx でよいか要確認. */ ?>
 <div id="nc-questionnaires-total-<?php echo (int)$frameId; ?>"
-	ng-controller="Questionnaires"
+	ng-controller="QuestionnairesAnswerSummary"
 	ng-init="initialize(<?php echo (int)$frameId; ?>,
-<?php echo h(json_encode($questionnaire)); ?>)">
+	<?php echo h(json_encode($questionnaire)); ?>,
+	<?php echo h(json_encode($questions)); ?>)">
 
 <?php App::uses('Sanitize', 'Utility'); ?>
 
@@ -70,7 +86,8 @@
 					'frameId' => $frameId,
 					'questionnaireId' => $questionnaireId,
 					'questionnaire' => $questionnaire,
-					'question' => $question
+					'question' => $question,
+					'questionId' => $questionnaireQuestionId
 				)
 			);
 		}

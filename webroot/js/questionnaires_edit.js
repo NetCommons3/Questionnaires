@@ -8,7 +8,6 @@
  */
 
 NetCommonsApp.requires.push('QuestionnaireCommon');
-NetCommonsApp.requires.push('dialogs.main');
 
 NetCommonsApp.controller('Questionnaires.edit',
     function($scope, NetCommonsBase, NetCommonsWysiwyg,

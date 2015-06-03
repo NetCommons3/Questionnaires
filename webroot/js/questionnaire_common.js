@@ -59,7 +59,6 @@ QuestionnaireCommon.directive('colorPalettePicker', [function() {
       };
     }
   };
-
 }]);
 
 

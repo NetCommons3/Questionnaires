@@ -131,3 +131,14 @@ table.table.questionnaire-table-vcenter tbody td {
     height:200px;
     overflow-y: scroll;
 }
+
+/*
+ * グラフ
+ */
+.questionnaire-chart-wrapper {
+    margin:1em;
+}
+.questionnaire-chart {
+    width: 480px;
+    height: 240px;
+}

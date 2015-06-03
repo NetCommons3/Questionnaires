@@ -44,6 +44,7 @@ NetCommonsApp.controller('Questionnaires',
         $scope.questionnaire = questionnaire;
       };
     });
+
 NetCommonsApp.controller('QuestionnairesAnswer',
     function($scope, $sce, $timeout, $log, NetCommonsBase, NetCommonsFlash) {
       $scope.Date = function(arg) {
@@ -54,6 +55,8 @@ NetCommonsApp.controller('QuestionnairesAnswer',
       };
     }
 );
+
+
 NetCommonsApp.controller('QuestionnairesFrame',
     function($scope, $sce, $log, NetCommonsBase, NetCommonsFlash,
     NetCommonsUser, $attrs, $timeout) {

@@ -22,7 +22,7 @@ msgstr "指定されたアンケートはありません"
 
 #: /Controller/QuestionnaireAnswerSummariesController.php:107
 msgid "annonymous person"
-msgstr ""
+msgstr "匿名者"
 
 #: /Controller/QuestionnaireAnswersController.php:83
 msgid "Invalid key phrase"
@@ -34,7 +34,7 @@ msgstr "画像認証の入力値が不正です"
 
 #: /Controller/QuestionnaireAnswersController.php:229
 msgid "Invalid answers"
-msgstr ""
+msgstr "不正な回答です。"
 
 #: /Controller/QuestionnaireQuestionsController.php:253
 msgid "page"
@@ -60,15 +60,15 @@ msgstr "その他"
 
 #: /Controller/QuestionnairesController.php:195
 msgid "Please select past questionnaire."
-msgstr ""
+msgstr "過去のアンケートを選んでください。"
 
 #: /Controller/QuestionnairesController.php:203
 msgid "Please choose create option."
-msgstr ""
+msgstr "作成方法を選択してください。"
 
 #: /Controller/QuestionnairesController.php:321
 msgid "This Questionnaire has been deleted."
-msgstr ""
+msgstr "このアンケートは削除されました。"
 
 #: /Controller/Component/QuestionnairesComponent.php:470;471;472;473;474;475
 msgid "item"
@@ -236,11 +236,7 @@ msgstr "行と列には、それぞれ１つ以上の選択肢が必要です。
 #: /View/Blocks/index.ctp:24
 #: /View/Elements/FrameSettings/edit_display_questionnaire.ctp:27
 msgid "Status"
-msgstr "状態"
-
-#: /View/Elements/comment_form.ctp:16
-msgid "send"
-msgstr ""
+msgstr "ステータス"
 
 #: /View/Elements/edit_flow_chart.ctp:14
 msgid "Set questions"
@@ -256,7 +252,7 @@ msgstr "アンケートの設定"
 
 #: /View/Elements/edit_status_selector.ctp:13
 msgid "Edit status"
-msgstr ""
+msgstr "ステータス"
 
 #: /View/Elements/questionnaire_status_label.ctp:15
 #: /View/Helper/QuestionnaireStatusLabelHelper.php:31
@@ -266,12 +262,12 @@ msgstr "未設定"
 #: /View/Elements/questionnaire_status_label.ctp:31
 #: /View/Helper/QuestionnaireStatusLabelHelper.php:49
 msgid "Before public"
-msgstr ""
+msgstr "公開前"
 
 #: /View/Elements/questionnaire_status_label.ctp:35
 #: /View/Helper/QuestionnaireStatusLabelHelper.php:53
 msgid "End"
-msgstr ""
+msgstr "終了"
 
 #: /View/Elements/AnswerSummaries/aggrigate_common_footer.ctp:15
 msgid "Note: Which may not be 100% because of rounding of numeric total."
@@ -299,7 +295,7 @@ msgstr "複数回答"
 
 #: /View/Elements/AnswerSummaries/aggrigate_common_header.ctp:35
 msgid "Matrix (selection list)"
-msgstr ""
+msgstr "マトリクス（単一選択）"
 
 #: /View/Elements/AnswerSummaries/aggrigate_common_header.ctp:38
 msgid "Matrix (multiple)"
@@ -311,7 +307,7 @@ msgstr "リストから選択"
 
 #: /View/Elements/AnswerSummaries/aggrigate_common_header.ctp:44
 msgid "Not selection"
-msgstr ""
+msgstr "未選択"
 
 #: /View/Elements/AnswerSummaries/aggrigate_matrix_table.ctp:31
 #: /View/Elements/AnswerSummaries/aggrigate_table.ctp:30
@@ -380,7 +376,7 @@ msgstr "集計結果"
 #: /View/Questionnaires/edit.ctp:106
 #: /View/Questionnaires/index.ctp:36
 msgid " - "
-msgstr ""
+msgstr "～"
 
 #: /View/Elements/FrameSettings/edit_display_questionnaire.ctp:90
 msgid "On"
@@ -408,7 +404,7 @@ msgstr "アンケートの表示順"
 
 #: /View/Elements/Questionnaires/answer_status.ctp:14
 msgid "Answer status"
-msgstr "状態"
+msgstr "ステータス"
 
 #: /View/Elements/Questionnaires/answer_status.ctp:17
 msgid "View All"
@@ -514,11 +510,11 @@ msgstr "回答"
 
 #: /View/Helper/QuestionnaireUtilHelper.php:141
 msgid "Unpublished"
-msgstr ""
+msgstr "未公開"
 
 #: /View/Helper/QuestionnaireUtilHelper.php:145
 msgid "Finished"
-msgstr ""
+msgstr "回答済"
 
 #: /View/QuestionnaireAnswerSummaries/result.ctp:80
 msgid "Back to Top"
@@ -550,7 +546,7 @@ msgstr "権限設定"
 
 #: /View/QuestionnaireBlocksSettings/edit.ctp:22
 msgid "Display change"
-msgstr ""
+msgstr "表示方法変更"
 
 #: /View/QuestionnairePage/setting.ctp:16
 #: /View/QuestionnaireQuestions/edit.ctp:29
@@ -809,3 +805,6 @@ msgstr "集計結果を表示する"
 msgid "Sub Title"
 msgstr "サブタイトル"
 
+#: /View/QuestionnaireAnswers/noMoreAnswer.ctp 12
+msgid "you will not be able to answer this questionnaire."
+msgstr "このアンケートは回答できません。"

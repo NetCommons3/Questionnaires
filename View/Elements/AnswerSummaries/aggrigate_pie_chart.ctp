@@ -9,4 +9,7 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 ?>
-pi graph jisso chu
+<div class="questionnaire-chart-wrapper" >
+    <nvd3 options='config[<?php echo $questionId; ?>]'
+          data='data[<?php echo $questionId; ?>]'></nvd3>
+</div>
