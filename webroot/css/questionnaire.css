@@ -108,14 +108,14 @@ table.table.questionnaire-table-vcenter tbody td {
     height:auto;
 }
 .questionnaire-step-item {
-    float:left;
-    height:100%;
-    padding:3px;
-    text-align:center;
-    font-size:12px;
+    float: left;
+    height: 100%;
+    padding: 6px 1em 3px 0px;
+    text-align: center;
+    font-size: 12px;
 }
-.questionnaire-step-item-title {
-    padding:0px 6em;
+.questionnaire-step-item .glyphicon {
+    float:right;
 }
 
 /*
