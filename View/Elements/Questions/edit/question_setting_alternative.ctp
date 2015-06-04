@@ -67,7 +67,8 @@
 					</select>
 					<button class="btn btn-default" type="button"
 							ng-disabled="question.QuestionnaireChoice.length < 2"
-							ng-click="deleteChoice($event, pageIndex, qIndex, choice.choice_sequence)">
+							ng-click="deleteChoice($event, pageIndex, qIndex, choice.choice_sequence)"
+							ng-if="choice.other_choice_type == <?php echo QuestionnairesComponent::OTHER_CHOICE_TYPE_NO_OTHER_FILED; ?>">
 						<span class="glyphicon glyphicon-remove"> </span>
 					</button>
 				</div>

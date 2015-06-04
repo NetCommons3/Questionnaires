@@ -23,7 +23,8 @@
         <li class="list-group-item" ng-repeat="(cIndex, choice) in matrixRows = (question.QuestionnaireChoice | filter: {matrix_type:<?php echo QuestionnairesComponent::MATRIX_TYPE_ROW_OR_NO_MATRIX; ?>})" >
             <button class="btn btn-default pull-right" type="button"
                     ng-disabled="matrixRows.length < 2"
-                    ng-click="deleteChoice($event, pageIndex, qIndex, choice.choice_sequence)">
+                    ng-click="deleteChoice($event, pageIndex, qIndex, choice.choice_sequence)"
+                    ng-if="choice.other_choice_type == <?php echo QuestionnairesComponent::OTHER_CHOICE_TYPE_NO_OTHER_FILED; ?>">
                 <span class="glyphicon glyphicon-remove"> </span>
             </button>
             <div class="form-inline">
