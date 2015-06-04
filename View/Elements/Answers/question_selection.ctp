@@ -23,6 +23,7 @@
 						'label' => false,
 						'div' => false,
 						'value' => $answer[0]['other_answer_value'],
+						'disabled' => $readonly,
 					));
 					$otherOpt[QuestionnairesComponent::ANSWER_DELIMITER . $choice['origin_id'] . QuestionnairesComponent::ANSWER_VALUE_DELIMITER . $choice['choice_label']] = $choice['choice_label'];
 					$afterLabel = '&nbsp;&nbsp;&nbsp;&nbsp;' . $otherInput . '</label></div>';
