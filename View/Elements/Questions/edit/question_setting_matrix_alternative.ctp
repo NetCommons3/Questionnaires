@@ -30,7 +30,6 @@
             <div class="form-inline">
                 <?php echo $this->element('Questionnaires.Questions/edit/question_setting_choice_element', array('pageIndex' => $pageIndex, 'qIndex' => $qIndex)); ?>
             </div>
-            <span class="clearfix"></span>
         </li>
     </ul>
     <button type="button" class="btn btn-default"
@@ -58,7 +57,6 @@
             <div class="form-inline">
                 <?php echo $this->element('Questionnaires.Questions/edit/question_setting_choice_element', array('pageIndex' => $pageIndex, 'qIndex' => $qIndex)); ?>
             </div>
-            <span class="clearfix"></span>
         </li>
     </ul>
 

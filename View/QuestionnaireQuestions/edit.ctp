@@ -152,12 +152,14 @@
 									<span class="glyphicon glyphicon-arrow-down"></span>
 								</button>
 
-								{{question.question_value}}
+								<span class="questionnaire-accordion-header-title">
+									{{question.question_value}}
+								</span>
 								<span ng-if="errors.QuestionnairePage[pageIndex].QuestionnaireQuestion[qIndex]">
 									<?php echo __d('questionnaires', 'There is an error'); ?>
 								</span>
 
-								<span class="clearfix"></span>
+								<div class="clearfix"></div>
 
 							</accordion-heading>
 

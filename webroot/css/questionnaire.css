@@ -68,7 +68,10 @@ table.table.questionnaire-table-vcenter tbody td {
     padding-bottom:1em;
     padding-left: 2em;
 }
-
+.questionnaire-accordion-header-title {
+    line-height:2em;
+    padding-left:0.5em;
+}
 /*480px以下のテーブルの見え方*/
 @media only screen and (max-width:480px){
     table.table.table-bordered.questionnaire-borderless tbody td{
