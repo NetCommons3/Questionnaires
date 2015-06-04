@@ -123,7 +123,6 @@
 					</div>
 					<accordion close-others="true">
 						<accordion-group
-								heading="{{question.question_value}}"
 								ng-repeat="(qIndex, question) in page.QuestionnaireQuestion"
 								is-open="question.isOpen"
 								ng-class="{'panel-danger':(errors.QuestionnairePage[pageIndex].QuestionnaireQuestion[qIndex])}">
@@ -153,7 +152,7 @@
 									<span class="glyphicon glyphicon-arrow-down"></span>
 								</button>
 
-								{{question.question_value|htmlToPlaintext}}
+								{{question.question_value}}
 								<span ng-if="errors.QuestionnairePage[pageIndex].QuestionnaireQuestion[qIndex]">
 									<?php echo __d('questionnaires', 'There is an error'); ?>
 								</span>
