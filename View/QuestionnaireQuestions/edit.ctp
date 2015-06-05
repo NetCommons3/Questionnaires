@@ -154,6 +154,9 @@
 
 								<span class="questionnaire-accordion-header-title">
 									{{question.question_value}}
+									<strong ng-if="question.is_require" class="text-danger h4">
+										<?php echo __d('net_commons', 'Required'); ?>
+									</strong>
 								</span>
 								<span ng-if="errors.QuestionnairePage[pageIndex].QuestionnaireQuestion[qIndex]">
 									<?php echo __d('questionnaires', 'There is an error'); ?>
