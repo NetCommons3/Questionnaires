@@ -11,6 +11,12 @@
 
 App::uses('AppController', 'Controller');
 
+/**
+ * QuestionnaireAnswersController
+ *
+ * @author Allcreator <info@allcreator.net>
+ * @package NetCommons\Questionnaires\Controller
+ */
 class QuestionnaireAnswersController extends QuestionnairesAppController {
 
 /**
