@@ -11,6 +11,12 @@
 
 App::uses('AppController', 'Controller');
 
+/**
+ * QuestionnairesAppController
+ *
+ * @author Allcreator <info@allcreator.net>
+ * @package NetCommons\Questionnaires\Controller
+ */
 class QuestionnairesAppController extends AppController {
 
 /**
@@ -32,6 +38,11 @@ class QuestionnairesAppController extends AppController {
 		'Questionnaires.QuestionnaireFrameSetting'
 	);
 
+/**
+ *  ValidationErrors
+ *
+ * @var array
+ */
 	public $qValidationErrors = array();
 
 /**
