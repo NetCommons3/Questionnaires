@@ -36,6 +36,10 @@ msgstr "画像認証の入力値が不正です"
 msgid "Invalid answers"
 msgstr "不正な回答です。"
 
+#: /Controller/QuestionnaireBlocksController.php:141
+msgid "download error"
+msgstr "ダウンロードエラー"
+
 #: /Controller/QuestionnaireQuestionsController.php:253
 msgid "page"
 msgstr ""
@@ -141,6 +145,22 @@ msgstr "開始日時は終了日時より前の日時を指定する必要があ
 msgid "if you set the use key phrase period, please set key phrase text."
 msgstr "キーフレーズを使う場合、キーフレーズを設定してください。"
 
+#: /Model/QuestionnaireAnswerSummaryCsv.php:152
+msgid "Respondent"
+msgstr "回答者"
+
+#: /Model/QuestionnaireAnswerSummaryCsv.php:153
+msgid "Answer Date"
+msgstr "回答日"
+
+#: /Model/QuestionnaireAnswerSummaryCsv.php:154
+msgid "Number"
+msgstr "回答回数"
+
+#: /Model/QuestionnaireAnswerSummaryCsv.php:191
+msgid "Anonymity"
+msgstr "匿名"
+
 #: /Model/QuestionnaireAnswerValidation.php:47
 msgid "Input required"
 msgstr "必須項目です"
@@ -176,6 +196,10 @@ msgstr "その他を選択する場合は、内容を入力してください。
 #: /Model/QuestionnaireAnswerValidation.php:212
 msgid "Please enter something in other item"
 msgstr "その他の内容を入力してください。"
+
+#: /Model/QuestionnaireAnswerValidation.php:237
+msgid "Please answer about all rows."
+msgstr "回答するときは全ての行に対して回答をしてください。"
 
 #: /Model/QuestionnaireChoice.php:76
 msgid "Please input choice text."
@@ -232,11 +256,6 @@ msgstr "少なくとも１つの選択肢を設定してください。"
 #: /Model/QuestionnaireValidation.php:251
 msgid "please set at least one choice at row and column."
 msgstr "行と列には、それぞれ１つ以上の選択肢が必要です。"
-
-#: /View/Blocks/index.ctp:24
-#: /View/Elements/FrameSettings/edit_display_questionnaire.ctp:27
-msgid "Status"
-msgstr "ステータス"
 
 #: /View/Elements/edit_flow_chart.ctp:14
 msgid "Set questions"
@@ -321,10 +340,6 @@ msgstr "回答数"
 #: /View/Elements/AnswerSummaries/aggrigate_table.ctp:32
 msgid "The percentage"
 msgstr "割合"
-
-#: /View/Elements/Answers/answer_test_mode_header.ctp:19
-msgid "Edit this question"
-msgstr "質問の作成へ"
 
 #: /View/Elements/Answers/answer_test_mode_header.ctp:31
 msgid "Test Mode"
@@ -532,9 +547,21 @@ msgstr "回答内容を確認してください。"
 msgid "Start over"
 msgstr "最初からやり直す"
 
+#: /View/QuestionnaireAnswers/noMoreAnswer.ctp:12
+msgid "you will not be able to answer this questionnaire."
+msgstr "このアンケートには回答することはできません。"
+
 #: /View/QuestionnaireAnswers/pre_answer.ctp:40
 msgid "This questionnaire has been guarded by the key phrase. Please enter the first key phrase To answer ."
 msgstr "このアンケートはキーフレーズが使われています。回答のためのキーフレーズを入力してください。"
+
+#: /View/QuestionnaireAnswers/pre_answer.ctp:58
+msgid "Please input Key-Phrase"
+msgstr "キーフレーズを入力してください。"
+
+#: /View/QuestionnaireBlockRolePermissions/noQuestionnaireBlock.ctp:19
+msgid "There is no questionnaire. First, please create a  questionnaire."
+msgstr "アンケートがまだありません。初めにアンケートを作成してください。"
 
 #: /View/QuestionnaireBlocksSettings/edit.ctp:10
 msgid "Plugin name"
@@ -694,6 +721,10 @@ msgstr "実施"
 #: /View/Questionnaires/edit.ctp:55
 msgid "Questionnaire setting"
 msgstr "アンケートの設定"
+
+#: /View/Questionnaires/edit.ctp:63
+msgid "Sub Title"
+msgstr "サブタイトル"
 
 #: /View/Questionnaires/edit.ctp:65
 msgid "Please enter if there is a sub title"

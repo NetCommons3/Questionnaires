@@ -55,7 +55,7 @@ echo $this->element('Questionnaires.Answers/answer_test_mode_header');
 		</p>
 		<?php echo $this->Form->input('key_phrase', array(
 			'div' => 'form-group',
-			'label' => 'Please input Key-Phrase',
+			'label' => __d('questionnaires', 'Please input Key-Phrase'),
 			'class' => 'form-control'
 		));?>
 		<?php if (isset($errors['PreAnswer']['key_phrase'])): ?>
