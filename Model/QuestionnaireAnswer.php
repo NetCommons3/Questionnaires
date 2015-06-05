@@ -134,9 +134,10 @@ class QuestionnaireAnswer extends QuestionnairesAppModel {
  *
  * @param array $data Postされた回答データ
  * @param array $question 回答データに対応する質問
+ * @param array $answers all answer data of this question (for matrix)
  * @return bool
  */
-	public function checkAnswerValue($data, $question) {
+	public function checkAnswerValue($data, $question, $answers) {
 		$this->loadModels([
 			'QuestionnaireAnswerValidation' => 'Questionnaires.QuestionnaireAnswerValidation',
 		]);
@@ -195,7 +196,7 @@ class QuestionnaireAnswer extends QuestionnairesAppModel {
 		// マトリクス
 		// マトリクス択一
 		// マトリクス複数
-		// マトリクスの場合はデフォルト全部の行に回答することを求める
+		// マトリクスの場合はデフォルト全部の行に回答する/または全く回答しないことを求める
 		// 異常値入力されてないか
 		// その他がチェックされているのにその他の項目に入力されていないことはないか
 		if (isset($this->data['QuestionnaireAnswer']['matrix_answer_values'])) {
@@ -204,6 +205,8 @@ class QuestionnaireAnswer extends QuestionnairesAppModel {
 				$this->QuestionnaireAnswerValidation->checkMatrixAnswerInList($question, $this->data['QuestionnaireAnswer']['matrix_answer_values'], $list));
 			$errors = array_merge($errors,
 				$this->QuestionnaireAnswerValidation->checkMatrixOtherAnswer($question, $this->data['QuestionnaireAnswer']['matrix_answer_values'], $this->data['QuestionnaireAnswer']));
+			$errors = array_merge($errors,
+				$this->QuestionnaireAnswerValidation->checkMatrixAnswerFill($question, $this->data['QuestionnaireAnswer']['matrix_answer_values'], $answers));
 		}
 
 		//
@@ -368,6 +371,7 @@ class QuestionnaireAnswer extends QuestionnairesAppModel {
 					array('rule' => array(
 						'checkAnswerValue',
 						$targetQuestion[0],
+						$answer,
 						'message' => ''
 					)));
 

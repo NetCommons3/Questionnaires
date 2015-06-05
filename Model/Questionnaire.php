@@ -251,7 +251,6 @@ class Questionnaire extends QuestionnairesAppModel {
 			// かつ、ページ数、質問数もカウントする
 			$val['Questionnaire']['page_count'] = 0;
 			$val['Questionnaire']['question_count'] = 0;
-			$this->log($val, 'debug');
 			$this->QuestionnairePage->setPageToQuestionnaire($val);
 
 			$val['Questionnaire']['all_answer_count'] = $this->QuestionnaireAnswerSummary->find('count', array(

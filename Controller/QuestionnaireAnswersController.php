@@ -205,6 +205,7 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 					$setAnswers[$answer['questionnaire_question_origin_id']][] = $answer;
 				}
 			}*/
+			$this->set('answers', $setAnswers);
 		}
 		//$this->log(print_r($setAnswers, true), 'debug');
 		// 質問情報をView変数にセット
@@ -212,7 +213,6 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 		$this->set('isDuringTest', $this->_isDuringTest($questionnaire));
 		$this->set('questionPage', $questionnaire['QuestionnairePage'][$nextPageSeq]);
 		$this->set('errors', $errors);
-		$this->set('answers', $setAnswers);
 	}
 
 /**

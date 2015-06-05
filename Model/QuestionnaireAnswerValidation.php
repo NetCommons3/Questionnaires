@@ -157,7 +157,7 @@ class QuestionnaireAnswerValidation extends QuestionnairesAppModel {
 			}
 			$choiceIds = array_keys($matrixColAns);
 			foreach ($choiceIds as $choiceId) {
-				if (!Validation::inList(strval($choiceId), $list)) {
+				if ($choiceId != '' && !Validation::inList(strval($choiceId), $list)) {
 					$errors[] = __d('questionnaires', 'Invalid choice');
 				}
 			}
@@ -205,6 +205,36 @@ class QuestionnaireAnswerValidation extends QuestionnairesAppModel {
 					$errors[] = __d('questionnaires', 'Please enter something in other item');
 				}
 			}
+		}
+		return $errors;
+	}
+
+/**
+ * checkMatrixAnswerFill
+ *
+ * @param array $question question
+ * @param string $answer answer string
+ * @param string $answers all row answer value
+ * @return array error message
+ */
+	public function checkMatrixAnswerFill($question, $answer, $answers) {
+		// マトリクスの場合は全行回答するか全行回答しないかでないと集計計算が狂うので
+		// 全行回答か全行無回答かを確認している
+		$errors = array();
+		$answerCount = 0;
+		$noAnswerCount = 0;
+		foreach ($answers as $ans) {
+			if (!isset($ans['id'])) {
+				// id すらないのはblackhole対応のためのhidden要素であるので無視
+				continue;
+			}
+			if ($ans['answer_value'] == '') {
+				$noAnswerCount++;
+			}
+			$answerCount++;
+		}
+		if ($noAnswerCount > 0 && $noAnswerCount < $answerCount) {
+			$errors[] = __d('questionnaires', 'Please answer about all rows.');
 		}
 		return $errors;
 	}

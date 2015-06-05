@@ -63,18 +63,27 @@
 					)); ?>
 				<?php endif ?>
 			</th>
+			<?php $optCount = 0; ?>
 			<?php foreach ($options as $key => $opt): ?>
 				<td>
-					<?php echo $this->Form->input('QuestionnaireAnswer.' . $index . '.' . $rowIndex . '.answer_value', array(
+					<?php
+					if (isset($answer[$rowIndex]['answer_value'])) {
+						$checked = ($key == $answer[$rowIndex]['answer_value']) ? true : false;
+					} else {
+						$checked = false;
+					}
+
+					echo $this->Form->input('QuestionnaireAnswer.' . $index . '.' . $rowIndex . '.answer_value', array(
 						'type' => 'radio',
 						'options' => array($key => null),
 						'legend' => false,
 						'label' => false,
 						'div' => false,
-						'hiddenField' => false,
-						'checked' => ($key == $answer[$rowIndex]['answer_value']) ? true : false,
+						'hiddenField' => ($readonly || $optCount != 0) ? false : true,
+						'checked' => $checked,
 						'disabled' => $readonly,
 						));
+					$optCount++;
 					?>
 				</td>
 			<?php endforeach; ?>
