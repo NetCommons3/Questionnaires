@@ -135,7 +135,7 @@ class QuestionnaireAnswerValidation extends QuestionnairesAppModel {
  */
 	public function checkAnswerInList($question, $answer, $list) {
 		$errors = array();
-		if (!Validation::inList(strval($answer), $list)) {
+		if ($answer != '' && !Validation::inList(strval($answer), $list)) {
 			$errors[] = __d('questionnaires', 'Invalid choice');
 		}
 		return $errors;
