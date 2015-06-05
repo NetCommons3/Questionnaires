@@ -519,6 +519,7 @@ NetCommonsApp.controller('Questionnaires.edit.question',
          * @return {void}
          */
       $scope.changeSkipPageChoice = function(skipPageIndex) {
+        skipPageIndex = parseInt(skipPageIndex);
         // 選択中のoptionを調べる
         if (skipPageIndex == variables.SKIP_GO_TO_END) {
           return;

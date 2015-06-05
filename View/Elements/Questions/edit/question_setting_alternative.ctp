@@ -55,13 +55,17 @@
 							&& question.question_type != <?php echo QuestionnairesComponent::TYPE_MULTIPLE_SELECTION; ?>">
 						<option
 								ng-repeat="skip_page in questionnaire.QuestionnairePage"
+								value="{{skip_page.page_sequence}}"
 								ng-value="{{skip_page.page_sequence}}"
 								ng-selected="choice.skip_page_sequence == skip_page.page_sequence"
 								ng-disabled="skip_page.page_sequence == pageIndex">
 							{{1 * skip_page.page_sequence + 1}}
 						</option>
 						<option value="<?php echo QuestionnairesComponent::SKIP_GO_TO_END ?>"><?php echo __d('questionnaires', 'goto end'); ?></option>
-						<option value="{{questionnaire.QuestionnairePage.length}}" title="<?php echo __d('questionnaires', '(new page will be created)'); ?>">
+						<option
+								value="{{questionnaire.QuestionnairePage.length}}"
+								ng-value="{{questionnaire.QuestionnairePage.length}}"
+								title="<?php echo __d('questionnaires', '(new page will be created)'); ?>">
 							<?php echo __d('questionnaires', 'create new page for this skip'); ?>
 						</option>
 					</select>
