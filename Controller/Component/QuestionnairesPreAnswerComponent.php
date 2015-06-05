@@ -11,6 +11,12 @@
 
 App::uses('Component', 'Controller');
 
+/**
+ * QuestionnairesPreAnswerComponent
+ *
+ * @author Allcreator <info@allcreator.net>
+ * @package NetCommons\Questionnaires\Controller
+ */
 class QuestionnairesPreAnswerComponent extends Component {
 
 /**

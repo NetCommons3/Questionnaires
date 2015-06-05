@@ -13,6 +13,9 @@
 
 App::uses('AppModel', 'Model');
 
+/**
+ * Summary for QuestionnaireQuestion Model
+ */
 class QuestionnairesAppModel extends AppModel {
 
 /**
