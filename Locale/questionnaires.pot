@@ -5,7 +5,6 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2015-05-22 00:24+0000\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -15,58 +14,62 @@ msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
 #: /Controller/QuestionnaireAnswerSummariesController.php:80
-#: /Controller/QuestionnairesController.php:145
-#: /Controller/Component/QuestionnairesPreAnswerComponent.php:37
+#: /Controller/QuestionnairesController.php:158
+#: /Controller/Component/QuestionnairesPreAnswerComponent.php:36
 msgid "Invalid questionnaire"
 msgstr ""
 
-#: /Controller/QuestionnaireAnswerSummariesController.php:107
+#: /Controller/QuestionnaireAnswerSummariesController.php:106
 msgid "annonymous person"
 msgstr ""
 
-#: /Controller/QuestionnaireAnswersController.php:83
+#: /Controller/QuestionnaireAnswersController.php:82
 msgid "Invalid key phrase"
 msgstr ""
 
-#: /Controller/QuestionnaireAnswersController.php:86
+#: /Controller/QuestionnaireAnswersController.php:85
 msgid "Invalid key Image Auth"
 msgstr ""
 
-#: /Controller/QuestionnaireAnswersController.php:229
+#: /Controller/QuestionnaireAnswersController.php:237
 msgid "Invalid answers"
 msgstr ""
 
-#: /Controller/QuestionnaireQuestionsController.php:253
+#: /Controller/QuestionnaireBlocksController.php:141
+msgid "download error"
+msgstr ""
+
+#: /Controller/QuestionnaireQuestionsController.php:261
 msgid "page"
 msgstr ""
 
-#: /Controller/QuestionnaireQuestionsController.php:254
-#: /Model/QuestionnaireQuestion.php:181
+#: /Controller/QuestionnaireQuestionsController.php:262
+#: /Model/QuestionnaireQuestion.php:174
 msgid "New Question"
 msgstr ""
 
-#: /Controller/QuestionnaireQuestionsController.php:255
-#: /Model/QuestionnaireChoice.php:141
+#: /Controller/QuestionnaireQuestionsController.php:263
+#: /Model/QuestionnaireChoice.php:134
 msgid "new choice"
 msgstr ""
 
-#: /Controller/QuestionnaireQuestionsController.php:256
+#: /Controller/QuestionnaireQuestionsController.php:264
 msgid "new column choice"
 msgstr ""
 
-#: /Controller/QuestionnaireQuestionsController.php:257
+#: /Controller/QuestionnaireQuestionsController.php:265
 msgid "other choice"
 msgstr ""
 
-#: /Controller/QuestionnairesController.php:195
+#: /Controller/QuestionnairesController.php:208
 msgid "Please select past questionnaire."
 msgstr ""
 
-#: /Controller/QuestionnairesController.php:203
+#: /Controller/QuestionnairesController.php:216
 msgid "Please choose create option."
 msgstr ""
 
-#: /Controller/QuestionnairesController.php:321
+#: /Controller/QuestionnairesController.php:335
 msgid "This Questionnaire has been deleted."
 msgstr ""
 
@@ -83,9 +86,9 @@ msgid "Registration order"
 msgstr ""
 
 #: /Controller/Component/QuestionnairesComponent.php:488
-#: /Model/Questionnaire.php:141
-#: /View/Blocks/index.ctp:27
-#: /View/Elements/FrameSettings/edit_display_questionnaire.ctp:30
+#: /Model/Questionnaire.php:134
+#: /View/Elements/FrameSettings/edit_display_questionnaire.ctp:27
+#: /View/QuestionnaireBlocks/index.ctp:38
 msgid "Title"
 msgstr ""
 
@@ -125,121 +128,132 @@ msgstr ""
 msgid "List select"
 msgstr ""
 
-#: /Model/Questionnaire.php:152
+#: /Model/Questionnaire.php:145
 msgid "if you set the answer period, please set start time or end time or both time."
 msgstr ""
 
-#: /Model/Questionnaire.php:158;164;174
+#: /Model/Questionnaire.php:151;157;167
 msgid "Invalid datetime format."
 msgstr ""
 
-#: /Model/Questionnaire.php:168
+#: /Model/Questionnaire.php:161
 msgid "start period must be smaller than end period"
 msgstr ""
 
-#: /Model/Questionnaire.php:196
+#: /Model/Questionnaire.php:189
 msgid "if you set the use key phrase period, please set key phrase text."
 msgstr ""
 
-#: /Model/QuestionnaireAnswerValidation.php:47
+#: /Model/QuestionnaireAnswerSummaryCsv.php:152
+msgid "Respondent"
+msgstr ""
+
+#: /Model/QuestionnaireAnswerSummaryCsv.php:153
+msgid "Answer Date"
+msgstr ""
+
+#: /Model/QuestionnaireAnswerSummaryCsv.php:154
+msgid "Number"
+msgstr ""
+
+#: /Model/QuestionnaireAnswerSummaryCsv.php:191
+msgid "Anonymity"
+msgstr ""
+
+#: /Model/QuestionnaireAnswerValidation.php:40
 msgid "Input required"
 msgstr ""
 
-#: /Model/QuestionnaireAnswerValidation.php:66
+#: /Model/QuestionnaireAnswerValidation.php:59
 msgid "Number required"
 msgstr ""
 
-#: /Model/QuestionnaireAnswerValidation.php:83
+#: /Model/QuestionnaireAnswerValidation.php:76
 msgid "Please enter a valid date in YY-MM-DD format."
 msgstr ""
 
-#: /Model/QuestionnaireAnswerValidation.php:87
+#: /Model/QuestionnaireAnswerValidation.php:80
 msgid "Please enter the time."
 msgstr ""
 
-#: /Model/QuestionnaireAnswerValidation.php:91
+#: /Model/QuestionnaireAnswerValidation.php:84
 msgid "Please enter a valid date and time."
 msgstr ""
 
-#: /Model/QuestionnaireAnswerValidation.php:109;128
+#: /Model/QuestionnaireAnswerValidation.php:102;121
 msgid "Please enter the %s between %s and %s."
 msgstr ""
 
-#: /Model/QuestionnaireAnswerValidation.php:146;163;168
+#: /Model/QuestionnaireAnswerValidation.php:139;156;161
 msgid "Invalid choice"
 msgstr ""
 
-#: /Model/QuestionnaireAnswerValidation.php:189
+#: /Model/QuestionnaireAnswerValidation.php:182
 msgid "Please enter something, if you chose the other item"
 msgstr ""
 
-#: /Model/QuestionnaireAnswerValidation.php:212
+#: /Model/QuestionnaireAnswerValidation.php:205
 msgid "Please enter something in other item"
 msgstr ""
 
-#: /Model/QuestionnaireChoice.php:76
+#: /Model/QuestionnaireAnswerValidation.php:237
+msgid "Please answer about all rows."
+msgstr ""
+
+#: /Model/QuestionnaireChoice.php:69
 msgid "Please input choice text."
 msgstr ""
 
-#: /Model/QuestionnaireChoice.php:111
+#: /Model/QuestionnaireChoice.php:104
 msgid "First character is \"#\". And input the hexadecimal numbers by six digits."
 msgstr ""
 
-#: /Model/QuestionnairePage.php:155
+#: /Model/QuestionnairePage.php:148
 msgid "First Page"
 msgstr ""
 
-#: /Model/QuestionnaireQuestion.php:116
+#: /Model/QuestionnaireQuestion.php:109
 msgid "Please input question text."
 msgstr ""
 
-#: /Model/QuestionnaireQuestion.php:156;162
+#: /Model/QuestionnaireQuestion.php:149;155
 msgid "Please enter both the maximum and minimum values."
 msgstr ""
 
-#: /Model/QuestionnaireValidation.php:45
+#: /Model/QuestionnaireValidation.php:38
 msgid "please set at least one page."
 msgstr ""
 
-#: /Model/QuestionnaireValidation.php:64
+#: /Model/QuestionnaireValidation.php:57
 msgid "Invalid page sequence set. Please try again from the beginning."
 msgstr ""
 
-#: /Model/QuestionnaireValidation.php:95
+#: /Model/QuestionnaireValidation.php:88
 msgid "please set at least one question."
 msgstr ""
 
-#: /Model/QuestionnaireValidation.php:122
+#: /Model/QuestionnaireValidation.php:115
 msgid "Invalid question sequence set. Please try again from the beginning."
 msgstr ""
 
-#: /Model/QuestionnaireValidation.php:185
+#: /Model/QuestionnaireValidation.php:178
 msgid "Invalid choice sequence set. Please try again from the beginning."
 msgstr ""
 
-#: /Model/QuestionnaireValidation.php:215
+#: /Model/QuestionnaireValidation.php:208
 msgid "Invalid skip page. Please set forward page."
 msgstr ""
 
-#: /Model/QuestionnaireValidation.php:220
+#: /Model/QuestionnaireValidation.php:213
 msgid "Invalid skip page. page does not exist."
 msgstr ""
 
-#: /Model/QuestionnaireValidation.php:237
+#: /Model/QuestionnaireValidation.php:230
 msgid "please set at least one choice."
 msgstr ""
 
-#: /Model/QuestionnaireValidation.php:251
+#: /Model/QuestionnaireValidation.php:244
 msgid "please set at least one choice at row and column."
-msgstr ""
-
-#: /View/Blocks/index.ctp:24
-#: /View/Elements/FrameSettings/edit_display_questionnaire.ctp:27
-msgid "Status"
-msgstr ""
-
-#: /View/Elements/comment_form.ctp:16
-msgid "send"
 msgstr ""
 
 #: /View/Elements/edit_flow_chart.ctp:14
@@ -326,16 +340,12 @@ msgstr ""
 msgid "The percentage"
 msgstr ""
 
-#: /View/Elements/Answers/answer_test_mode_header.ctp:19
-msgid "Edit this question"
-msgstr ""
-
-#: /View/Elements/Answers/answer_test_mode_header.ctp:31
+#: /View/Elements/Answers/answer_test_mode_header.ctp:38
 msgid "Test Mode"
 msgstr ""
 
-#: /View/Elements/Answers/answer_test_mode_header.ctp:34
-msgid "This questionnaire is being temporarily stored . You can questionnaire test before performed in this page . If you want to modify or change the questionnaire , you will be able to edit by pressing the [ Edit question ] button in the upper-right corner . Also, when you click on the bottom<span class=\"btn btn-primary questionnaire-btn-comment\"><span class=\"glyphicon glyphicon-comment\"></span></span> right of the screen , you can see the comments ."
+#: /View/Elements/Answers/answer_test_mode_header.ctp:41
+msgid "This questionnaire is being temporarily stored . You can questionnaire test before performed in this page . If you want to modify or change the questionnaire , you will be able to edit by pressing the [ Edit question ] button in the upper-right corner . "
 msgstr ""
 
 #: /View/Elements/Answers/question_range_description.ctp:14
@@ -354,10 +364,6 @@ msgstr ""
 msgid "Please choose one"
 msgstr ""
 
-#: /View/Elements/Blocks/delete_form.ctp:14;28
-msgid "QUESTIONNAIRES"
-msgstr ""
-
 #: /View/Elements/FrameSettings/edit_display_questionnaire.ctp:12
 msgid "select display questionnaires."
 msgstr ""
@@ -366,23 +372,28 @@ msgstr ""
 msgid "Display"
 msgstr ""
 
-#: /View/Elements/FrameSettings/edit_display_questionnaire.ctp:33
+#: /View/Elements/FrameSettings/edit_display_questionnaire.ctp:24
+#: /View/QuestionnaireBlocks/index.ctp:35
+msgid "Status"
+msgstr ""
+
+#: /View/Elements/FrameSettings/edit_display_questionnaire.ctp:30
 msgid "Implementation date"
 msgstr ""
 
-#: /View/Elements/FrameSettings/edit_display_questionnaire.ctp:36
+#: /View/Elements/FrameSettings/edit_display_questionnaire.ctp:33
 msgid "Aggregates"
 msgstr ""
 
-#: /View/Elements/FrameSettings/edit_display_questionnaire.ctp:84
+#: /View/Elements/FrameSettings/edit_display_questionnaire.ctp:75
 #: /View/Elements/Questions/edit/question_setting_date.ctp:72
-#: /View/Questionnaires/add.ctp:112
+#: /View/Questionnaires/add.ctp:111
 #: /View/Questionnaires/edit.ctp:106
 #: /View/Questionnaires/index.ctp:36
 msgid " - "
 msgstr ""
 
-#: /View/Elements/FrameSettings/edit_display_questionnaire.ctp:90
+#: /View/Elements/FrameSettings/edit_display_questionnaire.ctp:81
 msgid "On"
 msgstr ""
 
@@ -427,7 +438,7 @@ msgstr ""
 msgid "Test"
 msgstr ""
 
-#: /View/Elements/Questions/edit/question_setting_alternative.ctp:20;88
+#: /View/Elements/Questions/edit/question_setting_alternative.ctp:20;92
 msgid "add choices"
 msgstr ""
 
@@ -439,20 +450,20 @@ msgstr ""
 msgid "set page skip"
 msgstr ""
 
-#: /View/Elements/Questions/edit/question_setting_alternative.ctp:63
+#: /View/Elements/Questions/edit/question_setting_alternative.ctp:64
 msgid "goto end"
 msgstr ""
 
-#: /View/Elements/Questions/edit/question_setting_alternative.ctp:64
+#: /View/Elements/Questions/edit/question_setting_alternative.ctp:68
 msgid "(new page will be created)"
 msgstr ""
 
-#: /View/Elements/Questions/edit/question_setting_alternative.ctp:65
+#: /View/Elements/Questions/edit/question_setting_alternative.ctp:69
 msgid "create new page for this skip"
 msgstr ""
 
-#: /View/Elements/Questions/edit/question_setting_alternative.ctp:93
-#: /View/Elements/Questions/edit/question_setting_matrix_alternative.ctp:81
+#: /View/Elements/Questions/edit/question_setting_alternative.ctp:97
+#: /View/Elements/Questions/edit/question_setting_matrix_alternative.ctp:80
 msgid "add another choice"
 msgstr ""
 
@@ -488,7 +499,7 @@ msgstr ""
 msgid "Column choices"
 msgstr ""
 
-#: /View/Elements/Questions/edit/question_setting_matrix_alternative.ctp:47;68
+#: /View/Elements/Questions/edit/question_setting_matrix_alternative.ctp:47;67
 msgid "Add column choices"
 msgstr ""
 
@@ -520,7 +531,7 @@ msgstr ""
 msgid "Finished"
 msgstr ""
 
-#: /View/QuestionnaireAnswerSummaries/result.ctp:80
+#: /View/QuestionnaireAnswerSummaries/result.ctp:97
 msgid "Back to Top"
 msgstr ""
 
@@ -536,8 +547,20 @@ msgstr ""
 msgid "Start over"
 msgstr ""
 
-#: /View/QuestionnaireAnswers/pre_answer.ctp:40
+#: /View/QuestionnaireAnswers/noMoreAnswer.ctp:12
+msgid "you will not be able to answer this questionnaire."
+msgstr ""
+
+#: /View/QuestionnaireAnswers/pre_answer.ctp:54
 msgid "This questionnaire has been guarded by the key phrase. Please enter the first key phrase To answer ."
+msgstr ""
+
+#: /View/QuestionnaireAnswers/pre_answer.ctp:58
+msgid "Please input Key-Phrase"
+msgstr ""
+
+#: /View/QuestionnaireBlockRolePermissions/noQuestionnaireBlock.ctp:19
+msgid "There is no questionnaire. First, please create a  questionnaire."
 msgstr ""
 
 #: /View/QuestionnaireBlocksSettings/edit.ctp:10
@@ -560,30 +583,30 @@ msgstr ""
 msgid "plugin_name"
 msgstr ""
 
-#: /View/QuestionnaireQuestions/edit.ctp:64
-#: /View/Questionnaires/add.ctp:71
+#: /View/QuestionnaireQuestions/edit.ctp:63
+#: /View/Questionnaires/add.ctp:75
 msgid "Questionnaire title"
 msgstr ""
 
-#: /View/QuestionnaireQuestions/edit.ctp:67
-#: /View/Questionnaires/add.ctp:79
+#: /View/QuestionnaireQuestions/edit.ctp:66
+#: /View/Questionnaires/add.ctp:77
 msgid "Please input questionnaire title"
 msgstr ""
 
-#: /View/QuestionnaireQuestions/edit.ctp:94;296
+#: /View/QuestionnaireQuestions/edit.ctp:93;296
 msgid "Add Question"
 msgstr ""
 
-#: /View/QuestionnaireQuestions/edit.ctp:135
+#: /View/QuestionnaireQuestions/edit.ctp:133
 msgid "move to another page"
 msgstr ""
 
-#: /View/QuestionnaireQuestions/edit.ctp:144
+#: /View/QuestionnaireQuestions/edit.ctp:142
 msgid "Do you want to delete this question ?"
 msgstr ""
 
 #: /View/QuestionnaireQuestions/edit.ctp:159
-#: /View/QuestionnaireQuestions/edit_result.ctp:103
+#: /View/QuestionnaireQuestions/edit_result.ctp:104
 msgid "There is an error"
 msgstr ""
 
@@ -611,63 +634,63 @@ msgstr ""
 msgid "Add Page"
 msgstr ""
 
-#: /View/QuestionnaireQuestions/edit_result.ctp:54
+#: /View/QuestionnaireQuestions/edit_result.ctp:55
 msgid "Results setting"
 msgstr ""
 
-#: /View/QuestionnaireQuestions/edit_result.ctp:59
+#: /View/QuestionnaireQuestions/edit_result.ctp:60
 msgid "Please edit return to create the question screen if you want to change the questionnaire title"
 msgstr ""
 
-#: /View/QuestionnaireQuestions/edit_result.ctp:63
+#: /View/QuestionnaireQuestions/edit_result.ctp:64
 msgid "Published aggregate results"
 msgstr ""
 
-#: /View/QuestionnaireQuestions/edit_result.ctp:66
+#: /View/QuestionnaireQuestions/edit_result.ctp:67
 msgid "not disclose the total result"
 msgstr ""
 
-#: /View/QuestionnaireQuestions/edit_result.ctp:66
+#: /View/QuestionnaireQuestions/edit_result.ctp:67
 msgid "publish aggregate result"
 msgstr ""
 
-#: /View/QuestionnaireQuestions/edit_result.ctp:79
+#: /View/QuestionnaireQuestions/edit_result.ctp:80
 msgid "Text to be displayed in the aggregate results page"
 msgstr ""
 
-#: /View/QuestionnaireQuestions/edit_result.ctp:92
+#: /View/QuestionnaireQuestions/edit_result.ctp:93
 msgid "Question you want to display the aggregate results"
 msgstr ""
 
-#: /View/QuestionnaireQuestions/edit_result.ctp:108
+#: /View/QuestionnaireQuestions/edit_result.ctp:109
 msgid "aggregate display"
 msgstr ""
 
-#: /View/QuestionnaireQuestions/edit_result.ctp:111
+#: /View/QuestionnaireQuestions/edit_result.ctp:112
 msgid "The results of this question will not be displayed"
 msgstr ""
 
-#: /View/QuestionnaireQuestions/edit_result.ctp:112
+#: /View/QuestionnaireQuestions/edit_result.ctp:113
 msgid "The results of this question will be displayed"
 msgstr ""
 
-#: /View/QuestionnaireQuestions/edit_result.ctp:129
+#: /View/QuestionnaireQuestions/edit_result.ctp:130
 msgid "display type"
 msgstr ""
 
-#: /View/QuestionnaireQuestions/edit_result.ctp:132
+#: /View/QuestionnaireQuestions/edit_result.ctp:133
 msgid "Bar Chart"
 msgstr ""
 
-#: /View/QuestionnaireQuestions/edit_result.ctp:133
+#: /View/QuestionnaireQuestions/edit_result.ctp:134
 msgid "Pie Chart"
 msgstr ""
 
-#: /View/QuestionnaireQuestions/edit_result.ctp:134
+#: /View/QuestionnaireQuestions/edit_result.ctp:135
 msgid "Table"
 msgstr ""
 
-#: /View/QuestionnaireQuestions/edit_result.ctp:149
+#: /View/QuestionnaireQuestions/edit_result.ctp:150
 msgid "graph color"
 msgstr ""
 
@@ -675,28 +698,32 @@ msgstr ""
 msgid "You can create a new questionnaire. Please choose how to create."
 msgstr ""
 
-#: /View/Questionnaires/add.ctp:66
+#: /View/Questionnaires/add.ctp:69
 msgid "Create new questionnaire"
 msgstr ""
 
-#: /View/Questionnaires/add.ctp:93
+#: /View/Questionnaires/add.ctp:92
 msgid "Re-use past questionnaire"
 msgstr ""
 
-#: /View/Questionnaires/add.ctp:98
+#: /View/Questionnaires/add.ctp:97
 msgid "Past questionnaire"
 msgstr ""
 
-#: /View/Questionnaires/add.ctp:101
+#: /View/Questionnaires/add.ctp:100
 msgid "Refine by entering the part of the questionnaire name"
 msgstr ""
 
-#: /View/Questionnaires/add.ctp:114
+#: /View/Questionnaires/add.ctp:113
 msgid "Implementation"
 msgstr ""
 
 #: /View/Questionnaires/edit.ctp:55
 msgid "Questionnaire setting"
+msgstr ""
+
+#: /View/Questionnaires/edit.ctp:63
+msgid "Sub Title"
 msgstr ""
 
 #: /View/Questionnaires/edit.ctp:65
