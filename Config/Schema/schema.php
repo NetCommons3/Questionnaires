@@ -11,7 +11,7 @@
 
 /**
  * Schema file
- *
+ * 
  * @author Allcreator <info@allcreator.net>
  * @package NetCommons\Questionnaires\Config\Schema
  * @SuppressWarnings(PHPMD.LongVariable)
