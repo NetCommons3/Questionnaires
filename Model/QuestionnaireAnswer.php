@@ -419,7 +419,9 @@ class QuestionnaireAnswer extends QuestionnairesAppModel {
 		}
 		$answer['questionnaire_answer_summary_id'] = $summaryId;
 		if (isset($summary['QuestionnaireAnswer'])) {
-			$past = Hash::extract($summary['QuestionnaireAnswer'], '{n}[matrix_choice_id=' . $answer['matrix_choice_id'] . ']');
+			$matcher1 = 'questionnaire_question_origin_id=' . $answer['questionnaire_question_origin_id'];
+			$matcher2 = 'matrix_choice_id=' . $answer['matrix_choice_id'];
+			$past = Hash::extract($summary['QuestionnaireAnswer'], '{n}[' . $matcher1 . '][' . $matcher2 . ']');
 		} else {
 			$past = false;
 		}
