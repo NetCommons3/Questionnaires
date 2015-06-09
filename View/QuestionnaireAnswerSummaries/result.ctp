@@ -56,8 +56,8 @@
 		</div>
 	<?php endif; ?>
 
-	<?php
-		foreach ($questions as $questionnaireQuestionId => $question) {
+	<?php foreach ($questions as $questionnaireQuestionId => $question): ?>
+		<?php
 			if ($question['is_result_display'] != QuestionnairesComponent::EXPRESSION_SHOW) {
 				//集計表示をしない、なので飛ばす
 				continue;
@@ -81,17 +81,43 @@
 			if ($elementName === '') {
 				continue; //element名が決まらない場合、次へ。
 			}
-			echo $this->element($elementName,
-				array(
-					'frameId' => $frameId,
-					'questionnaireId' => $questionnaireId,
-					'questionnaire' => $questionnaire,
-					'question' => $question,
-					'questionId' => $questionnaireQuestionId
-				)
+		?>
+		<div class="row">
+			<?php
+			//各質問ごと集計表示の共通ヘッダー
+			echo $this->element('Questionnaires.AnswerSummaries/aggrigate_common_header',
+			array(
+			'frameId' => $frameId,
+			'questionnaireId' => $questionnaireId,
+			'questionnaire' => $questionnaire,
+			'question' => $question
+			)
 			);
-		}
-	?>
+			?>
+			<?php echo $this->element($elementName,
+					array(
+						'frameId' => $frameId,
+						'questionnaireId' => $questionnaireId,
+						'questionnaire' => $questionnaire,
+						'question' => $question,
+						'questionId' => $questionnaireQuestionId
+					)
+				);
+			?>
+			<?php
+			//各質問ごと集計表示の共通フッター
+			echo $this->element('Questionnaires.AnswerSummaries/aggrigate_common_footer',
+			array(
+			'frameId' => $frameId,
+			'questionnaireId' => $questionnaireId,
+			'questionnaire' => $questionnaire,
+			'question' => $question
+			)
+			);
+			?>
+
+		</div>
+	<?php endforeach; ?>
 
 	<div class="text-center">
 		<?php echo $this->BackToPage->backToPageButton(__d('questionnaires', 'Back to Top'), '', 'lg'); ?>

@@ -9,7 +9,7 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 ?>
-<div class="questionnaire-chart-wrapper" >
+<div class="col-xs-12 questionnaire-chart-wrapper" >
     <?php foreach ($question['QuestionnaireChoice'] as $choiceId => $choice): ?>
     <?php if ($choice['matrix_type'] == QuestionnairesComponent::MATRIX_TYPE_ROW_OR_NO_MATRIX): ?>
         <?php $dataStr = '[' . $questionId . '][' . $choice['origin_id'] . ']'; ?>

@@ -9,7 +9,7 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 ?>
-<div class="questionnaire-chart-wrapper" >
+<div class="col-xs-12 questionnaire-chart-wrapper" >
   <nvd3 options='config[<?php echo $questionId; ?>]'
         data='data[<?php echo $questionId; ?>]'></nvd3>
 </div>
