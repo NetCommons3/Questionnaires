@@ -60,7 +60,7 @@
 			<?php echo $this->Form->input(
 				'Questionnaire.title',
 				array(
-					'label' => __d('questionnaires', 'Questionnaire title'),
+					'label' => __d('questionnaires', 'Questionnaire title') . $this->element('NetCommons.required'),
 					'class' => 'form-control',
 					'ng-model' => 'questionnaire.Questionnaire.title',
 					'placeholder' => __d('questionnaires', 'Please input questionnaire title')
@@ -113,16 +113,15 @@
 						array(
 						'ng-value' => 'page.key'
 						));
-					?>
-					<div class="form-inline">
-						<?php echo $this->Form->hidden('QuestionnairePage.{{pageIndex}}.page_title',
+						$this->Form->hidden('QuestionnairePage.{{pageIndex}}.page_title',
 						array(
 						'ng-value' => 'page.page_title'
 						));
-						?>
-					</div>
+					?>
+
 					<accordion close-others="true">
 						<accordion-group
+								class="form-horizontal"
 								ng-repeat="(qIndex, question) in page.QuestionnaireQuestion"
 								is-open="question.isOpen"
 								ng-class="{'panel-danger':(errors.QuestionnairePage[pageIndex].QuestionnaireQuestion[qIndex])}">
@@ -171,9 +170,9 @@
 							</accordion-heading>
 
 							<div class="row form-group">
-								<?php echo $this->Form->label('QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.question_value',
-									__d('questionnaires', 'question sentence'),
-									array('class' => 'col-sm-2'));
+								<?php echo $this->Form->label('QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.is_require',
+									__d('questionnaires', 'Required'),
+									array('class' => 'col-sm-2 control-label'));
 								?>
 								<?php
 									echo $this->Form->hidden('QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.question_sequence',
@@ -210,13 +209,22 @@
 											'ng-model' => 'question.is_require'
 											));
 											?>
-											<?php echo __d('questionnaires', 'Required'); ?>
+											<?php echo __d('questionnaires', 'set answer to this question is required'); ?>
 										</label>
 										<?php echo $this->element(
 										'Questionnaires.errors', array(
 										'errorArrayName' => 'errors.QuestionnairePage[pageIndex].QuestionnaireQuestion[qIndex].is_require',
 										)); ?>
 									</div>
+								</div>
+							</div>
+
+							<div class="row form-group">
+								<?php echo $this->Form->label('QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.question_value',
+								__d('questionnaires', 'question title') . $this->element('NetCommons.required'),
+								array('class' => 'col-sm-2 control-label'));
+								?>
+								<div class="col-sm-10">
 									<?php echo $this->Form->input('QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.question_value',
 									array(
 									'type' => 'text',
@@ -229,6 +237,15 @@
 									'Questionnaires.errors', array(
 									'errorArrayName' => 'errors.QuestionnairePage[pageIndex].QuestionnaireQuestion[qIndex].question_value',
 									)); ?>
+								</div>
+							</div>
+
+							<div class="row form-group">
+								<?php echo $this->Form->label('QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.description',
+								__d('questionnaires', 'question sentence'),
+								array('class' => 'col-sm-2 control-label'));
+								?>
+								<div class="col-sm-10">
 									<div class="nc-wysiwyg-alert">
 										<?php echo $this->Form->textarea('QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.description',
 										array(
@@ -248,8 +265,8 @@
 
 							<div class="row form-group">
 								<?php echo $this->Form->label('QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.question_type',
-								__d('questionnaires', 'Question type'),
-								array('class' => 'col-sm-2'));
+								__d('questionnaires', 'Question type') . $this->element('NetCommons.required'),
+								array('class' => 'col-sm-2 control-label'));
 								?>
 								<div class="col-sm-10">
 									<?php

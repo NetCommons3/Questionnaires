@@ -614,11 +614,15 @@ msgid "There is an error"
 msgstr ""
 
 #: /View/QuestionnaireQuestions/edit.ctp:168
+msgid "question title"
+msgstr ""
 msgid "question sentence"
 msgstr ""
 
 #: /View/QuestionnaireQuestions/edit.ctp:206
 msgid "Required"
+msgstr ""
+msgid "set answer to this question is required"
 msgstr ""
 
 #: /View/QuestionnaireQuestions/edit.ctp:244

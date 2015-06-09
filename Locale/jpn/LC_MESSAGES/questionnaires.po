@@ -614,11 +614,15 @@ msgid "There is an error"
 msgstr "エラーがあります"
 
 #: /View/QuestionnaireQuestions/edit.ctp:168
+msgid "question title"
+msgstr "質問タイトル"
 msgid "question sentence"
 msgstr "質問文"
 
 #: /View/QuestionnaireQuestions/edit.ctp:206
 msgid "Required"
+msgstr "必須"
+msgid "set answer to this question is required"
 msgstr "この質問の回答を必須とする"
 
 #: /View/QuestionnaireQuestions/edit.ctp:244
