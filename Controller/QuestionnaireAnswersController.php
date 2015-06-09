@@ -283,6 +283,7 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 			$targetQuestion = Hash::extract($questionnaire['QuestionnairePage'], '{n}.QuestionnaireQuestion.{n}[origin_id=' . $answer['questionnaire_question_origin_id'] . ']');
 			if ($targetQuestion) {
 				$q = $targetQuestion[0];
+				// skipロジック対象の質問ならば次ページのチェックを行う
 				if ($q['is_skip'] == QuestionnairesComponent::SKIP_FLAGS_SKIP) {
 					$choiceIds = explode(QuestionnairesComponent::ANSWER_VALUE_DELIMITER,
 									trim($answer['answer_value'], QuestionnairesComponent::ANSWER_DELIMITER));
@@ -291,13 +292,12 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 						$c = $choice[0];
 						return empty($c['skip_page_sequence']) ? $nextPageSeq : $c['skip_page_sequence'];
 					} else {
-						return $nextPageSeq; // FUJI
+						return $nextPageSeq; // 指定された次ページを返す
 					}
-				} else {
-					return $nextPageSeq; // FUJI
 				}
 			}
 		}
+		// スキップロジック質問がない場合は元関数から言われた次ページをそのまま返す
 		return $nextPageSeq;
 	}
 
@@ -310,6 +310,7 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
  * @return bool
  */
 	private function __checkEndPage($questionnaire, $nextPageSeq) {
+		$this->log($nextPageSeq, 'debug');
 		if ($nextPageSeq == QuestionnairesComponent::SKIP_GO_TO_END) {
 			return true;
 		}
