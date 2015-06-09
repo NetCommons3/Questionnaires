@@ -162,9 +162,6 @@ NetCommonsApp.controller('Questionnaires.edit.question',
             $scope.questionnaire.QuestionnairePage[pIdx].
                 QuestionnaireQuestion[qIdx].calendar_opened = [false, false];
 
-            console.log($scope.questionnaire.QuestionnairePage[pIdx].
-                QuestionnaireQuestion[qIdx].QuestionnaireChoice);
-
             // 選択肢がないのならここでcontinue;
             if (!$scope.questionnaire.QuestionnairePage[pIdx].
                 QuestionnaireQuestion[qIdx].QuestionnaireChoice) {

@@ -130,9 +130,13 @@
 
 								<div class="pull-right">
 									<div class="btn-group">
-										<button type="button" class="btn btn-default dropdown-toggle"><?php echo __d('questionnaires', 'move to another page'); ?><span class="caret"></span></button>
+										<button type="button" class="btn btn-default dropdown-toggle" ng-click="question.isOpen = true">
+											<?php echo __d('questionnaires', 'move to another page'); ?>
+											<span class="caret"></span>
+										</button>
 										<ul class="dropdown-menu" role="menu">
-											<li ng-repeat="(movePageIndex, move_page) in questionnaire.QuestionnairePage" ng-class="{disabled:(page.page_sequence==move_page.page_sequence)}">
+											<li role="presentation" class="dropdown-header"><?php echo __d('questionnaires', 'destination page number'); ?></li>
+											<li ng-repeat="(movePageIndex, move_page) in questionnaire.QuestionnairePage | filter: {page_sequence: '!' + page.page_sequence}">
 												<a href="#" ng-click="moveQuestionToAnotherPage($event, pageIndex, qIndex, movePageIndex)">{{1 * move_page.page_sequence + 1}}</a>
 											</li>
 										</ul>
