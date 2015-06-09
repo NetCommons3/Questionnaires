@@ -446,7 +446,6 @@ class Questionnaire extends QuestionnairesAppModel {
 				'title' => '',
 				'key' => '',
 				'status' => NetCommonsBlockComponent::STATUS_IN_DRAFT,
-				'origin_id' => 0,
 				'is_total_show' => QuestionnairesComponent::EXPRESSION_SHOW),
 		);
 

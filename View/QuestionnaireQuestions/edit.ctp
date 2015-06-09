@@ -69,7 +69,7 @@
 			<?php echo $this->Form->hidden(
 			'Questionnaire.origin_id',
 			array(
-			'value' => $questionnaire['Questionnaire']['origin_id'],
+			'value' => isset($questionnaire['Questionnaire']['origin_id']) ? $questionnaire['Questionnaire']['origin_id'] : 0,
 			));
 			?>
 			<?php echo $this->Form->hidden(
