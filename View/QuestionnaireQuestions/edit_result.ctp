@@ -117,8 +117,14 @@
 								'before' => '<div class="radio"><label>',
 								'separator' => '</label></div><div class="radio"><label>',
 								'after' => '</label></div>',
+								'hiddenField' => true,
 								'ng-model' => 'question.is_result_display',
 								'ng-disabled' => 'question.question_type == ' . QuestionnairesComponent::TYPE_TEXT . ' || question.question_type == ' . QuestionnairesComponent::TYPE_TEXT_AREA . ' || question.question_type == ' . QuestionnairesComponent::TYPE_DATE_AND_TIME,
+								)); ?>
+								<?php echo $this->Form->hidden('QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.is_result_display',
+								array(
+								'ng-if' => 'question.question_type == ' . QuestionnairesComponent::TYPE_TEXT . ' || question.question_type == ' . QuestionnairesComponent::TYPE_TEXT_AREA . ' || question.question_type == ' . QuestionnairesComponent::TYPE_DATE_AND_TIME,
+								'ng-value' => 'question.is_result_display',
 								)); ?>
 								<?php echo $this->element(
 								'Questionnaires.errors', array(
