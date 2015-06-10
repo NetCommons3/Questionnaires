@@ -33,6 +33,7 @@
 	</div>
 
 	<?php echo $this->Form->create('Questionnaire', array(
+	'id' => 'questionnairePublishedForm-' . $frameId,
 	'type' => 'post',
 	'novalidate' => true,
 	)); ?>
@@ -309,7 +310,9 @@
 
 	<div class="modal-footer">
 		<div class="text-center">
-			<?php echo $this->element('Questionnaires.Questionnaires/workflow_buttons'); ?>
+			<?php echo $this->element('Questionnaires.Questionnaires/workflow_buttons', [
+			'isPublished' => $isPublished,
+			]); ?>
 		</div>
 	</div>
 	<?php echo $this->Form->end(); ?>

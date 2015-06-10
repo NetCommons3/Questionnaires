@@ -387,10 +387,17 @@ class QuestionnairesController extends QuestionnairesAppController {
  * @return void
  */
 	private function __setupViewParameters($questionnaire) {
+		$isPublished = $this->Questionnaire->find('count', array(
+			'conditions' => array(
+				'is_active' => true,
+				'origin_id' => $questionnaire['Questionnaire']['origin_id']
+			)
+		));
 		$this->set('questionnaire', $questionnaire);
 		$this->set('contentStatus', $questionnaire['Questionnaire']['status']);
 		$this->set('comments', $this->_getComments($questionnaire['Questionnaire']));
 		$this->set('backUrl', '/questionnaires/questionnaire_questions/edit_result/' . $this->viewVars['frameId']);
+		$this->set('isPublished', $isPublished);
 	}
 
 /**

@@ -191,6 +191,17 @@ NetCommonsApp.controller('Questionnaires.setting',
 
         $scope.opened = true;
       };
+      $scope.publishQuestionnaire = function(e, isPublished, message) {
+        if (isPublished == 0) {
+          if (!confirm(message)) {
+            e.stopPropagation();
+            return false;
+          }
+        }
+        angular.element('#questionnairePublishedForm-' +
+            $scope.frameId).submit();
+        return true;
+      };
       $scope.deleteQuestionnaire = function(e, message) {
         if (confirm(message)) {
           angular.element('#questionnaireDeleteForm-' +

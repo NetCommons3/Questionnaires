@@ -11,7 +11,7 @@
 ?>
 <?php echo $this->BackToPage->backToPageButton(__d('net_commons', 'Cancel'), 'remove'); ?>
 
-<a class="btn btn-default" href="<?php echo $backUrl; ?>">
+<a class="btn btn-default btn-workflow" href="<?php echo $backUrl; ?>">
 	<span class="glyphicon glyphicon-chevron-left"></span>
 	<?php echo __d('net_commons', 'BACK'); ?>
 </a>
@@ -21,7 +21,7 @@
 		<?php echo $this->Form->button(
 			__d('net_commons', 'Disapproval'),
 			array(
-			'class' => 'btn btn-danger',
+			'class' => 'btn btn-warning btn-workflow',
 			'name' => 'save_' . NetCommonsBlockComponent::STATUS_DISAPPROVED,
 		)) ?>
 	<?php endif; ?>
@@ -29,7 +29,7 @@
 		<?php echo $this->Form->button(
 			__d('net_commons', 'Save temporally'),
 			array(
-			'class' => 'btn btn-default',
+			'class' => 'btn btn-info btn-workflow',
 			'name' => 'save_' . NetCommonsBlockComponent::STATUS_IN_DRAFT,
 		)) ?>
 	<?php endif; ?>
@@ -37,7 +37,7 @@
 	<?php echo $this->Form->button(
 		__d('net_commons', 'Save temporally'),
 		array(
-		'class' => 'btn btn-default',
+		'class' => 'btn btn-info btn-workflow',
 		'name' => 'save_' . NetCommonsBlockComponent::STATUS_IN_DRAFT,
 		)) ?>
 <?php endif; ?>
@@ -46,14 +46,17 @@
 	<?php echo $this->Form->button(
 		__d('net_commons', 'OK'),
 		array(
-		'class' => 'btn btn-primary',
-		'name' => 'save_' . NetCommonsBlockComponent::STATUS_PUBLISHED,
+		'class' => 'btn btn-primary btn-workflow',
+		'type' => 'button',
+		'ng-click' => 'publishQuestionnaire($event' . ", " . $isPublished . ", '" . __d('questionnaires', 'You are starting the questionnaire.\\n Once you start, you cannnot edit it. \\n Is it OK?') . "')"
 	)) ?>
+	<?php $this->Form->unlockField('save_' . NetCommonsBlockComponent::STATUS_PUBLISHED); ?>
+	<input type="hidden" name="<?php echo 'save_' . NetCommonsBlockComponent::STATUS_PUBLISHED; ?>" />
 <?php else : ?>
 	<?php echo $this->Form->button(
 		__d('net_commons', 'OK'),
 		array(
-		'class' => 'btn btn-primary',
+		'class' => 'btn btn-primary btn-workflow',
 		'name' => 'save_' . NetCommonsBlockComponent::STATUS_APPROVED,
 		)) ?>
 <?php endif;
