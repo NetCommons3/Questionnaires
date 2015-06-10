@@ -234,18 +234,11 @@ class Questionnaire extends QuestionnairesAppModel {
 				continue;
 			}
 
-			$val['Questionnaire']['period_range_stat'] = QuestionnairesComponent::QUESTIONNAIRE_PERIOD_STAT_IN;
+			$val['Questionnaire']['period_range_stat'] = $this->getPeriodStatus(
+				isset($val['Questionnaire']['is_period']) ? $val['Questionnaire']['is_period'] : false,
+				$val['Questionnaire']['start_period'],
+				$val['Questionnaire']['end_period']);
 
-			if (isset($val['Questionnaire']['is_period'])
-				&& $val['Questionnaire']['is_period'] == QuestionnairesComponent::USES_USE) {
-				$nowTime = time();
-				if ($this->checkDateComp($nowTime, '<', 'start_period')) {
-					$val['Questionnaire']['period_range_stat'] = QuestionnairesComponent::QUESTIONNAIRE_PERIOD_STAT_BEFORE;
-				}
-				if ($this->checkDateComp($nowTime, '>', 'end_period')) {
-					$val['Questionnaire']['period_range_stat'] = QuestionnairesComponent::QUESTIONNAIRE_PERIOD_STAT_END;
-				}
-			}
 			//
 			// ページ配下の質問データも取り出す
 			// かつ、ページ数、質問数もカウントする

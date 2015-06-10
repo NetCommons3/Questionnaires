@@ -154,6 +154,31 @@ class QuestionnaireValidateBehavior extends ModelBehavior {
 	}
 
 /**
+ * getPeriodStatus
+ * get period status now and specified time
+ *
+ * @param object &$model use model
+ * @param bool $check flag data
+ * @param string $startTime start time
+ * @param string $endTime end time
+ * @return int
+ */
+	public function getPeriodStatus(&$model, $check, $startTime, $endTime) {
+		$ret = QuestionnairesComponent::QUESTIONNAIRE_PERIOD_STAT_IN;
+
+		if ($check == QuestionnairesComponent::USES_USE) {
+			$nowTime = time();
+			if ($nowTime < strtotime($startTime)) {
+				$ret = QuestionnairesComponent::QUESTIONNAIRE_PERIOD_STAT_BEFORE;
+			}
+			if ($nowTime > strtotime($endTime)) {
+				$ret = QuestionnairesComponent::QUESTIONNAIRE_PERIOD_STAT_END;
+			}
+		}
+		return $ret;
+	}
+
+/**
  * __checkMinMaxNumeric
  * min and max is require both value
  *
