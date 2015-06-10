@@ -70,7 +70,7 @@ class QuestionnaireAnswerSummary extends QuestionnairesAppModel {
 		'QuestionnaireAnswer' => array(
 			'className' => 'QuestionnaireAnswer',
 			'foreignKey' => 'questionnaire_answer_summary_id',
-			'dependent' => false,
+			'dependent' => true,
 			'conditions' => '',
 			'fields' => '',
 			'order' => '',

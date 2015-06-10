@@ -18,6 +18,20 @@ App::uses('QuestionnairesAppModel', 'Questionnaires.Model');
 class QuestionnaireBlocksSetting extends QuestionnairesAppModel {
 
 /**
+ * belongsTo associations
+ *
+ * @var array
+ */
+	public $belongsTo = array(
+		'Block' => array(
+			'className' => 'Blocks.Block',
+			'foreignKey' => false,
+			'conditions' => 'QuestionnaireBlocksSetting.block_key = Block.key',
+			'fields' => '',
+		),
+	);
+
+/**
  * Validation rules
  *
  * @var array
@@ -100,5 +114,4 @@ class QuestionnaireBlocksSetting extends QuestionnairesAppModel {
 		}
 		return true;
 	}
-
 }

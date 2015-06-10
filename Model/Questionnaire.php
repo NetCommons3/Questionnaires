@@ -54,7 +54,7 @@ class Questionnaire extends QuestionnairesAppModel {
  */
 	public $belongsTo = array(
 		'Block' => array(
-			'className' => 'Block',
+			'className' => 'Blocks.Block',
 			'foreignKey' => 'block_id',
 			'conditions' => '',
 			'fields' => '',
@@ -537,21 +537,41 @@ class Questionnaire extends QuestionnairesAppModel {
 	public function deleteQuestionnaire($data) {
 		$this->loadModels([
 			'Comment' => 'Comments.Comment',
+			'QuestionnaireFrameSetting' => 'Questionnaires.QuestionnaireFrameSetting',
 			'QuestionnaireFrameDisplayQuestionnaire' => 'Questionnaires.QuestionnaireFrameDisplayQuestionnaire',
+			'QuestionnaireAnswerSummary' => 'Questionnaires.QuestionnaireAnswerSummary',
 		]);
 		$this->setDataSource('master');
 		$dataSource = $this->getDataSource();
 		$dataSource->begin();
 		try {
+			// アンケート質問データ削除
 			if (! $this->deleteAll(array(
-					'Questionnaire.origin_id' => $data['Questionnaire']['origin_id']), true, true)) {
+					'Questionnaire.origin_id' => $data['Questionnaire']['origin_id']), true, false)) {
 				// @codeCoverageIgnoreStart
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 				// @codeCoverageIgnoreEnd
 			}
-			$this->QuestionnaireFrameDisplayQuestionnaire->deleteAll(array(
-				'questionnaire_origin_id' => $data['Questionnaire']['origin_id']), true, true
-			);
+			// 編集コメント削除
+			$this->Comment->deleteByContentKey($data['Questionnaire']['key']);
+
+			// アンケート表示設定削除
+			if (! $this->QuestionnaireFrameDisplayQuestionnaire->deleteAll(array(
+				'questionnaire_origin_id' => $data['Questionnaire']['origin_id']), true, false)) {
+				// @codeCoverageIgnoreStart
+				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+				// @codeCoverageIgnoreEnd
+			}
+			// アンケート回答削除
+			if (! $this->QuestionnaireAnswerSummary->deleteAll(array(
+				'questionnaire_origin_id' => $data['Questionnaire']['origin_id']), true, false)) {
+				// @codeCoverageIgnoreStart
+				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+				// @codeCoverageIgnoreEnd
+			}
+
+			// ブロックの後始末が必要
+			$this->QuestionnaireFrameSetting->cleanUpBlock($data['Frame']['id'], $data['Block']['id']);
 
 			$dataSource->commit();
 		} catch (Exception $ex) {

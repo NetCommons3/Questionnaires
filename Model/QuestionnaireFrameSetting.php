@@ -173,9 +173,9 @@ class QuestionnaireFrameSetting extends QuestionnairesAppModel {
  */
 	public function cleanUpBlock($frameId, $blockId) {
 		$this->loadModels([
-			'Block' => 'Blocks.Block',
 			'Questionnaire' => 'Questionnaires.Questionnaire',
 			'QuestionnaireBlocksSetting' => 'Questionnaires.QuestionnaireBlocksSetting',
+			'Block' => 'Blocks.Block',
 		]);
 
 		// 現在ルームのアンケートコンテンツ残量がいくつかをチェックし、
@@ -191,6 +191,7 @@ class QuestionnaireFrameSetting extends QuestionnairesAppModel {
 				'Questionnaire.block_id' => $block['Block']['id']
 			)
 		));
+
 		// まだアンケートがある
 		if ($questionnaireCnt > 0) {
 			return;
@@ -202,7 +203,7 @@ class QuestionnaireFrameSetting extends QuestionnairesAppModel {
 
 		// questionnaireBlockSettingのレコードも削除する
 		$this->QuestionnaireBlocksSetting->deleteAll(array(
-			'block_key' => $block['Block']['block_key']
+			'block_key' => $block['Block']['key']
 		));
 	}
 

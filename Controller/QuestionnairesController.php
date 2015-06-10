@@ -325,18 +325,10 @@ class QuestionnairesController extends QuestionnairesAppController {
  */
 	public function delete() {
 		if ($this->request->isPost()) {
-
 			// 削除処理
 			if (! $this->Questionnaire->deleteQuestionnaire($this->request->data)) {
 				return;
 			}
-
-			$frameId = $this->request->data['Frame']['id'];
-			$blockId = $this->request->data['Block']['id'];
-
-			// ブロックの後始末が必要
-			$this->QuestionnaireFrameSetting->cleanUpBlock($frameId, $blockId);
-
 			// メッセージ表示
 			$this->Session->setFlash(__d('questionnaires', 'This Questionnaire has been deleted.'));
 			// ページトップの画面へリダイレクト
