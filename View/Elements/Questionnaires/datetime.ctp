@@ -1,3 +1,5 @@
+<?php echo $this->element('NetCommons.datetimepicker'); ?>
+
 <div class="form-group ">
 
 <div class="input-group">
@@ -11,7 +13,6 @@
 		'min' => $min,
 		'max' => $max,
 		'show-meridian' => 'false',
-		'date-format' => 'yyyy-MM-dd',
 		'label' => false,
 		'div' => false));
 		?>

@@ -15,8 +15,6 @@
  */
 
 NetCommonsApp.requires.push('QuestionnaireCommon');
-NetCommonsApp.requires.push('datetimepicker');
-
 
 
 NetCommonsApp.controller('Questionnaires',

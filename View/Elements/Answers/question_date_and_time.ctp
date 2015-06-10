@@ -58,6 +58,7 @@
 
 		<?php if ($question['question_type_option'] == QuestionnairesComponent::TYPE_OPTION_DATE_TIME): ?>
 			<div class="col-sm-4">
+				<?php echo $this->element('NetCommons.datetimepicker'); ?>
 				<div class="input-group">
 					<?php echo
 					$this->Form->input('QuestionnaireAnswer.' . $index . '.answer_value',
