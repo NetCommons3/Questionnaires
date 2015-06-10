@@ -23,14 +23,14 @@
 )); ?>
 
 <?php echo $this->element('Blocks.block_role_setting', array(
-    'roles' => $roles,
-    'model' => 'QuestionnaireBlocksSetting',
-    'useWorkflow' => 'use_workflow',
-    'creatablePermissions' => array(
-        'contentCreatable' => __d('blocks', 'Content creatable roles'),
-    ),
-    'options' => array(
-        Block::NEED_APPROVAL => __d('blocks', 'Need approval'),
-        Block::NOT_NEED_APPROVAL => __d('blocks', 'Not need approval'),
-    ),
+	'roles' => $roles,
+	'model' => 'QuestionnaireBlocksSetting',
+	'useWorkflow' => 'use_workflow',
+	'creatablePermissions' => array(
+		'contentCreatable' => __d('blocks', 'Content creatable roles'),
+	),
+	'options' => array(
+		Block::NEED_APPROVAL => __d('blocks', 'Need approval'),
+		Block::NOT_NEED_APPROVAL => __d('blocks', 'Not need approval'),
+	),
 ));
