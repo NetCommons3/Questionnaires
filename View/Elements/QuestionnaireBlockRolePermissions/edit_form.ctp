@@ -11,11 +11,11 @@
 ?>
 
 <?php echo $this->Form->hidden('QuestionnaireBlocksSetting.id', array(
-'value' => isset($questionnaireBlockSetting['id']) ? (int)$questionnaireBlockSetting['id'] : null,
+'value' => isset($questionnaireBlocksSetting['id']) ? (int)$questionnaireBlocksSetting['id'] : null,
 )); ?>
 
 <?php echo $this->Form->hidden('QuestionnaireBlocksSetting.block_key', array(
-'value' => isset($questionnaireBlockSetting['blockKey']) ? $questionnaireBlockSetting['blockKey'] : null,
+'value' => isset($questionnaireBlocksSetting['blockKey']) ? $questionnaireBlocksSetting['blockKey'] : null,
 )); ?>
 
 <?php echo $this->Form->hidden('Block.id', array(
@@ -23,14 +23,14 @@
 )); ?>
 
 <?php echo $this->element('Blocks.block_role_setting', array(
-'roles' => $roles,
-'model' => 'QuestionnaireBlocksSetting',
-'useWorkflow' => 'use_workflow',
-'creatablePermissions' => array(
-'contentCreatable' => __d('blocks', 'Content creatable roles'),
-),
-'options' => array(
-Block::NEED_APPROVAL => __d('blocks', 'Need approval'),
-Block::NOT_NEED_APPROVAL => __d('blocks', 'Not need approval'),
-),
+    'roles' => $roles,
+    'model' => 'QuestionnaireBlocksSetting',
+    'useWorkflow' => 'use_workflow',
+    'creatablePermissions' => array(
+        'contentCreatable' => __d('blocks', 'Content creatable roles'),
+    ),
+    'options' => array(
+        Block::NEED_APPROVAL => __d('blocks', 'Need approval'),
+        Block::NOT_NEED_APPROVAL => __d('blocks', 'Not need approval'),
+    ),
 ));

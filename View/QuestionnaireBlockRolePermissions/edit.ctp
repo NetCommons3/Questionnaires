@@ -1,6 +1,6 @@
 <?php
 /**
- * BbsSettings edit template
+ * QuestionnaireSettings edit template
  *
  * @author Noriko Arai <arai@nii.ac.jp>
  * @author Shohei Nakajima <nakajimashouhei@gmail.com>
