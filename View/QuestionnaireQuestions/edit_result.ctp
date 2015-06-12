@@ -16,21 +16,9 @@
 <div id="nc-questionnaires-setting-list-<?php echo (int)$frameId; ?>"
 	 ng-controller="Questionnaires.edit.question"
 	 ng-init="initialize(<?php echo (int)$frameId; ?>,
-									<?php echo h(json_encode($questionnaire)); ?>,
-									<?php echo h(json_encode($questionnaireValidationErrors)); ?>)">
-
-	<?php $this->start('title'); ?>
-	<?php echo __d('questionnaires', 'plugin_name'); ?>
-	<?php $this->end(); ?>
-
-	<div class="modal-header">
-		<?php $title = $this->fetch('title'); ?>
-		<?php if ($title) : ?>
-		<?php echo $title; ?>
-		<?php else : ?>
-		<br />
-		<?php endif; ?>
-	</div>
+	 						<?php echo (int)$isPublished; ?>,
+							<?php echo h(json_encode($questionnaire)); ?>,
+							<?php echo h(json_encode($questionnaireValidationErrors)); ?>)">
 
 	<?php echo $this->Form->create('Questionnaire', array(
 	'type' => 'post',

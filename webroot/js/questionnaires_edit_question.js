@@ -88,10 +88,11 @@ NetCommonsApp.controller('Questionnaires.edit.question',
          * @return {void}
          */
       $scope.initialize =
-          function(frameId, questionnaire, errors,
+          function(frameId, isPublished, questionnaire, errors,
           newPageLabel, newQuestionLabel, newChoiceLabel,
           newChoiceColumnLabel, newChoiceOtherLabel) {
         $scope.frameId = frameId;
+        $scope.isPublished = isPublished;
         $scope.questionnaire = questionnaire;
         $scope.errors = errors;
 

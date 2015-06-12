@@ -19,19 +19,6 @@
 									<?php echo h(json_encode($questionnaire)); ?>)">
 
 
-	<?php $this->start('title'); ?>
-	<?php echo __d('questionnaires', 'plugin_name'); ?>
-	<?php $this->end(); ?>
-
-	<div class="modal-header">
-		<?php $title = $this->fetch('title'); ?>
-		<?php if ($title) : ?>
-		<?php echo $title; ?>
-		<?php else : ?>
-		<br />
-		<?php endif; ?>
-	</div>
-
 	<?php echo $this->Form->create('Questionnaire', array(
 	'id' => 'questionnairePublishedForm-' . $frameId,
 	'type' => 'post',

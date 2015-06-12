@@ -18,19 +18,6 @@
 	 ng-init="initialize(<?php echo (int)$frameId; ?>,
 									<?php echo h(json_encode($questionnaires)); ?>)">
 
-	<?php $this->start('title'); ?>
-	<?php echo __d('questionnaires', 'plugin_name'); ?>
-	<?php $this->end(); ?>
-
-	<div class="modal-header">
-		<?php $title = $this->fetch('title'); ?>
-		<?php if ($title) : ?>
-		<?php echo $title; ?>
-		<?php else : ?>
-		<br />
-		<?php endif; ?>
-	</div>
-
 	<div class="modal-body">
 			<div class="row">
 

@@ -88,7 +88,10 @@ class QuestionnaireQuestionsController extends QuestionnairesAppController {
 			// アンケートデータに作成されたPost質問データをかぶせる
 			// （質問作成画面では質問データ属性全てをPOSTしています）
 			$questionnaire['Questionnaire'] = Hash::merge($questionnaire['Questionnaire'], $postQuestionnaire['Questionnaire']);
-			$questionnaire['QuestionnairePage'] = $postQuestionnaire['QuestionnairePage'];
+			// 発行後のアンケートは質問情報は書き換えない
+			if ($this->__checkPublished($questionnaire) == 0) {
+				$questionnaire['QuestionnairePage'] = $postQuestionnaire['QuestionnairePage'];
+			}
 
 			// バリデート
 			if (! $this->__validateQuestionnaireQuestionSetting($questionnaire)) {
@@ -260,6 +263,17 @@ class QuestionnaireQuestionsController extends QuestionnairesAppController {
  * @return void
  */
 	private function __setupViewParameters($questionnaire, $backUrl) {
+		if (isset($questionnaire['Questionnaire']['origin_id'])) {
+			$isPublished = $this->Questionnaire->find('count', array(
+				'conditions' => array(
+					'is_active' => true,
+					'origin_id' => $questionnaire['Questionnaire']['origin_id']
+				)
+			));
+		} else {
+			$isPublished = 0;
+		}
+
 		$this->set('questionnaire', $this->_changeBooleansToNumbers($this->_sorted($questionnaire)));
 		$this->set('questionnaireValidationErrors', $this->qValidationErrors);
 		$this->set('backUrl', $backUrl . $this->viewVars['frameId']);
@@ -269,6 +283,20 @@ class QuestionnaireQuestionsController extends QuestionnairesAppController {
 		$this->set('newChoiceLabel', __d('questionnaires', 'new choice'));
 		$this->set('newChoiceColumnLabel', __d('questionnaires', 'new column choice'));
 		$this->set('newChoiceOtherLabel', __d('questionnaires', 'other choice'));
+		$this->set('isPublished', $isPublished);
 	}
 
+	private function __checkPublished($questionnaire) {
+		if (isset($questionnaire['Questionnaire']['origin_id'])) {
+			$isPublished = $this->Questionnaire->find('count', array(
+				'conditions' => array(
+					'is_active' => true,
+					'origin_id' => $questionnaire['Questionnaire']['origin_id']
+				)
+			));
+		} else {
+			$isPublished = 0;
+		}
+		return $isPublished;
+	}
 }
