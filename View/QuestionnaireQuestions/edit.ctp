@@ -205,7 +205,7 @@
 							<?php echo $this->element('Questionnaires.Questions/edit_form_controller_set',
 							array(
 								'name' => 'is_require',
-								'label'=> __d('questionnaires', 'Required'),
+								'label' => __d('questionnaires', 'Required'),
 								'disabled' => $disabled,
 								'input' => $this->Form->input('QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.is_require',
 									array(
@@ -223,7 +223,7 @@
 							<?php echo $this->element('Questionnaires.Questions/edit_form_controller_set',
 							array(
 								'name' => 'question_value',
-								'label'=> __d('questionnaires', 'question title') . $this->element('NetCommons.required'),
+								'label' => __d('questionnaires', 'question title') . $this->element('NetCommons.required'),
 								'disabled' => $disabled,
 								'input' => $this->Form->input('QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.question_value',
 									array(
@@ -260,7 +260,7 @@
 								echo $this->element('Questionnaires.Questions/edit_form_controller_set',
 								array(
 									'name' => 'description',
-									'label'=> __d('questionnaires', 'question sentence'),
+									'label' => __d('questionnaires', 'question sentence'),
 									'disabled' => $disabled,
 									'input' => '<div class="nc-wysiwyg-alert">' . $textarea . '</div>',
 								'isPublished' => $isPublished,
@@ -270,7 +270,7 @@
 							<?php echo $this->element('Questionnaires.Questions/edit_form_controller_set',
 								array(
 								'name' => 'question_type',
-								'label'=> __d('questionnaires', 'Question type') . $this->element('NetCommons.required'),
+								'label' => __d('questionnaires', 'Question type') . $this->element('NetCommons.required'),
 								'disabled' => $disabled,
 								'input' => $this->Form->select('QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.question_type',
 									$questionTypeOptions,

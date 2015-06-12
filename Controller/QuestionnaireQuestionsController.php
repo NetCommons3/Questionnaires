@@ -286,6 +286,12 @@ class QuestionnaireQuestionsController extends QuestionnairesAppController {
 		$this->set('isPublished', $isPublished);
 	}
 
+/**
+ * __checkPublished method
+ *
+ * @param array $questionnaire questionnaire data
+ * @return int
+ */
 	private function __checkPublished($questionnaire) {
 		if (isset($questionnaire['Questionnaire']['origin_id'])) {
 			$isPublished = $this->Questionnaire->find('count', array(
