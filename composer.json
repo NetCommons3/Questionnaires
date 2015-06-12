@@ -1,11 +1,15 @@
 {
     "name":        "netcommons/questionnaires",
-    "description": "Questionnaires Plugin",
-    "type":        "cakephp-plugin",
-    "keywords":    ["cakephp", "questionnaires"],
+    "description": "Questionnaires for NetCommons Plugin",
     "homepage":    "http://www.netcommons.org/",
     "license":     "NetCommons License",
     "authors": [
+        {
+            "name": "AllCreator Co., Ltd.",
+            "email": "info@allcreator.net",
+            "homepage": "https://allcreator.net",
+            "role": "Developer"
+        },
         {
             "name":     "NetCommons Community",
             "homepage": "https://github.com/NetCommons3/Questionnaires/graphs/contributors"
@@ -43,8 +47,9 @@
         "netcommons/rooms":             "dev-master",
         "netcommons/users":             "dev-master"
     },
+    "type":        "cakephp-plugin",
+    "keywords":    ["cakephp", "questionnaires"],
     "config": {
-        "vendor-dir": "vendors",
-        "process-timeout": 3000
+        "vendor-dir": "vendors"
     }
 }
