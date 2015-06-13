@@ -1,6 +1,6 @@
 <?php
 /**
- * NetCommons bootstrap
+ * Questionnaires bootstrap
  *
  * @author Allcreator <info@allcreator.net>
  * @link http://www.netcommons.org NetCommons Project
@@ -8,6 +8,12 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 
+/**
+ * Questionnaires Bootstrap
+ *
+ * @author Allcreator <info@allcreator.net>
+ * @package NetCommons\Questionnaires\Config\Migration
+ */
 define('QUESTIONNAIRE_DEFAULT_DISPLAY_NUM_PER_PAGE', 10);
 define('QUESTIONNAIRE_DEFAULT_DISPLAY_PAGE_SIZE', 5);
 define('QUESTIONNAIRE_CSV_UNIT_NUMBER', 1000);

@@ -17,31 +17,6 @@ App::uses('Questionnaire', 'Questionnaires.Model');
 class QuestionnaireTest extends CakeTestCase {
 
 /**
- * Fixtures
- *
- * @var array
- */
-	public $fixtures = array(
-		'plugin.questionnaires.questionnaire',
-		'plugin.users.user',
-		'plugin.questionnaires.role',
-		'plugin.questionnaires.group',
-		'plugin.questionnaires.room',
-		'plugin.questionnaires.space',
-		'plugin.questionnaires.box',
-		'plugin.questionnaires.block',
-		'plugin.questionnaires.page',
-		'plugin.questionnaires.language',
-		'plugin.questionnaires.groups_language',
-		'plugin.questionnaires.groups_user',
-		'plugin.users.user_attribute',
-		'plugin.users.user_attributes_user',
-		'plugin.users.user_select_attribute',
-		'plugin.users.user_select_attributes_user',
-		'plugin.questionnaires.questionnaire_page'
-	);
-
-/**
  * setUp method
  *
  * @return void

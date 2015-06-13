@@ -9,38 +9,12 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 
-App::uses('QuestionnairePage', 'Questionnaires.Model');
+App::uses('QuestionnaireTestBase', 'Questionnaires.Test/Case/Model');
 
 /**
  * Summary for QuestionnairePage Test Case
  */
-class QuestionnairePageTest extends CakeTestCase {
-
-/**
- * Fixtures
- *
- * @var array
- */
-	public $fixtures = array(
-		'plugin.questionnaires.questionnaire_page',
-		'plugin.questionnaires.questionnaire',
-		'plugin.users.user',
-		'plugin.questionnaires.role',
-		'plugin.questionnaires.group',
-		'plugin.questionnaires.room',
-		'plugin.questionnaires.space',
-		'plugin.questionnaires.box',
-		'plugin.questionnaires.block',
-		'plugin.questionnaires.page',
-		'plugin.questionnaires.language',
-		'plugin.questionnaires.groups_language',
-		'plugin.questionnaires.groups_user',
-		'plugin.users.user_attribute',
-		'plugin.users.user_attributes_user',
-		'plugin.users.user_select_attribute',
-		'plugin.users.user_select_attributes_user',
-		'plugin.questionnaires.questionnaire_question'
-	);
+class QuestionnairePageTest extends QuestionnaireTestBase {
 
 /**
  * setUp method
@@ -49,7 +23,6 @@ class QuestionnairePageTest extends CakeTestCase {
  */
 	public function setUp() {
 		parent::setUp();
-		$this->QuestionnairePage = ClassRegistry::init('Questionnaires.QuestionnairePage');
 	}
 
 /**
@@ -58,16 +31,115 @@ class QuestionnairePageTest extends CakeTestCase {
  * @return void
  */
 	public function tearDown() {
-		unset($this->QuestionnairePage);
-
 		parent::tearDown();
 	}
 
 /**
- * testIndex method
+ * getDefaultPage method
  *
  * @return void
  */
-	public function testIndex() {
+	public function testgetDefaultPage() {
+		$this->setUp();
+
+		$expected['page_title'] = __d('questionnaires', 'First Page');
+		$expected['page_sequence'] = 0;
+		$expected['origin_id'] = 0;
+		$expected['QuestionnaireQuestion'][0] = array(
+			'question_sequence' => 0,
+			'question_value' => __d('questionnaires', 'New Question') . '1',
+			'question_type' => QuestionnairesComponent::TYPE_SELECTION,
+			'is_result_display' => QuestionnairesComponent::EXPRESSION_SHOW,
+			'result_display_type' => QuestionnairesComponent::RESULT_DISPLAY_TYPE_BAR_CHART,
+			'QuestionnaireChoice' => array(
+				array(
+					'choice_sequence' => 0,
+					'matrix_type' => QuestionnairesComponent::MATRIX_TYPE_ROW_OR_NO_MATRIX,
+					'choice_label' => __d('questionnaires', 'new choice') . '1',
+					'other_choice_type' => QuestionnairesComponent::OTHER_CHOICE_TYPE_NO_OTHER_FILED
+				)
+			)
+		);
+
+		$result = $this->QuestionnairePage->getDefaultPage();
+
+		$this->_assertArray($expected, $result);
+
+		$this->tearDown();
 	}
+
+/**
+ * setPageToQuestionnaire method
+ *
+ * @return void
+ */
+	public function testsetPageToQuestionnaire() {
+		$this->setUp();
+
+		$data = array(
+		'QuestionnairePage' => array(
+			array(
+				'id' => 2,
+				'origin_id' => 1,
+				'active_id' => 1,
+				'latest_id' => 1,
+				'questionnaire_id' => 2,
+				'page_title' => 'kumaTEST1',
+				'page_sequence' => 1,
+				'is_auto_translated' => 1,
+				'created_user' => 1,
+				'created' => '2015-04-13 06:38:28',
+				'modified_user' => 1,
+				'modified' => '2015-04-13 06:38:28'
+			)
+		),
+		'Questionnaire' => array(
+			'page_count' => 1
+		)
+		);
+
+		$this->QuestionnairePage->setPageToQuestionnaire($data);
+		$expected = 2;
+		$this->assertEquals($data['Questionnaire']['page_count'], $expected);//
+		//		$result = $this->QuestionnairePage->QuestionnaireQuestion->find('all');
+		//		$result = $this->QuestionnairePage->find('all');
+		$this->tearDown();
+	}
+
+/**
+ * saveQuestionnairePage method
+ *
+ * @return void
+ */
+	public function testsaveQuestionnairePage() {
+		$this->setUp();
+
+		$questionnaireId = 2;
+		$status = NetCommonsBlockComponent::STATUS_PUBLISHED? true: false;
+		$questionnairePages = array(
+			'QuestionnairePage' => array(
+				array(
+					'id' => 2,
+					'origin_id' => 1,
+					'active_id' => 1,
+					'latest_id' => 1,
+					'questionnaire_id' => 2,
+					'page_title' => 'kumaTEST1',
+					'page_sequence' => 1,
+					'is_auto_translated' => 1,
+					'created_user' => 1,
+					'created' => '2015-04-13 06:38:28',
+					'modified_user' => 1,
+					'modified' => '2015-04-13 06:38:28'
+				)
+			)
+		);
+		$this->QuestionnairePage->saveQuestionnairePage($questionnaireId, $status, $questionnairePages);
+
+		//$result = $this->QuestionnairePage->QuestionnaireQuestion->find('all');
+		//PENDING		$result = $this->QuestionnairePage->find('all',array(
+		//			  'page_title' => 'kumaTEST1'));
+		$this->tearDown();
+	}
+
 }

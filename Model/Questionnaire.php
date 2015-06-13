@@ -474,14 +474,6 @@ class Questionnaire extends QuestionnairesAppModel {
 
 			// アンケートデータの準備
 			$saveQuestionnaire = $this->_setupSaveData($questionnaire['Questionnaire'], $status);
-			// まだブロックが存在しない状態でのアンケート作成であった場合
-			//ブロックの登録をまず行う
-			if (empty($saveQuestionnaire['block_id'])) {
-				$block = $this->Block->saveByFrameId($questionnaire['Frame']['id'], false);
-				$block['Block']['plugin_key'] = 'questionnaires';
-				$this->Block->save($block);
-				$saveQuestionnaire['block_id'] = $block['Block']['id'];
-			}
 
 			// 編集ステータスとコメントの関係性からのチェック
 			if (!$this->Comment->validateByStatus($questionnaire, array('caller' => $this->name))) {
@@ -562,10 +554,6 @@ class Questionnaire extends QuestionnairesAppModel {
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 				// @codeCoverageIgnoreEnd
 			}
-
-			// ブロックの後始末が必要
-			$this->QuestionnaireFrameSetting->cleanUpBlock($data['Frame']['id'], $data['Block']['id']);
-
 			$dataSource->commit();
 		} catch (Exception $ex) {
 			//トランザクションRollback

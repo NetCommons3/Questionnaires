@@ -136,17 +136,23 @@ class QuestionnaireFrameSetting extends QuestionnairesAppModel {
 		if (!$frame) {
 			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 		}
+		// すでに結びついている場合は何もしないでよい
 		if (!empty($frame['Frame']['block_id'])) {
 			return true;
 		}
+		// ルームに存在するブロックを探す
 		$block = $this->Block->find('first', array(
 			'conditions' => array(
 				'Block.room_id' => $frame['Frame']['room_id'],
 				'Block.plugin_key' => 'questionnaires'
 			)
 		));
+		// まだない場合
 		if (empty($block)) {
-			return false;
+			// 作成する
+			$block = $this->Block->saveByFrameId($frameId, false);
+			$block['Block']['plugin_key'] = 'questionnaires';
+			$this->Block->save($block);
 		}
 		$frame['Frame']['block_id'] = $block['Block']['id'];
 		$this->setDataSource('master');
@@ -161,50 +167,6 @@ class QuestionnaireFrameSetting extends QuestionnairesAppModel {
 			throw $ex;
 		}
 		return true;
-	}
-
-/**
- * cleanUpBlock
- *
- * @param int $frameId frame id
- * @param int $blockId block id
- * @return void
- * @throws InternalErrorException
- */
-	public function cleanUpBlock($frameId, $blockId) {
-		$this->loadModels([
-			'Questionnaire' => 'Questionnaires.Questionnaire',
-			'QuestionnaireBlocksSetting' => 'Questionnaires.QuestionnaireBlocksSetting',
-			'Block' => 'Blocks.Block',
-		]);
-
-		// 現在ルームのアンケートコンテンツ残量がいくつかをチェックし、
-		// その数が０個になっていたらブロックも消してしまう
-		$block = $this->Block->findById($blockId);
-		// すでにブロックが存在しない
-		if (!$block) {
-			return;
-		}
-
-		$questionnaireCnt = $this->Questionnaire->find('count', array(
-			'conditions' => array(
-				'Questionnaire.block_id' => $block['Block']['id']
-			)
-		));
-
-		// まだアンケートがある
-		if ($questionnaireCnt > 0) {
-			return;
-		}
-
-		// もうアンケートがないなら消してしまう
-		// ここでフレームとの関連もクリーンされる
-		$this->Block->deleteBlock($block['Block']['key']);
-
-		// questionnaireBlockSettingのレコードも削除する
-		$this->QuestionnaireBlocksSetting->deleteAll(array(
-			'block_key' => $block['Block']['key']
-		));
 	}
 
 /**

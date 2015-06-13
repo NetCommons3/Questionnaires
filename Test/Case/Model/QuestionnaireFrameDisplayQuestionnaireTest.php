@@ -21,27 +21,6 @@ class QuestionnaireFrameDisplayQuestionnaireTest extends CakeTestCase {
  *
  * @var array
  */
-	public $fixtures = array(
-		'plugin.questionnaires.questionnaire_frame_display_questionnaire',
-		'plugin.questionnaires.questionnaire_frame_setting',
-		'plugin.questionnaires.questionnaire',
-		'plugin.users.user',
-		'plugin.questionnaires.role',
-		'plugin.questionnaires.group',
-		'plugin.questionnaires.room',
-		'plugin.questionnaires.space',
-		'plugin.questionnaires.box',
-		'plugin.questionnaires.block',
-		'plugin.questionnaires.page',
-		'plugin.questionnaires.language',
-		'plugin.questionnaires.groups_language',
-		'plugin.questionnaires.groups_user',
-		'plugin.users.user_attribute',
-		'plugin.users.user_attributes_user',
-		'plugin.users.user_select_attribute',
-		'plugin.users.user_select_attributes_user'
-	);
-
 /**
  * setUp method
  *
