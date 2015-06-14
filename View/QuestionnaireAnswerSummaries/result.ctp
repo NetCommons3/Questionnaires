@@ -20,12 +20,23 @@
 	),
 	array(
 	'plugin' => false,
+	'once' => true,
 	'inline' => false
 	)
 	);
 	echo $this->Html->script('Questionnaires.questionnaires_graph.js');
 ?>
-<?php echo $this->Html->css('/components/nvd3/nv.d3.css'); ?>
+<?php echo $this->Html->css('/components/nvd3/nv.d3.css',
+	array(
+	'plugin' => false,
+	'once' => true,
+	'inline' => false
+	)
+); ?>
+
+<?php echo $this->Html->scriptStart(array('inline' => false)); ?>
+NetCommonsApp.requires.push('nvd3');
+<?php echo $this->Html->scriptEnd(); ?>
 
 <?php /* FUJI: 下のdivのidがnc-questionnaires-total-xx でよいか要確認. */ ?>
 <div id="nc-questionnaires-total-<?php echo (int)$frameId; ?>"

@@ -4,8 +4,6 @@
  */
 
 
-NetCommonsApp.requires.push('nvd3');
-
 
 /**
  * Questionnaire Graph Javascript
