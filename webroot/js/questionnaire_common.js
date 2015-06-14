@@ -37,7 +37,7 @@ QuestionnaireCommon.directive('colorPalettePicker', [function() {
     template: '<div class="input-group input-group-sm">' +
         '<span class="input-group-btn">' +
         '<div class="input-group-addon" ' +
-        'style="background-color:{{selected}};">&nbsp;</div>' +
+        'ng-attr-style="background-color:{{selected}};">&nbsp;</div>' +
         '</span><input name={{name}} type="text" ' +
         'ng-model="selected" value="{{selected}}" class="form-control">' +
         '<div class="input-group-btn">' +
