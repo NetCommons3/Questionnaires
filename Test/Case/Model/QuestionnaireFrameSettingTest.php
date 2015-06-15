@@ -9,6 +9,8 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 
+App::uses('QuestionnaireTestBase', 'Questionnaires.Test/Case/Model');
+
 /**
  * Summary for QuestionnaireFrameSetting Test Case
  */
