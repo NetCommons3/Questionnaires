@@ -839,3 +839,6 @@ msgstr ""
 msgid "Aggregate"
 msgstr ""
 
+
+msgid "You are starting the questionnaire.\\n Once you start, you cannnot edit it. \\n Is it OK?"
+msgstr ""

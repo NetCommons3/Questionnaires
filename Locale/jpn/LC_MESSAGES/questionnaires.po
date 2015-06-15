@@ -846,3 +846,6 @@ msgstr "サブタイトル"
 #: /View/QuestionnaireAnswers/noMoreAnswer.ctp 12
 msgid "you will not be able to answer this questionnaire."
 msgstr "このアンケートは回答できません。"
+
+msgid "You are starting the questionnaire.\\n Once you start, you cannnot edit it. \\n Is it OK?"
+msgstr "このアンケートを実施します。\n実施しますと修正はできません。\nよろしいですか？"
