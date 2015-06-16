@@ -5,9 +5,21 @@
     "license":     "NetCommons License",
     "authors": [
         {
-            "name": "AllCreator Co., Ltd.",
+            "name": "Toshihide Hashimoto(AllCreator Co., Ltd.)",
             "email": "info@allcreator.net",
-            "homepage": "https://allcreator.net",
+            "homepage": "http://allcreator.net",
+            "role": "Developer"
+        },
+        {
+            "name": "Minori Kikuchihara(AllCreator Co., Ltd.)",
+            "email": "info@allcreator.net",
+            "homepage": "http://allcreator.net",
+            "role": "Developer"
+        },
+        {
+            "name": "Rika Fujiwara(AllCreator Co., Ltd.)",
+            "email": "info@allcreator.net",
+            "homepage": "http://allcreator.net",
             "role": "Developer"
         },
         {
