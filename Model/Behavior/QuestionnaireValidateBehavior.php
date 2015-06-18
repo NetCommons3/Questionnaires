@@ -24,7 +24,7 @@ class QuestionnaireValidateBehavior extends ModelBehavior {
  *
  * @param object &$model use model
  * @param array $check check data array
- * @return bool
+ * @return bool 
  */
 	public function requireTimes(&$model, $check) {
 		if ($model->data['Questionnaire']['is_period'] == QuestionnairesComponent::USES_USE) {
