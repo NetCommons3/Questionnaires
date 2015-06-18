@@ -53,14 +53,14 @@ NetCommonsApp.controller('QuestionnairesAnswerSummary',
         for (var key in $scope.questions) {
           $scope.config[key] = new Object();
 
-          if ($scope.questions[key].result_display_type ==
+          if ($scope.questions[key].resultDisplayType ==
               variables.RESULT_DISPLAY_TYPE_BAR_CHART) {
 
             $scope.data[key] = new Array();
 
-            if ($scope.questions[key].question_type ==
+            if ($scope.questions[key].questionType ==
                 variables.TYPE_MATRIX_MULTIPLE ||
-                $scope.questions[key].question_type ==
+                $scope.questions[key].questionType ==
                 variables.TYPE_MATRIX_SELECTION_LIST) {
               $scope.config[key]['chart'] =
                   $scope.getMatrixBarConf($scope.questions[key]);
@@ -72,22 +72,22 @@ NetCommonsApp.controller('QuestionnairesAnswerSummary',
             }
           } else {
 
-            if ($scope.questions[key].question_type ==
+            if ($scope.questions[key].questionType ==
                 variables.TYPE_MATRIX_MULTIPLE ||
-                $scope.questions[key].question_type ==
+                $scope.questions[key].questionType ==
                 variables.TYPE_MATRIX_SELECTION_LIST) {
 
               $scope.data[key] = new Object();
 
               for (var choiceId in
-                  $scope.questions[key]['QuestionnaireChoice']) {
+                  $scope.questions[key]['questionnaireChoice']) {
                 var choice =
-                    $scope.questions[key]['QuestionnaireChoice'][choiceId];
-                if (choice.matrix_type ==
+                    $scope.questions[key]['questionnaireChoice'][choiceId];
+                if (choice.matrixType ==
                     variables.MATRIX_TYPE_ROW_OR_NO_MATRIX) {
-                  $scope.config[key][choice.origin_id] =
+                  $scope.config[key][choice.originId] =
                       $scope.getMatrixPieConf($scope.questions[key], choice);
-                  $scope.data[key][choice.origin_id] =
+                  $scope.data[key][choice.originId] =
                       $scope.getMatrixPieData($scope.questions[key], choice);
                 }
               }
@@ -193,7 +193,7 @@ NetCommonsApp.controller('QuestionnairesAnswerSummary',
         obj = {
           title: {
             enable: true,
-            text: choice.choice_label
+            text: choice.choiceLabel
           },
           chart: {
             type: 'pieChart',
@@ -212,37 +212,37 @@ NetCommonsApp.controller('QuestionnairesAnswerSummary',
       };
       $scope.getColorArray = function(question) {
         var colorArray = new Array();
-        for (var choiceKey in question.QuestionnaireChoice) {
-          var choice = question.QuestionnaireChoice[choiceKey];
-          if (question.question_type == variables.TYPE_MATRIX_MULTIPLE ||
-              question.question_type == variables.TYPE_MATRIX_SELECTION_LIST) {
-            if (choice.matrix_type == variables.MATRIX_TYPE_ROW_OR_NO_MATRIX) {
+        for (var choiceKey in question.questionnaireChoice) {
+          var choice = question.questionnaireChoice[choiceKey];
+          if (question.questionType == variables.TYPE_MATRIX_MULTIPLE ||
+              question.questionType == variables.TYPE_MATRIX_SELECTION_LIST) {
+            if (choice.matrixType == variables.MATRIX_TYPE_ROW_OR_NO_MATRIX) {
               continue;
             }
           }
-          colorArray.push(choice.graph_color);
+          colorArray.push(choice.graphColor);
         }
         return colorArray;
       };
       $scope.getBarData = function(question) {
         var dataObj = new Object();
         dataObj['values'] = new Array();
-        for (var choiceKey in question.QuestionnaireChoice) {
-          var choice = question.QuestionnaireChoice[choiceKey];
-          var y = choice.aggrigate_total.aggrigate_not_matrix;
+        for (var choiceKey in question.questionnaireChoice) {
+          var choice = question.questionnaireChoice[choiceKey];
+          var y = choice.aggrigateTotal.aggrigateNotMatrix;
           dataObj['values'].push(
-              {label: $scope.getChartLabelText(choice.choice_label),
+              {label: $scope.getChartLabelText(choice.choiceLabel),
                 value: y});
         }
         return dataObj;
       };
       $scope.getPieData = function(question) {
         var dataArray = new Array();
-        for (var choiceKey in question.QuestionnaireChoice) {
-          var choice = question.QuestionnaireChoice[choiceKey];
-          var y = choice.aggrigate_total.aggrigate_not_matrix;
+        for (var choiceKey in question.questionnaireChoice) {
+          var choice = question.questionnaireChoice[choiceKey];
+          var y = choice.aggrigateTotal.aggrigateNotMatrix;
           dataArray.push(
-              {label: $scope.getChartLabelText(choice.choice_label),
+              {label: $scope.getChartLabelText(choice.choiceLabel),
                 value: y});
         }
         return dataArray;
@@ -251,9 +251,9 @@ NetCommonsApp.controller('QuestionnairesAnswerSummary',
         // まず行データのみ、列データのオブジェクト配列作成（この後使う
         var rowChoice = new Object();
         var colChoice = new Object();
-        for (var choiceKey in question.QuestionnaireChoice) {
-          var choice = question.QuestionnaireChoice[choiceKey];
-          if (choice.matrix_type == variables.MATRIX_TYPE_ROW_OR_NO_MATRIX) {
+        for (var choiceKey in question.questionnaireChoice) {
+          var choice = question.questionnaireChoice[choiceKey];
+          if (choice.matrixType == variables.MATRIX_TYPE_ROW_OR_NO_MATRIX) {
             rowChoice[choiceKey] = choice;
           } else {
             colChoice[choiceKey] = choice;
@@ -264,14 +264,14 @@ NetCommonsApp.controller('QuestionnairesAnswerSummary',
         for (var choiceKey in colChoice) {
           var choice = colChoice[choiceKey];
           var dataObj = new Object();
-          dataObj['key'] = $scope.getChartLabelText(choice.choice_label);
+          dataObj['key'] = $scope.getChartLabelText(choice.choiceLabel);
           dataObj['values'] = new Array();
           for (var rowChoiceKey in rowChoice) {
             var rowC = rowChoice[rowChoiceKey];
             dataObj['values'].push(
                 {
-                  label: $scope.getChartLabelText(rowC.choice_label),
-                  value: rowC.aggrigate_total[choice.origin_id]
+                  label: $scope.getChartLabelText(rowC.choiceLabel),
+                  value: rowC.aggrigateTotal[choice.originId]
                 }
             );
           }
@@ -282,18 +282,18 @@ NetCommonsApp.controller('QuestionnairesAnswerSummary',
       $scope.getMatrixPieData = function(question, choice) {
         // まず行データのみ、列データのオブジェクト配列作成（この後使う
         var colChoice = new Object();
-        for (var choiceKey in question.QuestionnaireChoice) {
-          if (question.QuestionnaireChoice[choiceKey].matrix_type !=
+        for (var choiceKey in question.questionnaireChoice) {
+          if (question.questionnaireChoice[choiceKey].matrixType !=
               variables.MATRIX_TYPE_ROW_OR_NO_MATRIX) {
-            colChoice[question.QuestionnaireChoice[choiceKey].origin_id] =
-                question.QuestionnaireChoice[choiceKey];
+            colChoice[question.questionnaireChoice[choiceKey].originId] =
+                question.questionnaireChoice[choiceKey];
           }
         }
 
         var dataArr = new Array();
-        for (var resultKey in choice.aggrigate_total) {
-          var y = choice.aggrigate_total[resultKey];
-          var lbl = $scope.getChartLabelText(colChoice[resultKey].choice_label);
+        for (var resultKey in choice.aggrigateTotal) {
+          var y = choice.aggrigateTotal[resultKey];
+          var lbl = $scope.getChartLabelText(colChoice[resultKey].choiceLabel);
           dataArr.push({label: lbl, value: y});
         }
         return dataArr;

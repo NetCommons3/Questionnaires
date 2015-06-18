@@ -376,8 +376,7 @@ class QuestionnaireAnswer extends QuestionnairesAppModel {
 					)));
 
 				// データ保存
-				if ($targetQuestion[0]['question_type'] == QuestionnairesComponent::TYPE_MATRIX_MULTIPLE
-					|| $targetQuestion[0]['question_type'] == QuestionnairesComponent::TYPE_MATRIX_SELECTION_LIST) {
+				if (QuestionnairesComponent::isMatrixInputType($targetQuestion[0]['question_type'])) {
 					foreach ($answer as $ans) {
 						if (!$this->__saveAnswer($ans, $summaryId, $summary)) {
 							$errors[$ans['questionnaire_question_origin_id']] = $this->validationErrors;

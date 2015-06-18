@@ -120,7 +120,7 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
 			// アンケートデータが存在しないこととする
 			$questionnaire = array();
 		}
-		$this->set('questionnaires', $questionnaire);
+		$this->set('questionnaires', $this->camelizeKeyRecursive($questionnaire));
 	}
 
 /**
