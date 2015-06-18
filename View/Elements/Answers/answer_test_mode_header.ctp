@@ -39,7 +39,7 @@
 		<div class="clearfix"></div>
 		<p class="enp-tcome">
 			<?php echo __d('questionnaires',
-				'This questionnaire is being temporarily stored . You can questionnaire test before performed in this page . If you want to modify or change the questionnaire , you will be able to edit by pressing the [ Edit question ] button in the upper-right corner . '); ?>
+				'This questionnaire is being temporarily stored . You can questionnaire test before performed in this page . If you want to modify or change the questionnaire , you will be able to edit by pressing the [ Edit question ] button in the upper-right corner .'); ?>
 		</p>
 		<?php endif; ?>
 	</div>
