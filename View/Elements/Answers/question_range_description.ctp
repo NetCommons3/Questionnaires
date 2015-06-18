@@ -10,10 +10,10 @@
  */
 ?>
 
-<?php if (!is_null($question['min']) && !is_null($question['max'])): ?>
+<?php if (!empty($question['min']) && !empty($question['max'])): ?>
     <span class="help-block"><?php echo sprintf(__d('questionnaires', 'Please %s <= enter <= %s'), $question['min'], $question['max']); ?></span>
-<?php elseif (!is_null($question['min'])): ?>
+<?php elseif (!empty($question['min'])): ?>
     <span class="help-block"><?php echo sprintf(__d('questionnaires', 'Please %s <= enter'), $question['min']); ?></span>
-<?php elseif (!is_null($question['max'])): ?>
+<?php elseif (!empty($question['max'])): ?>
     <span class="help-block"><?php echo sprintf(__d('questionnaires', 'Please enter <= %s'), $question['max']); ?></span>
 <?php endif;
