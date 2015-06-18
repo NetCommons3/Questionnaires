@@ -14,7 +14,7 @@
 <?php else: ?>
 	<?php
 		$initStr = "questionnaireDateTimeAnswer" . $question['id'] . "= Date('" . $answer[0]['answerValue'] . "')";
-	?>
+		?>
 
 		<div class="row" ng-init="<?php echo $initStr; ?>">
 
