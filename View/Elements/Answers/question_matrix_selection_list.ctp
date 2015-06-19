@@ -10,12 +10,12 @@
  */
 ?>
 <?php
-	if (isset($question['QuestionnaireChoice'])) {
+	if (isset($question['questionnaireChoice'])) {
 		$options = array();
 		$rowChoices = array();
-		foreach ($question['QuestionnaireChoice'] as $choice) {
-			if ($choice['matrix_type'] == QuestionnairesComponent::MATRIX_TYPE_COLUMN) {
-				$options[QuestionnairesComponent::ANSWER_DELIMITER . $choice['origin_id'] . QuestionnairesComponent::ANSWER_VALUE_DELIMITER . $choice['choice_label']] = $choice['choice_label'];
+		foreach ($question['questionnaireChoice'] as $choice) {
+			if ($choice['matrixType'] == QuestionnairesComponent::MATRIX_TYPE_COLUMN) {
+				$options[QuestionnairesComponent::ANSWER_DELIMITER . $choice['originId'] . QuestionnairesComponent::ANSWER_VALUE_DELIMITER . $choice['choiceLabel']] = $choice['choiceLabel'];
 			} else {
 				$rowChoices[] = $choice;
 			}
@@ -43,22 +43,22 @@
 	<?php foreach ($rowChoices as $rowIndex => $row): ?>
 		<tr>
 			<th>
-				<?php echo $row['choice_label']; ?>
+				<?php echo $row['choiceLabel']; ?>
 				<?php echo $this->Form->hidden('QuestionnaireAnswer.' . $index . '.' . $rowIndex . '.questionnaire_question_origin_id', array(
-				'value' => $question['origin_id']
+				'value' => $question['originId']
 				));?>
 				<?php echo $this->Form->hidden('QuestionnaireAnswer.' . $index . '.' . $rowIndex . '.matrix_choice_id', array(
-				'value' => $row['origin_id']
+				'value' => $row['originId']
 				));?>
 				<?php echo $this->Form->hidden('QuestionnaireAnswer.' . $index . '.' . $rowIndex . '.id', array(
-				'value' => isset($questionPage['QuestionnaireAnswer'][$question['origin_id']]['id']) ? $questionPage['QuestionnaireAnswer'][$question['origin_id']]['id'] : null,
+				'value' => isset($questionPage['questionnaireAnswer'][$question['originId']]['id']) ? $questionPage['questionnaireAnswer'][$question['originId']]['id'] : null,
 				));?>
-				<?php if ($row['other_choice_type'] != QuestionnairesComponent::OTHER_CHOICE_TYPE_NO_OTHER_FILED): ?>
+				<?php if ($row['otherChoiceType'] != QuestionnairesComponent::OTHER_CHOICE_TYPE_NO_OTHER_FILED): ?>
 					<?php echo $this->Form->input('QuestionnaireAnswer.' . $index . '.' . $rowIndex . '.other_answer_value', array(
 					'type' => 'text',
 					'label' => false,
 					'div' => false,
-					'value' => $answer[$rowIndex]['other_answer_value'],
+					'value' => $answer[$rowIndex]['otherAnswerValue'],
 					'disabled' => $readonly,
 					)); ?>
 				<?php endif ?>
@@ -67,8 +67,8 @@
 			<?php foreach ($options as $key => $opt): ?>
 				<td>
 					<?php
-					if (isset($answer[$rowIndex]['answer_value'])) {
-						$checked = ($key == $answer[$rowIndex]['answer_value']) ? true : false;
+					if (isset($answer[$rowIndex]['answerValue'])) {
+						$checked = ($key == $answer[$rowIndex]['answerValue']) ? true : false;
 					} else {
 						$checked = false;
 					}

@@ -10,22 +10,22 @@
  */
 ?>
 <?php
-		if (isset($question['QuestionnaireChoice'])) {
+		if (isset($question['questionnaireChoice'])) {
 			$options = array();
 			$otherOpt = array();
 			$afterLabel = '</label></div>';
-			foreach ($question['QuestionnaireChoice'] as $choice) {
-				if ($choice['other_choice_type'] == QuestionnairesComponent::OTHER_CHOICE_TYPE_NO_OTHER_FILED) {
-					$options[QuestionnairesComponent::ANSWER_DELIMITER . $choice['origin_id'] . QuestionnairesComponent::ANSWER_VALUE_DELIMITER . $choice['choice_label']] = $choice['choice_label'];
+			foreach ($question['questionnaireChoice'] as $choice) {
+				if ($choice['otherChoiceType'] == QuestionnairesComponent::OTHER_CHOICE_TYPE_NO_OTHER_FILED) {
+					$options[QuestionnairesComponent::ANSWER_DELIMITER . $choice['originId'] . QuestionnairesComponent::ANSWER_VALUE_DELIMITER . $choice['choiceLabel']] = $choice['choiceLabel'];
 				} else {
 					$otherInput = $this->Form->input('QuestionnaireAnswer.' . $index . '.other_answer_value', array(
 						'type' => 'text',
 						'label' => false,
 						'div' => false,
-						'value' => $answer[0]['other_answer_value'],
+						'value' => $answer[0]['otherAnswerValue'],
 						'disabled' => $readonly,
 					));
-					$otherOpt[QuestionnairesComponent::ANSWER_DELIMITER . $choice['origin_id'] . QuestionnairesComponent::ANSWER_VALUE_DELIMITER . $choice['choice_label']] = $choice['choice_label'];
+					$otherOpt[QuestionnairesComponent::ANSWER_DELIMITER . $choice['originId'] . QuestionnairesComponent::ANSWER_VALUE_DELIMITER . $choice['choiceLabel']] = $choice['choiceLabel'];
 					$afterLabel = '&nbsp;&nbsp;&nbsp;&nbsp;' . $otherInput . '</label></div>';
 				}
 			}
@@ -39,7 +39,7 @@
 					'before' => '<div class="radio"><label>',
 					'separator' => '</label></div><div class="radio"><label>',
 					'after' => $afterLabel,
-					'value' => $answer[0]['answer_value'],
+					'value' => $answer[0]['answerValue'],
 					'disabled' => $readonly,
 				));
 		}

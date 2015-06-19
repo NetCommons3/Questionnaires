@@ -16,14 +16,7 @@
 
 	<?php echo $this->element('Questionnaires.Answers/answer_test_mode_header'); ?>
 
-	<header>
-		<h1>
-			<?php echo $questionnaire['Questionnaire']['title']; ?>
-			<?php if (isset($questionnaire['Questionnaire']['sub_title'])): ?>
-			<small><?php echo $questionnaire['Questionnaire']['sub_title'];?></small>
-			<?php endif ?>
-		</h1>
-	</header>
+	<?php echo $this->element('Questionnaires.Answers/answer_header'); ?>
 
 	<p>
 		<?php echo __d('questionnaires', 'Please confirm your answers.'); ?>
@@ -36,50 +29,50 @@
 	)); ?>
 	<?php echo $this->Form->hidden('Frame.id', array('value' => $frameId)); ?>
 	<?php echo $this->Form->hidden('Block.id', array('value' => $blockId)); ?>
-	<?php echo $this->Form->hidden('Questionnaire.id', array('value' => $questionnaire['Questionnaire']['id'])); ?>
+	<?php echo $this->Form->hidden('Questionnaire.id', array('value' => $questionnaire['questionnaire']['id'])); ?>
 
 	<?php $index = 0; ?>
-	<?php foreach($questionnaire['QuestionnairePage'] as $pIndex => $page): ?>
-		<?php foreach($page['QuestionnaireQuestion'] as $qIndex => $question): ?>
+	<?php foreach($questionnaire['questionnairePage'] as $pIndex => $page): ?>
+		<?php foreach($page['questionnaireQuestion'] as $qIndex => $question): ?>
 
-			<?php if (isset($answers[$question['origin_id']])): ?>
+			<?php if (isset($answers[$question['originId']])): ?>
 
-				<?php if ($question['is_require'] == QuestionnairesComponent::REQUIRES_REQUIRE): ?>
+				<?php if ($question['isRequire'] == QuestionnairesComponent::REQUIRES_REQUIRE): ?>
 					<div class="pull-left">
 						<?php echo $this->element('NetCommons.required'); ?>
 					</div>
 				<?php endif ?>
 
 				<label>
-					<?php echo $question['question_value']; ?>
+					<?php echo $question['questionValue']; ?>
 				</label>
 
 				<?php $index++; ?>
 				<div class="well form-control-static">
 
 				<div class="form-group">
-					<?php if ($question['question_type'] == QuestionnairesComponent::TYPE_TEXT): ?>
+					<?php if ($question['questionType'] == QuestionnairesComponent::TYPE_TEXT): ?>
 					<?php $elementName = 'Questionnaires.Answers/question_text'; ?>
-					<?php elseif ($question['question_type'] == QuestionnairesComponent::TYPE_SELECTION): ?>
+					<?php elseif ($question['questionType'] == QuestionnairesComponent::TYPE_SELECTION): ?>
 					<?php $elementName = 'Questionnaires.Answers/question_selection'; ?>
-					<?php elseif ($question['question_type'] == QuestionnairesComponent::TYPE_MULTIPLE_SELECTION): ?>
+					<?php elseif ($question['questionType'] == QuestionnairesComponent::TYPE_MULTIPLE_SELECTION): ?>
 					<?php $elementName = 'Questionnaires.Answers/question_multiple_selection'; ?>
-					<?php elseif ($question['question_type'] == QuestionnairesComponent::TYPE_TEXT_AREA): ?>
+					<?php elseif ($question['questionType'] == QuestionnairesComponent::TYPE_TEXT_AREA): ?>
 					<?php $elementName = 'Questionnaires.Answers/question_text_area'; ?>
-					<?php elseif ($question['question_type'] == QuestionnairesComponent::TYPE_MATRIX_SELECTION_LIST): ?>
+					<?php elseif ($question['questionType'] == QuestionnairesComponent::TYPE_MATRIX_SELECTION_LIST): ?>
 					<?php $elementName = 'Questionnaires.Answers/question_matrix_selection_list'; ?>
-					<?php elseif ($question['question_type'] == QuestionnairesComponent::TYPE_MATRIX_MULTIPLE): ?>
+					<?php elseif ($question['questionType'] == QuestionnairesComponent::TYPE_MATRIX_MULTIPLE): ?>
 					<?php $elementName = 'Questionnaires.Answers/question_matrix_multiple'; ?>
-					<?php elseif ($question['question_type'] == QuestionnairesComponent::TYPE_DATE_AND_TIME): ?>
+					<?php elseif ($question['questionType'] == QuestionnairesComponent::TYPE_DATE_AND_TIME): ?>
 					<?php $elementName = 'Questionnaires.Answers/question_date_and_time'; ?>
-					<?php elseif ($question['question_type'] == QuestionnairesComponent::TYPE_SINGLE_SELECT_BOX): ?>
+					<?php elseif ($question['questionType'] == QuestionnairesComponent::TYPE_SINGLE_SELECT_BOX): ?>
 					<?php $elementName = 'Questionnaires.Answers/question_single_select_box'; ?>
 					<?php endif ?>
 
 					<?php echo $this->element($elementName,
 					array('index' => $index,
 					'question' => $question,
-					'answer' => $answers[$question['origin_id']],
+					'answer' => $answers[$question['originId']],
 					'readonly' => true)); ?>
 				</div>
 				</div>

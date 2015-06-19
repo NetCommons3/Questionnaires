@@ -18,11 +18,11 @@
 				<th><?php echo __d('questionnaires', 'Item name'); ?></th>
 				<?php
 				$colIds = array();
-				foreach ($question['QuestionnaireChoice'] as $choice) {
-					if ($choice['matrix_type'] == QuestionnairesComponent::MATRIX_TYPE_COLUMN) {
-						$colIds[] = $choice['origin_id'];		//順番に列のid配列を作る。
+				foreach ($question['questionnaireChoice'] as $choice) {
+					if ($choice['matrixType'] == QuestionnairesComponent::MATRIX_TYPE_COLUMN) {
+						$colIds[] = $choice['originId'];		//順番に列のid配列を作る。
 						//選択肢の「列」
-						echo '<th>' . h($choice['choice_label']) . '</th>';
+						echo '<th>' . h($choice['choiceLabel']) . '</th>';
 					}
 				}
 				?>
@@ -33,31 +33,31 @@
 			</tr>
 			</thead>
 			<tbody>
-			<?php foreach($question['QuestionnaireChoice'] as $choice): ?>
+			<?php foreach($question['questionnaireChoice'] as $choice): ?>
 			<?php
-			if ($choice['matrix_type'] == QuestionnairesComponent::MATRIX_TYPE_COLUMN) {
+			if ($choice['matrixType'] == QuestionnairesComponent::MATRIX_TYPE_COLUMN) {
 				continue;	//列の選択肢なら次へ
 			}
 			//以降、行の選択肢
 		?>
 			<tr>
 				<td>
-					<?php echo h($choice['choice_label']); ?>
+					<?php echo h($choice['choiceLabel']); ?>
 				</td>
 				<?php
 				$subtotal = 0;
 				foreach ($colIds as $colId) {
 					echo '<td>';
 				//集計値
-				$cnt = (isset($choice['aggrigate_total'][$colId])) ? $choice['aggrigate_total'][$colId] : '0';
+				$cnt = (isset($choice['aggrigateTotal'][$colId])) ? $choice['aggrigateTotal'][$colId] : '0';
 				echo h($cnt);
 
 				echo '&nbsp;&nbsp;&nbsp;&nbsp;';
 
 				//合計回答数に対する割合
 				$thePercentage = QuestionnairesComponent::NOT_OPERATION_MARK;
-				if (isset($question['answer_total_cnt'])) {
-				$percent = round( (intval($cnt) / intval($question['answer_total_cnt'])) * 100, 1, PHP_ROUND_HALF_UP );
+				if (isset($question['answerTotalCnt'])) {
+				$percent = round( (intval($cnt) / intval($question['answerTotalCnt'])) * 100, 1, PHP_ROUND_HALF_UP );
 				$thePercentage = $percent . ' ' . QuestionnairesComponent::PERCENTAGE_UNIT;
 				}
 				echo ' (' . $thePercentage . ') ';

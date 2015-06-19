@@ -24,14 +24,6 @@ NetCommonsApp.controller('Questionnaires',
       //$attrsと$evalを使い、ng-initディレクティブの評価をcontrollerの最初に行う.
       $scope.$eval($attrs.ngInit);
 
-
-      /**
-       * Questionnaire
-       *
-       * @type {Object.<string>}
-       */
-      $scope.questionnaire = {};
-
       /**
        * Initialize
        *
@@ -41,7 +33,9 @@ NetCommonsApp.controller('Questionnaires',
         $scope.frameId = frameId;
         $scope.questionnaire = questionnaire;
       };
-    });
+    }
+);
+
 
 NetCommonsApp.controller('QuestionnairesAnswer',
     function($scope, $sce, $timeout, $log, NetCommonsBase, NetCommonsFlash) {

@@ -100,9 +100,9 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 		// もしも表示数を変えたいときは下記１行を有効にして、captcha関数でgenerateに引数を与える
 		//$this->set('imageDisplayCount', 10);
 
-		$this->set('questionnaire', $questionnaire);
+		$this->set('questionnaire', $this->camelizeKeyRecursive($questionnaire));
 		$this->set('isDuringTest', $this->_isDuringTest($questionnaire));
-		$this->set('errors', $errors);
+		$this->set('errors', $this->camelizeKeyRecursive($errors));
 	}
 
 /**
@@ -205,20 +205,14 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 		if (count($errors) == 0) {
 			$summary = $this->QuestionnaireAnswerSummary->getProgressiveSummaryOfThisUser($questionnaireId, $userId, $this->Session->id());
 			$setAnswers = $this->QuestionnaireAnswerSummary->getProgressiveAnswerOfThisSummary($summary);
-			/*
-			if ($answerSummary) {
-				foreach ($answerSummary[0]['QuestionnaireAnswer'] as $answer) {
-					$setAnswers[$answer['questionnaire_question_origin_id']][] = $answer;
-				}
-			}*/
-			$this->set('answers', $setAnswers);
+			$this->set('answers', $this->camelizeKeyRecursive($setAnswers));
 		}
 		//$this->log(print_r($setAnswers, true), 'debug');
 		// 質問情報をView変数にセット
-		$this->set('questionnaire', $questionnaire);
+		$this->set('questionnaire', $this->camelizeKeyRecursive($questionnaire));
 		$this->set('isDuringTest', $this->_isDuringTest($questionnaire));
-		$this->set('questionPage', $questionnaire['QuestionnairePage'][$nextPageSeq]);
-		$this->set('errors', $errors);
+		$this->set('questionPage', $this->camelizeKeyRecursive($questionnaire['QuestionnairePage'][$nextPageSeq]));
+		$this->set('errors', $this->camelizeKeyRecursive($errors));
 	}
 
 /**
@@ -261,9 +255,9 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 
 		// 質問情報をView変数にセット
 		$this->set('questionnaireId', $questionnaireId);
-		$this->set('questionnaire', $questionnaire);
+		$this->set('questionnaire', $this->camelizeKeyRecursive($questionnaire));
 		$this->set('isDuringTest', $this->_isDuringTest($questionnaire));
-		$this->set('answers', $setAnswers);
+		$this->set('answers', $this->camelizeKeyRecursive($setAnswers));
 	}
 
 /**

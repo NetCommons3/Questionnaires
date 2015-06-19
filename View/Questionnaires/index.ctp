@@ -29,12 +29,12 @@
 		<?php foreach($questionnaires as $questionnaire): ?>
 			<tr>
 				<td>
-					<?php if ($questionnaire['Questionnaire']['is_period'] == QuestionnairesComponent::USES_USE): ?>
+					<?php if ($questionnaire['questionnaire']['isPeriod'] == QuestionnairesComponent::USES_USE): ?>
 						<div class="row">
 							<div class="col-md-12 col-xs-12">
-								<?php echo $this->Date->dateFormat($questionnaire['Questionnaire']['start_period']); ?>
+								<?php echo $this->Date->dateFormat($questionnaire['questionnaire']['startPeriod']); ?>
 								<?php echo __d('questionnaires', ' - '); ?>
-								<?php echo $this->Date->dateFormat($questionnaire['Questionnaire']['end_period']); ?>
+								<?php echo $this->Date->dateFormat($questionnaire['questionnaire']['endPeriod']); ?>
 							</div>
 						</div>
 					<?php endif ?>
@@ -44,9 +44,9 @@
 						<div class="col-md-8 col-xs-12">
 							<?php echo $this->QuestionnaireStatusLabel->statusLabel($questionnaire);?>
 							<h2>
-								<?php echo h($questionnaire['Questionnaire']['title']); ?>
+								<?php echo h($questionnaire['questionnaire']['title']); ?>
 								<br>
-								<small><?php echo h($questionnaire['Questionnaire']['sub_title']); ?></small>
+								<small><?php echo h($questionnaire['questionnaire']['subTitle']); ?></small>
 							</h2>
 						</div>
 						<div class="col-md-4 col-xs-12" >
@@ -69,26 +69,26 @@
 								<div class="pull-right">
 									<a class="btn btn-primary"
 									   href="<?php echo $this->Html->url(
-										'questionnaire_questions/edit/' . $frameId . '/?questionnaire_id=' . $questionnaire['Questionnaire']['id']) ?>">
+										'questionnaire_questions/edit/' . $frameId . '/?questionnaire_id=' . $questionnaire['questionnaire']['id']) ?>">
 										<span class="glyphicon glyphicon-edit" ></span>
 									</a>
 								</div>
 								<small>
 									<dl class="questionnaire-editor-dl">
 										<dt><?php echo __d('questionnaires', 'Author'); ?></dt>
-										<dd><?php echo $questionnaire['CreatedUser']['value']; ?></dd>
+										<dd><?php echo $questionnaire['createdUser']['value']; ?></dd>
 										<dt><?php echo __d('questionnaires', 'Modified by'); ?></dt>
-										<dd><?php echo $questionnaire['ModifiedUser']['value']; ?>
-											(<?php echo $this->QuestionnaireUtil->transformPeriodYmdhi($questionnaire['Questionnaire']['modified']); ?>)
+										<dd><?php echo $questionnaire['modifiedUser']['value']; ?>
+											(<?php echo $this->Date->dateFormat($questionnaire['questionnaire']['modified']); ?>)
 										</dd>
 									</dl>
 									<dl class="questionnaire-editor-dl">
 										<dt><?php echo __d('questionnaires', 'Pages'); ?></dt>
-										<dd><?php echo $questionnaire['Questionnaire']['page_count']; ?></dd>
+										<dd><?php echo $questionnaire['questionnaire']['pageCount']; ?></dd>
 										<dt><?php echo __d('questionnaires', 'Questions'); ?></dt>
-										<dd><?php echo $questionnaire['Questionnaire']['question_count']; ?></dd>
+										<dd><?php echo $questionnaire['questionnaire']['questionCount']; ?></dd>
 										<dt><?php echo __d('questionnaires', 'Answers' ); ?></dt>
-										<dd><?php echo $questionnaire['Questionnaire']['all_answer_count']; ?></dd>
+										<dd><?php echo $questionnaire['questionnaire']['allAnswerCount']; ?></dd>
 									</dl>
 									<div class="clearfix"></div>
 								</small>

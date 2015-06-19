@@ -10,13 +10,13 @@
  */
 ?>
 <?php if ($readonly): ?>
-	<?php echo nl2br($answer[0]['answer_value']); ?>
+	<?php echo nl2br($answer[0]['answerValue']); ?>
 <?php else: ?>
 	<?php echo $this->Form->textarea('QuestionnaireAnswer.' . $index . '.answer_value', array(
 		'div' => 'form-inline',
 		'label' => false,
 		'class' => 'form-control',
-		'value' => $answer[0]['answer_value'],
+		'value' => $answer[0]['answerValue'],
 		'disabled' => $readonly,
 		'rows' => 5
 		));?>

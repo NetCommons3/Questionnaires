@@ -115,10 +115,10 @@ class QuestionnaireAnswerSummariesController extends QuestionnairesAppController
 
 		//画面用データをセットする。
 		$this->set('frameId', $frameId);								//ng-initのinitilize()引数用
-		$this->set('questionnaire', array('name' => $username));	//ng-initのinitilize()引数用
 		$this->set('questionnaireId', $questionnaireId);
-		$this->set('questionnaire', $questionnaire);
-		$this->set('questions', $questions);
+		$this->set('isDuringTest', $this->_isDuringTest($questionnaire));
+		$this->set('questionnaire', $this->camelizeKeyRecursive($questionnaire));
+		$this->set('questions', $this->camelizeKeyRecursive($questions));
 
 		//集計結果を、Viewに渡し、表示してもらう。
 		//$this->view = 'QuestionnaireQuestions/total';
@@ -191,8 +191,7 @@ class QuestionnaireAnswerSummariesController extends QuestionnairesAppController
 			);
 			$question['answer_total_cnt'] = $this->QuestionnaireAnswer->getAnswerCount($questionConditions);
 
-			if ($question['question_type'] == QuestionnairesComponent::TYPE_MATRIX_SELECTION_LIST ||
-				$question['question_type'] == QuestionnairesComponent::TYPE_MATRIX_MULTIPLE) {
+			if (QuestionnairesComponent::isMatrixInputType($question['question_type'])) {
 				$this->__aggrigateAnswerForMatrix($question, $questionConditions);
 			} else {
 				$this->__aggrigateAnswerForNotMatrix($question, $questionConditions);
