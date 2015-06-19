@@ -12,9 +12,9 @@
 
 <header>
     <h1>
-        <?php echo $questionnaire['questionnaire']['title']; ?>
-        <?php if (isset($questionnaire['questionnaire']['subTitle'])): ?>
-        <small><?php echo $questionnaire['questionnaire']['subTitle'];?></small>
+        <?php echo $questionnaire['Questionnaire']['title']; ?>
+        <?php if (isset($questionnaire['Questionnaire']['sub_title'])): ?>
+        <small><?php echo $questionnaire['Questionnaire']['sub_title'];?></small>
         <?php endif ?>
     </h1>
 </header>

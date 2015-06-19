@@ -10,15 +10,15 @@
  */
 ?>
 <?php if ($readonly): ?>
-		<?php echo $answer[0]['answerValue']; ?>
+		<?php echo $answer[0]['answer_value']; ?>
 <?php else: ?>
 	<?php
-		$initStr = "questionnaireDateTimeAnswer" . $question['id'] . "= Date('" . $answer[0]['answerValue'] . "')";
+		$initStr = "questionnaireDateTimeAnswer" . $question['id'] . "= Date('" . $answer[0]['answer_value'] . "')";
 		?>
 
 		<div class="row" ng-init="<?php echo $initStr; ?>">
 
-		<?php if ($question['questionTypeOption'] == QuestionnairesComponent::TYPE_OPTION_DATE): ?>
+		<?php if ($question['question_type_option'] == QuestionnairesComponent::TYPE_OPTION_DATE): ?>
 		<div class="col-sm-3 form-group">
 			 <div class="input-group">
 				<?php echo
@@ -38,7 +38,7 @@
 		</div>
 		<?php endif ?>
 
-		<?php if ($question['questionTypeOption'] == QuestionnairesComponent::TYPE_OPTION_TIME): ?>
+		<?php if ($question['question_type_option'] == QuestionnairesComponent::TYPE_OPTION_TIME): ?>
 		<div class="col-sm-3">
 			<timepicker
 					ng-model="questionnaireDateTimeAnswer<?php echo $question['id']; ?>"
@@ -56,7 +56,7 @@
 		</div>
 		<?php endif ?>
 
-		<?php if ($question['questionTypeOption'] == QuestionnairesComponent::TYPE_OPTION_DATE_TIME): ?>
+		<?php if ($question['question_type_option'] == QuestionnairesComponent::TYPE_OPTION_DATE_TIME): ?>
 			<div class="col-sm-4">
 				<?php echo $this->element('NetCommons.datetimepicker'); ?>
 				<div class="input-group">

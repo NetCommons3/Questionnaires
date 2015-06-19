@@ -10,7 +10,7 @@
  */
 ?>
 <?php if ($readonly): ?>
-	<?php echo $answer[0]['answerValue']; ?>
+	<?php echo $answer[0]['answer_value']; ?>
 <?php else: ?>
 
 	<?php echo $this->Form->input('QuestionnaireAnswer.' . $index . '.answer_value', array(
@@ -18,7 +18,7 @@
 		'type' => 'text',
 		'label' => false,
 		'class' => 'form-control',
-		'value' => $answer[0]['answerValue'],
+		'value' => $answer[0]['answer_value'],
 		'disabled' => $readonly,
 		));?>
 	<?php echo $this->element('Questionnaires.Answers/question_range_description', array('question' => $question)); ?>

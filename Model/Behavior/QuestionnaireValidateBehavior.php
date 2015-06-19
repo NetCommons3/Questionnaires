@@ -28,7 +28,7 @@ class QuestionnaireValidateBehavior extends ModelBehavior {
  */
 	public function requireTimes(&$model, $check) {
 		if ($model->data['Questionnaire']['is_period'] == QuestionnairesComponent::USES_USE) {
-			if (empty($model->data['Questionnaire']['start_period']) && empty($model->data['Questionnaire']['end_period'])) {
+			if (empty($model->data['Questionnaire']['start_period']) && empty($model->data['Questionnaire']['end_time'])) {
 				return false;
 			}
 		}

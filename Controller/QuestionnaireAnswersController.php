@@ -205,14 +205,14 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 		if (count($errors) == 0) {
 			$summary = $this->QuestionnaireAnswerSummary->getProgressiveSummaryOfThisUser($questionnaireId, $userId, $this->Session->id());
 			$setAnswers = $this->QuestionnaireAnswerSummary->getProgressiveAnswerOfThisSummary($summary);
-			$this->set('answers', $this->camelizeKeyRecursive($setAnswers));
+			$this->set('answers', $setAnswers);
 		}
 		//$this->log(print_r($setAnswers, true), 'debug');
 		// 質問情報をView変数にセット
-		$this->set('questionnaire', $this->camelizeKeyRecursive($questionnaire));
+		$this->set('questionnaire', $questionnaire);
 		$this->set('isDuringTest', $this->_isDuringTest($questionnaire));
-		$this->set('questionPage', $this->camelizeKeyRecursive($questionnaire['QuestionnairePage'][$nextPageSeq]));
-		$this->set('errors', $this->camelizeKeyRecursive($errors));
+		$this->set('questionPage', $questionnaire['QuestionnairePage'][$nextPageSeq]);
+		$this->set('errors', $errors);
 	}
 
 /**
@@ -255,9 +255,9 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 
 		// 質問情報をView変数にセット
 		$this->set('questionnaireId', $questionnaireId);
-		$this->set('questionnaire', $this->camelizeKeyRecursive($questionnaire));
+		$this->set('questionnaire', $questionnaire);
 		$this->set('isDuringTest', $this->_isDuringTest($questionnaire));
-		$this->set('answers', $this->camelizeKeyRecursive($setAnswers));
+		$this->set('answers', $setAnswers);
 	}
 
 /**

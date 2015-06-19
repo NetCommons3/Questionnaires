@@ -62,7 +62,7 @@ class QuestionnaireUtilHelper extends AppHelper {
 		// 繰り返しの回答を許さない = 回答前＝回答する　回答後＝回答済み（Disabled）
 		// 繰り返しの回答を許す = いずれの状態でも「回答する」
 
-		$id = $questionnaire['questionnaire']['originId'];
+		$id = $questionnaire['Questionnaire']['origin_id'];
 
 		// 編集権限がない人が閲覧しているとき、未公開アンケートはFindされていないので対策する必要はない
 		// ボタン表示ができるかできないか
@@ -72,41 +72,41 @@ class QuestionnaireUtilHelper extends AppHelper {
 		//	return '';
 		//}
 
-		$buttonStr = '<a class="btn btn-%s questionnaire-listbtn %s" href="/questionnaires/questionnaire_answers/answer/%d/%d/">%s</a>';
+		$buttonStr = '<a class="btn btn-%s questionnaire-listbtn %s" %s href="/questionnaires/questionnaire_answers/answer/%d/%d/">%s</a>';
 
 		// ボタンの色
 		// ボタンのラベル
-		if ($questionnaire['questionnaire']['status'] != NetCommonsBlockComponent::STATUS_PUBLISHED) {
+		if ($questionnaire['Questionnaire']['status'] != NetCommonsBlockComponent::STATUS_PUBLISHED) {
 			$answerButtonClass = 'info';
 			$answerButtonLabel = __d('questionnaires', 'Test');
-			return sprintf($buttonStr, $answerButtonClass, '', $frameId, $id, $answerButtonLabel);
+			return sprintf($buttonStr, $answerButtonClass, '', '', $frameId, $id, $answerButtonLabel);
 		}
-
-		// 操作できるかできないか
 
 		// 何事もなければ回答可能のボタン
 		$answerButtonLabel = __d('questionnaires', 'Answer');
 		$answerButtonClass = 'success';
 		$answerButtonDisabled = '';
 
+		// 操作できるかできないかの決定
 		// 期間外だったら操作不可能
 		// 繰り返し回答不可で回答済なら操作不可能
-		if ($questionnaire['questionnaire']['periodRangeStat'] != QuestionnairesComponent::QUESTIONNAIRE_PERIOD_STAT_IN
-			|| (isset($answerCounts[$id]['ansCnt']) && $answerCounts[$id]['ansCnt'] > 0
-				&& $questionnaire['questionnaire']['isRepeatAllow'] == QuestionnairesComponent::PERMISSION_NOT_PERMIT)) {
+		if ($questionnaire['Questionnaire']['period_range_stat'] != QuestionnairesComponent::QUESTIONNAIRE_PERIOD_STAT_IN
+			|| (isset($questionnaire['CountAnswerSummary']['answer_summary_count']) && $questionnaire['CountAnswerSummary']['answer_summary_count'] > 0
+				&& $questionnaire['Questionnaire']['is_repeat_allow'] == QuestionnairesComponent::PERMISSION_NOT_PERMIT)) {
 			$answerButtonClass = 'default';
 			$answerButtonDisabled = 'disabled';
 		}
 
-		if ($questionnaire['questionnaire']['periodRangeStat'] == QuestionnairesComponent::QUESTIONNAIRE_PERIOD_STAT_BEFORE) {
+		// ラベル名の決定
+		if ($questionnaire['Questionnaire']['period_range_stat'] == QuestionnairesComponent::QUESTIONNAIRE_PERIOD_STAT_BEFORE) {
 			// 未公開
 			$answerButtonLabel = __d('questionnaires', 'Unpublished');
 		}
-		if (isset($answerCounts[$id]['ansCnt']) && $answerCounts[$id]['ansCnt'] > 0) {
+		if (isset($questionnaire['CountAnswerSummary']['answer_summary_count']) && $questionnaire['CountAnswerSummary']['answer_summary_count'] > 0) {
 			// 回答済み
 			$answerButtonLabel = __d('questionnaires', 'Finished');
 		}
-		return sprintf($buttonStr, $answerButtonClass, '', $frameId, $id, $answerButtonLabel);
+		return sprintf($buttonStr, $answerButtonClass, '', $answerButtonDisabled, $frameId, $id, $answerButtonLabel);
 	}
 
 /**
@@ -124,9 +124,9 @@ class QuestionnaireUtilHelper extends AppHelper {
 		// 集計表示する＝回答すみ、または回答期間終了　集計ボタン
 		// 　　　　　　　アンケート自体が公開状態にない(not editor)
 		//			  未回答＆回答期間内　　　　　　　集計ボタン（disabled）
-		$id = $questionnaire['questionnaire']['originId'];
+		$id = $questionnaire['Questionnaire']['origin_id'];
 
-		if ($questionnaire['questionnaire']['isTotalShow'] == QuestionnairesComponent::EXPRESSION_NOT_SHOW) {
+		if ($questionnaire['Questionnaire']['is_total_show'] == QuestionnairesComponent::EXPRESSION_NOT_SHOW) {
 			return '';
 		}
 		// 編集権限がない人が閲覧しているとき、未公開アンケートはFindされていないので対策する必要はない
@@ -141,18 +141,18 @@ class QuestionnaireUtilHelper extends AppHelper {
 
 		// アンケート本体が始まってない
 		$nowTime = time();
-		if ($questionnaire['questionnaire']['periodRangeStat'] == QuestionnairesComponent::QUESTIONNAIRE_PERIOD_STAT_BEFORE) {
+		if ($questionnaire['Questionnaire']['period_range_stat'] == QuestionnairesComponent::QUESTIONNAIRE_PERIOD_STAT_BEFORE) {
 			$disabled = 'disabled';
 		} else {
 			// 始まっている
 			// 集計結果公開期間外である
-			if (isset($questionnaire['questionnaire']['totalShowStartPeriod']) &&
-				$nowTime < strtotime($questionnaire['questionnaire']['totalShowStartPeriod'])) {
+			if (isset($questionnaire['Questionnaire']['total_show_start_period']) &&
+				$nowTime < strtotime($questionnaire['Questionnaire']['total_show_start_period'])) {
 				$disabled = 'disabled';
 			} else {
 				// 集計結果公開期間内である
 				// 一つでも回答している
-				if (isset($questionnaire['countAnswerSummary']['answerSummaryCount']) && $questionnaire['countAnswerSummary']['answerSummaryCount'] > 0) {
+				if (isset($questionnaire['CountAnswerSummary']['answer_summary_count']) && $questionnaire['CountAnswerSummary']['answer_summary_count'] > 0) {
 					$disabled = '';
 				} else {
 					// 未回答

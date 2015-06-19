@@ -11,10 +11,9 @@
 ?>
 <?php echo $this->element('Questionnaires.scripts'); ?>
 
-
-<?php echo $this->element('Questionnaires.Answers/answer_test_mode_header'); ?>
-
 <article>
+	<?php echo $this->element('Questionnaires.Answers/answer_test_mode_header'); ?>
+
 	<?php echo $this->element('Questionnaires.Answers/answer_header'); ?>
 
 	<?php echo $this->Form->create('QuestionnaireAnswer', array(
@@ -24,10 +23,10 @@
 	)); ?>
 	<?php echo $this->Form->hidden('Frame.id', array('value' => $frameId)); ?>
 	<?php echo $this->Form->hidden('Block.id', array('value' => $blockId)); ?>
-	<?php echo $this->Form->hidden('Questionnaire.id', array('value' => $questionnaire['questionnaire']['id'])); ?>
+	<?php echo $this->Form->hidden('Questionnaire.id', array('value' => $questionnaire['Questionnaire']['id'])); ?>
 
 	<p>
-		<?php echo $questionnaire['questionnaire']['thanksContent']; ?>
+		<?php echo $questionnaire['Questionnaire']['thanks_content']; ?>
 	</p>
 	<hr>
 	<div class="text-center">
@@ -37,7 +36,7 @@
 			/* 集計ボタン表示Helperは回答数が１つはないと表示されない */
 			/* 今回答したのだから必ず回答は１つはある */
 			/* 強制的に一つ増やしておく */
-			$questionnaire['countAnswerSummary'] = array('answerSummaryCount' => 1);
+			$questionnaire['CountAnswerSummary'] = array('answer_summary_count' => 1);
 			echo $this->QuestionnaireUtil->getAggregateButtons($frameId, $questionnaire,
 				array('title' => __d('questionnaires', 'Aggregate'),
 						'class' => 'btn-primary btn-lg'));

@@ -117,8 +117,10 @@ class QuestionnaireAnswerSummariesController extends QuestionnairesAppController
 		$this->set('frameId', $frameId);								//ng-initのinitilize()引数用
 		$this->set('questionnaireId', $questionnaireId);
 		$this->set('isDuringTest', $this->_isDuringTest($questionnaire));
-		$this->set('questionnaire', $this->camelizeKeyRecursive($questionnaire));
-		$this->set('questions', $this->camelizeKeyRecursive($questions));
+		$this->set('questionnaire', $questionnaire);
+		$this->set('questions', $questions);
+		$this->set('jsQuestionnaire', $this->camelizeKeyRecursive($questionnaire));
+		$this->set('jsQuestions', $this->camelizeKeyRecursive($questions));
 
 		//集計結果を、Viewに渡し、表示してもらう。
 		//$this->view = 'QuestionnaireQuestions/total';

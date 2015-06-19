@@ -138,7 +138,7 @@ class QuestionnairesController extends QuestionnairesAppController {
 			// アンケートデータが存在しないこととする
 			$questionnaire = array();
 		}
-		$this->set('questionnaires', $this->camelizeKeyRecursive($questionnaire));
+		$this->set('questionnaires', $questionnaire);
 
 		if (count($questionnaire) == 0) {
 			$this->view = 'Questionnaires/noQuestionnaire';
@@ -173,7 +173,7 @@ class QuestionnairesController extends QuestionnairesAppController {
 		$this->Session->delete('Questionnaires.' . $questionnaireId);
 
 		// View変数にセット
-		$this->set('questionnaire', $this->camelizeKeyRecursive($questionnaire));
+		$this->set('questionnaire', $questionnaire);
 		$this->set('isDuringTest', $this->_isDuringTest($questionnaire));
 	}
 

@@ -20,22 +20,22 @@
 				</tr>
 			</thead>
 			<tbody>
-			<?php foreach($question['questionnaireChoice'] as $choice): ?>
+			<?php foreach($question['QuestionnaireChoice'] as $choice): ?>
 				<tr>
 					<td>
-						<?php echo h($choice['choiceLabel']); ?>
+						<?php echo h($choice['choice_label']); ?>
 					</td>
 					<td>
 						<?php
-							$cnt = (isset($choice['aggrigateTotal']['aggrigateNotMatrix'])) ? $choice['aggrigateTotal']['aggrigateNotMatrix'] : '0';
+							$cnt = (isset($choice['aggrigate_total']['aggrigate_not_matrix'])) ? $choice['aggrigate_total']['aggrigate_not_matrix'] : '0';
 							echo h($cnt);
 						?>
 					</td>
 					<td>
 						<?php
 							$thePercentage = QuestionnairesComponent::NOT_OPERATION_MARK;
-							if (isset($question['answerTotalCnt'])) {
-								$percent = round( (intval($cnt) / intval($question['answerTotalCnt'])) * 100, 1, PHP_ROUND_HALF_UP );
+							if (isset($question['answer_total_cnt'])) {
+								$percent = round( (intval($cnt) / intval($question['answer_total_cnt'])) * 100, 1, PHP_ROUND_HALF_UP );
 								$thePercentage = $percent . ' ' . QuestionnairesComponent::PERCENTAGE_UNIT;
 							}
 							echo $thePercentage;

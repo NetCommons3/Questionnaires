@@ -26,7 +26,7 @@
 				'controller' => 'questionnaire_questions',
 				'action' => 'edit',
 				$frameId,
-				'?' => array('questionnaire_id' => $questionnaire['questionnaire']['id'])),
+				'?' => array('questionnaire_id' => $questionnaire['Questionnaire']['id'])),
 			array(
 				'class' => 'btn btn-primary',
 				'escape' => false,

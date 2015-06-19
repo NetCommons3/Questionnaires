@@ -10,13 +10,13 @@
  */
 ?>
 <?php if ($readonly): ?>
-	<?php echo substr($answer[0]['answerValue'], strrpos($answer[0]['answerValue'], QuestionnairesComponent::ANSWER_VALUE_DELIMITER) + 1); ?>
+	<?php echo substr($answer[0]['answer_value'], strrpos($answer[0]['answer_value'], QuestionnairesComponent::ANSWER_VALUE_DELIMITER) + 1); ?>
 <?php else: ?>
 	<?php
-		if (isset($question['questionnaireChoice'])) {
+		if (isset($question['QuestionnaireChoice'])) {
 			$options = array();
-			foreach ($question['questionnaireChoice'] as $choice) {
-				$options[QuestionnairesComponent::ANSWER_DELIMITER . $choice['originId'] . QuestionnairesComponent::ANSWER_VALUE_DELIMITER . $choice['choiceLabel']] = $choice['choiceLabel'];
+			foreach ($question['QuestionnaireChoice'] as $choice) {
+				$options[QuestionnairesComponent::ANSWER_DELIMITER . $choice['origin_id'] . QuestionnairesComponent::ANSWER_VALUE_DELIMITER . $choice['choice_label']] = $choice['choice_label'];
 			}
 			echo $this->Form->input('QuestionnaireAnswer.' . $index . '.answer_value', array(
 				'type' => 'select',
@@ -24,7 +24,7 @@
 				'label' => false,
 				'div' => 'form-inline',
 				'class' => 'form-control',
-				'value' => $answer[0]['answerValue'],
+				'value' => $answer[0]['answer_value'],
 				'disabled' => $readonly,
 				'empty' => __d('questionnaires', 'Please choose one')
 			));

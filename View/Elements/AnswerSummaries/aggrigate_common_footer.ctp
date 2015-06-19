@@ -16,12 +16,12 @@
 	<?php
 		//各質問ごと集計表示の共通フッター
 
-		if (QuestionnairesComponent::isMatrixInputType($question['questionType'])) {
+		if (QuestionnairesComponent::isMatrixInputType($question['question_type'])) {
 			echo '<br />' . __d('questionnaires', 'Note: Matrix if the number in parentheses is a percentage of the total number of responses.');
 		}
 
-		if ($question['questionType'] == QuestionnairesComponent::TYPE_MULTIPLE_SELECTION ||
-			$question['questionType'] == QuestionnairesComponent::TYPE_MATRIX_MULTIPLE) {
+		if ($question['question_type'] == QuestionnairesComponent::TYPE_MULTIPLE_SELECTION ||
+			$question['question_type'] == QuestionnairesComponent::TYPE_MATRIX_MULTIPLE) {
 
 			echo '<br />' . __d('questionnaires', 'Note: If multiple selection is possible, total more than 100% to be.');
 		}

@@ -10,9 +10,9 @@
  */
 ?>
 <div class="col-xs-12 questionnaire-chart-wrapper" >
-    <?php foreach ($question['questionnaireChoice'] as $choiceId => $choice): ?>
-    <?php if ($choice['matrixType'] == QuestionnairesComponent::MATRIX_TYPE_ROW_OR_NO_MATRIX): ?>
-        <?php $dataStr = '[' . $questionId . '][' . $choice['originId'] . ']'; ?>
+    <?php foreach ($question['QuestionnaireChoice'] as $choiceId => $choice): ?>
+    <?php if ($choice['matrix_type'] == QuestionnairesComponent::MATRIX_TYPE_ROW_OR_NO_MATRIX): ?>
+        <?php $dataStr = '[' . $questionId . '][' . $choice['origin_id'] . ']'; ?>
                 <nvd3 options='config<?php echo $dataStr; ?>'
                       data='data<?php echo $dataStr; ?>'>
                 </nvd3>

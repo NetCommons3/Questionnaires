@@ -42,8 +42,8 @@ NetCommonsApp.requires.push('nvd3');
 <div id="nc-questionnaires-total-<?php echo (int)$frameId; ?>"
 	ng-controller="QuestionnairesAnswerSummary"
 	ng-init="initialize(<?php echo (int)$frameId; ?>,
-	<?php echo h(json_encode($questionnaire)); ?>,
-	<?php echo h(json_encode($questions)); ?>)">
+	<?php echo h(json_encode($jsQuestionnaire)); ?>,
+	<?php echo h(json_encode($jsQuestions)); ?>)">
 
 <?php App::uses('Sanitize', 'Utility'); ?>
 
@@ -52,11 +52,11 @@ NetCommonsApp.requires.push('nvd3');
 
 	<?php echo $this->element('Questionnaires.Answers/answer_header'); ?>
 
-	<?php if (!empty($questionnaire['questionnaire']['totalComment'])): ?>
+	<?php if (!empty($questionnaire['Questionnaire']['total_comment'])): ?>
 		<div class="row">
 			<div class="col-xs-12">
 					<p>
-						<?php echo Sanitize::stripAll($questionnaire['questionnaire']['totalComment']); ?>
+						<?php echo Sanitize::stripAll($questionnaire['Questionnaire']['total_comment']); ?>
 					</p>
 			</div>
 		</div>
@@ -64,7 +64,7 @@ NetCommonsApp.requires.push('nvd3');
 
 	<?php foreach ($questions as $questionnaireQuestionId => $question): ?>
 		<?php
-			if ($question['isResultDisplay'] != QuestionnairesComponent::EXPRESSION_SHOW) {
+			if ($question['is_result_display'] != QuestionnairesComponent::EXPRESSION_SHOW) {
 				//集計表示をしない、なので飛ばす
 				continue;
 			}
@@ -72,14 +72,14 @@ NetCommonsApp.requires.push('nvd3');
 			//集計表示用のelement名決定
 			$elementName = '';
 			$matrix = '';
-			if (QuestionnairesComponent::isMatrixInputType($question['questionType'])) {
+			if (QuestionnairesComponent::isMatrixInputType($question['question_type'])) {
 				$matrix = '_matrix';
 			}
-			if ($question['resultDisplayType'] == QuestionnairesComponent::RESULT_DISPLAY_TYPE_BAR_CHART) {
+			if ($question['result_display_type'] == QuestionnairesComponent::RESULT_DISPLAY_TYPE_BAR_CHART) {
 				$elementName = 'Questionnaires.AnswerSummaries/aggrigate' . $matrix . '_bar_chart';
-			} elseif ($question['resultDisplayType'] == QuestionnairesComponent::RESULT_DISPLAY_TYPE_PIE_CHART) {
+			} elseif ($question['result_display_type'] == QuestionnairesComponent::RESULT_DISPLAY_TYPE_PIE_CHART) {
 				$elementName = 'Questionnaires.AnswerSummaries/aggrigate' . $matrix . '_pie_chart';
-			} elseif ($question['resultDisplayType'] == QuestionnairesComponent::RESULT_DISPLAY_TYPE_TABLE) {
+			} elseif ($question['result_display_type'] == QuestionnairesComponent::RESULT_DISPLAY_TYPE_TABLE) {
 				$elementName = 'Questionnaires.AnswerSummaries/aggrigate' . $matrix . '_table';
 			}
 

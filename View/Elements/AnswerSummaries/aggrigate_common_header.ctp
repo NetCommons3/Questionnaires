@@ -18,13 +18,13 @@
 	</h2>
 	<?php endif; ?>
 	<p>
-		<?php echo __d('questionnaires', 'The total number of answers: ') . h($question['answerTotalCnt']); ?>
+		<?php echo __d('questionnaires', 'The total number of answers: ') . h($question['answer_total_cnt']); ?>
 
 	<?php
 		//各質問ごと集計表示の共通ヘッダー
 		$questionTypeStr = '';
 		//質問タイプ(選択型用)
-		switch ($question['questionType']) {
+		switch ($question['question_type']) {
 		case QuestionnairesComponent::TYPE_SELECTION:
 			$questionTypeStr = __d('questionnaires', 'Select one');
 			break;

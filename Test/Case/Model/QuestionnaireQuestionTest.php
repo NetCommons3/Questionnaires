@@ -9,12 +9,12 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 
-App::uses('QuestionnaireQuestions', 'Questionnaires.Model');
+App::uses('QuestionnaireTestBase', 'Questionnaires.Test/Case/Model');
 
 /**
  * Summary for QuestionnaireQuestions Test Case
  */
-class QuestionnaireQuestionTest extends CakeTestCase {
+class QuestionnaireQuestionTest extends QuestionnaireTestBase {
 
 /**
  * Fixtures
@@ -28,7 +28,6 @@ class QuestionnaireQuestionTest extends CakeTestCase {
  */
 	public function setUp() {
 		parent::setUp();
-		$this->QuestionnaireQuestion = ClassRegistry::init('Questionnaires.QuestionnaireQuestions');
 	}
 
 /**
@@ -37,8 +36,6 @@ class QuestionnaireQuestionTest extends CakeTestCase {
  * @return void
  */
 	public function tearDown() {
-		unset($this->QuestionnaireQuestion);
-
 		parent::tearDown();
 	}
 

@@ -25,7 +25,7 @@ class QuestionnaireStatusLabelHelper extends AppHelper {
  * @return string
  */
 	public function statusLabel($questionnaire) {
-		$status = $questionnaire['questionnaire']['status'];
+		$status = $questionnaire['Questionnaire']['status'];
 		//初期値セット
 		$lblColor = 'danger';
 		$lblMsg = __d('questionnaires', 'Undefined');
@@ -43,11 +43,11 @@ class QuestionnaireStatusLabelHelper extends AppHelper {
 			$lblColor = 'danger';
 			$lblMsg = __d('net_commons', 'Disapproving');
 		} else {
-			if ($questionnaire['questionnaire']['periodRangeStat'] == QuestionnairesComponent::QUESTIONNAIRE_PERIOD_STAT_BEFORE) {
+			if ($questionnaire['Questionnaire']['period_range_stat'] == QuestionnairesComponent::QUESTIONNAIRE_PERIOD_STAT_BEFORE) {
 				//未実施
 				$lblColor = 'default';
 				$lblMsg = __d('questionnaires', 'Before public');
-			} elseif ($questionnaire['questionnaire']['periodRangeStat'] == QuestionnairesComponent::QUESTIONNAIRE_PERIOD_STAT_END) {
+			} elseif ($questionnaire['Questionnaire']['period_range_stat'] == QuestionnairesComponent::QUESTIONNAIRE_PERIOD_STAT_END) {
 				//終了
 				$lblColor = 'default';
 				$lblMsg = __d('questionnaires', 'End');
