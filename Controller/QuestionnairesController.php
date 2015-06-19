@@ -404,6 +404,7 @@ class QuestionnairesController extends QuestionnairesAppController {
 			)
 		));
 		$this->set('questionnaire', $questionnaire);
+		$this->set('jsQuestionnaire', $this->camelizeKeyRecursive($questionnaire));
 		$this->set('contentStatus', $questionnaire['Questionnaire']['status']);
 		$this->set('comments', $this->_getComments($questionnaire['Questionnaire']));
 		$this->set('backUrl', '/questionnaires/questionnaire_questions/edit_result/' . $this->viewVars['frameId']);

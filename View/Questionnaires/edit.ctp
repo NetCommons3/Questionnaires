@@ -16,7 +16,7 @@
 <div id="nc-questionnaires-setting-<?php echo (int)$frameId; ?>"
 	 ng-controller="Questionnaires.setting"
 	 ng-init="initialize(<?php echo (int)$frameId; ?>,
-									<?php echo h(json_encode($questionnaire)); ?>)">
+									<?php echo h(json_encode($jsQuestionnaire)); ?>)">
 
 
 	<?php echo $this->Form->create('Questionnaire', array(
@@ -49,7 +49,7 @@
 			<?php echo $this->Form->input('sub_title',
 				array('class' => 'form-control',
 					'label' => __d('questionnaires', 'Sub Title'),
-					'ng-model' => 'questionnaires.Questionnaire.sub_title',
+					'ng-model' => 'questionnaires.questionnaire.subTitle',
 					'placeholder' => __d('questionnaires', 'Please enter if there is a sub title')
 					)
 				);
@@ -65,7 +65,7 @@
 					'type' => 'checkbox',
 					'div' => false,
 					'label' => false,
-					'ng-model' => 'questionnaires.Questionnaire.is_period',
+					'ng-model' => 'questionnaires.questionnaire.isPeriod',
 					'error' => false
 					));
 					?>
@@ -79,14 +79,14 @@
 				'field' => 'is_period',
 				]) ?>
 			</div>
-			<div class="row" ng-show="questionnaires.Questionnaire.is_period">
+			<div class="row" ng-show="questionnaires.questionnaire.isPeriod">
 				<div class="col-sm-5">
 					<?php echo $this->element(
 					'Questionnaires.Questionnaires/datetime', [
 					'fieldName' => 'start_period',
-					'ngModelName' => 'questionnaires.Questionnaire.start_period',
+					'ngModelName' => 'questionnaires.questionnaire.startPeriod',
 					'min' => 'minDate',
-					'max' => 'questionnaires.Questionnaire.end_period',
+					'max' => 'questionnaires.questionnaire.endPeriod',
 					'model' => 'Questionnaire',
 					]) ?>
 				</div>
@@ -97,8 +97,8 @@
 					<?php echo $this->element(
 					'Questionnaires.Questionnaires/datetime', [
 					'fieldName' => 'end_period',
-					'ngModelName' => 'questionnaires.Questionnaire.end_period',
-					'min' => 'questionnaires.Questionnaire.start_period',
+					'ngModelName' => 'questionnaires.questionnaire.endPeriod',
+					'min' => 'questionnaires.questionnaire.startPeriod',
 					'max' => '',
 					'model' => 'Questionnaire',
 					]) ?>
@@ -114,7 +114,7 @@
 					'type' => 'checkbox',
 					'div' => false,
 					'label' => false,
-					'ng-model' => 'questionnaires.Questionnaire.total_show_timing',
+					'ng-model' => 'questionnaires.questionnaire.totalShowTiming',
 					'ng-true-value' => QuestionnairesComponent::USES_USE,
 					'ng-false-value' => QuestionnairesComponent::USES_NOT_USE,
 					'error' => false
@@ -131,12 +131,12 @@
 				]) ?>
 			</div>
 
-			<div class="row" ng-show="questionnaires.Questionnaire.total_show_timing">
+			<div class="row" ng-show="questionnaires.questionnaire.totalShowTiming">
 				<div class="col-sm-5">
 					<?php echo $this->element(
 					'Questionnaires.Questionnaires/datetime', [
 					'fieldName' => 'total_show_start_period',
-					'ngModelName' => 'questionnaires.Questionnaire.total_show_start_period',
+					'ngModelName' => 'questionnaires.questionnaire.totalShowStartPeriod',
 					'min' => '',
 					'max' => '',
 					'model' => 'Questionnaire',
@@ -156,7 +156,7 @@
 			'label' => false,
 			'before' => '<div class="checkbox"><label>',
 			'after' => __d('questionnaires', 'accept the non-members answer') . '</label></div>',
-			'ng-model' => 'questionnaires.Questionnaire.is_no_member_allow',
+			'ng-model' => 'questionnaires.questionnaire.isNoMemberAllow',
 			'error' => false,
 			)
 			);
@@ -174,7 +174,7 @@
 			'label' => false,
 			'before' => '<div class="checkbox"><label>',
 			'after' => __d('questionnaires', 'use key phrase') . '</label></div>',
-			'ng-model' => 'questionnaires.Questionnaire.is_key_pass_use',
+			'ng-model' => 'questionnaires.questionnaire.isKeyPassUse',
 			'error' => false,
 			)
 			);
@@ -190,8 +190,8 @@
 			array(
 			'label' => false,
 			'class' => 'form-control',
-			'ng-show' => 'questionnaires.Questionnaire.is_key_pass_use',
-			'ng-model' => 'questionnaires.Questionnaire.key_phrase'
+			'ng-show' => 'questionnaires.questionnaire.isKeyPassUse',
+			'ng-model' => 'questionnaires.questionnaire.keyPhrase'
 			)
 			);
 			?>
@@ -202,7 +202,7 @@
 			'label' => false,
 			'before' => '<div class="checkbox"><label>',
 			'after' => __d('questionnaires', 'anonymous answer') . '</label></div>',
-			'ng-model' => 'questionnaires.Questionnaire.is_anonymity',
+			'ng-model' => 'questionnaires.questionnaire.isAnonymity',
 			'error' => false,
 			)
 			);
@@ -220,7 +220,7 @@
 			'label' => false,
 			'before' => '<div class="checkbox"><label>',
 			'after' => __d('questionnaires', 'forgive the repetition of the answer') . '</label></div>',
-			'ng-model' => 'questionnaires.Questionnaire.is_repeat_allow',
+			'ng-model' => 'questionnaires.questionnaire.isRepeatAllow',
 			'error' => false,
 			)
 			);
@@ -238,7 +238,7 @@
 			'label' => false,
 			'before' => '<div class="checkbox"><label>',
 			'after' => __d('questionnaires', 'do image authentication') . '</label></div>',
-			'ng-model' => 'questionnaires.Questionnaire.is_image_authentication',
+			'ng-model' => 'questionnaires.questionnaire.isImageAuthentication',
 			'error' => false,
 			)
 			);
@@ -256,7 +256,7 @@
 			'label' => false,
 			'before' => '<div class="checkbox"><label>',
 			'after' => __d('questionnaires', 'Deliver e-mail when submitted?') . '</label></div>',
-			'ng-model' => 'questionnaires.Questionnaire.is_answer_mail_send',
+			'ng-model' => 'questionnaires.questionnaire.isAnswerMailSend',
 			'error' => false,
 			)
 			);
@@ -275,7 +275,7 @@
 				<?php echo $this->Form->textarea('thanks_content',
 				array(
 				'class' => 'form-control',
-				'ng-model' => 'questionnaires.Questionnaire.thanks_content',
+				'ng-model' => 'questionnaires.questionnaire.thanksContent',
 				'ui-tinymce' => 'tinymce.options',
 				'rows' => 5,
 				'error' => false,

@@ -9,56 +9,6 @@
 
 NetCommonsApp.requires.push('QuestionnaireCommon');
 
-NetCommonsApp.controller('Questionnaires.edit',
-    function($scope, NetCommonsBase, NetCommonsWysiwyg,
-             NetCommonsUser, $timeout, $attrs) {
-
-
-      /**
-       * show user information method
-       *
-       * @param {number} users.id
-       * @return {string}
-       */
-      $scope.user = NetCommonsUser.new();
-
-      /**
-         * tinymce
-         *
-         * @type {object}
-         */
-      $scope.tinymce = NetCommonsWysiwyg.new();
-
-      /**
-         * serverValidationClear method
-         *
-         * @param {number} users.id
-         * @return {string}
-         */
-      $scope.serverValidationClear = NetCommonsBase.serverValidationClear;
-
-      /**
-         * Initialize
-         *
-         * @return {void}
-         */
-      $scope.initialize = function(frameId, questionnaires) {
-        $scope.frameId = frameId;
-        $scope.questionnaires = questionnaires;
-        $scope.filter = questionnaires.QuestionnairesSettingList.filter;
-      };
-      /**
-         * Questionnaire EnterSubmit gard
-         *
-         * @return {void}
-         */
-      $scope.handleKeydown = function(e) {
-        if (e.which === 13) {
-          e.stopPropagation();
-          return false;
-        }
-      };
-    });
 NetCommonsApp.controller('Questionnaires.add',
     function($scope, NetCommonsBase, NetCommonsWysiwyg) {
 
@@ -87,16 +37,7 @@ NetCommonsApp.controller('Questionnaires.add',
     });
 
 NetCommonsApp.controller('Questionnaires.setting',
-    function($scope, NetCommonsBase, NetCommonsWysiwyg,
-             NetCommonsUser) {
-
-      /**
-         * show user information method
-         *
-         * @param {number} users.id
-         * @return {string}
-         */
-      $scope.user = NetCommonsUser.new();
+    function($scope, NetCommonsBase, NetCommonsWysiwyg) {
 
       /**
          * tinymce
@@ -106,14 +47,6 @@ NetCommonsApp.controller('Questionnaires.setting',
       $scope.tinymce = NetCommonsWysiwyg.new();
 
       /**
-         * serverValidationClear method
-         *
-         * @param {number} users.id
-         * @return {string}
-         */
-      $scope.serverValidationClear = NetCommonsBase.serverValidationClear;
-
-      /**
          * Initialize
          *
          * @return {void}
@@ -121,41 +54,29 @@ NetCommonsApp.controller('Questionnaires.setting',
       $scope.initialize = function(frameId, questionnaires) {
         $scope.frameId = frameId;
         $scope.questionnaires = questionnaires;
-        $scope.total_period_flag = false;
-        if (Date.parse($scope.questionnaires.Questionnaire.start_period)) {
-          $scope.questionnaires.Questionnaire.start_period =
-              new Date($scope.questionnaires.Questionnaire.start_period);
+
+        if (Date.parse($scope.questionnaires.questionnaire.startPeriod)) {
+          $scope.questionnaires.questionnaire.startPeriod =
+              new Date($scope.questionnaires.questionnaire.startPeriod);
         } else {
-          $scope.questionnaires.Questionnaire.start_period = new Date();
+          $scope.questionnaires.questionnaire.startPeriod = new Date();
         }
-        if (Date.parse($scope.questionnaires.Questionnaire.end_period)) {
-          $scope.questionnaires.Questionnaire.end_period =
-              new Date($scope.questionnaires.Questionnaire.end_period);
+        if (Date.parse($scope.questionnaires.questionnaire.endPeriod)) {
+          $scope.questionnaires.questionnaire.endPeriod =
+              new Date($scope.questionnaires.questionnaire.endPeriod);
         } else {
-          $scope.questionnaires.Questionnaire.end_period = new Date();
+          $scope.questionnaires.questionnaire.endPeriod = new Date();
         }
         if (Date.parse(
-            $scope.questionnaires.Questionnaire.total_show_start_period)) {
-          $scope.questionnaires.Questionnaire.total_show_start_period =
+            $scope.questionnaires.questionnaire.totalShowStartPeriod)) {
+          $scope.questionnaires.questionnaire.totalShowStartPeriod =
               new Date(
-                  $scope.questionnaires.Questionnaire.total_show_start_period);
+                  $scope.questionnaires.questionnaire.totalShowStartPeriod);
         } else {
-          $scope.questionnaires.Questionnaire.total_show_start_period =
+          $scope.questionnaires.questionnaire.totalShowStartPeriod =
               new Date();
         }
         $scope.minDate = new Date();
-        $scope.calendar_opened = [false, false, false];
-      };
-      $scope.openCal = function($event, calNo) {
-        $event.preventDefault();
-        $event.stopPropagation();
-        $scope.calendar_opened[calNo] = true;
-      };
-      $scope.open = function($event) {
-        $event.preventDefault();
-        $event.stopPropagation();
-
-        $scope.opened = true;
       };
       $scope.publishQuestionnaire = function(e, isPublished, message) {
         if (isPublished == 0) {
