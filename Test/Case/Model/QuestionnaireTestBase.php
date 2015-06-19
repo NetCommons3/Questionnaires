@@ -62,12 +62,4 @@ class QuestionnaireTestBase extends QuestionnaireModelTestBase {
 		parent::tearDown();
 	}
 
-/**
- * testIndex method
- *
- * @return void
- */
-	public function testIndex() {
-	}
-
 }

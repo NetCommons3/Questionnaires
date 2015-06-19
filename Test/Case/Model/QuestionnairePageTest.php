@@ -40,10 +40,8 @@ class QuestionnairePageTest extends QuestionnaireTestBase {
  * @return void
  */
 	public function testgetDefaultPage() {
-		//初期処理
 		$this->setUp();
 
-		//データの生成
 		$expected['page_title'] = __d('questionnaires', 'First Page');
 		$expected['page_sequence'] = 0;
 		$expected['origin_id'] = 0;
@@ -63,13 +61,10 @@ class QuestionnairePageTest extends QuestionnaireTestBase {
 			)
 		);
 
-		//処理実行
 		$result = $this->QuestionnairePage->getDefaultPage();
 
-		//テスト実施
 		$this->_assertArray($expected, $result);
 
-		//終了処理
 		$this->tearDown();
 	}
 
@@ -79,10 +74,8 @@ class QuestionnairePageTest extends QuestionnaireTestBase {
  * @return void
  */
 	public function testsetPageToQuestionnaire() {
-		//初期処理
 		$this->setUp();
 
-		//データの生成
 		$data = array(
 		'QuestionnairePage' => array(
 			array(
@@ -105,11 +98,9 @@ class QuestionnairePageTest extends QuestionnaireTestBase {
 		)
 		);
 
-		// 処理実行
 		$this->QuestionnairePage->setPageToQuestionnaire($data);
 		$expected = 2;
 
-		//テスト実施（'page_count'が２に更新）
 		$this->assertEquals($data['Questionnaire']['page_count'], $expected);
 
 		$this->tearDown();
@@ -121,10 +112,8 @@ class QuestionnairePageTest extends QuestionnaireTestBase {
  * @return void
  */
 	public function testsaveQuestionnairePage() {
-		//初期処理
 		$this->setUp();
 
-		//データの生成
 		$questionnaireId = 1;
 		$status = NetCommonsBlockComponent::STATUS_IN_DRAFT;
 
@@ -150,14 +139,11 @@ class QuestionnairePageTest extends QuestionnaireTestBase {
 			)
 		);
 
-		//処理実行
 		$this->QuestionnairePage->saveQuestionnairePage($questionnaireId, $status, $questionnairePage['QuestionnairePage']);
 
-		//テスト実施
 		$result = $this->QuestionnairePage->findByPageTitle('TEST1');
 		$this->assertInternalType('array', $result['QuestionnairePage']);
 
-		//終了処理
 		$this->tearDown();
 	}
 
