@@ -77,7 +77,9 @@ class QuestionnaireChoiceTest extends QuestionnaireTestBase {
 			'choice_sequence' => 1,
 			'graph_color' => '#666666',
 			'is_auto_translated' => 0,
+			'status' => NetCommonsBlockComponent::STATUS_IN_DRAFT,
 		);
+
 		//期待値
 		$expected = array(
 				$field => array(__d('questionnaires', 'Please input choice text.')));
@@ -102,6 +104,7 @@ class QuestionnaireChoiceTest extends QuestionnaireTestBase {
 			'choice_sequence' => 1,
 			'graph_color' => '#666666',
 			'is_auto_translated' => 0,
+			'status' => NetCommonsBlockComponent::STATUS_IN_DRAFT,
 		);
 		//期待値  app/app/Locale/jpn/LC_MESSAGES/default.po msgid "numeric"  msgstr "数値"
 		$expected = array(
@@ -127,6 +130,7 @@ class QuestionnaireChoiceTest extends QuestionnaireTestBase {
 			'choice_sequence' => 1,
 			'graph_color' => '#666666',
 			'is_auto_translated' => 0,
+			'status' => NetCommonsBlockComponent::STATUS_IN_DRAFT,
 		);
 		//期待値  app/app/Locale/jpn/LC_MESSAGES/default.po msgid "numeric"  msgstr "数値"
 		$expected = array(
@@ -151,6 +155,7 @@ class QuestionnaireChoiceTest extends QuestionnaireTestBase {
 			'choice_sequence' => '',
 			'graph_color' => '#666666',
 			'is_auto_translated' => 0,
+			'status' => NetCommonsBlockComponent::STATUS_IN_DRAFT,
 		);
 		//期待値  app/app/Locale/jpn/LC_MESSAGES/default.po msgid "numeric"  msgstr "数値"
 		$expected = array(
@@ -176,6 +181,7 @@ class QuestionnaireChoiceTest extends QuestionnaireTestBase {
 			'choice_sequence' => 1,
 			'graph_color' => '#666',
 			'is_auto_translated' => 0,
+			'status' => NetCommonsBlockComponent::STATUS_IN_DRAFT,
 		);
 		//期待値
 		$expected = array(
@@ -201,6 +207,7 @@ class QuestionnaireChoiceTest extends QuestionnaireTestBase {
 				'choice_sequence' => 1,
 				'graph_color' => '#666666',
 				'is_auto_translated' => 2,
+				'status' => NetCommonsBlockComponent::STATUS_IN_DRAFT,
 			);
 		//期待値
 		$expected = array(

@@ -17,6 +17,7 @@ App::uses('YACakeTestCase', 'NetCommons.TestSuite');
 App::uses('AuthComponent', 'Component');
 App::uses('Block', 'Blocks.Model');
 App::uses('Frame', 'Frames.Model');
+App::uses('User', 'Users.Model');
 App::uses('Questionnaire', 'Questionnaires.Model');
 App::uses('QuestionnaireChoice', 'Questionnaires.Model');
 App::uses('QuestionnaireFrameSetting', 'Questionnaires.Model');

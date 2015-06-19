@@ -61,4 +61,13 @@ class QuestionnaireTestBase extends QuestionnaireModelTestBase {
 		unset($this->Frame);
 		parent::tearDown();
 	}
+
+/**
+ * testIndex method
+ *
+ * @return void
+ */
+	public function testIndex() {
+	}
+
 }
