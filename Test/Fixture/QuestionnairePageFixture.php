@@ -19,9 +19,12 @@ class QuestionnairePageFixture extends CakeTestFixture {
  */
 	public $fields = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'key' => 'primary'),
+		'key' => array('type' => 'string', 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+		'language_id' => array('type' => 'integer', 'null' => false, 'default' => null),
 		'origin_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'key' => 'index', 'comment' => 'このレコードの元となったレコードのID | このレコード自身が最初に作られたものである場合、idと同じ | '),
-		'active_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'key' => 'index', 'comment' => 'このレコードがオリジナルレコード(id = root_id)である場合、現時点での公開されているレコードのIDが入る'),
-		'latest_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'key' => 'index'),
+		'is_active' => array('type' => 'boolean', 'null' => false, 'default' => '0', 'comment' => '公開中データか否か'),
+		'is_latest' => array('type' => 'boolean', 'null' => false, 'default' => '0', 'comment' => '最新編集データであるか否か'),
+		'status' => array('type' => 'integer', 'null' => true, 'default' => null, 'length' => 4),
 		'questionnaire_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'key' => 'index'),
 		'page_title' => array('type' => 'string', 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => 'ページ名', 'charset' => 'utf8'),
 		'page_sequence' => array('type' => 'integer', 'null' => false, 'default' => null, 'comment' => 'ページ表示順'),
@@ -33,8 +36,6 @@ class QuestionnairePageFixture extends CakeTestFixture {
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'id', 'unique' => 1),
 			'origin_id' => array('column' => 'origin_id', 'unique' => 0),
-			'active_id' => array('column' => 'active_id', 'unique' => 0),
-			'latest_id' => array('column' => 'latest_id', 'unique' => 0),
 			'fk_questionnaire_pages_questionnaires1_idx' => array('column' => 'questionnaire_id', 'unique' => 0)
 		),
 		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'InnoDB')
@@ -48,11 +49,13 @@ class QuestionnairePageFixture extends CakeTestFixture {
 	public $records = array(
 		array(
 			'id' => 1,
-			'origin_id' => 1,
-			'active_id' => 1,
-			'latest_id' => 1,
+			'key' => 'aaa',
+			'language_id' => 1,
+			'is_active' => 1,
+			'is_latest' => 1,
+			'status' => 1,
 			'questionnaire_id' => 1,
-			'page_title' => 'Lorem ipsum dolor sit amet',
+			'page_title' => 'test',
 			'page_sequence' => 1,
 			'is_auto_translated' => 1,
 			'created_user' => 1,

@@ -19,10 +19,12 @@ class QuestionnaireQuestionFixture extends CakeTestFixture {
  */
 	public $fields = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'key' => 'primary'),
-		'origin_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'key' => 'index', 'comment' => 'このレコードの元となったレコードのID | このレコード自身が最初に作られたものである場合、idと同じ | '),
-		'active_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'key' => 'index', 'comment' => 'このレコードがオリジナルレコード(id = root_id)である場合、現時点での公開されているレコードのIDが入る'),
-		'latest_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'key' => 'index'),
-		'questionnaire_page_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'key' => 'index'),
+		'key' => array('type' => 'string', 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+		'language_id' => array('type' => 'integer', 'null' => false, 'default' => null),
+		'origin_id' => array('type' => 'integer', 'null' => false, 'default' => '0', 'key' => 'index', 'comment' => 'このレコードの元となったレコードのID | このレコード自身が最初に作られたものである場合、idと同じ | '),
+		'is_active' => array('type' => 'boolean', 'null' => false, 'default' => '0', 'comment' => '公開中データか否か'),
+		'is_latest' => array('type' => 'boolean', 'null' => false, 'default' => '0', 'comment' => '最新編集データであるか否か'),
+		'status' => array('type' => 'integer', 'null' => true, 'default' => null, 'length' => 4),
 		'question_sequence' => array('type' => 'integer', 'null' => false, 'default' => null, 'comment' => '質問表示順'),
 		'question_value' => array('type' => 'text', 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '質問文', 'charset' => 'utf8'),
 		'question_type' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 4, 'comment' => '質問タイプ | 1:択一選択 | 2:複数選択 | 3:テキスト | 4:テキストエリア | 5:マトリクス（択一） | 6:マトリクス（複数） | 7:日付・時刻 | 8:リスト
@@ -38,6 +40,8 @@ class QuestionnaireQuestionFixture extends CakeTestFixture {
 		'result_display_type' => array('type' => 'integer', 'null' => true, 'default' => null, 'length' => 4, 'comment' => '表示形式デファイン値が｜区切りで保存される | 0:棒グラフ（マトリクスのときは自動的に積み上げ棒グラフ） | 1:円グラフ | 2:表
 '),
 		'is_auto_translated' => array('type' => 'boolean', 'null' => true, 'default' => '0'),
+		'questionnaire_page_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'key' => 'index'),
+
 		'created_user' => array('type' => 'integer', 'null' => true, 'default' => null),
 		'created' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'modified_user' => array('type' => 'integer', 'null' => true, 'default' => null),
@@ -45,9 +49,7 @@ class QuestionnaireQuestionFixture extends CakeTestFixture {
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'id', 'unique' => 1),
 			'fk_questionnaire_question_questionnaire_page1_idx' => array('column' => 'questionnaire_page_id', 'unique' => 0),
-			'active_id' => array('column' => 'active_id', 'unique' => 0),
 			'origin_id' => array('column' => 'origin_id', 'unique' => 0),
-			'latest_id' => array('column' => 'latest_id', 'unique' => 0)
 		),
 		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'InnoDB')
 	);
@@ -60,10 +62,12 @@ class QuestionnaireQuestionFixture extends CakeTestFixture {
 	public $records = array(
 		array(
 			'id' => 1,
+			'key' => 'qqq',
+			'language_id' => 0,
 			'origin_id' => 1,
-			'active_id' => 1,
-			'latest_id' => 1,
-			'questionnaire_page_id' => 1,
+			'is_active' => 1,
+			'is_latest' => 1,
+			'status' => 1,
 			'question_sequence' => 1,
 			'question_value' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.',
 			'question_type' => 1,
@@ -77,6 +81,7 @@ class QuestionnaireQuestionFixture extends CakeTestFixture {
 			'is_result_display' => 1,
 			'result_display_type' => 1,
 			'is_auto_translated' => 1,
+			'questionnaire_page_id' => 1,
 			'created_user' => 1,
 			'created' => '2015-04-13 06:39:20',
 			'modified_user' => 1,

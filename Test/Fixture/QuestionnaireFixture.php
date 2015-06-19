@@ -19,9 +19,11 @@ class QuestionnaireFixture extends CakeTestFixture {
  */
 	public $fields = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'key' => 'primary'),
+		'key' => array('type' => 'string', 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+		'language_id' => array('type' => 'integer', 'null' => false, 'default' => null),
 		'origin_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'key' => 'index', 'comment' => 'このレコードの元となったレコードのID | このレコード自身が最初に作られたものである場合、idと同じ | '),
-		'active_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'key' => 'index', 'comment' => 'このレコードがオリジナルレコード(id = origin_id)である場合、現時点での公開されているレコードのIDが入る'),
-		'latest_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'key' => 'index'),
+		'is_active' => array('type' => 'boolean', 'null' => false, 'default' => '0', 'comment' => '公開中データか否か'),
+		'is_latest' => array('type' => 'boolean', 'null' => false, 'default' => '0', 'comment' => '最新編集データであるか否か'),
 		'block_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'key' => 'index'),
 		'status' => array('type' => 'integer', 'null' => true, 'default' => null, 'length' => 4, 'comment' => 'public status, 1: public, 2: public pending, 3: draft during 4: remand | 公開状況  1:公開中、2:公開申請中、3:下書き中、4:差し戻し |'),
 		'title' => array('type' => 'string', 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => 'アンケートタイトル', 'charset' => 'utf8'),
@@ -33,7 +35,7 @@ class QuestionnaireFixture extends CakeTestFixture {
 		'is_anonymity' => array('type' => 'boolean', 'null' => true, 'default' => '0', 'comment' => '会員回答であっても匿名扱いとするか否か | 0:非匿名 | 1:匿名'),
 		'is_key_pass_use' => array('type' => 'boolean', 'null' => true, 'default' => '0', 'comment' => 'キーフレーズによる回答ガードを設けるか | 0:キーフレーズガードは用いない | 1:キーフレーズガードを用いる'),
 		'key_phrase' => array('type' => 'string', 'null' => true, 'default' => 'NetCommons', 'length' => 128, 'collate' => 'utf8_general_ci', 'comment' => 'キーフレーズ', 'charset' => 'utf8'),
-		'is_repeate_allow' => array('type' => 'boolean', 'null' => true, 'default' => '0', 'comment' => '繰り返し回答を許可するか | 0:許可しない | 1:許可する'),
+		'is_repeat_allow' => array('type' => 'boolean', 'null' => true, 'default' => '0', 'comment' => '繰り返し回答を許可するか | 0:許可しない | 1:許可する'),
 		'is_total_show' => array('type' => 'boolean', 'null' => true, 'default' => '1', 'comment' => '集計結果を表示するか否か | 0:表示しない | 1:表示する'),
 		'total_show_timing' => array('type' => 'integer', 'null' => true, 'default' => '0', 'length' => 4, 'comment' => '集計結果を表示するタイミング | 0:アンケート回答後、すぐ | 1:期間設定'),
 		'total_show_start_peirod' => array('type' => 'datetime', 'null' => true, 'default' => null, 'comment' => '集計結果表示開始日時 total_show_timingが1のとき有効 画面表示時、NULLの場合、自動的に回答締切日時が設定される（回答締切がない場合は現在日時）'),
@@ -54,10 +56,8 @@ class QuestionnaireFixture extends CakeTestFixture {
 		'modified' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'id', 'unique' => 1),
+			'fk_questionnaires_blocks1_idx' => array('column' => 'block_id', 'unique' => 0),
 			'origin_id' => array('column' => 'origin_id', 'unique' => 0),
-			'active_id' => array('column' => 'active_id', 'unique' => 0),
-			'latest_id' => array('column' => 'latest_id', 'unique' => 0),
-			'fk_questionnaires_blocks1_idx' => array('column' => 'block_id', 'unique' => 0)
 		),
 		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'InnoDB')
 	);
@@ -70,11 +70,13 @@ class QuestionnaireFixture extends CakeTestFixture {
 	public $records = array(
 		array(
 			'id' => 1,
+			'key' => '41ef6012e7574886c9a52fb598f8c5f8',
+			'language_id' => 1,
 			'origin_id' => 1,
-			'active_id' => 1,
-			'latest_id' => 1,
+			'is_active' => 1,
+			'is_latest' => 1,
 			'block_id' => 1,
-			'status' => 1,
+			'status' => 3,
 			'title' => 'Lorem ipsum dolor sit amet',
 			'sub_title' => 'Lorem ipsum dolor sit amet',
 			'is_period' => 1,
@@ -84,7 +86,7 @@ class QuestionnaireFixture extends CakeTestFixture {
 			'is_anonymity' => 1,
 			'is_key_pass_use' => 1,
 			'key_phrase' => 'Lorem ipsum dolor sit amet',
-			'is_repeate_allow' => 1,
+			'is_repeat_allow' => 1,
 			'is_total_show' => 1,
 			'total_show_timing' => 1,
 			'total_show_start_peirod' => '2015-04-13 06:34:19',
