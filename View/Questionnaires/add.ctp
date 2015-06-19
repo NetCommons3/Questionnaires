@@ -16,7 +16,8 @@
 <div id="nc-questionnaires-setting-list-<?php echo (int)$frameId; ?>"
 	 ng-controller="Questionnaires.add"
 	 ng-init="initialize(<?php echo (int)$frameId; ?>,
-									<?php echo h(json_encode($questionnaires)); ?>)">
+									<?php echo h(json_encode($jsPastQuestionnaires)); ?>,
+									'<?php echo $createOption; ?>')">
 
 	<div class="modal-body">
 			<div class="row">
@@ -59,7 +60,7 @@
 					<div  collapse="createOption != '<?php echo QUESTIONNAIRE_CREATE_OPT_NEW; ?>'">
 						<?php echo $this->Form->input('title', array(
 						'class' => 'form-control',
-						'label' => $this->element('NetCommons.required') . __d('questionnaires', 'Questionnaire title'),
+						'label' => __d('questionnaires', 'Questionnaire title') . $this->element('NetCommons.required'),
 						'ng-model' => 'newTitle',
 						'placeholder' => __d('questionnaires', 'Please input questionnaire title')
 						)); ?>
@@ -84,19 +85,19 @@
 							<?php echo __d('questionnaires', 'Past questionnaire'); ?>
 							<?php echo $this->element('NetCommons.required'); ?>
 						</label>
-						<input type="search" id="questionnaires_past_search_filter" class="form-control" ng-model="q.Questionnaire.title" placeholder="<?php echo __d('questionnaires', 'Refine by entering the part of the questionnaire name'); ?>" />
+						<input type="search" id="questionnaires_past_search_filter" class="form-control" ng-model="q.questionnaire.title" placeholder="<?php echo __d('questionnaires', 'Refine by entering the part of the questionnaire name'); ?>" />
 						<ul class="questionnaire-select-box form-control ">
-							<li class="animate-repeat btn-default" ng-repeat="item in questionnaires.items | filter:q" ng-model="$parent.pastQuestionnaireSelect" btn-radio="item.Questionnaire.id" uncheckable>
-								{{item.Questionnaire.title}}
+							<li class="animate-repeat btn-default" ng-repeat="item in questionnaires.items | filter:q" ng-model="$parent.pastQuestionnaireSelect" btn-radio="item.questionnaire.id" uncheckable>
+								{{item.questionnaire.title}}
 
 								<?php echo $this->element('Questionnaires.status_label',
-								array('status' => 'item.Questionnaire.status')); ?>
+								array('status' => 'item.questionnaire.status')); ?>
 
-								<span ng-if="!!item.Questionnaire.is_period">
+								<span ng-if="!!item.questionnaire.isPeriod">
 								(
-									{{item.Questionnaire.start_period | ncDatetime}}
+									{{item.questionnaire.startPeriod | ncDatetime}}
 									<?php echo __d('questionnaires', ' - '); ?>
-									{{item.Questionnaire.end_period | ncDatetime}}
+									{{item.questionnaire.endPeriod | ncDatetime}}
 									<?php echo __d('questionnaires', 'Implementation'); ?>
 								)
 								</span>

@@ -50,7 +50,7 @@ class QuestionnairesAppModel extends AppModel {
  * @param int $userId ユーザID （指定しない場合は null)
  * @return array
  */
-	protected function _getQuestionnairesCommonForAnswer($sessionId, $userId) {
+	public function getQuestionnairesCommonForAnswer($sessionId, $userId) {
 		$dbo = $this->getDataSource();
 		$this->loadModels([
 			'QuestionnaireAnswerSummary' => 'Questionnaires.QuestionnaireAnswerSummary',

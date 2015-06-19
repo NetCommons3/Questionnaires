@@ -60,51 +60,17 @@ NetCommonsApp.controller('Questionnaires.edit',
       };
     });
 NetCommonsApp.controller('Questionnaires.add',
-    function($scope, NetCommonsBase, NetCommonsWysiwyg,
-             NetCommonsUser) {
-
-      /**
-         * show user information method
-         *
-         * @param {number} users.id
-         * @return {string}
-         */
-      $scope.user = NetCommonsUser.new();
-
-      /**
-         * serverValidationClear method
-         *
-         * @param {number} users.id
-         * @return {string}
-         */
-      $scope.serverValidationClear = NetCommonsBase.serverValidationClear;
-
-      /**
-         * variables
-         *
-         * @type {Object.<string>}
-         */
-      var variables = {
-        /**
-             * Relative path to Questionnaires.bootstrap
-             *
-             * @const
-             */
-        QUESTIONNAIRE_CREATE_OPT_NEW: 'create',
-        QUESTIONNAIRE_CREATE_OPT_REUSE: 'reuse'
-      };
+    function($scope, NetCommonsBase, NetCommonsWysiwyg) {
 
       /**
          * Initialize
          *
          * @return {void}
          */
-      $scope.initialize = function(frameId, questionnaires) {
+      $scope.initialize = function(frameId, questionnaires, createOption) {
         $scope.frameId = frameId;
         $scope.questionnaires = questionnaires;
-        if ($scope.questionnaires.items.length == 0) {
-          $scope.createOption = variables.QUESTIONNAIRE_CREATE_OPT_NEW;
-        }
+        $scope.createOption = createOption;
       };
       /**
          * Questionnaire EnterSubmit gard

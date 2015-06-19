@@ -257,132 +257,10 @@ class Questionnaire extends QuestionnairesAppModel {
 	}
 
 /**
- * _findGetQListWithAnsCnt
- * custom "find" function called from pagination
- *
- * @param string $state find status before find or after find
- * @param array $query find query
- * @param array $results found records
- * @access protected
- * @return array
- */
-	protected function _findGetQListWithAnsCnt($state, $query, $results = array()) {
-		if ($state == 'before') {
-			//$this->unbindModel(
-			//	array('hasMany' => array('QuestionnairePage'))
-			//);
-			return $query;
-		} elseif ($state == 'after') {
-			return $results;
-		}
-		return $results;
-	}
-
-/**
- * Removes 'fields' key from count query on custom finds when it is an array,
- * as it will completely break the Model::_findCount() call
- *
- * @param string $state Either "before" or "after"
- * @param array $query find query
- * @param array $results found records
- * @return int The number of records found, or false
- * @access protected
- * @see Model::find()
- */
-	protected function _findCount($state, $query, $results = array()) {
-		if ($state === 'before') {
-			if (isset($query['type']) && isset($this->findMethods[$query['type']])) {
-				$query = $this->{'_find' . ucfirst($query['type'])}('before', $query);
-				if (!empty($query['fields']) && is_array($query['fields'])) {
-					if (!preg_match('/^count/i', current($query['fields']))) {
-						unset($query['fields']);
-					}
-				}
-			}
-		}
-		return parent::_findCount($state, $query, $results);
-	}
-
-/**
- * paginate paginate method override function
- *
- * @param null $conditions conditions
- * @param null $fields find fields
- * @param null $order order
- * @param null $limit limit
- * @param int $page page number
- * @param null $recursive query recursive nest
- * @param array $extra extra data
- * @return mixed
- */
-	public function paginate($conditions = null, $fields = null, $order = null, $limit = null, $page = 1, $recursive = null, $extra = array()) {
-		if (!empty($conditions)) {
-			$params['conditions'] = $conditions;
-		}
-		if (!empty($fields)) {
-			$params['fields'] = $fields;
-		}
-		if (!empty($order)) {
-			$params['order'] = $order;
-		}
-		if (!empty($limit)) {
-			$params['limit'] = $limit;
-		}
-		if (!empty($page)) {
-			$params['page'] = $page;
-		}
-		if (!empty($recursive)) {
-			$params['recursive'] = $recursive;
-		}
-
-		if (!empty($extra['type']) && $extra['type'] == 'getQListWithAnsCnt') {
-			//カスタム設定
-			$subQuery = $this->_getQuestionnairesCommonForAnswer($extra['sessionId'], $extra['userId']);
-
-			$params['joins'] =	$subQuery;
-			$params['fields'] = array(
-				'Block.*',
-				'Questionnaire.*',
-				'CreatedUser.*',
-				'ModifiedUser.*',
-				'CountAnswerSummary.*'
-			);
-			return $this->find('getQListWithAnsCnt', $params);
-		} else {
-			//普通のpagination設定
-			return $this->find('all', $params);
-		}
-	}
-
-/**
- * paginate paginateCount method override function
- *
- * @param null $conditions get conditions
- * @param int $recursive recursive nest
- * @param array $extra extra data
- * @return int
- */
-	public function paginateCount($conditions = null, $recursive = 0, $extra = array()) {
-		if (!empty($conditions)) {
-			$params['conditions'] = $conditions;
-		}
-		if (!empty($recursive)) {
-			$params['recursive'] = $recursive;
-		}
-
-		if (!empty($extra['type']) && $extra['type'] == 'getQListWithAnsCnt') {
-			//カスタム設定
-			$subQuery = $this->_getQuestionnairesCommonForAnswer($extra['sessionId'], $extra['userId']);
-			$params['joins'] = $subQuery;
-		}
-		return $this->find('count', $params);
-	}
-
-/**
  * geQuestionnairesList
  * get questionnaires by specified block id and specified user id limited number
  *
- * @param array $viewVars netCommons variable parameters
+ * @param array $conditions find condition
  * @param string $sessionId Session id
  * @param int $userId User id （if not specified, null)
  * @param array $filter Narrowing conditions currently envisioned answer status , editing status
@@ -391,19 +269,8 @@ class Questionnaire extends QuestionnairesAppModel {
  * @param int $limit limit number of select
  * @return array
  */
-	public function getQuestionnairesList($viewVars, $sessionId, $userId, $filter, $sort = 'modified DESC', $offset = 0, $limit = QUESTIONNAIRE_DEFAULT_DISPLAY_NUM_PER_PAGE) {
-		$conditions = array_merge($filter, array(
-			'block_id' => $viewVars['blockId'],
-		));
-		if (!$viewVars['contentEditable']) {
-			$conditions['is_active'] = true;
-			$conditions['start_period <'] = date('Y-m-d h:i:s');
-		} else {
-			$conditions['is_latest'] = true;
-		}
-
-		$subQuery = $this->_getQuestionnairesCommonForAnswer($sessionId, $userId);
-
+	public function getQuestionnairesList($conditions, $sessionId, $userId, $filter, $sort = 'modified DESC', $offset = 0, $limit = QUESTIONNAIRE_DEFAULT_DISPLAY_NUM_PER_PAGE) {
+		$subQuery = $this->getQuestionnairesCommonForAnswer($sessionId, $userId);
 		$this->unbindModel(
 			array('hasMany' => array('QuestionnairePage'))
 		);
@@ -428,19 +295,21 @@ class Questionnaire extends QuestionnairesAppModel {
  * getDefaultQuestionnaire
  * get default data of questionnaires
  *
+ * @param array $addData add data to Default data
  * @return array
  */
-	public function getDefaultQuestionnaire() {
+	public function getDefaultQuestionnaire($addData) {
 		$this->loadModels([
 			'QuestionnairePage' => 'Questionnaires.QuestionnairePage',
 		]);
-		$questionnaire = array(
-			'Questionnaire' => array(
+		$questionnaire = array();
+		$questionnaire['Questionnaire'] = Hash::merge(
+			array(
 				'title' => '',
 				'key' => '',
 				'status' => NetCommonsBlockComponent::STATUS_IN_DRAFT,
 				'is_total_show' => QuestionnairesComponent::EXPRESSION_SHOW),
-		);
+			$addData);
 
 		if (!isset($questionnaire['QuestionnairePage'][0])) {
 			$questionnaire['QuestionnairePage'][0] = $this->QuestionnairePage->getDefaultPage($questionnaire);
