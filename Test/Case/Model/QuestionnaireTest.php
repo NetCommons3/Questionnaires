@@ -9,12 +9,12 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 
-App::uses('Questionnaire', 'Questionnaires.Model');
+App::uses('QuestionnaireTestBase', 'Questionnaires.Test/Case/Model');
 
 /**
  * Summary for Questionnaire Test Case
  */
-class QuestionnaireTest extends CakeTestCase {
+class QuestionnaireTest extends QuestionnaireTestBase {
 
 /**
  * setUp method
@@ -23,7 +23,6 @@ class QuestionnaireTest extends CakeTestCase {
  */
 	public function setUp() {
 		parent::setUp();
-		$this->Questionnaire = ClassRegistry::init('Questionnaires.Questionnaire');
 	}
 
 /**
@@ -32,16 +31,32 @@ class QuestionnaireTest extends CakeTestCase {
  * @return void
  */
 	public function tearDown() {
-		unset($this->Questionnaire);
-
 		parent::tearDown();
 	}
 
 /**
- * testIndex method
+ * afterFind method
  *
  * @return void
  */
-	public function testIndex() {
+	public function testafterFind() {
+		//初期処理
+		$this->setUp();
+
+		//データの生成
+		$primary = false;
+
+		$results = $this->Questionnaire->find('all');
+		$results[0]['Questionnaire']['all_answer_count'] = 0;
+
+		// 処理実行
+		$result = $this->Questionnaire->afterFind($results, $primary);
+
+		// テスト実施('all_answer_count'が1に更新されていること)
+		$this->assertEquals($result[0]['Questionnaire']['all_answer_count'], 1);
+
+		//終了処理
+		$this->tearDown();
 	}
+
 }

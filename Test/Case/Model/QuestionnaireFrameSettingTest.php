@@ -23,9 +23,6 @@ class QuestionnaireFrameSettingTest extends QuestionnaireTestBase {
  */
 	public function setUp() {
 		parent::setUp();
-		//$this->QuestionnaireFrameSetting = ClassRegistry::init('Questionnaires.QuestionnaireFrameSetting');
-		//$this->Frame = ClassRegistry::init();
-		//YACakeTestCase::loadTestPlugin($this, 'Frames','ModelWithAfterFrameSaveTestPlugin');
 	}
 
 /**
@@ -34,7 +31,6 @@ class QuestionnaireFrameSettingTest extends QuestionnaireTestBase {
  * @return void
  */
 	public function tearDown() {
-		unset($this->QuestionnaireFrameSetting);
 		parent::tearDown();
 	}
 

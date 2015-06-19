@@ -102,7 +102,7 @@ class QuestionnaireBlocksSettingTest extends QuestionnaireTestBase {
 		$result = $this->QuestionnaireBlocksSetting->saveQuestionnaireBlocksSetting($data);
 
 		// テスト実施
-		$this->assertFalse($result);//※Trueにしてみる、メモ2015.6.11
+		$this->assertFalse($result);
 
 		//終了処理
 		$this->tearDown();
