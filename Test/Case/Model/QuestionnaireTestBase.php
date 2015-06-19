@@ -40,7 +40,6 @@ class QuestionnaireTestBase extends QuestionnaireModelTestBase {
 		//↑ここまでがModelの各クラス
 		$this->Block = ClassRegistry::init('Blocks.Block');
 		$this->Frame = ClassRegistry::init('Frames.Frame');
-		$this->User = ClassRegistry::init('Users.User');
 	}
 
 /**
@@ -60,7 +59,15 @@ class QuestionnaireTestBase extends QuestionnaireModelTestBase {
 		unset($this->QuestionnaireAnswer);
 		unset($this->Block);
 		unset($this->Frame);
-		unset($this->User);
 		parent::tearDown();
 	}
+
+/**
+ * testIndex method
+ *
+ * @return void
+ */
+	public function testIndex() {
+	}
+
 }
