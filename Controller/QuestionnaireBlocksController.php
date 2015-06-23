@@ -103,6 +103,7 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
 		// Modelの方ではカスタムfindメソッドを装備している
 		// ここではtype属性を指定することでカスタムFindを呼び出すように指示している
 		try {
+			$subQuery = $this->Questionnaire->getQuestionnairesCommonForAnswer($this->Session->id(), $this->Auth->user('id'));
 			$this->paginate = array(
 				'conditions' => $conditions,
 				'page' => 1,
@@ -110,7 +111,14 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
 				'limit' => QUESTIONNAIRE_DEFAULT_DISPLAY_NUM_PER_PAGE,
 				'direction' => 'desc',
 				'recursive' => 0,
-				'type' => 'getQListWithAnsCnt',
+				'joins' => $subQuery,
+				'fields' => array(
+					'Block.*',
+					'Questionnaire.*',
+					'CreatedUser.*',
+					'ModifiedUser.*',
+					'CountAnswerSummary.*'
+				),
 				'sessionId' => $this->Session->id(),
 				'userId' => $this->Auth->user('id')
 			);
@@ -120,7 +128,7 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
 			// アンケートデータが存在しないこととする
 			$questionnaire = array();
 		}
-		$this->set('questionnaires', $this->camelizeKeyRecursive($questionnaire));
+		$this->set('questionnaires', $questionnaire);
 	}
 
 /**

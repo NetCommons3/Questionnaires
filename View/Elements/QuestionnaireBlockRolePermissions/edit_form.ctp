@@ -15,7 +15,7 @@
 )); ?>
 
 <?php echo $this->Form->hidden('QuestionnaireBlocksSetting.block_key', array(
-'value' => isset($questionnaireBlocksSetting['blockKey']) ? $questionnaireBlocksSetting['blockKey'] : null,
+'value' => isset($questionnaireBlocksSetting['block_key']) ? $questionnaireBlocksSetting['block_key'] : null,
 )); ?>
 
 <?php echo $this->Form->hidden('Block.id', array(

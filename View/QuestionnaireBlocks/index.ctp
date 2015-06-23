@@ -53,18 +53,18 @@
 						</td>
 						<td>
 							<a href="<?php echo $this->Html->url(
-										'/questionnaires/questionnaire_questions/edit/' . $frameId . '/?questionnaire_id=' . $questionnaire['questionnaire']['id']) ?>">
-								<?php echo h($questionnaire['questionnaire']['title']); ?>
+										'/questionnaires/questionnaire_questions/edit/' . $frameId . '/?questionnaire_id=' . $questionnaire['Questionnaire']['id']) ?>">
+								<?php echo h($questionnaire['Questionnaire']['title']); ?>
 							</a>
 						</td>
 						<td>
-							<?php echo $this->Date->dateFormat($questionnaire['questionnaire']['modified']); ?>
+							<?php echo $this->Date->dateFormat($questionnaire['Questionnaire']['modified']); ?>
 						</td>
 						<td>
-							<?php if ($questionnaire['questionnaire']['allAnswerCount'] > 0): ?>
+							<?php if ($questionnaire['Questionnaire']['all_answer_count'] > 0): ?>
 							<a class="btn btn-warning"
 							   href="<?php echo $this->Html->url(
-										'download/' . $frameId . '/' . $questionnaire['questionnaire']['originId']) ?>">
+										'download/' . $frameId . '/' . $questionnaire['Questionnaire']['origin_id']) ?>">
 								<span class="glyphicon glyphicon-download" ></span>
 							</a>
 							<?php endif; ?>

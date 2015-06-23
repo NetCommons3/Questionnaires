@@ -74,10 +74,6 @@ class QuestionnaireBlockRolePermissionsController extends QuestionnaireBlocksCon
  */
 	public function beforeFilter() {
 		parent::beforeFilter();
-
-		$results = $this->camelizeKeyRecursive($this->NetCommonsFrame->data);
-		$this->set($results);
-
 		//タブの設定
 		$this->initTabs('role_permissions');
 	}
@@ -112,7 +108,6 @@ class QuestionnaireBlockRolePermissionsController extends QuestionnaireBlocksCon
 				)
 			);
 		}
-		$blockSetting = $this->camelizeKeyRecursive($blockSetting);
 		$this->set($blockSetting);
 
 		if (! $block = $this->Block->find('first', array(

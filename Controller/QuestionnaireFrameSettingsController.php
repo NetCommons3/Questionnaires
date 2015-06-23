@@ -76,11 +76,6 @@ class QuestionnaireFrameSettingsController extends QuestionnaireBlocksController
  */
 	public function beforeFilter() {
 		parent::beforeFilter();
-		$this->Auth->deny('index');
-
-		$results = $this->camelizeKeyRecursive($this->NetCommonsFrame->data);
-		$this->set($results);
-
 		//タブの設定
 		$this->initTabs('frame_settings');
 	}
