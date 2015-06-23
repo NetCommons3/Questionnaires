@@ -25,12 +25,14 @@ echo $this->Html->css(
 		'inline' => false
 	)
 );
-echo $this->element('Questionnaires.Answers/answer_test_mode_header');
 ?>
 
 <articel>
 
-	<?php echo $this->element('Questionnaires.Answers/answer_header'); ?>
+	<?php
+	echo $this->element('Questionnaires.Answers/answer_test_mode_header');
+	echo $this->element('Questionnaires.Answers/answer_header');
+	?>
 
 	<?php echo $this->Form->create('PreAnswer', array(
 	'name' => 'questionnaire_form_answer',
@@ -41,19 +43,20 @@ echo $this->element('Questionnaires.Answers/answer_test_mode_header');
 	<?php echo $this->Form->hidden('id'); ?>
 	<?php echo $this->Form->hidden('Frame.id', array('value' => $frameId)); ?>
 	<?php echo $this->Form->hidden('Block.id', array('value' => $blockId)); ?>
-	<?php echo $this->Form->hidden('Questionnaire.id', array('value' => $questionnaire['questionnaire']['id'])); ?>
-	<?php if ($questionnaire['questionnaire']['isKeyPassUse'] == QuestionnairesComponent::USES_USE): ?>
-	<p>
-		<?php echo __d('questionnaires', 'This questionnaire has been guarded by the key phrase. Please enter the first key phrase To answer .'); ?>
+	<?php echo $this->Form->hidden('Questionnaire.id', array('value' => $questionnaire['Questionnaire']['id'])); ?>
+
+	<?php if ($questionnaire['Questionnaire']['is_key_pass_use'] == QuestionnairesComponent::USES_USE): ?>
+		<p>
+			<?php echo __d('questionnaires', 'This questionnaire has been guarded by the key phrase. Please enter the first key phrase To answer .'); ?>
 		</p>
 		<?php echo $this->Form->input('key_phrase', array(
 			'div' => 'form-group',
 			'label' => __d('questionnaires', 'Please input Key-Phrase'),
 			'class' => 'form-control'
 		));?>
-		<?php if (isset($errors['preAnswer']['keyPhrase'])): ?>
+		<?php if (isset($errors['PreAnswer']['key_phrase'])): ?>
 		<div class="has-error">
-			<?php foreach ($errors['preAnswer']['keyPhrase'] as $message): ?>
+			<?php foreach ($errors['PreAnswer']['key_phrase'] as $message): ?>
 			<div class="help-block">
 				<?php echo $message ?>
 			</div>
@@ -61,23 +64,23 @@ echo $this->element('Questionnaires.Answers/answer_test_mode_header');
 		</div>
 		<?php endif ?>
 
-	<?php echo $this->element(
-		'NetCommons.errors', [
-		'errors' => $this->validationErrors,
-		'model' => 'questionnaire',
-		'field' => 'keyPhrase',
-		]) ?>
+		<?php echo $this->element(
+			'NetCommons.errors', [
+			'errors' => $this->validationErrors,
+			'model' => 'Questionnaire',
+			'field' => 'key_phrase',
+			]) ?>
 	<?php endif ?>
 
-	<?php if ($questionnaire['questionnaire']['isImageAuthentication'] == QuestionnairesComponent::USES_USE): ?>
+	<?php if ($questionnaire['Questionnaire']['is_image_authentication'] == QuestionnairesComponent::USES_USE): ?>
 		<?php echo $this->element(
 			'NetCommons.visual_captcha', [
 			'elementId' => 'questionnaire-captcha',
 			'path' => 'questionnaires/questionnaire_answers/',
 			]) ?>
-		<?php if (isset($errors['preAnswer']['imageAuth'])): ?>
+		<?php if (isset($errors['PreAnswer']['image_auth'])): ?>
 		<div class="has-error">
-			<?php foreach ($errors['preAnswer']['imageAuth'] as $message): ?>
+			<?php foreach ($errors['PreAnswer']['image_auth'] as $message): ?>
 			<div class="help-block">
 				<?php echo $message ?>
 			</div>

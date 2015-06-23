@@ -744,6 +744,8 @@ msgstr ""
 #: /View/Questionnaires/edit.ctp:84
 msgid "set the answer period"
 msgstr ""
+msgid "do not set the answer period"
+msgstr ""
 
 #: /View/Questionnaires/edit.ctp:85
 msgid "After approval will be immediately published . Stop of the questionnaire to select the stop from the questionnaire data list ."
@@ -772,25 +774,39 @@ msgstr ""
 #: /View/Questionnaires/edit.ctp:170
 msgid "accept the non-members answer"
 msgstr ""
+msgid "do not accept the non-members answer"
+msgstr ""
 
 #: /View/Questionnaires/edit.ctp:188
 msgid "use key phrase"
+msgstr ""
+msgid "do use key phrase"
+msgstr ""
+msgid "key phrase"
 msgstr ""
 
 #: /View/Questionnaires/edit.ctp:216
 msgid "anonymous answer"
 msgstr ""
+msgid "register answer"
+msgstr ""
 
 #: /View/Questionnaires/edit.ctp:234
 msgid "forgive the repetition of the answer"
+msgstr ""
+msgid "do not forgive the repetition of the answer"
 msgstr ""
 
 #: /View/Questionnaires/edit.ctp:252
 msgid "do image authentication"
 msgstr ""
+msgid "do not image authentication"
+msgstr ""
 
 #: /View/Questionnaires/edit.ctp:270
-msgid "Deliver e-mail when submitted?"
+msgid "Deliver e-mail when submitted"
+msgstr ""
+msgid "do not deliver e-mail when submitted"
 msgstr ""
 
 #: /View/Questionnaires/edit.ctp:284
@@ -841,4 +857,7 @@ msgstr ""
 
 
 msgid "You are starting the questionnaire.\\n Once you start, you cannnot edit it. \\n Is it OK?"
+msgstr ""
+
+msgid "Start the test answers of this questionnaire"
 msgstr ""

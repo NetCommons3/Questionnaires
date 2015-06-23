@@ -13,9 +13,7 @@
 		/*
 				$name
 				$label
-				$diabled
 				$input
-				$isPublished
 		*/
 ?>
 <div class="row form-group">
@@ -27,7 +25,7 @@
 		<?php echo $input; ?>
 		<?php echo $this->element(
 		'Questionnaires.errors', array(
-		'errorArrayName' => 'errors.QuestionnairePage[pageIndex].QuestionnaireQuestion[qIndex].' . $name,
+		'errorArrayName' => 'question.errorMessages.' . $jsName,
 		)); ?>
 	</div>
 </div>

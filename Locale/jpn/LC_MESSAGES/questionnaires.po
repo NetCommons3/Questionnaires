@@ -744,6 +744,8 @@ msgstr "アンケート回答期間"
 #: /View/Questionnaires/edit.ctp:84
 msgid "set the answer period"
 msgstr "回答期間を設定する"
+msgid "do not set the answer period"
+msgstr "回答期間を制限しない"
 
 #: /View/Questionnaires/edit.ctp:85
 msgid "After approval will be immediately published . Stop of the questionnaire to select the stop from the questionnaire data list ."
@@ -756,6 +758,8 @@ msgstr "集計結果公開期間"
 #: /View/Questionnaires/edit.ctp:135
 msgid "set the aggregate display period"
 msgstr "公開期間を設定する"
+msgid "do not set the aggregate display period"
+msgstr "公開期間を制限しない"
 
 #: /View/Questionnaires/edit.ctp:136
 msgid "If not set , it will be displayed after the respondent answers."
@@ -772,26 +776,40 @@ msgstr "アンケート方式"
 #: /View/Questionnaires/edit.ctp:170
 msgid "accept the non-members answer"
 msgstr "非会員の回答を受け付ける"
+msgid "do not accept the non-members answer"
+msgstr "非会員の回答を受け付けない"
 
 #: /View/Questionnaires/edit.ctp:188
 msgid "use key phrase"
 msgstr "キーフレーズを使う"
+msgid "do not use key phrase"
+msgstr "キーフレーズは使わない"
+msgid "key phrase"
+msgstr "キーフレーズ"
 
 #: /View/Questionnaires/edit.ctp:216
 msgid "anonymous answer"
 msgstr "匿名の回答とする"
+msgid "register answer"
+msgstr "記名式回答とする"
 
 #: /View/Questionnaires/edit.ctp:234
 msgid "forgive the repetition of the answer"
 msgstr "繰り返しの回答をさせる"
+msgid "do not forgive the repetition of the answer"
+msgstr "繰り返し回答は許さない"
 
 #: /View/Questionnaires/edit.ctp:252
 msgid "do image authentication"
 msgstr "画像認証を行う"
+msgid "do not image authentication"
+msgstr "画像認証は行わない"
 
 #: /View/Questionnaires/edit.ctp:270
-msgid "Deliver e-mail when submitted?"
+msgid "Deliver e-mail when submitted"
 msgstr "提出されたらメールで通知する"
+msgid "do not deliver e-mail when submitted"
+msgstr "回答時のメール通知は行わない"
 
 #: /View/Questionnaires/edit.ctp:284
 msgid "Thanks page message settings"
@@ -849,3 +867,6 @@ msgstr "このアンケートは回答できません。"
 
 msgid "You are starting the questionnaire.\\n Once you start, you cannnot edit it. \\n Is it OK?"
 msgstr "このアンケートを実施します。\n実施しますと修正はできません。\nよろしいですか？"
+
+msgid "Start the test answers of this questionnaire"
+msgstr "このアンケートのテスト回答を始める"

@@ -16,8 +16,8 @@
 				<?php echo $this->Form->checkbox('QuestionnairePage.' . $pageIndex . '.QuestionnaireQuestion.' . $qIndex . '.question_type_option',
 				array(
 				'value' => QuestionnairesComponent::TYPE_OPTION_NUMERIC,
-				'ng-model' => 'question.question_type_option',
-				'ng-checked' => 'question.question_type_option == ' . QuestionnairesComponent::TYPE_OPTION_NUMERIC
+				'ng-model' => 'question.questionTypeOption',
+				'ng-checked' => 'question.questionTypeOption == ' . QuestionnairesComponent::TYPE_OPTION_NUMERIC
 				));
 				?>
 				<?php echo __d('questionnaires', 'Please check if you want to limit the input to the numerical value.'); ?>
@@ -25,7 +25,7 @@
 		</div>
 	</div>
 	<div class="col-sm-6">
-		<div class="form-inline" ng-if="question.question_type_option == <?php echo QuestionnairesComponent::TYPE_OPTION_NUMERIC; ?>">
+		<div class="form-inline" ng-if="question.questionTypeOption == <?php echo QuestionnairesComponent::TYPE_OPTION_NUMERIC; ?>">
 			<?php echo $this->Form->input('QuestionnairePage.' . $pageIndex . '.QuestionnaireQuestion.' . $qIndex . '.min',
 			array(
 			'div' => array('class' => 'form-group'),
@@ -37,12 +37,12 @@
 		</div>
 		<?php echo $this->element(
 		'Questionnaires.errors', array(
-		'errorArrayName' => 'errors.QuestionnairePage[pageIndex].QuestionnaireQuestion[qIndex].min',
+		'errorArrayName' => 'question.errorMessages.min',
 		)); ?>
 	</div>
 
 	<div class="col-sm-6">
-		<div class="form-inline" ng-if="question.question_type_option == <?php echo QuestionnairesComponent::TYPE_OPTION_NUMERIC; ?>">
+		<div class="form-inline" ng-if="question.questionTypeOption == <?php echo QuestionnairesComponent::TYPE_OPTION_NUMERIC; ?>">
 			<?php echo $this->Form->input('QuestionnairePage.' . $pageIndex . '.QuestionnaireQuestion.' . $qIndex . '.max',
 			array(
 			'div' => array('class' => 'form-group'),
@@ -54,7 +54,7 @@
 		</div>
 		<?php echo $this->element(
 		'Questionnaires.errors', array(
-		'errorArrayName' => 'errors.QuestionnairePage[pageIndex].QuestionnaireQuestion[qIndex].max',
+		'errorArrayName' => 'question.errorMessages.max',
 		)); ?>
 	</div>
 </div>

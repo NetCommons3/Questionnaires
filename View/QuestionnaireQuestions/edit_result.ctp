@@ -17,8 +17,7 @@
 	 ng-controller="Questionnaires.edit.question"
 	 ng-init="initialize(<?php echo (int)$frameId; ?>,
 	 						<?php echo (int)$isPublished; ?>,
-							<?php echo h(json_encode($questionnaire)); ?>,
-							<?php echo h(json_encode($questionnaireValidationErrors)); ?>)">
+							<?php echo h(json_encode($jsQuestionnaire)); ?>)">
 
 	<?php echo $this->Form->create('Questionnaire', array(
 	'type' => 'post',
@@ -44,7 +43,7 @@
 			</div>
 
 			<div class="bg-info">
-				<h2 class="questionnaire-setting-ttl">{{questionnaire.Questionnaire.title}}</h2>
+				<h2 class="questionnaire-setting-ttl">{{questionnaire.questionnaire.title}}</h2>
 				<span class="help-block questionnaire-setting-ttl-help"><?php echo __d('questionnaires', 'Please edit return to create the question screen if you want to change the questionnaire title'); ?></span>
 			</div>
 
@@ -58,11 +57,11 @@
 							'before' => '<div class="radio"><label>',
 							'separator' => '</label></div><div class="radio"><label>',
 							'after' => '</label></div>',
-							'ng-model' => 'questionnaire.Questionnaire.is_total_show'
+							'ng-model' => 'questionnaire.questionnaire.isTotalShow'
 					)); ?>
 			</div>
 
-			<div ng-show="questionnaire.Questionnaire.is_total_show == <?php echo QuestionnairesComponent::EXPRESSION_SHOW; ?>">
+			<div ng-show="questionnaire.questionnaire.isTotalShow == <?php echo QuestionnairesComponent::EXPRESSION_SHOW; ?>">
 
 				<div class="form-group questionnaire-group">
 					<label><?php echo __d('questionnaires', 'Text to be displayed in the aggregate results page'); ?></label>
@@ -70,7 +69,7 @@
 						<?php echo $this->Form->textarea('Questionnaire.total_comment',
 						array(
 						'class' => 'form-control',
-						'ng-model' => 'questionnaire.Questionnaire.total_comment',
+						'ng-model' => 'questionnaire.questionnaire.totalComment',
 						'ui-tinymce' => 'tinymce.options',
 						'rows' => 5,
 						)) ?>
@@ -79,16 +78,16 @@
 
 				<div class="form-group questionnaire-group">
 					<label><?php echo __d('questionnaires', 'Question you want to display the aggregate results'); ?></label>
-					<accordion ng-repeat="(pageIndex, page) in questionnaire.QuestionnairePage">
-						<accordion-group ng-repeat="(qIndex, question) in page.QuestionnaireQuestion" ng-class="{'panel-danger':(errors.QuestionnairePage[pageIndex].QuestionnaireQuestion[qIndex])}">
+					<accordion ng-repeat="(pageIndex, page) in questionnaire.questionnairePage">
+						<accordion-group ng-repeat="(qIndex, question) in page.questionnaireQuestion" ng-class="{'panel-danger':(question.hasError)}">
 							<accordion-heading>
 								<span class="glyphicon" 
 									ng-class="{
-									'glyphicon-eye-open': question.is_result_display == <?php echo QuestionnairesComponent::EXPRESSION_SHOW; ?>,
-									'glyphicon-eye-close': question.is_result_display == <?php echo QuestionnairesComponent::EXPRESSION_NOT_SHOW; ?>}">
+									'glyphicon-eye-open': question.isResultDisplay == <?php echo QuestionnairesComponent::EXPRESSION_SHOW; ?>,
+									'glyphicon-eye-close': question.isResultDisplay == <?php echo QuestionnairesComponent::EXPRESSION_NOT_SHOW; ?>}">
 								</span>
-								{{question.question_value|htmlToPlaintext}}
-								<span ng-if="errors.QuestionnairePage[pageIndex].QuestionnaireQuestion[qIndex]">
+								{{question.questionValue|htmlToPlaintext}}
+								<span ng-if="question.hasError">
 									<?php echo __d('questionnaires', 'There is an error'); ?>
 								</span>
 							</accordion-heading>
@@ -106,20 +105,20 @@
 								'separator' => '</label></div><div class="radio"><label>',
 								'after' => '</label></div>',
 								'hiddenField' => true,
-								'ng-model' => 'question.is_result_display',
-								'ng-disabled' => 'question.question_type == ' . QuestionnairesComponent::TYPE_TEXT . ' || question.question_type == ' . QuestionnairesComponent::TYPE_TEXT_AREA . ' || question.question_type == ' . QuestionnairesComponent::TYPE_DATE_AND_TIME,
+								'ng-model' => 'question.isResultDisplay',
+								'ng-disabled' => 'question.questionType == ' . QuestionnairesComponent::TYPE_TEXT . ' || question.questionType == ' . QuestionnairesComponent::TYPE_TEXT_AREA . ' || question.questionType == ' . QuestionnairesComponent::TYPE_DATE_AND_TIME,
 								)); ?>
 								<?php echo $this->Form->hidden('QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.is_result_display',
 								array(
-								'ng-if' => 'question.question_type == ' . QuestionnairesComponent::TYPE_TEXT . ' || question.question_type == ' . QuestionnairesComponent::TYPE_TEXT_AREA . ' || question.question_type == ' . QuestionnairesComponent::TYPE_DATE_AND_TIME,
-								'ng-value' => 'question.is_result_display',
+								'ng-if' => 'question.questionType == ' . QuestionnairesComponent::TYPE_TEXT . ' || question.questionType == ' . QuestionnairesComponent::TYPE_TEXT_AREA . ' || question.questionType == ' . QuestionnairesComponent::TYPE_DATE_AND_TIME,
+								'ng-value' => 'question.isResultDisplay',
 								)); ?>
 								<?php echo $this->element(
 								'Questionnaires.errors', array(
-								'errorArrayName' => 'errors.QuestionnairePage[pageIndex].QuestionnaireQuestion[qIndex].is_result_display',
+								'errorArrayName' => 'question.errorMessages.isResultDisplay',
 								)); ?>
 							</div>
-							<div ng-show="question.is_result_display == <?php echo QuestionnairesComponent::EXPRESSION_SHOW; ?>">
+							<div ng-show="question.isResultDisplay == <?php echo QuestionnairesComponent::EXPRESSION_SHOW; ?>">
 								<div class="form-group">
 									<label><?php echo __d('questionnaires', 'display type');?></label>
 									<?php echo $this->Form->input('QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.result_display_type',
@@ -132,54 +131,55 @@
 									'before' => '<div class="radio"><label>',
 									'separator' => '</label></div><div class="radio"><label>',
 									'after' => '</label></div>',
-									'ng-model' => 'question.result_display_type'
+									'ng-model' => 'question.resultDisplayType'
 									)); ?>
 								</div>
 								<?php echo $this->element(
 								'Questionnaires.errors', array(
-								'errorArrayName' => 'errors.QuestionnairePage[pageIndex].QuestionnaireQuestion[qIndex].result_display_type',
+								'errorArrayName' => 'question.errorMessages.resultDisplayType',
 								)); ?>
 
-								<div class="form-group" ng-show="question.result_display_type != <?php echo QuestionnairesComponent::RESULT_DISPLAY_TYPE_TABLE; ?>">
+								<div class="form-group" ng-show="question.resultDisplayType != <?php echo QuestionnairesComponent::RESULT_DISPLAY_TYPE_TABLE; ?>">
 									<label><?php echo __d('questionnaires', 'graph color');?></label>
 									<table class="table table-condensed" 
-										ng-show="question.question_type != <?php echo QuestionnairesComponent::TYPE_MATRIX_SELECTION_LIST; ?>
-											&& question.question_type != <?php echo QuestionnairesComponent::TYPE_MATRIX_MULTIPLE; ?>">
-										<tr ng-repeat="(cIndex, choice) in question.QuestionnaireChoice">
+										ng-show="question.questionType != <?php echo QuestionnairesComponent::TYPE_MATRIX_SELECTION_LIST; ?>
+											&& question.questionType != <?php echo QuestionnairesComponent::TYPE_MATRIX_MULTIPLE; ?>">
+										<tr ng-repeat="(cIndex, choice) in question.questionnaireChoice">
 											<td>
 												<div class="col-sm-9">
-													{{choice.choice_label}}
+													{{choice.choiceLabel}}
 
 													<?php echo $this->element(
 													'Questionnaires.errors', array(
-													'errorArrayName' => 'errors.QuestionnairePage[pageIndex].QuestionnaireQuestion[qIndex].QuestionnaireChoice[cIndex].graph_color',
+													'errorArrayName' => 'choice.errorMessages.graphColor',
 													)); ?>
 
 												</div>
 												<div class="col-sm-3">
-													<color-palette-picker selected='selected' name='data[QuestionnairePage][{{pageIndex}}][QuestionnaireQuestion][{{qIndex}}][QuestionnaireChoice][{{cIndex}}][graph_color]' ng-model='choice.graph_color'></color-palette-picker>												</div>
+													<color-palette-picker selected='selected' name='data[QuestionnairePage][{{pageIndex}}][QuestionnaireQuestion][{{qIndex}}][QuestionnaireChoice][{{cIndex}}][graph_color]' ng-model='choice.graphColor'></color-palette-picker>
+												</div>
 											</td>
 										</tr>
 									</table>
 									<table class="table table-condensed" 
-										ng-show="question.question_type == <?php echo QuestionnairesComponent::TYPE_MATRIX_SELECTION_LIST; ?>
-										|| question.question_type == <?php echo QuestionnairesComponent::TYPE_MATRIX_MULTIPLE; ?>">
-										<tr ng-repeat="(cIndex, choice) in question.QuestionnaireChoice | filter : {matrix_type:<?php echo QuestionnairesComponent::MATRIX_TYPE_COLUMN; ?>}">
+										ng-show="question.questionType == <?php echo QuestionnairesComponent::TYPE_MATRIX_SELECTION_LIST; ?>
+										|| question.questionType == <?php echo QuestionnairesComponent::TYPE_MATRIX_MULTIPLE; ?>">
+										<tr ng-repeat="(cIndex, choice) in question.questionnaireChoice | filter : {matrixType:<?php echo QuestionnairesComponent::MATRIX_TYPE_COLUMN; ?>}">
 											<td>
 												<div class="col-sm-9">
-													{{choice.choice_label}}
+													{{choice.choiceLabel}}
 
 													<?php echo $this->element(
 													'Questionnaires.errors', array(
-													'errorArrayName' => 'errors.QuestionnairePage[pageIndex].QuestionnaireQuestion[qIndex].QuestionnaireChoice[cIndex].graph_color',
+													'errorArrayName' => 'choice.errorMessages.graphColor',
 													)); ?>
 
 												</div>
 												<div class="col-sm-3">
 													<color-palette-picker
-															selected='choice.graph_color'
+															selected='choice.graphColor'
 															name='QuestionnairePage[{{pageIndex}}][QuestionnaireQuestion][{{qIndex}}][QuestionnaireChoice][{{cIndex}}][graph_color]'
-															ng-model='choice.graph_color'>
+															ng-model='choice.graphColor'>
 													</color-palette-picker>
 												</div>
 											</td>

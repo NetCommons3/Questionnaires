@@ -274,8 +274,16 @@ class QuestionnaireQuestionsController extends QuestionnairesAppController {
 			$isPublished = 0;
 		}
 
-		$this->set('questionnaire', $this->_changeBooleansToNumbers($this->_sorted($questionnaire)));
-		$this->set('questionnaireValidationErrors', $this->qValidationErrors);
+		// エラーメッセージはページ、質問、選択肢要素のそれぞれの場所に割り当てる
+		$flatError = Hash::flatten($this->qValidationErrors);
+		$newFlatError = array();
+		foreach ($flatError as $key => $val) {
+			if (preg_match('/^(.*)\.(.*)\.(.*)$/', $key, $matches)) {
+				$newFlatError[$matches[1] . '.error_messages.' . $matches[2] . '.' . $matches[3]] = $val;
+			}
+		}
+		$questionnaire = Hash::merge($questionnaire, Hash::expand($newFlatError));
+		$this->set('jsQuestionnaire', $this->camelizeKeyRecursive($this->_changeBooleansToNumbers($this->_sorted($questionnaire))));
 		$this->set('backUrl', $backUrl . $this->viewVars['frameId']);
 		$this->set('questionTypeOptions', $this->Questionnaires->getQuestionTypeOptionsWithLabel());
 		$this->set('newPageLabel', __d('questionnaires', 'page'));

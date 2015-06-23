@@ -5,23 +5,7 @@
 
 NetCommonsApp.controller('Questionnaires.edit.question',
     function($scope, NetCommonsBase, NetCommonsWysiwyg,
-             NetCommonsUser, $timeout) {
-
-      /**
-         * plugin
-         *
-         * @type {object}
-         */
-      $scope.plugin =
-          NetCommonsBase.initUrl('questionnaires', 'questionnaire_questions');
-
-      /**
-         * show user information method
-         *
-         * @param {number} users.id
-         * @return {string}
-         */
-      $scope.user = NetCommonsUser.new();
+             $timeout) {
 
       /**
          * tinymce
@@ -83,109 +67,124 @@ NetCommonsApp.controller('Questionnaires.edit.question',
            '#be5945', '#cccccc'];
 
       /**
+       * isDateTimeType
+       *
+       * @return {bool}
+       */
+      $scope.isDateTimeType = function(typeOpt) {
+        if (typeOpt == variables.TYPE_OPTION_DATE ||
+            typeOpt == variables.TYPE_OPTION_TIME ||
+            typeOpt == variables.TYPE_OPTION_DATE_TIME) {
+          return true;
+        } else {
+          return false;
+        }
+      };
+
+
+      /**
+       * get Date Object
+       *
+       * @return {Date}
+       */
+      $scope.Date = function(dateStr) {
+        if (Date.parse(dateStr)) {
+          return new Date(dateStr);
+        } else {
+          return null;
+        }
+      };
+
+      /**
          * Initialize
          *
          * @return {void}
          */
       $scope.initialize =
-          function(frameId, isPublished, questionnaire, errors,
+          function(frameId, isPublished, questionnaire,
           newPageLabel, newQuestionLabel, newChoiceLabel,
           newChoiceColumnLabel, newChoiceOtherLabel) {
         $scope.frameId = frameId;
         $scope.isPublished = isPublished;
         $scope.questionnaire = questionnaire;
-        $scope.errors = errors;
 
+        // 各ページ処理
         for (var pIdx = 0; pIdx <
-             $scope.questionnaire.QuestionnairePage.length;
+             $scope.questionnaire.questionnairePage.length;
              pIdx++) {
+          var page = $scope.questionnaire.questionnairePage[pIdx];
 
-          $scope.questionnaire.QuestionnairePage[pIdx].tab_active = false;
+          $scope.questionnaire.questionnairePage[pIdx].tabActive = false;
 
-          if (
-              !$scope.questionnaire.QuestionnairePage[pIdx].
-                  QuestionnaireQuestion
-          ) {
+          if (!page.questionnaireQuestion) {
             continue;
           }
+
+          // 各質問処理
           for (var qIdx = 0;
-              qIdx <
-              $scope.questionnaire.QuestionnairePage[pIdx].
-              QuestionnaireQuestion.length;
+              qIdx < page.questionnaireQuestion.length;
               qIdx++) {
+            var question = $scope.questionnaire.questionnairePage[pIdx].
+                questionnaireQuestion[qIdx];
+
             // 各質問が日付・時刻のタイプならば、範囲設定があるかの確認
-            $scope.questionnaire.QuestionnairePage[pIdx].
-                QuestionnaireQuestion[qIdx].setDateTimeRange = false;
-            if ($scope.questionnaire.QuestionnairePage[pIdx].
-                QuestionnaireQuestion[qIdx].question_type_option ==
-                    variables.TYPE_OPTION_DATE ||
-                $scope.questionnaire.QuestionnairePage[pIdx].
-                    QuestionnaireQuestion[qIdx].
-                question_type_option == variables.TYPE_OPTION_TIME ||
-                $scope.questionnaire.QuestionnairePage[pIdx].
-                    QuestionnaireQuestion[qIdx].question_type_option ==
-                variables.TYPE_OPTION_DATE_TIME) {
-              if ($scope.questionnaire.QuestionnairePage[pIdx].
-                  QuestionnaireQuestion[qIdx].min.length > 0) {
-                $scope.questionnaire.QuestionnairePage[pIdx].
-                    QuestionnaireQuestion[qIdx].setDateTimeRange = true;
-                var d = new Date(
-                    $scope.questionnaire.QuestionnairePage[pIdx].
-                    QuestionnaireQuestion[qIdx].min);
-                $scope.questionnaire.QuestionnairePage[pIdx].
-                    QuestionnaireQuestion[qIdx].min = d;
-              }
-              if ($scope.questionnaire.QuestionnairePage[pIdx].
-                  QuestionnaireQuestion[qIdx].max.length > 0) {
-                $scope.questionnaire.QuestionnairePage[pIdx].
-                    QuestionnaireQuestion[qIdx].setDateTimeRange = true;
-                var d = new Date($scope.questionnaire.QuestionnairePage[pIdx].
-                    QuestionnaireQuestion[qIdx].max);
-                $scope.questionnaire.QuestionnairePage[pIdx].
-                    QuestionnaireQuestion[qIdx].max = d;
+            $scope.questionnaire.questionnairePage[pIdx].
+                questionnaireQuestion[qIdx].setDateTimeRange = false;
+
+            if ($scope.isDateTimeType(question.questionTypeOption)) {
+              $scope.questionnaire.questionnairePage[pIdx].
+                  questionnaireQuestion[qIdx].min = $scope.Date(question.min);
+              $scope.questionnaire.questionnairePage[pIdx].
+                  questionnaireQuestion[qIdx].max = $scope.Date(question.max);
+              if ($scope.questionnaire.questionnairePage[pIdx].
+                  questionnaireQuestion[qIdx].min != null ||
+                  $scope.questionnaire.questionnairePage[pIdx].
+                  questionnaireQuestion[qIdx].max != null) {
+                $scope.questionnaire.questionnairePage[pIdx].
+                    questionnaireQuestion[qIdx].setDateTimeRange = true;
               }
             }
             // テキスト、１行テキスト、日付け型は集計結果を出さない設定
-            if ($scope.questionnaire.QuestionnairePage[pIdx].
-                QuestionnaireQuestion[qIdx].question_type ==
-                variables.TYPE_TEXT ||
-                $scope.questionnaire.QuestionnairePage[pIdx].
-                QuestionnaireQuestion[qIdx].question_type ==
-                variables.TYPE_TEXT_AREA ||
-                $scope.questionnaire.QuestionnairePage[pIdx].
-                QuestionnaireQuestion[qIdx].question_type ==
-                variables.TYPE_DATE_AND_TIME) {
-              $scope.questionnaire.QuestionnairePage[pIdx].
-                  QuestionnaireQuestion[qIdx].is_result_display =
+            if (question.questionType == variables.TYPE_TEXT ||
+                question.questionType == variables.TYPE_TEXT_AREA ||
+                question.questionType == variables.TYPE_DATE_AND_TIME) {
+              $scope.questionnaire.questionnairePage[pIdx].
+                  questionnaireQuestion[qIdx].isResultDisplay =
                   variables.EXPRESSION_NOT_SHOW;
             }
             // 日付け型の設定画面でカレンダーの開閉オプション
-            $scope.questionnaire.QuestionnairePage[pIdx].
-                QuestionnaireQuestion[qIdx].calendar_opened = [false, false];
+            $scope.questionnaire.questionnairePage[pIdx].
+                questionnaireQuestion[qIdx].calendarOpened = [false, false];
+
+            if (question.errorMessages) {
+              $scope.questionnaire.questionnairePage[pIdx].
+                  questionnaireQuestion[qIdx].hasError = true;
+            }
 
             // 選択肢がないのならここでcontinue;
-            if (!$scope.questionnaire.QuestionnairePage[pIdx].
-                QuestionnaireQuestion[qIdx].QuestionnaireChoice) {
+            if (!question.questionnaireChoice) {
               continue;
             }
             // 各質問の選択肢があればその選択肢の中に「その他」が入っているかの確認とフラグ設定
-            for (var cIdx = 0; cIdx <
-                $scope.questionnaire.QuestionnairePage[pIdx].
-                QuestionnaireQuestion[qIdx].QuestionnaireChoice.length;
+            // また質問の選択肢の中にエラーがあるかのフラグ設定
+            for (var cIdx = 0;
+                cIdx < question.questionnaireChoice.length;
                 cIdx++) {
-              if ($scope.questionnaire.QuestionnairePage[pIdx].
-                  QuestionnaireQuestion[qIdx].QuestionnaireChoice[cIdx].
-                  other_choice_type !=
+              var choice = question.questionnaireChoice[cIdx];
+              if (choice.otherChoiceType !=
                   variables.OTHER_CHOICE_TYPE_NO_OTHER_FILED) {
-                $scope.questionnaire.QuestionnairePage[pIdx].
-                    QuestionnaireQuestion[qIdx].has_another_choice = true;
-                break;
+                $scope.questionnaire.questionnairePage[pIdx].
+                    questionnaireQuestion[qIdx].hasAnotherChoice = true;
+              }
+              if (choice.errorMessages) {
+                $scope.questionnaire.questionnairePage[pIdx].
+                    questionnaireQuestion[qIdx].hasError = true;
               }
             }
 
           }
         }
-        $scope.questionnaire.QuestionnairePage[0].tab_active = true;
+        $scope.questionnaire.questionnairePage[0].tabActive = true;
 
         $scope.newPageLabel = newPageLabel;
         $scope.newQuestionLabel = newQuestionLabel;
@@ -193,6 +192,7 @@ NetCommonsApp.controller('Questionnaires.edit.question',
         $scope.newChoiceColumnLabel = newChoiceColumnLabel;
         $scope.newChoiceOtherLabel = newChoiceOtherLabel;
       };
+
       /**
          * Questionnaire EnterSubmit gard
          *
@@ -212,20 +212,20 @@ NetCommonsApp.controller('Questionnaires.edit.question',
          */
       $scope.addPage = function($event) {
         var page = new Object();
-        page['page_title'] =
+        page['pageTitle'] =
             $scope.newPageLabel +
-            ($scope.questionnaire.QuestionnairePage.length + 1);
-        page['page_sequence'] =
-            $scope.questionnaire.QuestionnairePage.length;
-        page['origin_id'] = 0;
-        page['QuestionnaireQuestion'] = new Array();
-        $scope.questionnaire.QuestionnairePage.push(page);
+            ($scope.questionnaire.questionnairePage.length + 1);
+        page['pageSequence'] =
+            $scope.questionnaire.questionnairePage.length;
+        page['originId'] = 0;
+        page['questionnaireQuestion'] = new Array();
+        $scope.questionnaire.questionnairePage.push(page);
 
         $scope.addQuestion($event,
-            $scope.questionnaire.QuestionnairePage.length - 1);
+            $scope.questionnaire.questionnairePage.length - 1);
 
-        $scope.questionnaire.QuestionnairePage[$scope.questionnaire.
-            QuestionnairePage.length - 1].tab_active = true;
+        $scope.questionnaire.questionnairePage[$scope.questionnaire.
+            questionnairePage.length - 1].tabActive = true;
         if ($event) {
           $event.stopPropagation();
         }
@@ -237,43 +237,14 @@ NetCommonsApp.controller('Questionnaires.edit.question',
          * @return {void}
          */
       $scope.deletePage = function(idx, message) {
-        if ($scope.questionnaire.QuestionnairePage.length < 2) {
+        if ($scope.questionnaire.questionnairePage.length < 2) {
           // 残り１ページは削除させない
           return;
         }
         if (confirm(message)) {
-          $scope.questionnaire.QuestionnairePage.splice(idx, 1);
+          $scope.questionnaire.questionnairePage.splice(idx, 1);
           $scope._resetQuestionnairePageSequence();
         }
-      };
-
-      /**
-         * Move Questionnaire Page
-         *
-         * @return {void}
-         */
-      $scope.movePage = function(before_idx_str, after_idx_str) {
-        var before_idx = parseInt(before_idx_str);
-        var after_idx = parseInt(after_idx_str);
-        var before_q = $scope.questionnaire.QuestionnairePage[before_idx];
-        if (before_idx < after_idx) {
-          for (var i = before_idx + 1; i < after_idx; i++) {
-            var tmp_q = $scope.questionnaire.QuestionnairePage[i];
-            $scope.questionnaire.QuestionnairePage.
-                splice(i - 1, 1, tmp_q);
-          }
-          $scope.questionnaire.QuestionnairePage.splice(after_idx - 1, 1,
-              before_q);
-        }
-        else {
-          for (var i = before_idx; i >= after_idx; i--) {
-            var tmp_q = $scope.questionnaire.QuestionnairePage[i - 1];
-            $scope.questionnaire.QuestionnairePage.splice(i, 1, tmp_q);
-          }
-          $scope.questionnaire.QuestionnairePage.splice(after_idx,
-              1, before_q);
-        }
-        $scope._resetQuestionnairePageSequence();
       };
 
       /**
@@ -283,27 +254,9 @@ NetCommonsApp.controller('Questionnaires.edit.question',
          */
       $scope._resetQuestionnairePageSequence = function() {
         for (var i = 0;
-            i < $scope.questionnaire.QuestionnairePage.length; i++) {
-          $scope.questionnaire.QuestionnairePage[i].page_sequence = i;
+            i < $scope.questionnaire.questionnairePage.length; i++) {
+          $scope.questionnaire.questionnairePage[i].pageSequence = i;
         }
-      };
-
-      /**
-         * Delete Questionnaire Question
-         *
-         * @return {void}
-         */
-      $scope.deleteQuestion = function($event, pageIndex, idx, message) {
-        if ($scope.questionnaire.QuestionnairePage[pageIndex].
-            QuestionnaireQuestion.length < 2) {
-          return;
-        }
-        if (confirm(message)) {
-          $scope.questionnaire.QuestionnairePage[pageIndex].
-              QuestionnaireQuestion.splice(idx, 1);
-          $scope._resetQuestionnaireQuestionSequence(pageIndex);
-        }
-        $event.stopPropagation();
       };
 
       /**
@@ -313,30 +266,30 @@ NetCommonsApp.controller('Questionnaires.edit.question',
          */
       $scope.addQuestion = function($event, pageIndex) {
         var question = new Object();
-        if (!$scope.questionnaire.QuestionnairePage[pageIndex].
-            QuestionnaireQuestion) {
-          $scope.questionnaire.QuestionnairePage[pageIndex].
-              QuestionnaireQuestion = new Array();
+        if (!$scope.questionnaire.questionnairePage[pageIndex].
+            questionnaireQuestion) {
+          $scope.questionnaire.questionnairePage[pageIndex].
+              questionnaireQuestion = new Array();
         }
         var newIndex =
-            $scope.questionnaire.QuestionnairePage[pageIndex].
-                QuestionnaireQuestion.length;
-        question['question_value'] = $scope.newQuestionLabel + (newIndex + 1);
-        question['question_sequence'] = newIndex;
-        question['question_type'] = variables.TYPE_SELECTION;
-        question['origin_id'] = 0;
-        question['is_result_display'] = 1;
-        question['result_display_type'] =
+            $scope.questionnaire.questionnairePage[pageIndex].
+                questionnaireQuestion.length;
+        question['questionValue'] = $scope.newQuestionLabel + (newIndex + 1);
+        question['questionSequence'] = newIndex;
+        question['questionType'] = variables.TYPE_SELECTION;
+        question['originId'] = 0;
+        question['isResultDisplay'] = 1;
+        question['resultDisplayType'] =
             variables.RESULT_DISPLAY_TYPE_BAR_CHART;
-        question['QuestionnaireChoice'] = new Array();
+        question['questionnaireChoice'] = new Array();
         question['isOpen'] = true;
-        $scope.questionnaire.QuestionnairePage[pageIndex].
-            QuestionnaireQuestion.push(question);
+        $scope.questionnaire.questionnairePage[pageIndex].
+            questionnaireQuestion.push(question);
 
         $scope.addChoice($event,
             pageIndex,
-            $scope.questionnaire.QuestionnairePage[pageIndex].
-                QuestionnaireQuestion.length - 1,
+            $scope.questionnaire.questionnairePage[pageIndex].
+                questionnaireQuestion.length - 1,
             0,
             variables.OTHER_CHOICE_TYPE_NO_OTHER_FILED,
             variables.MATRIX_TYPE_ROW_OR_NO_MATRIX);
@@ -352,37 +305,38 @@ NetCommonsApp.controller('Questionnaires.edit.question',
          * @return {void}
          */
       $scope.moveQuestion =
-          function($event, pageIndex, before_idx_str, after_idx_str) {
-        var before_idx = parseInt(before_idx_str);
-        var after_idx = parseInt(after_idx_str);
-        var before_q =
-            $scope.questionnaire.QuestionnairePage[pageIndex].
-                QuestionnaireQuestion[before_idx];
-        if (before_idx < after_idx) {
-          for (var i = before_idx + 1; i <= after_idx; i++) {
-            var tmp_q =
-                $scope.questionnaire.QuestionnairePage[pageIndex].
-                    QuestionnaireQuestion[i];
-            $scope.questionnaire.QuestionnairePage[pageIndex].
-                QuestionnaireQuestion.splice(i - 1, 1, tmp_q);
+          function($event, pageIndex, beforeIdxStr, afterIdxStr) {
+        var beforeIdx = parseInt(beforeIdxStr);
+        var afterIdx = parseInt(afterIdxStr);
+        var beforeQ =
+            $scope.questionnaire.questionnairePage[pageIndex].
+                questionnaireQuestion[beforeIdx];
+        if (beforeIdx < afterIdx) {
+          for (var i = beforeIdx + 1; i <= afterIdx; i++) {
+            var tmpQ =
+                $scope.questionnaire.questionnairePage[pageIndex].
+                    questionnaireQuestion[i];
+            $scope.questionnaire.questionnairePage[pageIndex].
+                questionnaireQuestion.splice(i - 1, 1, tmpQ);
           }
-          $scope.questionnaire.QuestionnairePage[pageIndex].
-              QuestionnaireQuestion.splice(after_idx, 1, before_q);
+          $scope.questionnaire.questionnairePage[pageIndex].
+              questionnaireQuestion.splice(afterIdx, 1, beforeQ);
         }
         else {
-          for (var i = before_idx; i >= after_idx; i--) {
-            var tmp_q =
-                $scope.questionnaire.QuestionnairePage[pageIndex].
-                    QuestionnaireQuestion[i - 1];
-            $scope.questionnaire.QuestionnairePage[pageIndex].
-                QuestionnaireQuestion.splice(i, 1, tmp_q);
+          for (var i = beforeIdx; i >= afterIdx; i--) {
+            var tmpQ =
+                $scope.questionnaire.questionnairePage[pageIndex].
+                    questionnaireQuestion[i - 1];
+            $scope.questionnaire.questionnairePage[pageIndex].
+                questionnaireQuestion.splice(i, 1, tmpQ);
           }
-          $scope.questionnaire.QuestionnairePage[pageIndex].
-              QuestionnaireQuestion.splice(after_idx, 1, before_q);
+          $scope.questionnaire.questionnairePage[pageIndex].
+              questionnaireQuestion.splice(afterIdx, 1, beforeQ);
         }
         $scope._resetQuestionnaireQuestionSequence(pageIndex);
         $event.stopPropagation();
       };
+
       /**
          * Move to another page Questionnaire Question
          *
@@ -390,27 +344,47 @@ NetCommonsApp.controller('Questionnaires.edit.question',
          */
       $scope.moveQuestionToAnotherPage =
           function($event, pageIndex, qIndex, movePageIndex) {
-        var tmp_q =
-            $scope.questionnaire.QuestionnairePage[pageIndex].
-                QuestionnaireQuestion.splice(qIndex, 1);
-        $scope.questionnaire.QuestionnairePage[movePageIndex].
-            QuestionnaireQuestion.push(tmp_q[0]);
+        var tmpQ =
+            $scope.questionnaire.questionnairePage[pageIndex].
+                questionnaireQuestion.splice(qIndex, 1);
+        $scope.questionnaire.questionnairePage[movePageIndex].
+            questionnaireQuestion.push(tmpQ[0]);
 
         $scope._resetQuestionnaireQuestionSequence(pageIndex);
         //$event.stopPropagation();
       };
+
       /**
-         * Questionnaire Page Sequence reset
+       * Delete Questionnaire Question
+       *
+       * @return {void}
+       */
+      $scope.deleteQuestion = function($event, pageIndex, idx, message) {
+        if ($scope.questionnaire.questionnairePage[pageIndex].
+            questionnaireQuestion.length < 2) {
+          return;
+        }
+        if (confirm(message)) {
+          $scope.questionnaire.questionnairePage[pageIndex].
+              questionnaireQuestion.splice(idx, 1);
+          $scope._resetQuestionnaireQuestionSequence(pageIndex);
+        }
+        $event.stopPropagation();
+      };
+
+      /**
+         * Questionnaire Question Sequence reset
          *
          * @return {void}
          */
       $scope._resetQuestionnaireQuestionSequence = function(pageIndex) {
-        for (var i = 0; i < $scope.questionnaire.QuestionnairePage[pageIndex].
-            QuestionnaireQuestion.length; i++) {
-          $scope.questionnaire.QuestionnairePage[pageIndex].
-              QuestionnaireQuestion[i].question_sequence = i;
+        for (var i = 0; i < $scope.questionnaire.questionnairePage[pageIndex].
+            questionnaireQuestion.length; i++) {
+          $scope.questionnaire.questionnairePage[pageIndex].
+              questionnaireQuestion[i].questionSequence = i;
         }
       };
+
       /**
          * Add Questionnaire Choice
          *
@@ -418,23 +392,25 @@ NetCommonsApp.controller('Questionnaires.edit.question',
          */
       $scope.addChoice =
           function($event, pIdx, qIdx, choiceCount, otherType, matrixType) {
+        var question = $scope.questionnaire.
+            questionnairePage[pIdx].questionnaireQuestion[qIdx];
         var choice = new Object();
-        if (!$scope.questionnaire.QuestionnairePage[pIdx].
-            QuestionnaireQuestion[qIdx].QuestionnaireChoice) {
-          $scope.questionnaire.QuestionnairePage[pIdx].
-              QuestionnaireQuestion[qIdx].QuestionnaireChoice = new Array();
+        var choiceColorIdx = choiceCount % $scope.colorPickerPalette.length;
+
+        if (!question.questionnaireChoice) {
+          $scope.questionnaire.questionnairePage[pIdx].
+              questionnaireQuestion[qIdx].questionnaireChoice = new Array();
         }
-        var newIndex = $scope.questionnaire.QuestionnairePage[pIdx].
-            QuestionnaireQuestion[qIdx].QuestionnaireChoice.length;
+        var newIndex = question.questionnaireChoice.length;
 
         if (otherType != variables.OTHER_CHOICE_TYPE_NO_OTHER_FILED) {
-          choice['choice_label'] = $scope.newChoiceOtherLabel;
+          choice['choiceLabel'] = $scope.newChoiceOtherLabel;
         } else {
           if (matrixType == variables.MATRIX_TYPE_ROW_OR_NO_MATRIX) {
-            choice['choice_label'] =
+            choice['choiceLabel'] =
                 $scope.newChoiceLabel + (choiceCount + 1);
           } else {
-            choice['choice_label'] =
+            choice['choiceLabel'] =
                 $scope.newChoiceColumnLabel + (choiceCount + 1);
           }
         }
@@ -442,43 +418,38 @@ NetCommonsApp.controller('Questionnaires.edit.question',
         // その他選択肢は必ず最後にするためにいったん取りのけておく
         var otherChoice = null;
         for (var i = 0;
-            i < $scope.questionnaire.QuestionnairePage[pIdx].
-                QuestionnaireQuestion[qIdx].QuestionnaireChoice.length; i++) {
-          if ($scope.questionnaire.QuestionnairePage[pIdx].
-              QuestionnaireQuestion[qIdx].QuestionnaireChoice[i].
-              other_choice_type != variables.OTHER_CHOICE_TYPE_NO_OTHER_FILED) {
-            otherChoice = $scope.questionnaire.QuestionnairePage[pIdx].
-                QuestionnaireQuestion[qIdx].QuestionnaireChoice[i];
-            $scope.questionnaire.QuestionnairePage[pIdx].
-                QuestionnaireQuestion[qIdx].QuestionnaireChoice.splice(i, 1);
+            i < question.questionnaireChoice.length; i++) {
+          if (question.questionnaireChoice[i].otherChoiceType !=
+              variables.OTHER_CHOICE_TYPE_NO_OTHER_FILED) {
+            otherChoice = question.questionnaireChoice[i];
+            $scope.questionnaire.questionnairePage[pIdx].
+                questionnaireQuestion[qIdx].questionnaireChoice.splice(i, 1);
           }
         }
 
         if (otherChoice) {
-          choice['choice_sequence'] = newIndex - 1;
-          otherChoice['choice_sequence'] = newIndex;
+          choice['choiceSequence'] = newIndex - 1;
+          otherChoice['choiceSequence'] = newIndex;
         } else {
-          choice['choice_sequence'] = newIndex;
+          choice['choiceSequence'] = newIndex;
         }
 
-        choice['other_choice_type'] = otherType;
-        choice['matrix_type'] = matrixType;
-        choice['origin_id'] = 0;
+        choice['otherChoiceType'] = otherType;
+        choice['matrixType'] = matrixType;
+        choice['originId'] = 0;
         if (otherType != variables.OTHER_CHOICE_TYPE_NO_OTHER_FILED) {
-          choice['graph_color'] =
-              $scope.colorPickerPalette[choice['choice_sequence'] % 12];
-        } else {
-          choice['graph_color'] =
-              $scope.colorPickerPalette[choiceCount % 12];
+          choiceColorIdx =
+              choice['choiceSequence'] % $scope.colorPickerPalette.length;
         }
+        choice['graphColor'] = $scope.colorPickerPalette[choiceColorIdx];
 
         // 指定された新しい選択肢を追加する
-        $scope.questionnaire.QuestionnairePage[pIdx].
-            QuestionnaireQuestion[qIdx].QuestionnaireChoice.push(choice);
+        $scope.questionnaire.questionnairePage[pIdx].
+            questionnaireQuestion[qIdx].questionnaireChoice.push(choice);
         // 取りのけておいたその他選択肢を元通り最後に追加する
         if (otherChoice != null) {
-          $scope.questionnaire.QuestionnairePage[pIdx].
-              QuestionnaireQuestion[qIdx].QuestionnaireChoice.push(otherChoice);
+          $scope.questionnaire.questionnairePage[pIdx].
+              questionnaireQuestion[qIdx].questionnaireChoice.push(otherChoice);
         }
 
         if ($event != null) {
@@ -486,26 +457,27 @@ NetCommonsApp.controller('Questionnaires.edit.question',
         }
       };
       /**
-         * Add Questionnaire Choice
+         * Change Another Choice
          *
          * @return {void}
          */
       $scope.changeAnotherChoice =
           function(pIdx, qIdx, otherType, matrixType) {
-        if ($scope.questionnaire.QuestionnairePage[pIdx].
-            QuestionnaireQuestion[qIdx].has_another_choice) {
+
+        var question = $scope.questionnaire.
+            questionnairePage[pIdx].questionnaireQuestion[qIdx];
+
+        //その他を持つように指示されている
+        if (question.hasAnotherChoice) {
           $scope.addChoice(null, pIdx, qIdx, 0, otherType, matrixType);
-        }
-        else {
+        } else {
+          // その他選択肢をなくすように指示されている
           for (var i = 0;
-              i < $scope.questionnaire.QuestionnairePage[pIdx].
-                  QuestionnaireQuestion[qIdx].QuestionnaireChoice.length; i++) {
-            if ($scope.questionnaire.QuestionnairePage[pIdx].
-                QuestionnaireQuestion[qIdx].QuestionnaireChoice[i].
-                    other_choice_type !=
-                        variables.OTHER_CHOICE_TYPE_NO_OTHER_FILED) {
-              $scope.questionnaire.QuestionnairePage[pIdx].
-                  QuestionnaireQuestion[qIdx].QuestionnaireChoice.splice(i, 1);
+              i < question.questionnaireChoice.length; i++) {
+            if (question.questionnaireChoice[i].otherChoiceType !=
+                variables.OTHER_CHOICE_TYPE_NO_OTHER_FILED) {
+              $scope.questionnaire.questionnairePage[pIdx].
+                  questionnaireQuestion[qIdx].questionnaireChoice.splice(i, 1);
             }
           }
         }
@@ -522,7 +494,7 @@ NetCommonsApp.controller('Questionnaires.edit.question',
         if (skipPageIndex == variables.SKIP_GO_TO_END) {
           return;
         }
-        if ($scope.questionnaire.QuestionnairePage.length - 1 >=
+        if ($scope.questionnaire.questionnairePage.length - 1 >=
             skipPageIndex) {
           return;
         }
@@ -535,18 +507,18 @@ NetCommonsApp.controller('Questionnaires.edit.question',
          * @return {void}
          */
       $scope.deleteChoice = function($event, pIdx, qIdx, seq) {
-        if ($scope.questionnaire.QuestionnairePage[pIdx].
-            QuestionnaireQuestion[qIdx].QuestionnaireChoice.length < 2) {
+
+        var question = $scope.questionnaire.
+            questionnairePage[pIdx].questionnaireQuestion[qIdx];
+
+        if (question.questionnaireChoice.length < 2) {
           return;
         }
         for (var i = 0;
-            i < $scope.questionnaire.QuestionnairePage[pIdx].
-                QuestionnaireQuestion[qIdx].QuestionnaireChoice.length; i++) {
-          if ($scope.questionnaire.QuestionnairePage[pIdx].
-              QuestionnaireQuestion[qIdx].QuestionnaireChoice[i].
-                  choice_sequence == seq) {
-            $scope.questionnaire.QuestionnairePage[pIdx].
-                QuestionnaireQuestion[qIdx].QuestionnaireChoice.splice(i, 1);
+            i < question.questionnaireChoice.length; i++) {
+          if (question.questionnaireChoice[i].choiceSequence == seq) {
+            $scope.questionnaire.questionnairePage[pIdx].
+                questionnaireQuestion[qIdx].questionnaireChoice.splice(i, 1);
           }
         }
         $scope._resetQuestionnaireChoiceSequence(pIdx, qIdx);
@@ -556,47 +528,17 @@ NetCommonsApp.controller('Questionnaires.edit.question',
         }
       };
       /**
-         * Questionnaire Page Sequence reset
+         * Questionnaire Choice Sequence reset
          *
          * @return {void}
          */
       $scope._resetQuestionnaireChoiceSequence = function(pageIndex, qIndex) {
         for (var i = 0; i <
-            $scope.questionnaire.QuestionnairePage[pageIndex].
-            QuestionnaireQuestion[qIndex].QuestionnaireChoice.length; i++) {
-          $scope.questionnaire.QuestionnairePage[pageIndex].
-              QuestionnaireQuestion[qIndex].QuestionnaireChoice[i].
-              choice_sequence = i;
-        }
-      };
-      /**
-         * Questionnaire Date Time Option Set
-         *
-         * @return {void}
-         */
-      $scope.changeDateTimeOption = function(pageIndex, qIndex, opt) {
-        if ($scope.questionnaire.QuestionnairePage[pageIndex].
-            QuestionnaireQuestion[qIndex].timeOption &&
-            $scope.questionnaire.QuestionnairePage[pageIndex].
-            QuestionnaireQuestion[qIndex].dateOption) {
-          $scope.questionnaire.QuestionnairePage[pageIndex].
-              QuestionnaireQuestion[qIndex].question_type_option =
-                  variables.TYPE_OPTION_DATE_TIME;
-        }
-        else if ($scope.questionnaire.QuestionnairePage[pageIndex].
-            QuestionnaireQuestion[qIndex].timeOption) {
-          $scope.questionnaire.QuestionnairePage[pageIndex].
-              QuestionnaireQuestion[qIndex].question_type_option =
-              variables.TYPE_OPTION_TIME;
-        }
-        else if ($scope.questionnaire.QuestionnairePage[pageIndex].
-            QuestionnaireQuestion[qIndex].dateOption) {
-          $scope.questionnaire.QuestionnairePage[pageIndex].
-              QuestionnaireQuestion[qIndex].question_type_option =
-              variables.TYPE_OPTION_DATE;
-        }
-        else {
-
+            $scope.questionnaire.questionnairePage[pageIndex].
+            questionnaireQuestion[qIndex].questionnaireChoice.length; i++) {
+          $scope.questionnaire.questionnairePage[pageIndex].
+              questionnaireQuestion[qIndex].questionnaireChoice[i].
+              choiceSequence = i;
         }
       };
       /**
@@ -607,8 +549,8 @@ NetCommonsApp.controller('Questionnaires.edit.question',
       $scope.openCal = function($event, pIdx, qIdx, opt) {
         $event.preventDefault();
         $event.stopPropagation();
-        $scope.questionnaire.QuestionnairePage[pIdx].
-            QuestionnaireQuestion[qIdx].calendar_opened[opt] = true;
+        $scope.questionnaire.questionnairePage[pIdx].
+            questionnaireQuestion[qIdx].calendarOpened[opt] = true;
       };
 
     });

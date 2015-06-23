@@ -15,7 +15,7 @@
 <div class="row">
 	<div class="col-sm-12">
 		<ul class="list-group ">
-			<li class="list-group-item" ng-repeat="(cIndex, choice) in question.QuestionnaireChoice" >
+			<li class="list-group-item" ng-repeat="(cIndex, choice) in question.questionnaireChoice" >
 				<div class="form-inline">
 					<?php echo $this->element('Questionnaires.Questions/edit/question_setting_choice_element', array('pageIndex' => $pageIndex, 'qIndex' => $qIndex, 'isPublished' => $isPublished)); ?>
 				</div>

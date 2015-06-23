@@ -78,6 +78,9 @@ class QuestionnairesPreAnswerComponent extends Component {
 		if (!$controller->isAbleTo($questionnaire)) {
 			return false;
 		}
+		if ($questionnaire['Questionnaire']['status'] != NetCommonsBlockComponent::STATUS_PUBLISHED) {
+			return true;
+		}
 		// 繰り返し回答を許していないのにすでに回答済みか
 		if ($questionnaire['Questionnaire']['is_repeat_allow'] == QuestionnairesComponent::PERMISSION_NOT_PERMIT) {
 			$summary = $answerSummary->getNowSummaryOfThisUser(
@@ -102,25 +105,27 @@ class QuestionnairesPreAnswerComponent extends Component {
  */
 	public function isPreAnswer($controller, $questionnaire) {
 		// プレ回答をすべき状態かチェックする
-		// 表示すべきページ番号がFIRST_PAGE_SEQUENCEで
 		// かつパスフレーズや画像認証が要求されており、
+		// またはテストモードで初期ページのとき、
 		// かつ、それらがまだ認証されていない場合
 		// ０ページ目としてそれらを表示する
-		if (($questionnaire['Questionnaire']['is_key_pass_use'] == QuestionnairesComponent::USES_USE
-			|| $questionnaire['Questionnaire']['is_image_authentication'] == QuestionnairesComponent::USES_USE)) {
-			$checkKeyPhrase = true;
-			if ($questionnaire['Questionnaire']['is_key_pass_use'] == QuestionnairesComponent::USES_USE) {
-				$checkKeyPhrase = $this->__checkPreAnswer($controller, $questionnaire['Questionnaire']['origin_id'], 'key_phrase');
-			}
+		$checkKeyPhrase = true;
+		if ($questionnaire['Questionnaire']['is_key_pass_use'] == QuestionnairesComponent::USES_USE) {
+			$checkKeyPhrase = $this->checkPreAnswer($controller, $questionnaire['Questionnaire']['origin_id'], 'key_phrase');
+		}
 
-			$checkImageAuth = true;
-			if ($questionnaire['Questionnaire']['is_image_authentication'] == QuestionnairesComponent::USES_USE) {
-				$checkImageAuth = $this->__checkPreAnswer($controller, $questionnaire['Questionnaire']['origin_id'], 'image_auth');
-			}
+		$checkImageAuth = true;
+		if ($questionnaire['Questionnaire']['is_image_authentication'] == QuestionnairesComponent::USES_USE) {
+			$checkImageAuth = $this->checkPreAnswer($controller, $questionnaire['Questionnaire']['origin_id'], 'image_auth');
+		}
 
-			if (!$checkKeyPhrase || !$checkImageAuth) {
-				return true;
-			}
+		$checkTestDisp = true;
+		if ($questionnaire['Questionnaire']['status'] != NetCommonsBlockComponent::STATUS_PUBLISHED) {
+			$checkTestDisp = $this->checkPreAnswer($controller, $questionnaire['Questionnaire']['origin_id'], 'test_mode');
+		}
+
+		if (!$checkKeyPhrase || !$checkImageAuth || !$checkTestDisp) {
+			return true;
 		}
 		return false;
 	}
@@ -172,6 +177,30 @@ class QuestionnairesPreAnswerComponent extends Component {
 	}
 
 /**
+ * checkTestMode
+ *
+ * @param object $controller controller
+ * @param array $questionnaire Questionnaire
+ * @param array $data post data
+ * @return bool
+ */
+	public function checkTestMode($controller, $questionnaire, $data) {
+		// テストモードの場合アンケート開始前にアンケート設定情報を見せる
+		// 表示したらセッションに書きこむ
+		if ($questionnaire['Questionnaire']['status'] == NetCommonsBlockComponent::STATUS_PUBLISHED) {
+			return true;
+		}
+		if ($this->checkPreAnswer($controller, $questionnaire['Questionnaire']['origin_id'], 'test_mode')) {
+			return true;
+		}
+		if (!empty($data['PreAnswer']['test_mode'])) {
+			$controller->Session->write('Questionnaires.' . $questionnaire['Questionnaire']['origin_id'] . '.test_mode', true);
+			return true;
+		}
+		return false;
+	}
+
+/**
  * _checkPreAnswer
  * アンケート開始前にキーフレーズの入力や画像認証が求められている場合
  * それらの回答がすんでいるかどうかをチェックする
@@ -181,7 +210,7 @@ class QuestionnairesPreAnswerComponent extends Component {
  * @param string $checkType キーフレーズ　もしくは　画像認証
  * @return bool
  */
-	private function __checkPreAnswer($controller, $questionnaireId, $checkType) {
+	public function checkPreAnswer($controller, $questionnaireId, $checkType) {
 		$check = $controller->Session->check('Questionnaires.' . $questionnaireId . '.' . $checkType);
 		if ($check) {
 			return true;

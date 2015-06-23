@@ -58,27 +58,13 @@
 
 		<label class="h3"><?php echo __d('questionnaires', 'Questionnaire answer period'); ?></label>
 		<div class="form-group questionnaire-group">
-			<div class="checkbox">
-				<label>
-					<?php echo $this->Form->input('is_period',
-					array(
-					'type' => 'checkbox',
-					'div' => false,
-					'label' => false,
-					'ng-model' => 'questionnaires.questionnaire.isPeriod',
-					'error' => false
-					));
-					?>
-					<?php echo __d('questionnaires', 'set the answer period'); ?>
-					<span class="help-block"><?php echo __d('questionnaires', 'After approval will be immediately published . Stop of the questionnaire to select the stop from the questionnaire data list .'); ?></span>
-				</label>
-				<?php echo $this->element(
-				'NetCommons.errors', [
-				'errors' => $this->validationErrors,
-				'model' => 'Questionnaire',
-				'field' => 'is_period',
+			<?php echo $this->element(
+				'Questionnaires.Questionnaires/checkbox_set', [
+				'fieldName' => 'is_period',
+				'modelName' => 'isPeriod',
+				'label' => __d('questionnaires', 'set the answer period'),
+				'help' => __d('questionnaires', 'After approval will be immediately published . Stop of the questionnaire to select the stop from the questionnaire data list .')
 				]) ?>
-			</div>
 			<div class="row" ng-show="questionnaires.questionnaire.isPeriod">
 				<div class="col-sm-5">
 					<?php echo $this->element(
@@ -107,29 +93,13 @@
 		</div>
 		<label class="h3"><?php echo __d('questionnaires', 'Counting result display start date'); ?></label>
 		<div class="row form-group questionnaire-group">
-			<div class="col-sm-12 checkbox">
-				<label>
-					<?php echo $this->Form->input('total_show_timing',
-					array(
-					'type' => 'checkbox',
-					'div' => false,
-					'label' => false,
-					'ng-model' => 'questionnaires.questionnaire.totalShowTiming',
-					'ng-true-value' => QuestionnairesComponent::USES_USE,
-					'ng-false-value' => QuestionnairesComponent::USES_NOT_USE,
-					'error' => false
-					));
-					?>
-					<?php echo __d('questionnaires', 'set the aggregate display period'); ?>
-					<span class="help-block"><?php echo __d('questionnaires', 'If not set , it will be displayed after the respondent answers.'); ?></span>
-				</label>
-				<?php echo $this->element(
-				'NetCommons.errors', [
-				'errors' => $this->validationErrors,
-				'model' => 'Questionnaire',
-				'field' => 'total_show_timing',
-				]) ?>
-			</div>
+			<?php echo $this->element(
+			'Questionnaires.Questionnaires/checkbox_set', [
+			'fieldName' => 'total_show_timing',
+			'modelName' => 'totalShowTiming',
+			'label' => __d('questionnaires', 'set the aggregate display period'),
+			'help' => __d('questionnaires', 'If not set , it will be displayed after the respondent answers.')
+			]) ?>
 
 			<div class="row" ng-show="questionnaires.questionnaire.totalShowTiming">
 				<div class="col-sm-5">
@@ -150,40 +120,20 @@
 
 		<label class="h3"><?php echo __d('questionnaires', 'Questionnaire method'); ?></label>
 		<div class="form-group questionnaire-group">
-			<?php echo $this->Form->input('is_no_member_allow',
-			array(
-			'type' => 'checkbox',
-			'label' => false,
-			'before' => '<div class="checkbox"><label>',
-			'after' => __d('questionnaires', 'accept the non-members answer') . '</label></div>',
-			'ng-model' => 'questionnaires.questionnaire.isNoMemberAllow',
-			'error' => false,
-			)
-			);
-			?>
 			<?php echo $this->element(
-			'NetCommons.errors', [
-			'errors' => $this->validationErrors,
-			'model' => 'Questionnaire',
-			'field' => 'is_no_member_allow',
+			'Questionnaires.Questionnaires/checkbox_set', [
+			'fieldName' => 'is_no_member_allow',
+			'modelName' => 'isNoMemberAllow',
+			'label' => __d('questionnaires', 'accept the non-members answer'),
+			'help' => ''
 			]) ?>
 
-			<?php echo $this->Form->input('is_key_pass_use',
-			array(
-			'type' => 'checkbox',
-			'label' => false,
-			'before' => '<div class="checkbox"><label>',
-			'after' => __d('questionnaires', 'use key phrase') . '</label></div>',
-			'ng-model' => 'questionnaires.questionnaire.isKeyPassUse',
-			'error' => false,
-			)
-			);
-			?>
 			<?php echo $this->element(
-			'NetCommons.errors', [
-			'errors' => $this->validationErrors,
-			'model' => 'Questionnaire',
-			'field' => 'is_key_pass_use',
+			'Questionnaires.Questionnaires/checkbox_set', [
+			'fieldName' => 'is_key_pass_use',
+			'modelName' => 'isKeyPassUse',
+			'label' => __d('questionnaires', 'use key phrase'),
+			'help' => ''
 			]) ?>
 
 			<?php echo $this->Form->input('key_phrase',
@@ -196,76 +146,36 @@
 			);
 			?>
 
-			<?php echo $this->Form->input('is_anonymity',
-			array(
-			'type' => 'checkbox',
-			'label' => false,
-			'before' => '<div class="checkbox"><label>',
-			'after' => __d('questionnaires', 'anonymous answer') . '</label></div>',
-			'ng-model' => 'questionnaires.questionnaire.isAnonymity',
-			'error' => false,
-			)
-			);
-			?>
 			<?php echo $this->element(
-			'NetCommons.errors', [
-			'errors' => $this->validationErrors,
-			'model' => 'Questionnaire',
-			'field' => 'is_anonymity',
+			'Questionnaires.Questionnaires/checkbox_set', [
+			'fieldName' => 'is_anonymity',
+			'modelName' => 'isAnonymity',
+			'label' => __d('questionnaires', 'anonymous answer'),
+			'help' => ''
 			]) ?>
 
-			<?php echo $this->Form->input('is_repeat_allow',
-			array(
-			'type' => 'checkbox',
-			'label' => false,
-			'before' => '<div class="checkbox"><label>',
-			'after' => __d('questionnaires', 'forgive the repetition of the answer') . '</label></div>',
-			'ng-model' => 'questionnaires.questionnaire.isRepeatAllow',
-			'error' => false,
-			)
-			);
-			?>
 			<?php echo $this->element(
-			'NetCommons.errors', [
-			'errors' => $this->validationErrors,
-			'model' => 'Questionnaire',
-			'field' => 'is_repeat_allow',
+			'Questionnaires.Questionnaires/checkbox_set', [
+			'fieldName' => 'is_repeat_allow',
+			'modelName' => 'isRepeatAllow',
+			'label' => __d('questionnaires', 'forgive the repetition of the answer'),
+			'help' => ''
 			]) ?>
 
-			<?php echo $this->Form->input('is_image_authentication',
-			array(
-			'type' => 'checkbox',
-			'label' => false,
-			'before' => '<div class="checkbox"><label>',
-			'after' => __d('questionnaires', 'do image authentication') . '</label></div>',
-			'ng-model' => 'questionnaires.questionnaire.isImageAuthentication',
-			'error' => false,
-			)
-			);
-			?>
 			<?php echo $this->element(
-			'NetCommons.errors', [
-			'errors' => $this->validationErrors,
-			'model' => 'Questionnaire',
-			'field' => 'is_image_authentication',
+			'Questionnaires.Questionnaires/checkbox_set', [
+			'fieldName' => 'is_image_authentication',
+			'modelName' => 'isImageAuthentication',
+			'label' => __d('questionnaires', 'do image authentication'),
+			'help' => ''
 			]) ?>
 
-			<?php echo $this->Form->input('is_answer_mail_send',
-			array(
-			'type' => 'checkbox',
-			'label' => false,
-			'before' => '<div class="checkbox"><label>',
-			'after' => __d('questionnaires', 'Deliver e-mail when submitted?') . '</label></div>',
-			'ng-model' => 'questionnaires.questionnaire.isAnswerMailSend',
-			'error' => false,
-			)
-			);
-			?>
 			<?php echo $this->element(
-			'NetCommons.errors', [
-			'errors' => $this->validationErrors,
-			'model' => 'Questionnaire',
-			'field' => 'is_answer_mail_send',
+			'Questionnaires.Questionnaires/checkbox_set', [
+			'fieldName' => 'is_answer_mail_send',
+			'modelName' => 'isAnswerMailSend',
+			'label' => __d('questionnaires', 'Deliver e-mail when submitted'),
+			'help' => ''
 			]) ?>
 		</div>
 

@@ -163,7 +163,6 @@ class QuestionnairePage extends QuestionnairesAppModel {
 		$this->loadModels([
 			'QuestionnaireQuestion' => 'Questionnaires.QuestionnaireQuestion',
 		]);
-
 		// ページデータがアンケートデータの中にない状態でここが呼ばれている場合、
 		if (!isset($questionnaire['QuestionnairePage'])) {
 			/*
@@ -184,14 +183,11 @@ class QuestionnairePage extends QuestionnairesAppModel {
 				'conditions' => array(
 					'questionnaire_id' => $questionnaire['Questionnaire']['id'],
 				),
+				'order' => array('page_sequence ASC'),
 				'recursive' => -1));
-				$questionnaire['QuestionnairePage'] = $pages[0]['QuestionnairePage'];
+			$questionnaire['QuestionnairePage'] = Hash::combine($pages, '{n}.QuestionnairePage.page_sequence', '{n}.QuestionnairePage');
 		}
-
-		// ページシーケンスによって並べ替え
-		$pages = Hash::sort($questionnaire['QuestionnairePage'], '{n}.page_sequence', 'asc');
-		$questionnaire['QuestionnairePage'] = $pages;
-
+		$questionnaire['Questionnaire']['page_count'] = 0;
 		foreach ($questionnaire['QuestionnairePage'] as &$page) {
 			if (isset($page['id'])) {
 				$this->QuestionnaireQuestion->setQuestionToPage($questionnaire, $page);

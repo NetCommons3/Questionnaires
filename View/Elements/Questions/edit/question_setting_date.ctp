@@ -23,79 +23,55 @@
 							QuestionnairesComponent::TYPE_OPTION_DATE_TIME => __d('questionnaires', 'Date and Time')),
 		'legend' => false,
 		'label' => false,
-		'ng-model' => 'question.question_type_option'
+		'ng-model' => 'question.questionTypeOption'
 	));
 	?>
 	<div class="col-sm-3">
 	</div>
 </div>
 
-<div ng-show="question.question_type_option == <?php echo QuestionnairesComponent::TYPE_OPTION_DATE; ?>
-						|| question.question_type_option == <?php echo QuestionnairesComponent::TYPE_OPTION_DATE_TIME; ?>">
 
-	<div class="row">
-		<div class="col-sm-12">
-			<div class="checkbox">
-				<label>
-					<input type="checkbox" ng-model="question.setDateTimeRange"><?php echo __d('questionnaires', 'set range to answer date and time'); ?>
-				</label>
-			</div>
+<div class="row">
+	<div class="col-sm-12">
+		<div class="checkbox">
+			<label>
+				<input type="checkbox" ng-model="question.setDateTimeRange"><?php echo __d('questionnaires', 'set range to answer date and time'); ?>
+			</label>
 		</div>
 	</div>
+</div>
 
-	<div class="row">
-		<div ng-show="question.setDateTimeRange">
-			<div class="col-sm-5">
-				<p class="input-group">
-					<input type="text" class="form-control" datepicker-popup ng-model="question.min" show-weeks="false" is-open="question.calendar_opened[0]"  max="question.max" />
-					<span class="input-group-btn">
-						<button type="button" class="btn btn-default" ng-click="openCal($event, pageIndex, qIndex, 0)"><i class="glyphicon glyphicon-calendar"></i></button>
-					</span>
-				</p>
-				<div ng-model="question.min"
-					ng-show="question.question_type_option == <?php echo QuestionnairesComponent::TYPE_OPTION_DATE_TIME; ?>">
-					<timepicker hour-step="1" minute-step="15" ></timepicker>
-				</div>
-				<?php echo $this->Form->input('QuestionnairePage.' . $pageIndex . '.QuestionnaireQuestion.' . $qIndex . '.min',
-					array(
-					'type' => 'hidden',
-					'label' => false,
-					'ng-value' => "question.min | date : 'yyyy-MM-dd HH:mm:ss'"
-					));
-					?>
-				<?php echo $this->element(
-				'Questionnaires.errors', array(
-				'errorArrayName' => 'errors.QuestionnairePage[pageIndex].QuestionnaireQuestion[qIndex].min',
-				)); ?>
-			</div>
 
-			<div class="col-sm-2"><p class="form-control-static text-center"><?php echo __d('questionnaires', ' - '); ?></p></div>
+<div class="row">
+	<div ng-show="question.setDateTimeRange">
+		<div class="col-sm-5">
+			<?php
+			echo $this->element(
+			'Questionnaires.Questions/edit/question_setting_date_element', array(
+			'field' => 'QuestionnairePage.' . $pageIndex . '.QuestionnaireQuestion.' . $qIndex . '.min',
+			'model' => 'question.min',
+			'calOpenId' => 0,
+			'min' => '',
+			'max' => 'question.max',
+			'error' => 'question.errorMessages.min',
+			));
+			?>
+		</div>
 
-			<div class="col-sm-5">
-				<p class="input-group">
-					<input type="text" class="form-control" datepicker-popup ng-model="question.max" show-weeks="false" is-open="question.calendar_opened[1]"  min="question.min" />
-					<span class="input-group-btn">
-						<button type="button" class="btn btn-default" ng-click="openCal($event, pageIndex, qIndex, 1)"><i class="glyphicon glyphicon-calendar"></i></button>
-					</span>
-				</p>
-				<div ng-model="question.max"
-					 ng-show="question.question_type_option == <?php echo QuestionnairesComponent::TYPE_OPTION_DATE_TIME; ?>">
-					<timepicker hour-step="1" minute-step="15" ></timepicker>
-				</div>
-				<?php echo $this->Form->input('QuestionnairePage.' . $pageIndex . '.QuestionnaireQuestion.' . $qIndex . '.max',
-				array(
-				'type' => 'hidden',
-				'label' => false,
-				'ng-value' => "question.max | date : 'yyyy-MM-dd HH:mm:ss'"
-				)
-				);
-				?>
-				<?php echo $this->element(
-				'Questionnaires.errors', array(
-				'errorArrayName' => 'errors.QuestionnairePage[pageIndex].QuestionnaireQuestion[qIndex].max',
-				)); ?>
-			</div>
+		<div class="col-sm-2"><p class="form-control-static text-center"><?php echo __d('questionnaires', ' - '); ?></p></div>
+
+		<div class="col-sm-5">
+			<?php
+			echo $this->element(
+			'Questionnaires.Questions/edit/question_setting_date_element', array(
+			'field' => 'QuestionnairePage.' . $pageIndex . '.QuestionnaireQuestion.' . $qIndex . '.max',
+			'model' => 'question.max',
+			'calOpenId' => 1,
+			'min' => 'question.min',
+			'max' => '',
+			'error' => 'question.errorMessages.max',
+			));
+			?>
 		</div>
 	</div>
-
 </div>

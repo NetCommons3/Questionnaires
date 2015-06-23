@@ -77,25 +77,40 @@ class QuestionnairePageTest extends QuestionnaireTestBase {
 		$this->setUp();
 
 		$data = array(
-		'QuestionnairePage' => array(
-			array(
+			'QuestionnairePage' => array(
+				array(
+					'id' => 2,
+					'origin_id' => 1,
+					'active_id' => 1,
+					'latest_id' => 1,
+					'questionnaire_id' => 2,
+					'page_title' => 'TEST1',
+					'page_sequence' => 0,
+					'is_auto_translated' => 1,
+					'created_user' => 1,
+					'created' => '2015-04-13 06:38:28',
+					'modified_user' => 1,
+					'modified' => '2015-04-13 06:38:28'
+				),
+				array(
+					'id' => 3,
+					'origin_id' => 3,
+					'active_id' => 1,
+					'latest_id' => 1,
+					'questionnaire_id' => 2,
+					'page_title' => 'TEST2',
+					'page_sequence' => 1,
+					'is_auto_translated' => 1,
+					'created_user' => 1,
+					'created' => '2015-04-13 06:38:28',
+					'modified_user' => 1,
+					'modified' => '2015-04-13 06:38:28'
+				)
+			),
+			'Questionnaire' => array(
 				'id' => 2,
-				'origin_id' => 1,
-				'active_id' => 1,
-				'latest_id' => 1,
-				'questionnaire_id' => 2,
-				'page_title' => 'TEST1',
-				'page_sequence' => 1,
-				'is_auto_translated' => 1,
-				'created_user' => 1,
-				'created' => '2015-04-13 06:38:28',
-				'modified_user' => 1,
-				'modified' => '2015-04-13 06:38:28'
+				'page_count' => 1
 			)
-		),
-		'Questionnaire' => array(
-			'page_count' => 1
-		)
 		);
 
 		$this->QuestionnairePage->setPageToQuestionnaire($data);

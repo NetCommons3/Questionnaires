@@ -55,27 +55,13 @@ NetCommonsApp.controller('Questionnaires.setting',
         $scope.frameId = frameId;
         $scope.questionnaires = questionnaires;
 
-        if (Date.parse($scope.questionnaires.questionnaire.startPeriod)) {
-          $scope.questionnaires.questionnaire.startPeriod =
-              new Date($scope.questionnaires.questionnaire.startPeriod);
-        } else {
-          $scope.questionnaires.questionnaire.startPeriod = new Date();
-        }
-        if (Date.parse($scope.questionnaires.questionnaire.endPeriod)) {
-          $scope.questionnaires.questionnaire.endPeriod =
-              new Date($scope.questionnaires.questionnaire.endPeriod);
-        } else {
-          $scope.questionnaires.questionnaire.endPeriod = new Date();
-        }
-        if (Date.parse(
-            $scope.questionnaires.questionnaire.totalShowStartPeriod)) {
-          $scope.questionnaires.questionnaire.totalShowStartPeriod =
-              new Date(
-                  $scope.questionnaires.questionnaire.totalShowStartPeriod);
-        } else {
-          $scope.questionnaires.questionnaire.totalShowStartPeriod =
-              new Date();
-        }
+        $scope.questionnaires.questionnaire.startPeriod =
+            $scope.Date($scope.questionnaires.questionnaire.startPeriod);
+        $scope.questionnaires.questionnaire.endPeriod =
+            $scope.Date($scope.questionnaires.questionnaire.endPeriod);
+        $scope.questionnaires.questionnaire.totalShowStartPeriod =
+            $scope.Date(
+                $scope.questionnaires.questionnaire.totalShowStartPeriod);
         $scope.minDate = new Date();
       };
       $scope.publishQuestionnaire = function(e, isPublished, message) {
@@ -97,5 +83,12 @@ NetCommonsApp.controller('Questionnaires.setting',
         }
         e.stopPropagation();
         return false;
+      };
+      $scope.Date = function(dateStr) {
+        if (Date.parse(dateStr)) {
+          return new Date(dateStr);
+        } else {
+          return new Date();
+        }
       };
     });

@@ -150,7 +150,7 @@ class QuestionnairesAppController extends AppController {
  */
 	private function __converter(&$value, $key) {
 		if (is_bool($value)) {
-			$value = ($value ? 1 : 0);
+			$value = ($value ? '1' : '0');
 		}
 	}
 

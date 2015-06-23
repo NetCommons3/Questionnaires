@@ -51,10 +51,11 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
  * use helpers
  *
  */
-	public $helpers = array(
+	public $helpers = [
 		'NetCommons.BackToPage',
-		'NetCommons.Token'
-	);
+		'NetCommons.Token',
+		'NetCommons.Date'
+	];
 
 /**
  * beforeFilter
@@ -83,13 +84,17 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 
 		// check POST request
 		if ($this->request->isPost()) {
-			// Check the post data , if correct answer , will be session registration
-			if (!$this->QuestionnairesPreAnswer->checkKeyPhrase($this, $questionnaire, $this->data)) {
-				$errors['PreAnswer']['key_phrase'][] = __d('questionnaires', 'Invalid key phrase');
+
+			if (!isset($this->data['PreAnswer']['test_mode'])) {
+				// Check the post data , if correct answer , will be session registration
+				if (!$this->QuestionnairesPreAnswer->checkKeyPhrase($this, $questionnaire, $this->data)) {
+					$errors['PreAnswer']['key_phrase'][] = __d('questionnaires', 'Invalid key phrase');
+				}
+				if (!$this->QuestionnairesPreAnswer->checkImageAuth($this, $questionnaire, $this->data)) {
+					$errors['PreAnswer']['image_auth'][] = __d('questionnaires', 'Invalid key Image Auth');
+				}
 			}
-			if (!$this->QuestionnairesPreAnswer->checkImageAuth($this, $questionnaire, $this->data)) {
-				$errors['PreAnswer']['image_auth'][] = __d('questionnaires', 'Invalid key Image Auth');
-			}
+			$this->QuestionnairesPreAnswer->checkTestMode($this, $questionnaire, $this->data);
 		}
 
 		// check that whether the current state is in the state to be a pre-answer
@@ -97,12 +102,18 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 			$this->redirect('answer/' . $frameId . '/' . $questionnaireId);
 		}
 
+		// 認証系画面とテスト画面を分けてしまったため
+		// ここでどっちの画面に流すべきかの判定が必要になってしまった、、、
+		if (!$this->QuestionnairesPreAnswer->checkTestMode($this, $questionnaire, $this->data)) {
+			$this->view = 'QuestionnaireAnswers/test_mode';
+		}
+
 		// もしも表示数を変えたいときは下記１行を有効にして、captcha関数でgenerateに引数を与える
 		//$this->set('imageDisplayCount', 10);
 
-		$this->set('questionnaire', $this->camelizeKeyRecursive($questionnaire));
+		$this->set('questionnaire', $questionnaire);
 		$this->set('isDuringTest', $this->_isDuringTest($questionnaire));
-		$this->set('errors', $this->camelizeKeyRecursive($errors));
+		$this->set('errors', $errors);
 	}
 
 /**

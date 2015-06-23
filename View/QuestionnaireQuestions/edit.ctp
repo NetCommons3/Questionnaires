@@ -27,8 +27,7 @@
 	 ng-controller="Questionnaires.edit.question"
 	 ng-init="initialize(<?php echo (int)$frameId; ?>,
 	 						<?php echo (int)$isPublished; ?>,
-							<?php echo h(json_encode($questionnaire)); ?>,
-							<?php echo h(json_encode($questionnaireValidationErrors)); ?>,
+							<?php echo h(json_encode($jsQuestionnaire)); ?>,
 							'<?php echo h($newPageLabel); ?>',
 							'<?php echo h($newQuestionLabel); ?>',
 							'<?php echo h($newChoiceLabel); ?>',
@@ -41,6 +40,8 @@
 	'ng-keydown' => 'handleKeydown($event)'
 	)); ?>
 
+	<?php $this->Form->unlockField('Questionnaire.origin_id'); ?>
+	<?php $this->Form->unlockField('Questionnaire.key'); ?>
 	<?php $this->Form->unlockField('QuestionnairePage'); ?>
 
 	<?php echo $this->Form->hidden('Frame.id', array(
@@ -60,27 +61,27 @@
 				array(
 					'label' => __d('questionnaires', 'Questionnaire title') . $this->element('NetCommons.required'),
 					'class' => 'form-control',
-					'ng-model' => 'questionnaire.Questionnaire.title',
+					'ng-model' => 'questionnaire.questionnaire.title',
 					'placeholder' => __d('questionnaires', 'Please input questionnaire title')
 				));
 			?>
 			<?php echo $this->Form->hidden(
 			'Questionnaire.origin_id',
 			array(
-			'value' => isset($questionnaire['Questionnaire']['origin_id']) ? $questionnaire['Questionnaire']['origin_id'] : 0,
+			'ng-value' => 'questionnaire.questionnaire.originId',
 			));
 			?>
 			<?php echo $this->Form->hidden(
 			'Questionnaire.key',
 			array(
-			'value' => $questionnaire['Questionnaire']['key'],
+			'ng-value' => 'questionnaire.questionnaire.key',
 			));
 			?>
 		</div>
 
 
 		<tabset>
-			<tab ng-repeat="(pageIndex, page) in questionnaire.QuestionnairePage" active="page.tab_active">
+			<tab ng-repeat="(pageIndex, page) in questionnaire.questionnairePage" active="page.tabActive">
 				<tab-heading>
 					{{pageIndex+1}}
 				</tab-heading>
@@ -97,7 +98,7 @@
 					<?php
 						echo $this->Form->hidden('QuestionnairePage.{{pageIndex}}.page_sequence',
 						array(
-							'ng-value' => 'page.page_sequence'
+							'ng-value' => 'page.pageSequence'
 						));
 						echo $this->Form->hidden('QuestionnairePage.{{pageIndex}}.id',
 						array(
@@ -105,7 +106,7 @@
 						));
 						echo $this->Form->hidden('QuestionnairePage.{{pageIndex}}.origin_id',
 						array(
-						'ng-value' => 'page.origin_id'
+						'ng-value' => 'page.originId'
 						));
 						echo $this->Form->hidden('QuestionnairePage.{{pageIndex}}.key',
 						array(
@@ -113,16 +114,16 @@
 						));
 						$this->Form->hidden('QuestionnairePage.{{pageIndex}}.page_title',
 						array(
-						'ng-value' => 'page.page_title'
+						'ng-value' => 'page.pageTitle'
 						));
 					?>
 
 					<accordion close-others="true">
 						<accordion-group
 								class="form-horizontal"
-								ng-repeat="(qIndex, question) in page.QuestionnaireQuestion"
+								ng-repeat="(qIndex, question) in page.questionnaireQuestion"
 								is-open="question.isOpen"
-								ng-class="{'panel-danger':(errors.QuestionnairePage[pageIndex].QuestionnaireQuestion[qIndex])}">
+								ng-class="{'panel-danger':(question.hasError)}">
 							<accordion-heading>
 
 								<div class="pull-right" ng-if="isPublished == 0">
@@ -133,13 +134,13 @@
 										</button>
 										<ul class="dropdown-menu" role="menu">
 											<li role="presentation" class="dropdown-header"><?php echo __d('questionnaires', 'destination page number'); ?></li>
-											<li ng-repeat="(movePageIndex, move_page) in questionnaire.QuestionnairePage | filter: {page_sequence: '!' + page.page_sequence}">
-												<a href="#" ng-click="moveQuestionToAnotherPage($event, pageIndex, qIndex, movePageIndex)">{{1 * move_page.page_sequence + 1}}</a>
+											<li ng-repeat="(movePageIndex, movePage) in questionnaire.questionnairePage | filter: {pageSequence: '!' + page.pageSequence}">
+												<a href="#" ng-click="moveQuestionToAnotherPage($event, pageIndex, qIndex, movePageIndex)">{{1 * movePage.pageSequence + 1}}</a>
 											</li>
 										</ul>
 									</div>
 									<button class="btn btn-danger " type="button"
-											ng-disabled="page.QuestionnaireQuestion.length < 2"
+											ng-disabled="page.questionnaireQuestion.length < 2"
 											ng-click="deleteQuestion($event, pageIndex, qIndex, '<?php echo __d('questionnaires', 'Do you want to delete this question ?'); ?>')">
 										<span class="glyphicon glyphicon-remove"> </span>
 									</button>
@@ -162,12 +163,12 @@
 								</button>
 
 								<span class="questionnaire-accordion-header-title">
-									{{question.question_value}}
-									<strong ng-if="question.is_require" class="text-danger h4">
+									{{question.questionValue}}
+									<strong ng-if="question.isRequire" class="text-danger h4">
 										<?php echo __d('net_commons', 'Required'); ?>
 									</strong>
 								</span>
-								<span ng-if="errors.QuestionnairePage[pageIndex].QuestionnaireQuestion[qIndex]">
+								<span ng-if="question.hasError">
 									<?php echo __d('questionnaires', 'There is an error'); ?>
 								</span>
 
@@ -178,7 +179,7 @@
 							<?php
 								echo $this->Form->hidden('QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.question_sequence',
 							array(
-							'ng-value' => 'question.question_sequence'
+							'ng-value' => 'question.questionSequence'
 							));
 							echo $this->Form->hidden('QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.id',
 							array(
@@ -186,7 +187,7 @@
 							));
 							echo $this->Form->hidden('QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.origin_id',
 							array(
-							'ng-value' => 'question.origin_id'
+							'ng-value' => 'question.originId'
 							));
 							echo $this->Form->hidden('QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.key',
 							array(
@@ -194,48 +195,44 @@
 							));
 							echo $this->Form->hidden('QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.is_result_display',
 							array(
-							'ng-value' => 'question.is_result_display'
+							'ng-value' => 'question.isResultDisplay'
 							));
 							echo $this->Form->hidden('QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.result_display_type',
 							array(
-							'ng-value' => 'question.result_display_type'
+							'ng-value' => 'question.resultDisplayType'
 							));
 							?>
 
 							<?php echo $this->element('Questionnaires.Questions/edit_form_controller_set',
 							array(
 								'name' => 'is_require',
+								'jsName' => 'isRequire',
 								'label' => __d('questionnaires', 'Required'),
-								'disabled' => $disabled,
 								'input' => $this->Form->input('QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.is_require',
 									array(
 									'type' => 'checkbox',
 									'div' => array('class' => 'checkbox ' . $disabled),
 									'label' => __d('questionnaires', 'set answer to this question is required'),
-									'value' => true,
-									'ng-model' => 'question.is_require',
+									'ng-checked' => 'question.isRequire == ' . QuestionnairesComponent::USES_USE,
+									'ng-model' => 'question.isRequire',
 									'ng-disabled' => 'isPublished != 0',
 									)),
-								'isPublished' => $isPublished,
-								'value' => 'question.is_require'
 							));?>
 
 							<?php echo $this->element('Questionnaires.Questions/edit_form_controller_set',
 							array(
 								'name' => 'question_value',
+								'jsName' => 'questionValue',
 								'label' => __d('questionnaires', 'question title') . $this->element('NetCommons.required'),
-								'disabled' => $disabled,
 								'input' => $this->Form->input('QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.question_value',
 									array(
 										'type' => 'text',
 										'label' => false,
 										'class' => 'form-control',
-										'ng-model' => 'question.question_value',
+										'ng-model' => 'question.questionValue',
 										'required' => 'required',
 										'ng-disabled' => 'isPublished != 0',
 									)),
-								'isPublished' => $isPublished,
-								'value' => 'question.question_value'
 							));?>
 
 							<?php
@@ -260,54 +257,50 @@
 								echo $this->element('Questionnaires.Questions/edit_form_controller_set',
 								array(
 									'name' => 'description',
+									'jsName' => 'description',
 									'label' => __d('questionnaires', 'question sentence'),
-									'disabled' => $disabled,
 									'input' => '<div class="nc-wysiwyg-alert">' . $textarea . '</div>',
-								'isPublished' => $isPublished,
-								'value' => 'question.description'
 							));?>
 
 							<?php echo $this->element('Questionnaires.Questions/edit_form_controller_set',
 								array(
 								'name' => 'question_type',
+								'jsName' => 'questionType',
 								'label' => __d('questionnaires', 'Question type') . $this->element('NetCommons.required'),
-								'disabled' => $disabled,
 								'input' => $this->Form->select('QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.question_type',
 									$questionTypeOptions,
 									array(
 										'class' => 'form-control',
-										'ng-model' => 'question.question_type',
+										'ng-model' => 'question.questionType',
 										'ng-disabled' => 'isPublished != 0',
 										'empty' => null
 									)),
-								'isPublished' => $isPublished,
-								'value' => 'question.question_type'
 							));?>
 							<div class="row form-group">
 								<div class="col-sm-12">
 									<div class="well">
-										<div ng-if="question.question_type == <?php echo QuestionnairesComponent::TYPE_SELECTION; ?>">
+										<div ng-if="question.questionType == <?php echo QuestionnairesComponent::TYPE_SELECTION; ?>">
 											<?php echo $this->element($elementFolder . 'question_setting_alternative', array('pageIndex' => '{{pageIndex}}', 'qIndex' => '{{qIndex}}', 'isPublisehd' => $isPublished)); ?>
 										</div>
-										<div ng-if="question.question_type == <?php echo QuestionnairesComponent::TYPE_MULTIPLE_SELECTION; ?>">
+										<div ng-if="question.questionType == <?php echo QuestionnairesComponent::TYPE_MULTIPLE_SELECTION; ?>">
 											<?php echo $this->element($elementFolder . 'question_setting_alternative', array('pageIndex' => '{{pageIndex}}', 'qIndex' => '{{qIndex}}')); ?>
 										</div>
-										<div ng-if="question.question_type == <?php echo QuestionnairesComponent::TYPE_TEXT; ?>">
+										<div ng-if="question.questionType == <?php echo QuestionnairesComponent::TYPE_TEXT; ?>">
 											<?php echo $this->element($elementFolder . 'question_setting_text', array('pageIndex' => '{{pageIndex}}', 'qIndex' => '{{qIndex}}')); ?>
 										</div>
-										<div ng-if="question.question_type == <?php echo QuestionnairesComponent::TYPE_TEXT_AREA; ?>">
+										<div ng-if="question.questionType == <?php echo QuestionnairesComponent::TYPE_TEXT_AREA; ?>">
 											<?php /* 複数行テキストの場合は詳細設定がないです */ ?>
 										</div>
-										<div ng-if="question.question_type == <?php echo QuestionnairesComponent::TYPE_MATRIX_SELECTION_LIST; ?>">
+										<div ng-if="question.questionType == <?php echo QuestionnairesComponent::TYPE_MATRIX_SELECTION_LIST; ?>">
 											<?php echo $this->element($elementFolder . 'question_setting_matrix_alternative', array('pageIndex' => '{{pageIndex}}', 'qIndex' => '{{qIndex}}')); ?>
 										</div>
-										<div ng-if="question.question_type == <?php echo QuestionnairesComponent::TYPE_MATRIX_MULTIPLE; ?>">
+										<div ng-if="question.questionType == <?php echo QuestionnairesComponent::TYPE_MATRIX_MULTIPLE; ?>">
 											<?php echo $this->element($elementFolder . 'question_setting_matrix_alternative', array('pageIndex' => '{{pageIndex}}', 'qIndex' => '{{qIndex}}')); ?>
 										</div>
-										<div ng-if="question.question_type == <?php echo QuestionnairesComponent::TYPE_DATE_AND_TIME; ?>">
+										<div ng-if="question.questionType == <?php echo QuestionnairesComponent::TYPE_DATE_AND_TIME; ?>">
 											<?php echo $this->element($elementFolder . 'question_setting_date', array('pageIndex' => '{{pageIndex}}', 'qIndex' => '{{qIndex}}')); ?>
 										</div>
-										<div ng-if="question.question_type == <?php echo QuestionnairesComponent::TYPE_SINGLE_SELECT_BOX; ?>">
+										<div ng-if="question.questionType == <?php echo QuestionnairesComponent::TYPE_SINGLE_SELECT_BOX; ?>">
 											<?php echo $this->element($elementFolder . 'question_setting_alternative', array('pageIndex' => '{{pageIndex}}', 'qIndex' => '{{qIndex}}')); ?>
 										</div>
 									</div>
@@ -319,7 +312,7 @@
 
 					<div class="form-group text-right"
 						 ng-if="isPublished == 0"
-						 ng-show="page.QuestionnaireQuestion.length > 0">
+						 ng-show="page.questionnaireQuestion.length > 0">
 						<button class="btn btn-success" type="button" ng-click="addQuestion($event, pageIndex)">
 							<span class="glyphicon glyphicon-plus"></span>
 							<?php echo __d('questionnaires', 'Add Question'); ?>
@@ -328,7 +321,7 @@
 
 					<div class="text-center" ng-if="isPublished == 0">
 						<button class="btn btn-danger" type="button"
-								ng-disabled="questionnaire.QuestionnairePage.length < 2"
+								ng-disabled="questionnaire.questionnairePage.length < 2"
 								ng-click="deletePage($index, '<?php echo __d('questionnaires', 'Do you want to delete this page?'); ?>')">
 							<span class="glyphicon glyphicon-remove"></span><?php echo __d('questionnaires', 'Delete this page'); ?>
 						</button>

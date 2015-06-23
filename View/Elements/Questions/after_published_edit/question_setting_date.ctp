@@ -24,7 +24,7 @@
 	QuestionnairesComponent::TYPE_OPTION_DATE_TIME => __d('questionnaires', 'Date and Time')),
 	'legend' => false,
 	'label' => false,
-	'ng-model' => 'question.question_type_option',
+	'ng-model' => 'question.questionTypeOption',
 	'disabled' => 'disabled',
 	));
 	?>
@@ -32,49 +32,46 @@
 	</div>
 </div>
 
-<div ng-show="question.question_type_option == <?php echo QuestionnairesComponent::TYPE_OPTION_DATE; ?>
-						|| question.question_type_option == <?php echo QuestionnairesComponent::TYPE_OPTION_DATE_TIME; ?>">
 
-	<div class="row">
-		<div class="col-sm-12">
-			<div class="checkbox disabled">
-				<label>
-					<input type="checkbox"
-						   disabled
-						   ng-model="question.setDateTimeRange">
-					<?php echo __d('questionnaires', 'set range to answer date and time'); ?>
-				</label>
-			</div>
+<div class="row">
+	<div class="col-sm-12">
+		<div class="checkbox disabled">
+			<label>
+				<input type="checkbox"
+					   disabled
+					   ng-model="question.setDateTimeRange">
+				<?php echo __d('questionnaires', 'set range to answer date and time'); ?>
+			</label>
 		</div>
 	</div>
-
-	<div class="row">
-		<div ng-show="question.setDateTimeRange">
-			<div class="col-sm-5">
-				<?php echo $this->Form->input('QuestionnairePage.' . $pageIndex . '.QuestionnaireQuestion.' . $qIndex . '.min',
-				array(
-				'type' => 'text',
-				'label' => false,
-				'disabled' => 'disabled',
-				'ng-value' => "question.min | date : 'yyyy-MM-dd HH:mm:ss'"
-				));
-				?>
-			</div>
-
-			<div class="col-sm-2"><p class="form-control-static text-center"><?php echo __d('questionnaires', ' - '); ?></p></div>
-
-			<div class="col-sm-5">
-				<?php echo $this->Form->input('QuestionnairePage.' . $pageIndex . '.QuestionnaireQuestion.' . $qIndex . '.max',
-				array(
-				'type' => 'text',
-				'label' => false,
-				'disabled' => 'disabled',
-				'ng-value' => "question.max | date : 'yyyy-MM-dd HH:mm:ss'"
-				)
-				);
-				?>
-			</div>
-		</div>
-	</div>
-
 </div>
+
+<div class="row">
+	<div ng-show="question.setDateTimeRange">
+		<div class="col-sm-5">
+			<?php echo $this->Form->input('QuestionnairePage.' . $pageIndex . '.QuestionnaireQuestion.' . $qIndex . '.min',
+			array(
+			'type' => 'text',
+			'label' => false,
+			'disabled' => 'disabled',
+			'ng-value' => "question.min | date : 'yyyy-MM-dd HH:mm:ss'"
+			));
+			?>
+		</div>
+
+		<div class="col-sm-2"><p class="form-control-static text-center"><?php echo __d('questionnaires', ' - '); ?></p></div>
+
+		<div class="col-sm-5">
+			<?php echo $this->Form->input('QuestionnairePage.' . $pageIndex . '.QuestionnaireQuestion.' . $qIndex . '.max',
+			array(
+			'type' => 'text',
+			'label' => false,
+			'disabled' => 'disabled',
+			'ng-value' => "question.max | date : 'yyyy-MM-dd HH:mm:ss'"
+			)
+			);
+			?>
+		</div>
+	</div>
+</div>
+

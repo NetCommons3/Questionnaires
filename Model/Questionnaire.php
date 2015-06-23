@@ -94,7 +94,7 @@ class Questionnaire extends QuestionnairesAppModel {
 			'dependent' => true,
 			'conditions' => '',
 			'fields' => '',
-			'order' => '',
+			'order' => array('page_sequence' => 'ASC'),
 			'limit' => '',
 			'offset' => '',
 			'exclusive' => '',

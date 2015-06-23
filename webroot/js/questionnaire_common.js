@@ -64,6 +64,7 @@ QuestionnaireCommon.directive('colorPalettePicker', [function() {
 
 /**
  * questionnaire filter
+ * html text to plain text
  */
 /**
  * html tag strip
