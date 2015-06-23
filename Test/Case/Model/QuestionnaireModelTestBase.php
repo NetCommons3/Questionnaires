@@ -18,6 +18,7 @@ App::uses('AuthComponent', 'Component');
 App::uses('Block', 'Blocks.Model');
 App::uses('Frame', 'Frames.Model');
 App::uses('User', 'Users.Model');
+App::uses('Comment', 'Comments.Model');
 App::uses('Questionnaire', 'Questionnaires.Model');
 App::uses('QuestionnaireChoice', 'Questionnaires.Model');
 App::uses('QuestionnaireFrameSetting', 'Questionnaires.Model');
@@ -62,6 +63,7 @@ class QuestionnaireModelTestBase extends YACakeTestCase {
 		'plugin.rooms.room',
 		'plugin.users.user_attributes_user',
 		'plugin.users.user',
+		'plugin.comments.comment',
 	);
 
 /**
