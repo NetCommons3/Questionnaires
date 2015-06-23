@@ -20,35 +20,39 @@ App::uses('ModelBehavior', 'Model');
 class QuestionnaireValidateBehavior extends ModelBehavior {
 
 /**
- * Checks if is_period is on, required start_period, end_period
+ * Checks if flag is on, required other fields
  *
  * @param object &$model use model
  * @param array $check check data array
+ * @param array $others require data field names
+ * @param string $ope require condition AND or OR
  * @return bool
  */
-	public function requireTimes(&$model, $check) {
-		if ($model->data['Questionnaire']['is_period'] == QuestionnairesComponent::USES_USE) {
-			if (empty($model->data['Questionnaire']['start_period']) && empty($model->data['Questionnaire']['end_time'])) {
-				return false;
+	public function requireOtherFields(&$model, $check, $others, $ope) {
+		$value = array_values($check);
+		$value = $value[0];
+		$ope = strtoupper($ope);
+		if ($value != QuestionnairesComponent::USES_USE) {
+			return true;
+		}
+		if ($value == QuestionnairesComponent::USES_USE) {
+			foreach ($others as $other) {
+				$ret = empty($model->data[$model->name][$other]);
+				if ($ope == 'AND') {
+					if ($ret == true) {
+						return false;
+					}
+				} elseif ($ope == 'OR') {
+					if ($ret == false) {
+						return true;
+					}
+				}
 			}
 		}
-		return true;
-	}
-
-/**
- * Checks if is_key_pass_use is on, required key_phrase
- *
- * @param object &$model use model
- * @param array $check check data array
- * @return bool
- */
-	public function requireKeyPhrase(&$model, $check) {
-		if ($model->data['Questionnaire']['is_key_pass_use'] == QuestionnairesComponent::USES_USE) {
-			if (empty($model->data['Questionnaire']['key_phrase'])) {
-				return false;
-			}
+		if ($ope == 'AND') {
+			return true;
 		}
-		return true;
+		return false;
 	}
 
 /**
@@ -116,7 +120,7 @@ class QuestionnaireValidateBehavior extends ModelBehavior {
 			|| $model->data['QuestionnaireQuestion']['question_type'] == QuestionnairesComponent::TYPE_TEXT_AREA
 			|| $model->data['QuestionnaireQuestion']['question_type'] == QuestionnairesComponent::TYPE_DATE_AND_TIME
 		) {
-			if ($check == QuestionnairesComponent::EXPRESSION_SHOW) {
+			if ($check['is_result_display'] == QuestionnairesComponent::EXPRESSION_SHOW) {
 				return false;
 			}
 		}

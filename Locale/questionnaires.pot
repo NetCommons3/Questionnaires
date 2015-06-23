@@ -129,7 +129,7 @@ msgid "List select"
 msgstr ""
 
 #: /Model/Questionnaire.php:145
-msgid "if you set the answer period, please set start time or end time or both time."
+msgid "if you set the period, please set time."
 msgstr ""
 
 #: /Model/Questionnaire.php:151;157;167

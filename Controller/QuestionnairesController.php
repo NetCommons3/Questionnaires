@@ -361,6 +361,8 @@ class QuestionnairesController extends QuestionnairesAppController {
 				'is_period',
 				'start_period',
 				'end_period',
+				'total_show_timing',
+				'total_show_start_period',
 				'is_no_member_allow',
 				'is_anonymity',
 				'is_key_pass_use',

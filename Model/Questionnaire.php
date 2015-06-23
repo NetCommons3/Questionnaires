@@ -111,6 +111,7 @@ class Questionnaire extends QuestionnairesAppModel {
  * @return bool True if validate operation should continue, false to abort
  * @link http://book.cakephp.org/2.0/en/models/callback-methods.html#beforevalidate
  * @see Model::save()
+ * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
  */
 	public function beforeValidate($options = array()) {
 		$this->validate = Hash::merge($this->validate, array(
@@ -118,7 +119,6 @@ class Questionnaire extends QuestionnairesAppModel {
 				'numeric' => array(
 					'rule' => array('numeric'),
 					'message' => __d('net_commons', 'Invalid request.'),
-					'allowEmpty' => true,
 					'required' => true,
 				)
 			),
@@ -140,9 +140,9 @@ class Questionnaire extends QuestionnairesAppModel {
 					'rule' => array('boolean'),
 					'message' => __d('net_commons', 'Invalid request.'),
 				),
-				'requireTime' => array(
-					'rule' => 'requireTimes',
-					'message' => __d('questionnaires', 'if you set the answer period, please set start time or end time or both time.')
+				'requireOtherFields' => array(
+					'rule' => array('requireOtherFields', array('start_period', 'end_period'), 'OR'),
+					'message' => __d('questionnaires', 'if you set the period, please set time.')
 				)
 			),
 			'start_period' => array(
@@ -159,6 +159,16 @@ class Questionnaire extends QuestionnairesAppModel {
 				'checkDateComp' => array(
 					'rule' => array('checkDateComp', '>=', 'start_period'),
 					'message' => __d('questionnaires', 'start period must be smaller than end period')
+				)
+			),
+			'total_show_timing' => array(
+				'inList' => array(
+					'rule' => array('inList', array(QuestionnairesComponent::USES_USE, QuestionnairesComponent::USES_NOT_USE)),
+					'message' => __d('net_commons', 'Invalid request.'),
+				),
+				'requireOtherFields' => array(
+					'rule' => array('requireOtherFields', array('total_show_start_period'), 'AND'),
+					'message' => __d('questionnaires', 'if you set the period, please set time.')
 				)
 			),
 			'total_show_start_period' => array(
@@ -184,8 +194,8 @@ class Questionnaire extends QuestionnairesAppModel {
 					'rule' => array('boolean'),
 					'message' => __d('net_commons', 'Invalid request.'),
 				),
-				'requireKeyPhrase' => array(
-					'rule' => 'requireKeyPhrase',
+				'requireOtherFields' => array(
+					'rule' => array('requireOtherFields', array('key_phrase'), 'AND'),
 					'message' => __d('questionnaires', 'if you set the use key phrase period, please set key phrase text.')
 				)
 			),
@@ -352,6 +362,7 @@ class Questionnaire extends QuestionnairesAppModel {
 
 			$this->create();
 			if (! $this->save($saveQuestionnaire)) {
+				$this->log($this->validationErrors, 'debug');
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}
 

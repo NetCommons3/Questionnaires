@@ -1,6 +1,6 @@
 <?php
 /**
- * Questionnaire Test Case
+ * QuestionnaireFrameDisplayQuestionnaire Test Case
  *
  * @author Noriko Arai <arai@nii.ac.jp>
  * @author Allcreator <info@allcreator.net>
@@ -11,12 +11,10 @@
 
 App::uses('QuestionnaireTestBase', 'Questionnaires.Test/Case/Model');
 
-//require_once 'Questionnaire.php';
-
 /**
- * Summary for Questionnaire Test Case
+ * Summary for QuestionnaireFrameDisplayQuestionnaire Test Case
  */
-class QuestionnaireBehaviorTest extends QuestionnaireTestBase {
+class QuestionnaireFrameDisplayQuestionnaireValidationTest extends QuestionnaireTestBase {
 
 /**
  * setUp method
@@ -45,62 +43,65 @@ class QuestionnaireBehaviorTest extends QuestionnaireTestBase {
  * @return void
  */
 	private function __assertValidationError($field, $data, $expected) {
+		//初期設定
 		$this->setUp();
 
-		$this->Questionnaire->set($data);
-		$result = $this->Questionnaire->validates();
+		//validate処理実行
+		$this->QuestionnaireFrameDisplayQuestionnaire->set($data);
+		$result = $this->QuestionnaireFrameDisplayQuestionnaire->validates();
 
+		//戻り値チェック
 		$expectMessage = 'Expect `' . $field . '` field, error data: ' . print_r($data, true);
 		$this->assertFalse($result, $expectMessage);
 
-		$this->assertEquals($this->Questionnaire->validationErrors, $expected);
+		//validationErrorsチェック
+		$this->assertEquals($this->QuestionnaireFrameDisplayQuestionnaire->validationErrors, $expected);
 
+		//処理終了
 		$this->tearDown();
 	}
 
 /**
  * validate method
+ *  validate試験'frame_key'が空白の場合（エラー）
  * @return void
  */
-	public function testbeforeValidate1() {
-		$field = 'is_period';
+	public function testValidate1() {
+		$field = 'frame_key';
 
+		//データ生成
 		$data = array(
-			'block_id' => 1,
-			'is_auto_translated' => 1,
-			'title' => 'title',
-			'status' => NetCommonsBlockComponent::STATUS_IN_DRAFT,
-			'start_period' => '',
-			'end_period' => '',
-			'is_period' => 1,
+			'frame_key' => '',
+			'questionnaire_origin_id' => 1,
 		);
-		$expected = array(
-				$field => array( __d('questionnaires', 'if you set the period, please set time.')));
 
+		//期待値
+		$expected = array(
+			$field => array(__('notEmpty')));
+
+		//テスト実施
 		$this->__assertValidationError($field, $data, $expected);
 	}
 
 /**
  * validate method
+ *  validate試験'questionnaire_origin_id'が数字以外(エラー)
  * @return void
  */
-	public function testbeforeValidate2() {
-		$field = 'is_key_pass_use';
+	public function testValidate2() {
+		$field = 'questionnaire_origin_id';
 
+		//データ生成
 		$data = array(
-			'block_id' => 1,
-			'is_auto_translated' => 1,
-			'title' => 'title',
-			'status' => NetCommonsBlockComponent::STATUS_IN_DRAFT,
-			'start_period' => '2015-06-04 11:45:22',
-			'end_period' => '2015-06-04 11:45:22',
-			'is_period' => 0,
-			'is_key_pass_use' => 1,
-			'key_phrase' => '',
+			'frame_key' => 'aaa',
+			'questionnaire_origin_id' => 'a',
 		);
-		$expected = array(
-				$field => array(__d('questionnaires', 'if you set the use key phrase period, please set key phrase text.')));
 
+		//期待値
+		$expected = array(
+			$field => array(__('numeric')));
+
+		//テスト実施
 		$this->__assertValidationError($field, $data, $expected);
 	}
 

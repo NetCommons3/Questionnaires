@@ -130,8 +130,8 @@ msgid "List select"
 msgstr "リストから選択"
 
 #: /Model/Questionnaire.php:152
-msgid "if you set the answer period, please set start time or end time or both time."
-msgstr "回答期間を設定する場合は、開始日時または終了日時のいずれか、または両方を設定してください。"
+msgid "if you set the period, please set time."
+msgstr "期間を設定する場合は、日時を設定してください。"
 
 #: /Model/Questionnaire.php:158;164;174
 msgid "Invalid datetime format."
