@@ -220,4 +220,23 @@ class QuestionnaireAnswerSummary extends QuestionnairesAppModel {
 		}
 		return $summary;
 	}
+
+/**
+ * deleteTestAnswerSummary
+ * when questionnaire is published, delete test answer summary
+ *
+ * @param int $originId questionnaire originId
+ * @param int $status publish status
+ * @return bool
+ */
+	public function deleteTestAnswerSummary($originId, $status) {
+		if ($status != NetCommonsBlockComponent::STATUS_PUBLISHED) {
+			return true;
+		}
+		$this->deleteAll(array(
+			'questionnaire_origin_id' => $originId,
+			'test_status' => QuestionnairesComponent::TEST_ANSWER_STATUS_TEST), true);
+		return true;
+	}
+
 }

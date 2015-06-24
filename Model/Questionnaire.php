@@ -341,6 +341,7 @@ class Questionnaire extends QuestionnairesAppModel {
 			'Block' => 'Blocks.Block',
 			'Comment' => 'Comments.Comment',
 			'QuestionnaireFrameDisplayQuestionnaire' => 'Questionnaires.QuestionnaireFrameDisplayQuestionnaire',
+			'QuestionnaireAnswerSummary' => 'Questionnaires.QuestionnaireAnswerSummary',
 		]);
 
 		//トランザクションBegin
@@ -361,8 +362,8 @@ class Questionnaire extends QuestionnairesAppModel {
 			}
 
 			$this->create();
-			if (! $this->save($saveQuestionnaire)) {
-				$this->log($this->validationErrors, 'debug');
+			$saveQuestionnaire = $this->save($saveQuestionnaire);
+			if (!$saveQuestionnaire) {
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}
 
@@ -381,6 +382,8 @@ class Questionnaire extends QuestionnairesAppModel {
 			if (!$this->QuestionnaireFrameDisplayQuestionnaire->saveFrameDisplayQuestionnaire($questionnaire['Frame']['id'], $questionnaireId)) {
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}
+
+			$this->QuestionnaireAnswerSummary->deleteTestAnswerSummary($saveQuestionnaire['Questionnaire']['origin_id'], $status);
 
 			$dataSource->commit();
 		} catch (Exception $ex) {
