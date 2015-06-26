@@ -56,7 +56,8 @@ class QuestionnairePageTest extends QuestionnaireTestBase {
 					'choice_sequence' => 0,
 					'matrix_type' => QuestionnairesComponent::MATRIX_TYPE_ROW_OR_NO_MATRIX,
 					'choice_label' => __d('questionnaires', 'new choice') . '1',
-					'other_choice_type' => QuestionnairesComponent::OTHER_CHOICE_TYPE_NO_OTHER_FILED
+					'other_choice_type' => QuestionnairesComponent::OTHER_CHOICE_TYPE_NO_OTHER_FILED,
+					'skip_page_sequence' => QuestionnairesComponent::SKIP_GO_TO_END
 				)
 			)
 		);

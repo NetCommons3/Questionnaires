@@ -167,6 +167,9 @@
 									<strong ng-if="question.isRequire" class="text-danger h4">
 										<?php echo __d('net_commons', 'Required'); ?>
 									</strong>
+									<span ng-if="question.isSkip" class="badge">
+										<?php echo __d('questionnaires', 'Skip'); ?>
+									</span>
 								</span>
 								<span ng-if="question.hasError">
 									<?php echo __d('questionnaires', 'There is an error'); ?>

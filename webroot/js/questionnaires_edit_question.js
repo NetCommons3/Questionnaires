@@ -156,6 +156,7 @@ NetCommonsApp.controller('Questionnaires.edit.question',
             $scope.questionnaire.questionnairePage[pIdx].
                 questionnaireQuestion[qIdx].calendarOpened = [false, false];
 
+            // この質問の中にエラーがあるか
             if (question.errorMessages) {
               $scope.questionnaire.questionnairePage[pIdx].
                   questionnaireQuestion[qIdx].hasError = true;
@@ -392,6 +393,8 @@ NetCommonsApp.controller('Questionnaires.edit.question',
          */
       $scope.addChoice =
           function($event, pIdx, qIdx, choiceCount, otherType, matrixType) {
+        var page = $scope.questionnaire.
+            questionnairePage[pIdx];
         var question = $scope.questionnaire.
             questionnairePage[pIdx].questionnaireQuestion[qIdx];
         var choice = new Object();
@@ -413,6 +416,12 @@ NetCommonsApp.controller('Questionnaires.edit.question',
             choice['choiceLabel'] =
                 $scope.newChoiceColumnLabel + (choiceCount + 1);
           }
+        }
+        // skipPageIndex仮設定
+        if (pIdx == $scope.questionnaire.questionnairePage.length - 1) {
+          choice['skipPageSequence'] = variables.SKIP_GO_TO_END;
+        } else {
+          choice['skipPageSequence'] = parseInt(page['pageSequence']) + 1;
         }
 
         // その他選択肢は必ず最後にするためにいったん取りのけておく
@@ -551,6 +560,16 @@ NetCommonsApp.controller('Questionnaires.edit.question',
         $event.stopPropagation();
         $scope.questionnaire.questionnairePage[pIdx].
             questionnaireQuestion[qIdx].calendarOpened[opt] = true;
+      };
+      /**
+       * Questionnaire Judgment sentence greater than
+       *
+       * @return {bool}
+       */
+      $scope.greaterThan = function(prop, tgt2) {
+        return function(item) {
+          return item[prop] > tgt2[prop];
+        }
       };
 
     });

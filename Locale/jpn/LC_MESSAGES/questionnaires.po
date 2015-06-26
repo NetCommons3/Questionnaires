@@ -593,6 +593,9 @@ msgstr "アンケートタイトル"
 msgid "Please input questionnaire title"
 msgstr "アンケートタイトルを入力してください"
 
+msgid "Skip"
+msgstr "スキップ"
+
 #: /View/QuestionnaireQuestions/edit.ctp:94;296
 msgid "Add Question"
 msgstr "質問の追加"

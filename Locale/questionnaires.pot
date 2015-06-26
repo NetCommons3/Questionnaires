@@ -593,6 +593,9 @@ msgstr ""
 msgid "Please input questionnaire title"
 msgstr ""
 
+msgid "Skip"
+msgstr ""
+
 #: /View/QuestionnaireQuestions/edit.ctp:93;296
 msgid "Add Question"
 msgstr ""

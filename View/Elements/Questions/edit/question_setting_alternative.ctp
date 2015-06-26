@@ -34,7 +34,7 @@
 			array(
 			'value' => QuestionnairesComponent::USES_USE,
 			'ng-model' => 'question.isSkip',
-			'ng-checked' => 'question.isSkip == ' . QuestionnairesComponent::USES_USE,
+			'ng-checked' => 'question.isSkip == ' . QuestionnairesComponent::SKIP_FLAGS_SKIP,
 			));
 			?>
 			<?php echo __d('questionnaires', 'set page skip'); ?>
@@ -51,17 +51,18 @@
 							class="form-control input-sm"
 							ng-change="changeSkipPageChoice(choice.skipPageSequence)"
 							ng-model="choice.skipPageSequence"
-							ng-if="question.isSkip == <?php echo QuestionnairesComponent::USES_USE; ?>
+							ng-if="question.isSkip == <?php echo QuestionnairesComponent::SKIP_FLAGS_SKIP; ?>
 							&& question.questionType != <?php echo QuestionnairesComponent::TYPE_MULTIPLE_SELECTION; ?>">
-						<option
-								ng-repeat="skipPage in questionnaire.questionnairePage"
-								value="{{skipPage.pageSequence}}"
+						<option ng-if="questionnaire.questionnairePage.length-1-pageIndex"
+								ng-repeat="skipPage in questionnaire.questionnairePage | filter: greaterThan('pageSequence', page)"
 								ng-value="{{skipPage.pageSequence}}"
-								ng-selected="choice.skipPageSequence == skipPage.pageSequence"
-								ng-disabled="skipPage.pageSequence == pageIndex">
+								ng-selected="choice.skipPageSequence == skipPage.pageSequence || (choice.skipPageSequence == null && skipPage.pageSequence == pageIndex+1)">
 							{{1 * skipPage.pageSequence + 1}}
 						</option>
-						<option value="<?php echo QuestionnairesComponent::SKIP_GO_TO_END ?>"><?php echo __d('questionnaires', 'goto end'); ?></option>
+						<option ng-value="<?php echo QuestionnairesComponent::SKIP_GO_TO_END ?>"
+								ng-selected="choice.skipPageSequence == <?php echo QuestionnairesComponent::SKIP_GO_TO_END ?> || (choice.skipPageSequence == null && questionnaire.questionnairePage.length-1==pageIndex)">
+							<?php echo __d('questionnaires', 'goto end'); ?>
+						</option>
 						<option
 								value="{{questionnaire.questionnairePage.length}}"
 								ng-value="{{questionnaire.questionnairePage.length}}"
@@ -79,6 +80,10 @@
 				<div class="form-inline">
 					<?php echo $this->element('Questionnaires.Questions/edit/question_setting_choice_element', array('pageIndex' => $pageIndex, 'qIndex' => $qIndex)); ?>
 				</div>
+				<?php echo $this->element(
+				'Questionnaires.errors', array(
+				'errorArrayName' => 'choice.errorMessages.skipPageSequence',
+				)); ?>
 			</li>
 		</ul>
 

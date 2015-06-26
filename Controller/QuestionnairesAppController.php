@@ -103,21 +103,18 @@ class QuestionnairesAppController extends AppController {
  */
 	protected function _sorted($obj) {
 		// シーケンス順に並び替え、かつ、インデックス値は０オリジン連番に変更
-		$path = 'QuestionnairePage.{n}';
-
 		// ページ配列もないのでそのまま戻す
-		if (!Hash::check($obj, $path)) {
+		if (!Hash::check($obj, 'QuestionnairePage.{n}')) {
 			return $obj;
 		}
-		$obj = Hash::sort($obj, $path . '.page_sequence', 'asc', 'numeric');
+		$obj['QuestionnairePage'] = Hash::sort($obj['QuestionnairePage'], '{n}.page_sequence', 'asc', 'numeric');
 
 		foreach ($obj['QuestionnairePage'] as &$page) {
-
-			if (isset($page['QuestionnaireQuestion'])) {
+			if (!Hash::check($page, 'QuestionnaireQuestion.{n}')) {
 				$page['QuestionnaireQuestion'] = Hash::sort($page['QuestionnaireQuestion'], '{n}.question_sequence', 'asc', 'numeric');
 
 				foreach ($page['QuestionnaireQuestion'] as &$question) {
-					if (isset($question['QuestionnaireChoice'])) {
+					if (!Hash::check($question, 'QuestionnaireChoice.{n}')) {
 						$question['QuestionnaireChoice'] = Hash::sort($question['QuestionnaireChoice'], '{n}.choice_sequence', 'asc', 'numeric');
 					}
 				}

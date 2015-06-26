@@ -112,7 +112,7 @@ class QuestionnaireValidation extends QuestionnairesAppModel {
 			}
 			// 質問のシーケンスが０始まりで連番になっているか
 			if ($qSeq != $question['question_sequence']) {
-				$errors['QuestionnaireQuestion'][$qIndex][] = __d('questionnaires', 'Invalid question sequence set. Please try again from the beginning.');
+				$errors['QuestionnaireQuestion'][$qIndex]['question_sequence'][] = __d('questionnaires', 'Invalid question sequence set. Please try again from the beginning.');
 				return false;
 			}
 
@@ -175,7 +175,7 @@ class QuestionnaireValidation extends QuestionnairesAppModel {
 		// 選択肢のシーケンスが０始まりで連番になっているか
 		$invalidSeq = array_search(false, $cSeqs);
 		if ($invalidSeq) {
-			$errors['QuestionnaireChoice'][$invalidSeq] = __d('questionnaires', 'Invalid choice sequence set. Please try again from the beginning.');
+			$errors['QuestionnaireChoice'][$invalidSeq]['choice_sequence'][] = __d('questionnaires', 'Invalid choice sequence set. Please try again from the beginning.');
 		}
 
 		if (!empty($this->validationErrors)) {
@@ -201,16 +201,21 @@ class QuestionnaireValidation extends QuestionnairesAppModel {
 		}
 		// 質問がスキップ質問である場合
 		if ($question['is_skip'] == QuestionnairesComponent::SKIP_FLAGS_SKIP) {
-			// 選択肢にジャンプ先の設定があり、かつ、最後ページへの指定ではない場合（未設定時はデフォルトの次ページ移動となります）
-			if (!empty($choice['skip_page_sequence']) && $choice['skip_page_sequence'] != QuestionnairesComponent::SKIP_GO_TO_END) {
+			// 未設定時はデフォルトの次ページ移動となります
+			if (empty($choice['skip_page_sequence'])) {
+				$choice['skip_page_sequence'] = $page['page_sequence'] + 1;
+			}
+			// 最後ページへの指定ではない場合
+			if ($choice['skip_page_sequence'] != QuestionnairesComponent::SKIP_GO_TO_END) {
 				// そのジャンプ先は現在ページから戻っていないか
 				if ($choice['skip_page_sequence'] < $page['page_sequence']) {
-					$errors[] = __d('questionnaires', 'Invalid skip page. Please set forward page.');
+					$errors['skip_page_sequence'][] = __d('questionnaires', 'Invalid skip page. Please set forward page.');
 				}
 				// そのジャンプ先は存在するページシーケンスか
-				$page = Hash::extract($questionnaire['QuestionnairePage'], '{n}[page_sequence=' . $choice['skip_page_sequence'] . ']');
-				if (!$page) {
-					$errors[] = __d('questionnaires', 'Invalid skip page. page does not exist.');
+				$skipPage = Hash::extract($questionnaire['QuestionnairePage'], '{n}[page_sequence=' . $choice['skip_page_sequence'] . ']');
+				if (!$skipPage) {
+					$errors['skip_page_sequence'][] = __d('questionnaires', 'Invalid skip page. page does not exist.');
+					$this->log($errors, 'debug');
 				}
 			}
 		}
@@ -241,7 +246,7 @@ class QuestionnaireValidation extends QuestionnairesAppModel {
 		$cols = Hash::extract($choices, '{n}[matrix_type=' . QuestionnairesComponent::MATRIX_TYPE_COLUMN . ']');
 
 		if (empty($rows) || empty($cols)) {
-			$errors[] = __d('questionnaires', 'please set at least one choice at row and column.');
+			$errors['question_type'][] = __d('questionnaires', 'please set at least one choice at row and column.');
 			return;
 		}
 	}
