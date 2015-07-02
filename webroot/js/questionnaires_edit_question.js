@@ -116,6 +116,11 @@ NetCommonsApp.controller('Questionnaires.edit.question',
 
           $scope.questionnaire.questionnairePage[pIdx].tabActive = false;
 
+          // このページの中にエラーがあるか
+          if (page.errorMessages) {
+            $scope.questionnaire.questionnairePage[pIdx].hasError = true;
+          }
+
           if (!page.questionnaireQuestion) {
             continue;
           }
@@ -160,6 +165,8 @@ NetCommonsApp.controller('Questionnaires.edit.question',
             if (question.errorMessages) {
               $scope.questionnaire.questionnairePage[pIdx].
                   questionnaireQuestion[qIdx].hasError = true;
+              $scope.questionnaire.questionnairePage[pIdx].
+                  hasError = true;
             }
 
             // 選択肢がないのならここでcontinue;
@@ -180,6 +187,8 @@ NetCommonsApp.controller('Questionnaires.edit.question',
               if (choice.errorMessages) {
                 $scope.questionnaire.questionnairePage[pIdx].
                     questionnaireQuestion[qIdx].hasError = true;
+                $scope.questionnaire.questionnairePage[pIdx].
+                    hasError = true;
               }
             }
 

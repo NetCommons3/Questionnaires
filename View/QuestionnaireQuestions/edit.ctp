@@ -83,7 +83,7 @@
 		<tabset>
 			<tab ng-repeat="(pageIndex, page) in questionnaire.questionnairePage" active="page.tabActive">
 				<tab-heading>
-					{{pageIndex+1}}
+					{{pageIndex+1}}<span class="glyphicon glyphicon-exclamation-sign text-danger" ng-if="page.hasError"></span>
 				</tab-heading>
 				<div class="tab-body">
 					<div class="form-group text-right" ng-if="isPublished == 0">
@@ -171,9 +171,7 @@
 										<?php echo __d('questionnaires', 'Skip'); ?>
 									</span>
 								</span>
-								<span ng-if="question.hasError">
-									<?php echo __d('questionnaires', 'There is an error'); ?>
-								</span>
+								<span class="glyphicon glyphicon-exclamation-sign text-danger" ng-if="question.hasError"></span>
 
 								<div class="clearfix"></div>
 
