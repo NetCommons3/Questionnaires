@@ -73,7 +73,7 @@ class QuestionnaireTest extends QuestionnaireTestBase {
 		$filter = array();
 		$sort = 'modified DESC';
 		$offset = 0;
-		$limit = QUESTIONNAIRE_DEFAULT_DISPLAY_NUM_PER_PAGE;
+		$limit = QuestionnairesComponent::QUESTIONNAIRE_DEFAULT_DISPLAY_NUM_PER_PAGE;
 
 		//処理実行
 		$this->Questionnaire->unbindModel(array('belongsTo' => array('Block')));
@@ -144,7 +144,6 @@ class QuestionnaireTest extends QuestionnaireTestBase {
 		$data[0]['Questionnaire']['key'] = 'key2';
 		$data[0]['Questionnaire']['status'] = 3;
 		$data[0]['Frame']['id'] = 1;
-		$data[0]['Block']['id'] = 5;
 		$data[0]['QuestionnairePage'][0]['id'] = 2;
 		unset($data[0]['QuestionnairePage'][0]['QuestionnaireQuestion']);
 

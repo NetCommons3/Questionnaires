@@ -133,8 +133,9 @@ class QuestionnairePageTest extends QuestionnaireTestBase {
 		$questionnaireId = 1;
 		$status = NetCommonsBlockComponent::STATUS_IN_DRAFT;
 
-		$questionnairePage = array(
-			'QuestionnairePage' => array(
+		$questionnairePage = array();
+		$questionnairePage['QuestionnairePage'] = array(
+		'QuestionnairePage' =>
 				array(
 					'id' => 2,
 					'key' => '41ef6012e7574886c9a52fb598f8c5f8',
@@ -150,10 +151,36 @@ class QuestionnairePageTest extends QuestionnaireTestBase {
 					'created_user' => 1,
 					'created' => '2015-04-13 06:38:28',
 					'modified_user' => 1,
-					'modified' => '2015-04-13 06:38:28'
-				),
-			)
-		);
+					'modified' => '2015-04-13 06:38:28'));
+		$questionnairePage['QuestionnairePage']['QuestionnaireQuestion'] =
+			array(
+				'QuestionnaireQuestion' => array(
+					array(
+						'key' => 'testkey',
+						'language_id' => 0,
+						'origin_id' => 1,
+						'is_active' => 1,
+						'is_latest' => 1,
+						'status' => NetCommonsBlockComponent::STATUS_IN_DRAFT,
+						'question_sequence' => 1,
+						'question_value' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.',
+						'question_type' => 1,
+						'description' => 'Lorem ipsum dolor sit amet',
+						'is_require' => 1,
+						'question_type_option' => QuestionnairesComponent::TYPE_OPTION_NUMERIC,
+						'is_choice_random' => 1,
+						'is_skip' => 1,
+						'min' => '1',
+						'max' => '3',
+						'is_result_display' => 1,
+						'result_display_type' => 1,
+						'is_auto_translated' => 1,
+						'questionnaire_page_id' => 2,
+						'created_user' => 1,
+						'created' => '2015-04-13 06:39:20',
+						'modified_user' => 1,
+						'modified' => '2015-04-13 06:39:20'
+		)));
 
 		$this->QuestionnairePage->saveQuestionnairePage($questionnaireId, $status, $questionnairePage['QuestionnairePage']);
 

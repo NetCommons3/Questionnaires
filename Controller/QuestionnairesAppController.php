@@ -184,7 +184,7 @@ class QuestionnairesAppController extends AppController {
 					array('answer_summary_count' => 0)
 				)
 			);
-		} elseif ($answerStatus ==  QuestionnairesComponent::QUESTIONNAIRE_ANSWER_ANSWERED) {
+		} elseif ($answerStatus == QuestionnairesComponent::QUESTIONNAIRE_ANSWER_ANSWERED) {
 			$filter = array(
 				'answer_summary_count >' => 0
 			);
