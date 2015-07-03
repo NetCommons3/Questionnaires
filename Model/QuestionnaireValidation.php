@@ -102,6 +102,7 @@ class QuestionnaireValidation extends QuestionnairesAppModel {
 					'question_type_option',
 					'is_choice_random',
 					'is_skip',
+					'is_range',
 					'min',
 					'max',
 					'questionnaire_page_id',

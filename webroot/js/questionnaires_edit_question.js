@@ -133,21 +133,12 @@ NetCommonsApp.controller('Questionnaires.edit.question',
                 questionnaireQuestion[qIdx];
 
             // 各質問が日付・時刻のタイプならば、範囲設定があるかの確認
-            $scope.questionnaire.questionnairePage[pIdx].
-                questionnaireQuestion[qIdx].setDateTimeRange = false;
 
             if ($scope.isDateTimeType(question.questionTypeOption)) {
               $scope.questionnaire.questionnairePage[pIdx].
                   questionnaireQuestion[qIdx].min = $scope.Date(question.min);
               $scope.questionnaire.questionnairePage[pIdx].
                   questionnaireQuestion[qIdx].max = $scope.Date(question.max);
-              if ($scope.questionnaire.questionnairePage[pIdx].
-                  questionnaireQuestion[qIdx].min != null ||
-                  $scope.questionnaire.questionnairePage[pIdx].
-                  questionnaireQuestion[qIdx].max != null) {
-                $scope.questionnaire.questionnairePage[pIdx].
-                    questionnaireQuestion[qIdx].setDateTimeRange = true;
-              }
             }
             // テキスト、１行テキスト、日付け型は集計結果を出さない設定
             if (question.questionType == variables.TYPE_TEXT ||

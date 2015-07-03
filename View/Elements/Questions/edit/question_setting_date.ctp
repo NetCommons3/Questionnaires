@@ -35,15 +35,26 @@
 	<div class="col-sm-12">
 		<div class="checkbox">
 			<label>
-				<input type="checkbox" ng-model="question.setDateTimeRange"><?php echo __d('questionnaires', 'set range to answer date and time'); ?>
+				<?php echo $this->Form->checkbox('QuestionnairePage.' . $pageIndex . '.QuestionnaireQuestion.' . $qIndex . '.is_range',
+				array(
+				'value' => QuestionnairesComponent::USES_USE,
+				'ng-model' => 'question.isRange',
+				'ng-checked' => 'question.isRange == ' . QuestionnairesComponent::USES_USE
+				));
+				?>
+				<?php echo __d('questionnaires', 'set range to answer date and time'); ?>
 			</label>
+			<?php echo $this->element(
+			'Questionnaires.errors', array(
+			'errorArrayName' => 'question.errorMessages.isRange',
+			)); ?>
 		</div>
 	</div>
 </div>
 
 
 <div class="row">
-	<div ng-show="question.setDateTimeRange">
+	<div ng-show="question.isRange">
 		<div class="col-sm-5">
 			<?php
 			echo $this->element(

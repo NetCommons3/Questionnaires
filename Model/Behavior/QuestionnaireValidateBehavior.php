@@ -37,7 +37,7 @@ class QuestionnaireValidateBehavior extends ModelBehavior {
 		}
 		if ($value == QuestionnairesComponent::USES_USE) {
 			foreach ($others as $other) {
-				$ret = empty($model->data[$model->name][$other]);
+				$ret = Validation::blank($model->data[$model->name][$other]);
 				if ($ope == 'AND') {
 					if ($ret == true) {
 						return false;
@@ -64,7 +64,7 @@ class QuestionnaireValidateBehavior extends ModelBehavior {
  */
 	public function checkDateTime(&$model, $check) {
 		foreach ($check as $val) {
-			if (empty($val)) {
+			if (Validation::blank($val)) {
 				continue;
 			}
 			$ret = Validation::datetime($val);
@@ -88,13 +88,13 @@ class QuestionnaireValidateBehavior extends ModelBehavior {
  */
 	public function checkDateComp(&$model, $check, $operator, $compare) {
 		// 比較対象がないので比較する必要なし
-		if (empty($model->data['Questionnaire'][$compare])) {
+		if (Validation::blank($model->data['Questionnaire'][$compare])) {
 			return true;
 		}
 
 		$check2 = strtotime($model->data['Questionnaire'][$compare]);
 		foreach ($check as $val) {
-			if (empty($val)) {
+			if (Validation::blank($val)) {
 				continue;
 			}
 			$check1 = strtotime($val);
@@ -136,11 +136,12 @@ class QuestionnaireValidateBehavior extends ModelBehavior {
  * @return bool
  */
 	public function checkMinMax(&$model, $check) {
-		// 最大値、最小値はテキストで「数値型」の場合と、日付け型の「日」「日時」の場合のみ設定可能
-		if (empty($model->data['QuestionnaireQuestion']['min']) && empty($model->data['QuestionnaireQuestion']['max'])) {
+		// 範囲使わない設定のときはチェックしない
+		if ($model->data['QuestionnaireQuestion']['is_range'] == QuestionnairesComponent::USES_NOT_USE) {
 			return true;
 		}
 
+		// 最大値、最小値はテキストで「数値型」の場合と、日付け型の「日」「日時」の場合のみ設定可能
 		if (!$this->__checkMinMaxNumeric($model, $check)) {
 			return false;
 		}
@@ -150,11 +151,11 @@ class QuestionnaireValidateBehavior extends ModelBehavior {
 		if (!$this->__checkMinMaxDateTime($model, $check)) {
 			return false;
 		}
-		if (!empty($model->data['QuestionnaireQuestion']['min']) && !empty($model->data['QuestionnaireQuestion']['max'])) {
-			return true;
+		if ($model->data['QuestionnaireQuestion']['min'] >= $model->data['QuestionnaireQuestion']['max']) {
+			return false;
 		}
 
-		return false;
+		return true;
 	}
 
 /**

@@ -20,12 +20,28 @@
 				'ng-checked' => 'question.questionTypeOption == ' . QuestionnairesComponent::TYPE_OPTION_NUMERIC
 				));
 				?>
-				<?php echo __d('questionnaires', 'Please check if you want to limit the input to the numerical value.'); ?>
+				<?php echo __d('questionnaires', 'Numeric'); ?>
 			</label>
+		</div>
+		<div class="form-group">
+			<label class="checkbox-inline">
+				<?php echo $this->Form->checkbox('QuestionnairePage.' . $pageIndex . '.QuestionnaireQuestion.' . $qIndex . '.is_range',
+				array(
+				'value' => QuestionnairesComponent::USES_USE,
+				'ng-model' => 'question.isRange',
+				'ng-checked' => 'question.isRange == ' . QuestionnairesComponent::USES_USE
+				));
+				?>
+				<?php echo __d('questionnaires', 'Please check if you want to set limit(or length) value.'); ?>
+			</label>
+			<?php echo $this->element(
+			'Questionnaires.errors', array(
+			'errorArrayName' => 'question.errorMessages.isRange',
+			)); ?>
 		</div>
 	</div>
 	<div class="col-sm-6">
-		<div class="form-inline" ng-if="question.questionTypeOption == <?php echo QuestionnairesComponent::TYPE_OPTION_NUMERIC; ?>">
+		<div class="form-inline" ng-if="question.isRange == <?php echo QuestionnairesComponent::USES_USE; ?>">
 			<?php echo $this->Form->input('QuestionnairePage.' . $pageIndex . '.QuestionnaireQuestion.' . $qIndex . '.min',
 			array(
 			'div' => array('class' => 'form-group'),
@@ -42,7 +58,7 @@
 	</div>
 
 	<div class="col-sm-6">
-		<div class="form-inline" ng-if="question.questionTypeOption == <?php echo QuestionnairesComponent::TYPE_OPTION_NUMERIC; ?>">
+		<div class="form-inline" ng-if="question.isRange == <?php echo QuestionnairesComponent::USES_USE; ?>">
 			<?php echo $this->Form->input('QuestionnairePage.' . $pageIndex . '.QuestionnaireQuestion.' . $qIndex . '.max',
 			array(
 			'div' => array('class' => 'form-group'),

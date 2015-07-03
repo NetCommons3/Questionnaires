@@ -143,16 +143,26 @@ class QuestionnaireQuestion extends QuestionnairesAppModel {
 					'message' => __d('net_commons', 'Invalid request.'),
 				),
 			),
+			'is_range' => array(
+				'boolean' => array(
+					'rule' => array('boolean'),
+					'message' => __d('net_commons', 'Invalid request.'),
+				),
+				'requireOtherFields' => array(
+					'rule' => array('requireOtherFields', array('min', 'max'), 'AND'),
+					'message' => __d('questionnaires', 'Please enter both the maximum and minimum values.')
+				)
+			),
 			'min' => array(
 				'checkMinMax' => array(
 					'rule' => array('checkMinMax'),
-					'message' => __d('questionnaires', 'Please enter both the maximum and minimum values.'),
+					'message' => __d('questionnaires', 'Invalid value'),
 				),
 			),
 			'max' => array(
 				'checkMinMax' => array(
 					'rule' => array('checkMinMax'),
-					'message' => __d('questionnaires', 'Please enter both the maximum and minimum values.'),
+					'message' => __d('questionnaires', 'Invalid value'),
 				),
 			),
 		));
