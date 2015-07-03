@@ -88,7 +88,7 @@ QuestionnaireCommon.filter('ncDatetime', ['$filter', function($filter) {
     if (!input || input.length == 0) {
       return '';
     }
-    var d = new Date(input);
+    var d = new Date(input.replace(/-/g, "/"));
     var nowD = new Date();
     if (d.getFullYear() == nowD.getFullYear() &&
         d.getMonth() == nowD.getMonth() &&
