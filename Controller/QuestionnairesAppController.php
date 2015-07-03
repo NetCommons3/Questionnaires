@@ -175,20 +175,20 @@ class QuestionnairesAppController extends AppController {
  * @return array
  */
 	public function getConditionForAnswer($addConditions = array()) {
-		$answerStatus = isset($this->params['named']['answer_status']) ? $this->params['named']['answer_status'] : QUESTIONNAIRE_ANSEWER_VIEW_ALL;
+		$answerStatus = isset($this->params['named']['answer_status']) ? $this->params['named']['answer_status'] : QuestionnairesComponent::QUESTIONNAIRE_ANSWER_VIEW_ALL;
 
-		if ($answerStatus == QUESTIONNAIRE_ANSEWER_UNANSERERED) {
+		if ($answerStatus == QuestionnairesComponent::QUESTIONNAIRE_ANSWER_UNANSWERED) {
 			$filter = array(
 				'OR' => array(
 					array('answer_summary_count' => null),
 					array('answer_summary_count' => 0)
 				)
 			);
-		} elseif ($answerStatus == QUESTIONNAIRE_ANSEWER_ANSWERED) {
+		} elseif ($answerStatus ==  QuestionnairesComponent::QUESTIONNAIRE_ANSWER_ANSWERED) {
 			$filter = array(
 				'answer_summary_count >' => 0
 			);
-		} elseif ($answerStatus == QUESTIONNAIRE_ANSEWER_TEST) {
+		} elseif ($answerStatus == QuestionnairesComponent::QUESTIONNAIRE_ANSWER_TEST) {
 			$filter = array(
 				'status !=' => NetCommonsBlockComponent::STATUS_PUBLISHED
 			);

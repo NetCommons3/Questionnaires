@@ -70,7 +70,7 @@ class QuestionnaireFrameSetting extends QuestionnairesAppModel {
 
 		if (!$frameSetting) {
 			$displayType = QuestionnairesComponent::DISPLAY_TYPE_LIST;
-			$displayNum = QUESTIONNAIRE_DEFAULT_DISPLAY_NUM_PER_PAGE;
+			$displayNum = QuestionnairesComponent::QUESTIONNAIRE_DEFAULT_DISPLAY_NUM_PER_PAGE;
 			$sort = 'modified';
 			$dir = 'DESC';
 		} else {
@@ -104,7 +104,7 @@ class QuestionnaireFrameSetting extends QuestionnairesAppModel {
 		$frame = array(
 			'QuestionnaireFrameSettings' => array(
 				'display_type' => QuestionnairesComponent::DISPLAY_TYPE_LIST,
-				'display_num_per_page' => QUESTIONNAIRE_DEFAULT_DISPLAY_NUM_PER_PAGE,
+				'display_num_per_page' => QuestionnairesComponent::QUESTIONNAIRE_DEFAULT_DISPLAY_NUM_PER_PAGE,
 				'sort_type' => QuestionnairesComponent::DISPLAY_SORT_TYPE_NEW_ARRIVALS,
 			)
 		);
@@ -194,7 +194,7 @@ class QuestionnaireFrameSetting extends QuestionnairesAppModel {
 		try {
 			$frameSetting['frame_key'] = $frameKey;
 			$frameSetting['display_type'] = QuestionnairesComponent::DISPLAY_TYPE_LIST;
-			$frameSetting['display_num_per_page'] = QUESTIONNAIRE_DEFAULT_DISPLAY_NUM_PER_PAGE;
+			$frameSetting['display_num_per_page'] = QuestionnairesComponent::QUESTIONNAIRE_DEFAULT_DISPLAY_NUM_PER_PAGE;
 			$frameSetting['sort_type'] = QuestionnairesComponent::DISPLAY_SORT_TYPE_NEW_ARRIVALS;
 			$this->save($frameSetting);
 			$dataSource->commit();

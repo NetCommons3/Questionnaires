@@ -20,6 +20,38 @@ App::uses('Component', 'Controller');
 class QuestionnairesComponent extends Component {
 
 /**
+ * default display questionnaire item count
+ *
+ * @var int
+ */
+	const	QUESTIONNAIRE_DEFAULT_DISPLAY_NUM_PER_PAGE = 10;
+
+/**
+ * csv download item count handling unit
+ *
+ * @var int
+ */
+	const	QUESTIONNAIRE_CSV_UNIT_NUMBER = 1000;
+
+/**
+ * questionnaire create options
+ *
+ * @var string
+ */
+	const QUESTIONNAIRE_CREATE_OPT_NEW = 'create';
+	const QUESTIONNAIRE_CREATE_OPT_REUSE = 'reuse';
+
+/**
+ * questionnaire view filter
+ *
+ * @var string
+ */
+	const QUESTIONNAIRE_ANSWER_VIEW_ALL = 'viewall';
+	const QUESTIONNAIRE_ANSWER_UNANSWERED = 'unanswered';
+	const QUESTIONNAIRE_ANSWER_ANSWERED = 'answered';
+	const QUESTIONNAIRE_ANSWER_TEST = 'test';
+
+/**
  * status questionnaire status started
  *
  * @var string

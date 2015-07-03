@@ -190,7 +190,7 @@ class QuestionnairesController extends QuestionnairesAppController {
 	public function add() {
 		// 作成中データ
 		$pastQuestionnaires = array();
-		$createOption = QUESTIONNAIRE_CREATE_OPT_NEW;
+		$createOption = QuestionnairesComponent::QUESTIONNAIRE_CREATE_OPT_NEW;
 
 		// POSTされたデータを読み取り
 		if ($this->request->isPost()) {
@@ -203,7 +203,7 @@ class QuestionnairesController extends QuestionnairesAppController {
 				$createOption = $this->data['create_option'];
 
 				// 空の新規作成
-				if ($createOption == QUESTIONNAIRE_CREATE_OPT_NEW) {
+				if ($createOption == QuestionnairesComponent::QUESTIONNAIRE_CREATE_OPT_NEW) {
 					//
 					$this->Questionnaire->set($this->request->data);
 					// 新規作成時のvalidation実行
@@ -213,7 +213,7 @@ class QuestionnairesController extends QuestionnairesAppController {
 						$questionnaire = $this->Questionnaire->getDefaultQuestionnaire(array(
 							'title' => $this->data['Questionnaire']['title']));
 					}
-				} elseif ($createOption == QUESTIONNAIRE_CREATE_OPT_REUSE) {
+				} elseif ($createOption == QuestionnairesComponent::QUESTIONNAIRE_CREATE_OPT_REUSE) {
 
 					if (isset($this->data['past_questionnaire_id'])) {
 						// 過去のアンケートのコピー・クローンで作成

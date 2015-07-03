@@ -108,7 +108,7 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
 				'conditions' => $conditions,
 				'page' => 1,
 				'sort' => QuestionnairesComponent::DISPLAY_SORT_TYPE_NEW_ARRIVALS,
-				'limit' => QUESTIONNAIRE_DEFAULT_DISPLAY_NUM_PER_PAGE,
+				'limit' => QuestionnairesComponent::QUESTIONNAIRE_DEFAULT_DISPLAY_NUM_PER_PAGE,
 				'direction' => 'desc',
 				'recursive' => 0,
 				'joins' => $subQuery,
@@ -165,14 +165,14 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
 		$filePath = $folder->pwd() . DS . $fileName;
 		$fp = fopen($filePath, 'w+');
 		do {
-			$datas = $this->QuestionnaireAnswerSummaryCsv->getAnswerSummaryCsv($questionnaire, QUESTIONNAIRE_CSV_UNIT_NUMBER, $offset);
+			$datas = $this->QuestionnaireAnswerSummaryCsv->getAnswerSummaryCsv($questionnaire, QuestionnairesComponent::QUESTIONNAIRE_CSV_UNIT_NUMBER, $offset);
 			// テンポラリファイルにCSV形式で書きこみ
 			foreach ($datas as $data) {
 				fputcsv($fp, $data);
 			}
 			$offset += count($datas);
 			$dataCount = count($datas);
-		} while ($dataCount == QUESTIONNAIRE_CSV_UNIT_NUMBER);
+		} while ($dataCount == QuestionnairesComponent::QUESTIONNAIRE_CSV_UNIT_NUMBER);
 		// ファイルクローズ
 		fclose($fp);
 

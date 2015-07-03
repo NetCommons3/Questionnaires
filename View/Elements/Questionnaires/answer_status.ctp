@@ -14,12 +14,12 @@
 <label><?php echo __d('questionnaires', 'Answer status'); ?></label>
 <?php
 	$list = array(
-		QUESTIONNAIRE_ANSEWER_VIEW_ALL => __d('questionnaires', 'View All'),
-		QUESTIONNAIRE_ANSEWER_UNANSERERED => __d('questionnaires', 'Unanswered'),
-		QUESTIONNAIRE_ANSEWER_ANSWERED => __d('questionnaires', 'Answered'),
+		QuestionnairesComponent::QUESTIONNAIRE_ANSWER_VIEW_ALL => __d('questionnaires', 'View All'),
+	QuestionnairesComponent::QUESTIONNAIRE_ANSWER_UNANSWERED => __d('questionnaires', 'Unanswered'),
+	QuestionnairesComponent::QUESTIONNAIRE_ANSWER_ANSWERED => __d('questionnaires', 'Answered'),
 	);
 	if ($contentEditable) {
-		$list[QUESTIONNAIRE_ANSEWER_TEST] = __d('questionnaires', 'Test');
+		$list[QuestionnairesComponent::QUESTIONNAIRE_ANSWER_TEST] = __d('questionnaires', 'Test');
 	}
 	$url = Hash::merge(
 	array('controller' => 'questionnaires', 'action' => 'index', $frameId),

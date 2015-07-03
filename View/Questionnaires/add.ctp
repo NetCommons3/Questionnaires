@@ -53,11 +53,11 @@
 				<div class="form-group col-lg-12">
 					<div class="radio">
 						<label>
-							<input type="radio" name="create_option" value="<?php echo QUESTIONNAIRE_CREATE_OPT_NEW; ?>" ng-model="createOption">
+							<input type="radio" name="create_option" value="<?php echo QuestionnairesComponent::QUESTIONNAIRE_CREATE_OPT_NEW; ?>" ng-model="createOption">
 							<?php echo __d('questionnaires', 'Create new questionnaire'); ?>
 						</label>
 					</div>
-					<div  collapse="createOption != '<?php echo QUESTIONNAIRE_CREATE_OPT_NEW; ?>'">
+					<div  collapse="createOption != '<?php echo QuestionnairesComponent::QUESTIONNAIRE_CREATE_OPT_NEW; ?>'">
 						<?php echo $this->Form->input('title', array(
 						'class' => 'form-control',
 						'label' => __d('questionnaires', 'Questionnaire title') . $this->element('NetCommons.required'),
@@ -76,11 +76,11 @@
 				<div class="form-group col-lg-12">
 					<div class="radio" name="create_option" ng-model="isCollapse">
 						<label>
-							<input type="radio" name="create_option" value="<?php echo QUESTIONNAIRE_CREATE_OPT_REUSE; ?>" ng-model="createOption" ng-disabled="questionnaires.items.length == 0">
+							<input type="radio" name="create_option" value="<?php echo QuestionnairesComponent::QUESTIONNAIRE_CREATE_OPT_REUSE; ?>" ng-model="createOption" ng-disabled="questionnaires.items.length == 0">
 							<?php echo __d('questionnaires', 'Re-use past questionnaire'); ?>
 						</label>
 					</div>
-					<div class="form-group" collapse="createOption != '<?php echo QUESTIONNAIRE_CREATE_OPT_REUSE; ?>'">
+					<div class="form-group" collapse="createOption != '<?php echo QuestionnairesComponent::QUESTIONNAIRE_CREATE_OPT_REUSE; ?>'">
 						<label for="questionnaires_past_search_filter">
 							<?php echo __d('questionnaires', 'Past questionnaire'); ?>
 							<?php echo $this->element('NetCommons.required'); ?>
@@ -120,7 +120,7 @@
 					array(
 					'class' => 'btn btn-primary',
 					'name' => 'next_' . '',
-					'ng-disabled' => "!((createOption=='" . QUESTIONNAIRE_CREATE_OPT_NEW . "' && newTitle) || (createOption=='" . QUESTIONNAIRE_CREATE_OPT_REUSE . "' && pastQuestionnaireSelect))",
+					'ng-disabled' => "!((createOption=='" . QuestionnairesComponent::QUESTIONNAIRE_CREATE_OPT_NEW . "' && newTitle) || (createOption=='" . QuestionnairesComponent::QUESTIONNAIRE_CREATE_OPT_REUSE . "' && pastQuestionnaireSelect))",
 					)) ?>
 				</div>
 

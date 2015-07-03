@@ -279,7 +279,7 @@ class Questionnaire extends QuestionnairesAppModel {
  * @param int $limit limit number of select
  * @return array
  */
-	public function getQuestionnairesList($conditions, $sessionId, $userId, $filter, $sort = 'modified DESC', $offset = 0, $limit = QUESTIONNAIRE_DEFAULT_DISPLAY_NUM_PER_PAGE) {
+	public function getQuestionnairesList($conditions, $sessionId, $userId, $filter, $sort = 'modified DESC', $offset = 0, $limit = QuestionnairesComponent::QUESTIONNAIRE_DEFAULT_DISPLAY_NUM_PER_PAGE) {
 		$subQuery = $this->getQuestionnairesCommonForAnswer($sessionId, $userId);
 		$this->unbindModel(
 			array('hasMany' => array('QuestionnairePage'))
