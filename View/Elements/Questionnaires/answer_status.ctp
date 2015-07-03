@@ -26,7 +26,7 @@
 	$this->params['named']
 	);
 
-	$currentStatus = isset($this->params['named']['answer_status']) ? $this->params['named']['answer_status'] : QUESTIONNAIRE_ANSEWER_VIEW_ALL;
+	$currentStatus = isset($this->params['named']['answer_status']) ? $this->params['named']['answer_status'] : QuestionnairesComponent::QUESTIONNAIRE_ANSWER_VIEW_ALL;
 ?>
 	<span class="btn-group">
 		<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
