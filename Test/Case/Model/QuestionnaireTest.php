@@ -145,6 +145,8 @@ class QuestionnaireTest extends QuestionnaireTestBase {
 		$data[0]['Questionnaire']['status'] = 3;
 		$data[0]['Frame']['id'] = 1;
 		$data[0]['QuestionnairePage'][0]['id'] = 2;
+		$data[0]['QuestionnairePage'][0]['page_sequence'] = 0;
+		$data[0]['QuestionnairePage'][0]['next_page_sequence'] = 1;
 		unset($data[0]['QuestionnairePage'][0]['QuestionnaireQuestion']);
 
 		$questionnaire = Hash::merge( array(

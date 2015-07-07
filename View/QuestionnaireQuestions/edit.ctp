@@ -86,11 +86,32 @@
 					{{pageIndex+1}}<span class="glyphicon glyphicon-exclamation-sign text-danger" ng-if="page.hasError"></span>
 				</tab-heading>
 				<div class="tab-body">
-					<div class="form-group text-right" ng-if="isPublished == 0">
-						<button class="btn btn-success" type="button" ng-click="addQuestion($event, pageIndex)">
+					<div class="form-group" ng-if="isPublished == 0">
+
+						<button class="btn btn-success pull-right" type="button" ng-click="addQuestion($event, pageIndex)">
 							<span class="glyphicon glyphicon-plus"></span>
 							<?php echo __d('questionnaires', 'Add Question'); ?>
 						</button>
+
+						<div class="pull-left form-inline">
+							<label><?php echo __d('questionnaires', 'next page'); ?></label>
+							<select name="data[QuestionnairePage][{{pageIndex}}][next_page_sequence]"
+									class="form-control input-sm"
+									ng-disabled="isDisabledSetSkip(page, null)"
+									ng-model="page.nextPageSequence">
+								<option ng-if="questionnaire.questionnairePage.length-1-pageIndex"
+										ng-repeat="nextPage in questionnaire.questionnairePage | filter: greaterThan('pageSequence', page)"
+										ng-value="{{nextPage.pageSequence}}"
+										ng-selected="page.nextPageSequence == nextPage.pageSequence || (page.nextPageSequence == null && nextPage.pageSequence == pageIndex+1)">
+									{{1 * nextPage.pageSequence + 1}}
+								</option>
+								<option ng-value="<?php echo QuestionnairesComponent::SKIP_GO_TO_END ?>"
+										ng-selected="page.nextPageSequence == <?php echo QuestionnairesComponent::SKIP_GO_TO_END ?> || (page.nextPageSequence >= questionnaire.questionnairePage.length)">
+									<?php echo __d('questionnaires', 'goto end'); ?>
+								</option>
+							</select>
+						</div>
+
 					</div>
 
 					<div class="clearfix"></div>

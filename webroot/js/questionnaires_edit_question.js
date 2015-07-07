@@ -34,6 +34,7 @@ NetCommonsApp.controller('Questionnaires.edit.question',
              * @const
              */
         EXPRESSION_NOT_SHOW: '0',
+        USES_USE: '1',
 
         OTHER_CHOICE_TYPE_NO_OTHER_FILED: '0',
 
@@ -218,6 +219,7 @@ NetCommonsApp.controller('Questionnaires.edit.question',
             ($scope.questionnaire.questionnairePage.length + 1);
         page['pageSequence'] =
             $scope.questionnaire.questionnairePage.length;
+        page['nextPageSequence'] = page['pageSequence'] + 1;
         page['originId'] = 0;
         page['questionnaireQuestion'] = new Array();
         $scope.questionnaire.questionnairePage.push(page);
@@ -570,6 +572,27 @@ NetCommonsApp.controller('Questionnaires.edit.question',
         return function(item) {
           return item[prop] > tgt2[prop];
         }
+      };
+      /**
+       * Questionnaire is able set jump page and skip page
+       *
+       * @return {bool}
+       */
+      $scope.isDisabledSetSkip = function(page, question) {
+        // ページの中の質問をチェック
+        for (var i = 0; i < page.questionnaireQuestion.length; i++) {
+          // もしも質問が引数で指定されているものである場合はチェックしない（continue)
+          if (question && page.questionnaireQuestion[i] == question) {
+            continue;
+          }
+          // スキップが設定されている？
+          if (page.questionnaireQuestion[i].isSkip == variables.USES_USE) {
+            // スキップが設定されている場合はtrueを返す
+            // return true is disabled
+            return true;
+          }
+        }
+        return false;
       };
 
     });

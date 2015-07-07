@@ -44,6 +44,7 @@ class QuestionnairePageTest extends QuestionnaireTestBase {
 
 		$expected['page_title'] = __d('questionnaires', 'First Page');
 		$expected['page_sequence'] = 0;
+		$expected['next_page_sequence'] = 1;
 		$expected['origin_id'] = 0;
 		$expected['QuestionnaireQuestion'][0] = array(
 			'question_sequence' => 0,

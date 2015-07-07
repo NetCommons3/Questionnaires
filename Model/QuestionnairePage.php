@@ -84,6 +84,16 @@ class QuestionnairePage extends QuestionnairesAppModel {
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
 		),
+		'next_page_sequence' => array(
+			'numeric' => array(
+				'rule' => array('numeric'),
+				//'message' => 'Your custom message here',
+				//'allowEmpty' => false,
+				//'required' => false,
+				//'last' => false, // Stop validation after this rule
+				//'on' => 'create', // Limit validation to 'create' or 'update' operations
+			),
+		),
 		'is_auto_translated' => array(
 			'boolean' => array(
 				'rule' => array('boolean'),
@@ -148,6 +158,7 @@ class QuestionnairePage extends QuestionnairesAppModel {
 		$page['page_title'] = __d('questionnaires', 'First Page');
 		$page['page_sequence'] = 0;
 		$page['origin_id'] = 0;
+		$page['next_page_sequence'] = $page['page_sequence'] + 1;
 		$page['QuestionnaireQuestion'][0] = $this->QuestionnaireQuestion->getDefaultQuestion();
 		return $page;
 	}

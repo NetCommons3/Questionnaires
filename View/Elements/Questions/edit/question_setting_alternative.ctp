@@ -35,6 +35,7 @@
 			'value' => QuestionnairesComponent::USES_USE,
 			'ng-model' => 'question.isSkip',
 			'ng-checked' => 'question.isSkip == ' . QuestionnairesComponent::SKIP_FLAGS_SKIP,
+			'ng-disabled' => 'isDisabledSetSkip(page, question)'
 			));
 			?>
 			<?php echo __d('questionnaires', 'set page skip'); ?>

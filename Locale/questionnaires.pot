@@ -602,6 +602,9 @@ msgstr ""
 msgid "Add Question"
 msgstr ""
 
+msgid "next page"
+msgstr ""
+
 #: /View/QuestionnaireQuestions/edit.ctp:133
 msgid "move to another page"
 msgstr ""
