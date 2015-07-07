@@ -25,6 +25,7 @@ class Questionnaire extends QuestionnairesAppModel {
 	public $actsAs = array(
 		'NetCommons.Publishable',
 		'NetCommons.OriginalKey',
+		'NetCommons.Trackable',
 		'Questionnaires.QuestionnaireValidate',
 	);
 
@@ -60,26 +61,6 @@ class Questionnaire extends QuestionnairesAppModel {
 			'fields' => '',
 			'order' => ''
 		),
-		'CreatedUser' => array(
-			'className' => 'Users.UserAttributesUser',
-			'foreignKey' => false,
-			'conditions' => array(
-				'Questionnaire.created_user = CreatedUser.user_id',
-				'CreatedUser.key' => 'nickname'
-			),
-			'fields' => array('CreatedUser.key', 'CreatedUser.value'),
-			'order' => ''
-		),
-		'ModifiedUser' => array(
-			'className' => 'Users.UserAttributesUser',
-			'foreignKey' => false,
-			'conditions' => array(
-				'Questionnaire.modified_user = ModifiedUser.user_id',
-				'ModifiedUser.key' => 'nickname'
-			),
-			'fields' => array('ModifiedUser.key', 'ModifiedUser.value'),
-			'order' => ''
-		)
 	);
 
 /**
@@ -288,8 +269,8 @@ class Questionnaire extends QuestionnairesAppModel {
 			'fields' => array(
 				'Block.*',
 				'Questionnaire.*',
-				'CreatedUser.*',
-				'ModifiedUser.*',
+				'TrackableCreator.*',
+				'TrackableUpdater.*',
 				'CountAnswerSummary.*'
 			),
 			'joins' => $subQuery,

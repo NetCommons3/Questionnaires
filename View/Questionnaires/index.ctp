@@ -76,9 +76,9 @@
 								<small>
 									<dl class="questionnaire-editor-dl">
 										<dt><?php echo __d('questionnaires', 'Author'); ?></dt>
-										<dd><?php echo $questionnaire['CreatedUser']['value']; ?></dd>
+										<dd><?php echo $questionnaire['TrackableCreator']['username']; ?></dd>
 										<dt><?php echo __d('questionnaires', 'Modified by'); ?></dt>
-										<dd><?php echo $questionnaire['ModifiedUser']['value']; ?>
+										<dd><?php echo $questionnaire['TrackableUpdater']['username']; ?>
 											(<?php echo $this->Date->dateFormat($questionnaire['Questionnaire']['modified']); ?>)
 										</dd>
 									</dl>

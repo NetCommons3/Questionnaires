@@ -27,6 +27,15 @@ class QuestionnaireAnswerSummaryCsv extends QuestionnairesAppModel {
 	public $useTable = 'questionnaire_answer_summaries';
 
 /**
+ * use behaviors
+ *
+ * @var array
+ */
+	public $actsAs = array(
+		'NetCommons.Trackable',
+	);
+
+/**
  * Validation rules
  *
  * @var array
@@ -49,26 +58,6 @@ class QuestionnaireAnswerSummaryCsv extends QuestionnairesAppModel {
 			'fields' => '',
 			'order' => ''
 		),
-		'CreatedUser' => array(
-			'className' => 'Users.UserAttributesUser',
-			'foreignKey' => false,
-			'conditions' => array(
-				'QuestionnaireAnswerSummaryCsv.created_user = CreatedUser.user_id',
-				'CreatedUser.key' => 'nickname'
-			),
-			'fields' => array('CreatedUser.key', 'CreatedUser.value'),
-			'order' => ''
-		),
-		'ModifiedUser' => array(
-			'className' => 'Users.UserAttributesUser',
-			'foreignKey' => false,
-			'conditions' => array(
-				'QuestionnaireAnswerSummaryCsv.modified_user = ModifiedUser.user_id',
-				'ModifiedUser.key' => 'nickname'
-			),
-			'fields' => array('ModifiedUser.key', 'ModifiedUser.value'),
-			'order' => ''
-		)
 	);
 
 /**
@@ -188,7 +177,7 @@ class QuestionnaireAnswerSummaryCsv extends QuestionnairesAppModel {
 
 		$cols = array();
 
-		$cols[] = ($questionnaire['Questionnaire']['is_anonymity']) ? __d('questionnaires', 'Anonymity') : $summary['CreatedUser']['value'];
+		$cols[] = ($questionnaire['Questionnaire']['is_anonymity']) ? __d('questionnaires', 'Anonymity') : $summary['TrackableCreator']['username'];
 		$cols[] = $summary['QuestionnaireAnswerSummaryCsv']['modified'];
 		$cols[] = $summary['QuestionnaireAnswerSummaryCsv']['answer_number'];
 

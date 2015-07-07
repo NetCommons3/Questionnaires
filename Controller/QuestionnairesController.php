@@ -137,8 +137,8 @@ class QuestionnairesController extends QuestionnairesAppController {
 				'fields' => array(
 					'Block.*',
 					'Questionnaire.*',
-					'CreatedUser.*',
-					'ModifiedUser.*',
+					'TrackableCreator.*',
+					'TrackableUpdater.*',
 					'CountAnswerSummary.*'
 				)
 			);
