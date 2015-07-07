@@ -98,7 +98,12 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
  */
 	public function index() {
 		// 条件設定値取得
-		$conditions = $this->getConditionForAnswer();
+		$conditions = $this->Questionnaire->getConditionForAnswer(
+			$this->viewVars['blockId'],
+			$this->Auth->user('id'),
+			$this->viewVars,
+			$this->getNowTime()
+		);
 		// データ取得
 		// Modelの方ではカスタムfindメソッドを装備している
 		// ここではtype属性を指定することでカスタムFindを呼び出すように指示している

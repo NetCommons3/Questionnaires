@@ -32,7 +32,13 @@ class QuestionnairesPreAnswerComponent extends Component {
 		$Questionnaire = ClassRegistry::init('Questionnaire');
 
 		// get conditions for finding specified Questionnaire
-		$conditions = $controller->getConditionForAnswer(array('origin_id' => $questionnaireId));
+		$conditions = $Questionnaire->getConditionForAnswer(
+			$controller->viewVars['blockId'],
+			$controller->Auth->user('id'),
+			$controller->viewVars,
+			$controller->getNowTime(),
+			array('origin_id' => $questionnaireId)
+		);
 
 		// get the specified questionnaire
 		$questionnaire = $Questionnaire->find('first', array(

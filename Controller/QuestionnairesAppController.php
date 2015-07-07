@@ -85,12 +85,12 @@ class QuestionnairesAppController extends AppController {
 	}
 
 /**
- * _getNowTime method
+ * getNowTime method
  * 現在時刻を取得する
  *
  * @return string 現在時刻
  */
-	protected function _getNowTime() {
+	public function getNowTime() {
 		return date('Y-m-d H:i:s');
 	}
 
@@ -149,73 +149,6 @@ class QuestionnairesAppController extends AppController {
 		if (is_bool($value)) {
 			$value = ($value ? '1' : '0');
 		}
-	}
-
-/**
- * get index sql condition method
- *
- * @param array $addConditions 追加条件
- * @return array
- */
-	public function getCondition($addConditions = array()) {
-		$conditions = $this->getConditionForAnswer($addConditions);
-		$conditions['NOT'] = array('QuestionnaireFrameDisplayQuestionnaires.id' => null);
-		$conditions['QuestionnaireFrameDisplayQuestionnaires.frame_key'] = $this->viewVars['frameKey'];
-
-		if ($addConditions) {
-			$conditions = array_merge($conditions, $addConditions);
-		}
-		return $conditions;
-	}
-
-/**
- * get index sql condition method
- *
- * @param array $addConditions 追加条件
- * @return array
- */
-	public function getConditionForAnswer($addConditions = array()) {
-		$answerStatus = isset($this->params['named']['answer_status']) ? $this->params['named']['answer_status'] : QuestionnairesComponent::QUESTIONNAIRE_ANSWER_VIEW_ALL;
-
-		if ($answerStatus == QuestionnairesComponent::QUESTIONNAIRE_ANSWER_UNANSWERED) {
-			$filter = array(
-				'OR' => array(
-					array('answer_summary_count' => null),
-					array('answer_summary_count' => 0)
-				)
-			);
-		} elseif ($answerStatus == QuestionnairesComponent::QUESTIONNAIRE_ANSWER_ANSWERED) {
-			$filter = array(
-				'answer_summary_count >' => 0
-			);
-		} elseif ($answerStatus == QuestionnairesComponent::QUESTIONNAIRE_ANSWER_TEST) {
-			$filter = array(
-				'status !=' => NetCommonsBlockComponent::STATUS_PUBLISHED
-			);
-		} else {
-			$filter = array();
-		}
-
-		$conditions = array_merge($filter, array(
-			'block_id' => $this->viewVars['blockId'],
-		));
-		if (!$this->viewVars['contentEditable']) {
-			$conditions['is_active'] = true;
-			$conditions['OR'] = array(
-				'start_period <' => $this->_getNowTime(),
-				'is_period' => false,
-			);
-		} else {
-			$conditions['is_latest'] = true;
-		}
-		if ($this->viewVars['roomRoleKey'] == NetCommonsRoomRoleComponent::DEFAULT_ROOM_ROLE_KEY) {
-			$conditions['is_no_member_allow'] = QuestionnairesComponent::PERMISSION_PERMIT;
-		}
-
-		if ($addConditions) {
-			$conditions = array_merge($conditions, $addConditions);
-		}
-		return $conditions;
 	}
 
 /**

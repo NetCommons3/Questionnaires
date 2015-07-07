@@ -76,7 +76,12 @@ class QuestionnaireAnswerSummariesController extends QuestionnairesAppController
  */
 	public function result($frameId = 0, $questionnaireId = 0) {
 		// get conditions for finding specified Questionnaire
-		$conditions = $this->__getConditionForResult(array('origin_id' => $questionnaireId));
+		$conditions = $this->Questionnaire->getConditionForResult(
+			$this->viewVars['blockId'],
+			$this->Auth->user('id'),
+			$this->viewVars,
+			array('origin_id' => $questionnaireId)
+		);
 
 		// get the specified questionnaire
 		$questionnaire = $this->Questionnaire->find('first', array(
@@ -124,35 +129,6 @@ class QuestionnaireAnswerSummariesController extends QuestionnairesAppController
 
 		//集計結果を、Viewに渡し、表示してもらう。
 		//$this->view = 'QuestionnaireQuestions/total';
-	}
-
-/**
- * get questionnaire for result display sql condition method
- *
- * @param array $addConditions 追加条件
- * @return array
- */
-	private function __getConditionForResult($addConditions = array()) {
-		$conditions = array(
-			'block_id' => $this->viewVars['blockId'],
-			'is_total_show' => QuestionnairesComponent::EXPRESSION_SHOW,
-
-		);
-		if (!$this->viewVars['contentEditable']) {
-			$conditions['is_active'] = true;
-			$conditions['OR'] = array(
-				'total_show_start_period <' => $this->_getNowTime(),
-			);
-		} else {
-			$conditions['is_latest'] = true;
-		}
-		if ($this->viewVars['roomRoleKey'] == NetCommonsRoomRoleComponent::DEFAULT_ROOM_ROLE_KEY) {
-			$conditions['is_no_member_allow'] = QuestionnairesComponent::PERMISSION_PERMIT;
-		}
-		if ($addConditions) {
-			$conditions = array_merge($conditions, $addConditions);
-		}
-		return $conditions;
 	}
 
 /**

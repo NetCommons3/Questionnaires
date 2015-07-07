@@ -89,7 +89,12 @@ class QuestionnairesController extends QuestionnairesAppController {
 			$this->QuestionnaireFrameSetting->getQuestionnaireFrameSetting($this->viewVars['frameKey']);
 
 		// 条件設定値取得
-		$conditions = $this->getCondition();
+		$conditions = $this->Questionnaire->getCondition(
+			$this->viewVars['blockId'],
+			$this->Auth->user('id'),
+			$this->viewVars,
+			$this->getNowTime()
+		);
 
 		// 単独表示が指定されていた場合
 		if ($displayType == QuestionnairesComponent::DISPLAY_TYPE_SINGLE) {
@@ -137,7 +142,7 @@ class QuestionnairesController extends QuestionnairesAppController {
 					'CountAnswerSummary.*'
 				)
 			);
-			$questionnaire = $this->paginate('Questionnaire');
+			$questionnaire = $this->paginate('Questionnaire', $this->_getPaginateFilter());
 		} catch (NotFoundException $e) {
 			// NotFoundの例外
 			// アンケートデータが存在しないこととする
@@ -151,6 +156,34 @@ class QuestionnairesController extends QuestionnairesAppController {
 	}
 
 /**
+ * _getPaginateFilter method
+ *
+ * @return array
+ */
+	protected function _getPaginateFilter() {
+		$answerStatus = isset($this->params['named']['answer_status']) ? $this->params['named']['answer_status'] : QuestionnairesComponent::QUESTIONNAIRE_ANSWER_VIEW_ALL;
+		if ($answerStatus == QuestionnairesComponent::QUESTIONNAIRE_ANSWER_UNANSWERED) {
+			$filter = array(
+				'OR' => array(
+					array('answer_summary_count' => null),
+					array('answer_summary_count' => 0)
+				)
+			);
+		} elseif ($answerStatus == QuestionnairesComponent::QUESTIONNAIRE_ANSWER_ANSWERED) {
+			$filter = array(
+				'answer_summary_count >' => 0
+			);
+		} elseif ($answerStatus == QuestionnairesComponent::QUESTIONNAIRE_ANSWER_TEST) {
+			$filter = array(
+				'status !=' => NetCommonsBlockComponent::STATUS_PUBLISHED
+			);
+		} else {
+			$filter = array();
+		}
+		return $filter;
+	}
+
+/**
  * thanks method
  *
  * @param int $frameId フレームID
@@ -161,7 +194,13 @@ class QuestionnairesController extends QuestionnairesAppController {
  */
 	public function thanks($frameId = 0, $questionnaireId = 0) {
 		// 指定されたアンケート情報を取り出す
-		$conditions = $this->getConditionForAnswer(array('origin_id' => $questionnaireId));
+		$conditions = $this->Questionnaire->getConditionForAnswer(
+			$this->viewVars['blockId'],
+			$this->Auth->user('id'),
+			$this->viewVars,
+			$this->getNowTime(),
+			array('origin_id' => $questionnaireId)
+		);
 		$questionnaire = $this->Questionnaire->find('first', array(
 			'conditions' => $conditions
 		));
@@ -217,7 +256,7 @@ class QuestionnairesController extends QuestionnairesAppController {
 
 					if (isset($this->data['past_questionnaire_id'])) {
 						// 過去のアンケートのコピー・クローンで作成
-						$questionnaire = $this->__getQuestionnaireCloneById($this->data['past_questionnaire_id']);
+						$questionnaire = $this->Questionnaire->getQuestionnaireCloneById($this->data['past_questionnaire_id']);
 					} else {
 						// Modelにはない属性のエラーを入れる
 						$this->validationErrors['Questionnaire']['past_questionnaire_id'] = __d('questionnaires', 'Please select past questionnaire.');
@@ -242,7 +281,12 @@ class QuestionnairesController extends QuestionnairesAppController {
 		// 過去データ 取り出し
 		// 表示方法設定値取得
 		$settings = $this->QuestionnaireFrameSetting->getQuestionnaireFrameSetting($this->viewVars['frameId']);
-		$conditions = $this->getConditionForAnswer();
+		$conditions = $this->Questionnaire->getConditionForAnswer(
+			$this->viewVars['blockId'],
+			$this->Auth->user('id'),
+			$this->viewVars,
+			$this->getNowTime()
+		);
 		$pastQuestionnaires['items'] = $this->Questionnaire->getQuestionnairesList(
 			$conditions,
 			$this->Session->id(),
@@ -413,38 +457,4 @@ class QuestionnairesController extends QuestionnairesAppController {
 		$this->set('isPublished', $isPublished);
 	}
 
-/**
- * __getQuestionnaireCloneById 指定されたIDにのアンケートデータのクローンを取得する
- *
- * @param int $questionnaireId アンケートID(編集なのでoriginではなくRAWなIDのほう
- * @return array
- */
-	private function __getQuestionnaireCloneById($questionnaireId) {
-		$questionnaire = $this->Questionnaire->find('first', array(
-			'conditions' => array('Questionnaire.id' => $questionnaireId),
-		));
-
-		// ID値のみクリア
-		$this->__clearQuestionnaireId($questionnaire);
-
-		return $questionnaire;
-	}
-
-/**
- * __clearQuestionnaireId アンケートデータからＩＤのみをクリアする
- *
- * @param array &$questionnaire アンケートデータ
- * @return void
- */
-	private function __clearQuestionnaireId(&$questionnaire) {
-		foreach ($questionnaire as $qKey => $q) {
-			if (is_array($q)) {
-				$this->__clearQuestionnaireId($questionnaire[$qKey]);
-			} elseif (preg_match('/(.*?)id$/', $qKey) ||
-				preg_match('/^created(.*?)/', $qKey) ||
-				preg_match('/^modified(.*?)/', $qKey)) {
-				unset($questionnaire[$qKey]);
-			}
-		}
-	}
 }

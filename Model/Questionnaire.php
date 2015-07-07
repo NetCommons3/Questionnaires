@@ -302,6 +302,93 @@ class Questionnaire extends QuestionnairesAppModel {
 	}
 
 /**
+ * get index sql condition method
+ *
+ * @param int $blockId block id
+ * @param int $userId login user id
+ * @param array $permissions ( viewVars )
+ * @param datetime $currentDateTime date time
+ * @param array $addConditions 追加条件
+ * @return array
+ */
+	public function getCondition($blockId, $userId, $permissions, $currentDateTime, $addConditions = array()) {
+		$conditions = $this->getConditionForAnswer($blockId, $userId, $permissions, $currentDateTime, $addConditions);
+		$conditions['NOT'] = array('QuestionnaireFrameDisplayQuestionnaires.id' => null);
+		$conditions['QuestionnaireFrameDisplayQuestionnaires.frame_key'] = $permissions['frameKey'];
+
+		if ($addConditions) {
+			$conditions = array_merge($conditions, $addConditions);
+		}
+		return $conditions;
+	}
+
+/**
+ * get index sql condition method
+ *
+ * @param int $blockId block id
+ * @param int $userId login user id
+ * @param array $permissions ( viewVars )
+ * @param datetime $currentDateTime date time
+ * @param array $addConditions 追加条件
+ * @return array
+ */
+	public function getConditionForAnswer($blockId, $userId, $permissions, $currentDateTime, $addConditions = array()) {
+		$conditions = array(
+			'block_id' => $blockId,
+		);
+		if (!$permissions['contentEditable']) {
+			$conditions['is_active'] = true;
+			$conditions['OR'] = array(
+				'start_period <' => $currentDateTime,
+				'is_period' => false,
+			);
+		} else {
+			$conditions['is_latest'] = true;
+		}
+		if ($permissions['roomRoleKey'] == NetCommonsRoomRoleComponent::DEFAULT_ROOM_ROLE_KEY) {
+			$conditions['is_no_member_allow'] = QuestionnairesComponent::PERMISSION_PERMIT;
+		}
+
+		if ($addConditions) {
+			$conditions = array_merge($conditions, $addConditions);
+		}
+		return $conditions;
+	}
+
+/**
+ * get questionnaire for result display sql condition method
+ *
+ * @param int $blockId block id
+ * @param int $userId login user id
+ * @param array $permissions ( viewVars )
+ * @param datetime $currentDateTime date time
+ * @param array $addConditions 追加条件
+ * @return array
+ */
+	public function getConditionForResult($blockId, $userId, $permissions, $currentDateTime, $addConditions = array()) {
+		$conditions = array(
+			'block_id' => $blockId,
+			'is_total_show' => QuestionnairesComponent::EXPRESSION_SHOW,
+
+		);
+		if (!$permissions['contentEditable']) {
+			$conditions['is_active'] = true;
+			$conditions['OR'] = array(
+				'total_show_start_period <' => $currentDateTime,
+			);
+		} else {
+			$conditions['is_latest'] = true;
+		}
+		if ($permissions['roomRoleKey'] == NetCommonsRoomRoleComponent::DEFAULT_ROOM_ROLE_KEY) {
+			$conditions['is_no_member_allow'] = QuestionnairesComponent::PERMISSION_PERMIT;
+		}
+		if ($addConditions) {
+			$conditions = array_merge($conditions, $addConditions);
+		}
+		return $conditions;
+	}
+
+/**
  * getDefaultQuestionnaire
  * get default data of questionnaires
  *
@@ -325,6 +412,45 @@ class Questionnaire extends QuestionnairesAppModel {
 			$questionnaire['QuestionnairePage'][0] = $this->QuestionnairePage->getDefaultPage($questionnaire);
 		}
 		return $questionnaire;
+	}
+
+/**
+ * getQuestionnaireCloneById 指定されたIDにのアンケートデータのクローンを取得する
+ *
+ * @param int $questionnaireId アンケートID(編集なのでoriginではなくRAWなIDのほう
+ * @return array
+ */
+	public function getQuestionnaireCloneById($questionnaireId) {
+		$questionnaire = $this->find('first', array(
+			'conditions' => array('Questionnaire.id' => $questionnaireId),
+		));
+
+		if (!$questionnaire) {
+			return $this->getDefaultQuestionnaire(array('title' => ''));
+		}
+		// ID値のみクリア
+		$this->__clearQuestionnaireId($questionnaire);
+
+		return $questionnaire;
+	}
+
+/**
+ * __clearQuestionnaireId アンケートデータからＩＤのみをクリアする
+ *
+ * @param array &$questionnaire アンケートデータ
+ * @return void
+ */
+	private function __clearQuestionnaireId(&$questionnaire) {
+		foreach ($questionnaire as $qKey => $q) {
+			if (is_array($q)) {
+				$this->__clearQuestionnaireId($questionnaire[$qKey]);
+			} elseif (preg_match('/(.*?)id$/', $qKey) ||
+				preg_match('/^key$/', $qKey) ||
+				preg_match('/^created(.*?)/', $qKey) ||
+				preg_match('/^modified(.*?)/', $qKey)) {
+				unset($questionnaire[$qKey]);
+			}
+		}
 	}
 
 /**
