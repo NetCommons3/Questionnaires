@@ -78,7 +78,7 @@
 			<div class="text-center">
 				<?php echo $this->element('NetCommons.paginator', array(
 				'url' => Hash::merge(
-				array('controller' => 'blocks', 'action' => 'index', $frameId),
+				array('controller' => 'questionnaire_blocks', 'action' => 'index', $frameId),
 				$this->Paginator->params['named']
 				)
 				)); ?>
