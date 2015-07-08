@@ -149,7 +149,7 @@
 
 								<div class="pull-right" ng-if="isPublished == 0">
 									<div class="btn-group">
-										<button type="button" class="btn btn-default dropdown-toggle" ng-click="question.isOpen = true">
+										<button type="button" class="btn btn-default dropdown-toggle" >
 											<?php echo __d('questionnaires', 'move to another page'); ?>
 											<span class="caret"></span>
 										</button>

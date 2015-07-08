@@ -25,6 +25,7 @@
 					|| question.questionTypeOption == <?php echo QuestionnairesComponent::TYPE_OPTION_DATE_TIME; ?>">
     <input type="text"
            class="form-control"
+           datepicker-append-to-body="true"
            datepicker-popup
            ng-model="<?php echo $model; ?>"
            show-weeks="false"
