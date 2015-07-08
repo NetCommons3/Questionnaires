@@ -115,6 +115,3 @@
 	</div>
 
 </div>
-<div class="text-center">
-	<?php echo $this->BackToPage->backToPageButton(__d('questionnaires', 'Back to page'), 'menu-up'); ?>
-</div>
