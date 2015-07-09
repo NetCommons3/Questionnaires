@@ -39,7 +39,7 @@ QuestionnaireCommon.directive('colorPalettePicker', [function() {
         '<div class="input-group-addon" ' +
         'ng-attr-style="background-color:{{selected}};">&nbsp;</div>' +
         '</span><input name={{name}} type="text" ' +
-        'ng-model="selected" value="{{selected}}" class="form-control">' +
+        'ng-model="selected" ng-value="{{selected}}" class="form-control">' +
         '<div class="input-group-btn">' +
         '<button type="button" class="btn btn-default dropdown-toggle" ' +
         'data-toggle="dropdown">' +
@@ -51,7 +51,7 @@ QuestionnaireCommon.directive('colorPalettePicker', [function() {
         '</div></li></ul></div></div>',
     link: function(scope, element, attr) {
       scope.colors = scope.customizedColors || defaultColors;
-      scope.selected = scope.ngModel || scope.colors[0];
+      scope.selected = scope.ngModel;
 
       scope.pick = function(color) {
         scope.selected = color;
