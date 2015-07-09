@@ -645,8 +645,8 @@ msgstr "このページを削除"
 #: /View/QuestionnaireQuestions/edit.ctp:313
 msgid "Add Page"
 msgstr "ページの追加"
-msgid "next page"
-msgstr "次のページ"
+msgid "next display page"
+msgstr "次に表示するページ"
 
 #: /View/QuestionnaireQuestions/edit_result.ctp:54
 msgid "Results setting"

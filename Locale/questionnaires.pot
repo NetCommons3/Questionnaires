@@ -602,7 +602,7 @@ msgstr ""
 msgid "Add Question"
 msgstr ""
 
-msgid "next page"
+msgid "next display page"
 msgstr ""
 
 #: /View/QuestionnaireQuestions/edit.ctp:133

@@ -94,7 +94,7 @@
 						</button>
 
 						<div class="pull-left form-inline">
-							<label><?php echo __d('questionnaires', 'next page'); ?></label>
+							<label><?php echo __d('questionnaires', 'next display page'); ?></label>
 							<select name="data[QuestionnairePage][{{pageIndex}}][next_page_sequence]"
 									class="form-control input-sm"
 									ng-disabled="isDisabledSetSkip(page, null)"
