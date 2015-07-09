@@ -345,15 +345,15 @@ NetCommonsApp.controller('Questionnaires.edit.question',
          *
          * @return {void}
          */
-      $scope.moveQuestionToAnotherPage =
-          function($event, pageIndex, qIndex, movePageIndex) {
-        var tmpQ =
+      $scope.copyQuestionToAnotherPage =
+          function($event, pageIndex, qIndex, copyPageIndex) {
+        var tmpQ = angular.copy(
             $scope.questionnaire.questionnairePage[pageIndex].
-                questionnaireQuestion.splice(qIndex, 1);
-        $scope.questionnaire.questionnairePage[movePageIndex].
-            questionnaireQuestion.push(tmpQ[0]);
+                questionnaireQuestion[qIndex]);
+        $scope.questionnaire.questionnairePage[copyPageIndex].
+            questionnaireQuestion.push(tmpQ);
 
-        $scope._resetQuestionnaireQuestionSequence(pageIndex);
+        $scope._resetQuestionnaireQuestionSequence(copyPageIndex);
         //$event.stopPropagation();
       };
 

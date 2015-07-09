@@ -150,13 +150,13 @@
 								<div class="pull-right" ng-if="isPublished == 0">
 									<div class="btn-group">
 										<button type="button" class="btn btn-default dropdown-toggle" >
-											<?php echo __d('questionnaires', 'move to another page'); ?>
+											<?php echo __d('questionnaires', 'copy to another page'); ?>
 											<span class="caret"></span>
 										</button>
 										<ul class="dropdown-menu" role="menu">
 											<li role="presentation" class="dropdown-header"><?php echo __d('questionnaires', 'destination page number'); ?></li>
-											<li ng-repeat="(movePageIndex, movePage) in questionnaire.questionnairePage | filter: {pageSequence: '!' + page.pageSequence}">
-												<a href="#" ng-click="moveQuestionToAnotherPage($event, pageIndex, qIndex, movePageIndex)">{{1 * movePage.pageSequence + 1}}</a>
+											<li ng-repeat="(copyPageIndex, copyPage) in questionnaire.questionnairePage | filter: {pageSequence: '!' + page.pageSequence}">
+												<a href="#" ng-click="copyQuestionToAnotherPage($event, pageIndex, qIndex, copyPage.pageSequence)">{{1 * copyPage.pageSequence + 1}}</a>
 											</li>
 										</ul>
 									</div>

@@ -606,7 +606,7 @@ msgid "next display page"
 msgstr ""
 
 #: /View/QuestionnaireQuestions/edit.ctp:133
-msgid "move to another page"
+msgid "copy to another page"
 msgstr ""
 
 msgid "destination page number"
