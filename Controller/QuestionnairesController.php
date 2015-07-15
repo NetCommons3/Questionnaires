@@ -115,7 +115,10 @@ class QuestionnairesController extends QuestionnairesAppController {
 				return;
 			}
 			//$this->redirect('questionnaire_answers/answer/' . $this->viewVars['frameId'] . '/' . $questionnaires[0]['Questionnaire']['origin_id']);
-			$ret = $this->requestAction('/questionnaires/questionnaire_answers/answer/' . $this->viewVars['frameId'] . '/' . $questionnaires[0]['Questionnaire']['origin_id'], array('return'));
+			//$ret = $this->requestAction('/questionnaires/questionnaire_answers/answer/' . $this->viewVars['frameId'] . '/' . $questionnaires[0]['Questionnaire']['origin_id'], array('return'));
+			$ret = $this->requestAction(
+				array('controller' => 'questionnaire_answers', 'action' => 'answer'),
+				array('pass' => array($this->viewVars['frameId'], $questionnaires[0]['Questionnaire']['origin_id']), 'return'));
 			$this->set('answer', $ret);
 			$this->view = 'Questionnaires/answer';
 			return;
