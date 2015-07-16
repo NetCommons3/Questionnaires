@@ -181,7 +181,11 @@ msgid "Please enter a valid date and time."
 msgstr ""
 
 #: /Model/QuestionnaireAnswerValidation.php:102;121
-msgid "Please enter the %s between %s and %s."
+msgid "Please enter the answer between %s and %s."
+msgstr ""
+msgid "Please enter the answer between %s letters and %s letters."
+msgstr ""
+msgid "the answer is too long. Please enter under %d letters."
 msgstr ""
 
 #: /Model/QuestionnaireAnswerValidation.php:139;156;161
@@ -349,15 +353,15 @@ msgid "This questionnaire is being temporarily stored . You can questionnaire te
 msgstr ""
 
 #: /View/Elements/Answers/question_range_description.ctp:14
-msgid "Please %s <= enter <= %s"
+msgid "Please enter a number between %s and %s"
 msgstr ""
 
 #: /View/Elements/Answers/question_range_description.ctp:16
-msgid "Please %s <= enter"
+msgid "Please enter between %s letters and %s letters"
 msgstr ""
 
 #: /View/Elements/Answers/question_range_description.ctp:18
-msgid "Please enter <= %s"
+msgid "Please enter at %s to %s"
 msgstr ""
 
 #: /View/Elements/Answers/question_single_select_box.ctp:29

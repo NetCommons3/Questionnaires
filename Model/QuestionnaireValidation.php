@@ -217,7 +217,6 @@ class QuestionnaireValidation extends QuestionnairesAppModel {
 				$skipPage = Hash::extract($questionnaire['QuestionnairePage'], '{n}[page_sequence=' . $choice['skip_page_sequence'] . ']');
 				if (!$skipPage) {
 					$errors['skip_page_sequence'][] = __d('questionnaires', 'Invalid skip page. page does not exist.');
-					$this->log($errors, 'debug');
 				}
 			}
 		}

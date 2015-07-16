@@ -10,10 +10,14 @@
  */
 ?>
 
-<?php if (!empty($question['min']) && !empty($question['max'])): ?>
-    <span class="help-block"><?php echo sprintf(__d('questionnaires', 'Please %s <= enter <= %s'), $question['min'], $question['max']); ?></span>
-<?php elseif (!empty($question['min'])): ?>
-    <span class="help-block"><?php echo sprintf(__d('questionnaires', 'Please %s <= enter'), $question['min']); ?></span>
-<?php elseif (!empty($question['max'])): ?>
-    <span class="help-block"><?php echo sprintf(__d('questionnaires', 'Please enter <= %s'), $question['max']); ?></span>
+<?php if ($question['is_range'] == QuestionnairesComponent::USES_USE): ?>
+    <?php if ($question['question_type'] == QuestionnairesComponent::TYPE_TEXT): ?>
+        <?php if ($question['question_type_option'] == QuestionnairesComponent::TYPE_OPTION_NUMERIC): ?>
+            <span class="help-block"><?php echo sprintf(__d('questionnaires', 'Please enter a number between %s and %s'), $question['min'], $question['max']); ?></span>
+        <?php else: ?>
+            <span class="help-block"><?php echo sprintf(__d('questionnaires', 'Please enter between %s letters and %s letters'), $question['min'], $question['max']); ?></span>
+        <?php endif; ?>
+    <?php elseif ($question['question_type'] == QuestionnairesComponent::TYPE_DATE_AND_TIME): ?>
+        <span class="help-block"><?php echo sprintf(__d('questionnaires', 'Please enter at %s to %s'), $question['min'], $question['max']); ?></span>
+    <?php endif; ?>
 <?php endif;

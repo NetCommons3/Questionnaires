@@ -20,6 +20,13 @@ App::uses('Component', 'Controller');
 class QuestionnairesComponent extends Component {
 
 /**
+ * answer max length
+ *
+ * @var int
+ */
+	const	QUESTIONNAIRE_MAX_ANSWER_LENGTH = 60000;
+
+/**
  * default display questionnaire item count
  *
  * @var int

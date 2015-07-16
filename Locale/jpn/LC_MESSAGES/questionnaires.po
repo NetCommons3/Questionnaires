@@ -182,8 +182,12 @@ msgid "Please enter a valid date and time."
 msgstr "正しい日付と時間を設定してください。"
 
 #: /Model/QuestionnaireAnswerValidation.php:109;128
-msgid "Please enter the %s between %s and %s."
-msgstr "%sは%sから%sの範囲で入力してください。"
+msgid "Please enter the answer between %s and %s."
+msgstr "回答は%sから%sの範囲で入力してください。"
+msgid "Please enter the answer between %s letters and %s letters."
+msgstr "回答は%s文字から%s文字の範囲で入力してください。"
+msgid "the answer is too long. Please enter under %s letters."
+msgstr "回答が長すぎます。%d文字以下で答えてください。"
 
 #: /Model/QuestionnaireAnswerValidation.php:146;163;168
 msgid "Invalid choice"
@@ -350,16 +354,16 @@ msgid "This questionnaire is being temporarily stored . You can questionnaire te
 msgstr "このアンケートは一時保存中です。このページで実施前のアンケートテストをすることができます。<br />アンケートを修正・変更したい場合は、上部にある質問作成ボタンを押すと編集することができます。"
 
 #: /View/Elements/Answers/question_range_description.ctp:14
-msgid "Please %s <= enter <= %s"
-msgstr "次の範囲で入力してください %s <= 入力値 <= %s"
+msgid "Please enter a number between %s and %s"
+msgstr "%s から %s の間の数値を入力してください"
 
 #: /View/Elements/Answers/question_range_description.ctp:16
-msgid "Please %s <= enter"
-msgstr "入力してください %s <= enter"
+msgid "Please enter between %s letters and %s letters"
+msgstr "%s文字から%s文字の入力をしてください"
 
 #: /View/Elements/Answers/question_range_description.ctp:18
-msgid "Please enter <= %s"
-msgstr "入力してください <= %s"
+msgid "Please enter at %s to %s"
+msgstr "%s から %sまでの間で入力してください"
 
 #: /View/Elements/Answers/question_single_select_box.ctp:29
 msgid "Please choose one"

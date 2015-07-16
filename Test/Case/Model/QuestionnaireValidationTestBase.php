@@ -19,7 +19,7 @@ App::uses('QuestionnaireModelTestBase', 'Questionnaires.Test/Case/Model');
  * @author Shohei Nakajima <nakajimashouhei@gmail.com>
  * @package NetCommons\Questionnaires\Test\Case\Model
  */
-class QuestionnaireTestBase extends QuestionnaireModelTestBase {
+class QuestionnaireValidationTestBase extends QuestionnaireModelTestBase {
 
 /**
  * setUp
@@ -40,7 +40,6 @@ class QuestionnaireTestBase extends QuestionnaireModelTestBase {
 		//↑ここまでがModelの各クラス
 		$this->Block = ClassRegistry::init('Blocks.Block');
 		$this->Frame = ClassRegistry::init('Frames.Frame');
-		$this->Comment = ClassRegistry::init('Comments.Comment');
 	}
 
 /**
@@ -60,7 +59,6 @@ class QuestionnaireTestBase extends QuestionnaireModelTestBase {
 		unset($this->QuestionnaireAnswer);
 		unset($this->Block);
 		unset($this->Frame);
-		unset($this->Comment);
 		parent::tearDown();
 	}
 

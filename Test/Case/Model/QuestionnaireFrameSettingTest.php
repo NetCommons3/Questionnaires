@@ -84,63 +84,7 @@ class QuestionnaireFrameSettingTest extends QuestionnaireTestBase {
 	}
 
 /**
- * getQuestionnaireFrameSetting method
- *
- * @return void
- */
-	public function testgetQuestionnaireFrameSetting() {
-		// フレーム設定が存在しない場合のデフォルト値取得試験
-		//初期処理
-		$this->setUp();
-
-		$frameKey = '88554c2b94b5db80d4ec975b63ec';
-
-		$expected = array(
-			QuestionnairesComponent::DISPLAY_TYPE_LIST,
-			QuestionnairesComponent::QUESTIONNAIRE_DEFAULT_DISPLAY_NUM_PER_PAGE,
-			'modified',
-			'DESC'
-		);
-
-		// 処理実行
-		$result = $this->QuestionnaireFrameSetting->getQuestionnaireFrameSetting($frameKey);
-
-		// テスト実施
-		$this->_assertArray($expected, $result);
-
-		//終了処理
-		$this->tearDown();
-	}
-/**
- * getQuestionnaireFrameSetting method
- *
- * @return void
- */
-	public function testgetDefaultFrameSetting() {
-		//初期処理
-		$this->setUp();
-
-		//期待値の生成
-		$expected = array(
-			'QuestionnaireFrameSettings' => array(
-				'display_type' => QuestionnairesComponent::DISPLAY_TYPE_LIST,
-				'display_num_per_page' => QuestionnairesComponent::QUESTIONNAIRE_DEFAULT_DISPLAY_NUM_PER_PAGE,
-				'sort_type' => QuestionnairesComponent::DISPLAY_SORT_TYPE_NEW_ARRIVALS,
-			)
-		);
-
-		// 処理実行
-		$result = $this->QuestionnaireFrameSetting->getDefaultFrameSetting();
-
-		// テスト実施
-		$this->_assertArray($expected, $result);
-
-		//終了処理
-		$this->tearDown();
-	}
-
-/**
- * getQuestionnaireFrameSetting method
+ * prepareBlock method
  *
  * @return void
  */
@@ -177,7 +121,7 @@ class QuestionnaireFrameSettingTest extends QuestionnaireTestBase {
 		//初期処理
 		$this->setUp();
 
-		$frameKey = 'frame_2';
+		$frameKey = 'frame_10';
 		//期待値の生成
 		$expected = array(
 			'QuestionnaireFrameSetting' => array(

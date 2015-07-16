@@ -316,7 +316,6 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
  * @return bool
  */
 	private function __checkEndPage($questionnaire, $nextPageSeq) {
-		$this->log($nextPageSeq, 'debug');
 		if ($nextPageSeq == QuestionnairesComponent::SKIP_GO_TO_END) {
 			return true;
 		}

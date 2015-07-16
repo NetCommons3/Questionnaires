@@ -19,7 +19,7 @@ App::uses('QuestionnaireModelTestBase', 'Questionnaires.Test/Case/Model');
  * @author Shohei Nakajima <nakajimashouhei@gmail.com>
  * @package NetCommons\Questionnaires\Test\Case\Model
  */
-class QuestionnaireTestBase extends QuestionnaireModelTestBase {
+class QuestionnaireAnswerTestBase extends QuestionnaireModelTestBase {
 
 /**
  * setUp
@@ -36,11 +36,11 @@ class QuestionnaireTestBase extends QuestionnaireModelTestBase {
 		$this->QuestionnaireFrameDisplayQuestionnaire = ClassRegistry::init('Questionnaires.QuestionnaireFrameDisplayQuestionnaire');
 		$this->QuestionnaireBlocksSetting = ClassRegistry::init('Questionnaires.QuestionnaireBlocksSetting');
 		$this->QuestionnaireAnswerSummary = ClassRegistry::init('Questionnaires.QuestionnaireAnswerSummary');
+		$this->QuestionnaireAnswerSummaryCsv = ClassRegistry::init('Questionnaires.QuestionnaireAnswerSummaryCsv');
 		$this->QuestionnaireAnswer = ClassRegistry::init('Questionnaires.QuestionnaireAnswer');
 		//↑ここまでがModelの各クラス
 		$this->Block = ClassRegistry::init('Blocks.Block');
 		$this->Frame = ClassRegistry::init('Frames.Frame');
-		$this->Comment = ClassRegistry::init('Comments.Comment');
 	}
 
 /**
@@ -57,10 +57,10 @@ class QuestionnaireTestBase extends QuestionnaireModelTestBase {
 		unset($this->QuestionnaireFrameDisplayQuestionnaire);
 		unset($this->QuestionnaireBlocksSetting);
 		unset($this->QuestionnaireAnswerSummary);
+		unset($this->QuestionnaireAnswerSummaryCsv);
 		unset($this->QuestionnaireAnswer);
 		unset($this->Block);
 		unset($this->Frame);
-		unset($this->Comment);
 		parent::tearDown();
 	}
 

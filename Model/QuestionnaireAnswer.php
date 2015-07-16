@@ -20,6 +20,15 @@ App::uses('QuestionnairesAppModel', 'Questionnaires.Model');
 class QuestionnaireAnswer extends QuestionnairesAppModel {
 
 /**
+ * use behaviors
+ *
+ * @var array
+ */
+	public $actsAs = array(
+		'Questionnaires.QuestionnaireAnswerValidate',
+	);
+
+/**
  * Validation rules
  *
  * @var array
@@ -52,6 +61,22 @@ class QuestionnaireAnswer extends QuestionnairesAppModel {
 				'message' => ''
 			)
 		),
+	);
+
+/**
+ * Answer Validation rule by question type
+ *
+ * @var array
+ */
+	public $answerTypeValidate = array(
+		QuestionnairesComponent::TYPE_MATRIX_MULTIPLE => 'checkMatrixSelectionListAnswerValue',
+		QuestionnairesComponent::TYPE_MATRIX_SELECTION_LIST => 'checkMatrixSelectionListAnswerValue',
+		QuestionnairesComponent::TYPE_MULTIPLE_SELECTION => 'checkSelectionAnswerValue',
+		QuestionnairesComponent::TYPE_SELECTION => 'checkSelectionAnswerValue',
+		QuestionnairesComponent::TYPE_TEXT => 'checkTextAnswerValue',
+		QuestionnairesComponent::TYPE_TEXT_AREA => 'checkTextAreaAnswerValue',
+		QuestionnairesComponent::TYPE_SINGLE_SELECT_BOX => 'checkSelectionAnswerValue',
+		QuestionnairesComponent::TYPE_DATE_AND_TIME => 'checkDateAndTimeAnswerValue'
 	);
 
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
@@ -144,71 +169,20 @@ class QuestionnaireAnswer extends QuestionnairesAppModel {
 
 		$errors = array();
 
-		$answer = $this->data['QuestionnaireAnswer']['answer_value'];
+		$answer = $data['answer_value'];
 
 		$this->__setupAnswerValue($answer, $question);
 
-		//
+		// 共通チェック
 		// 必須なのに入力されていない
-		//
 		if ($question['is_require'] == QuestionnairesComponent::REQUIRES_REQUIRE) {
 			$errors = array_merge($errors,
 				$this->QuestionnaireAnswerValidation->checkRequire($question, $this->data['QuestionnaireAnswer']));
 		}
-
-		//
-		// １行テキストチェック
-		//
-		if ($question['question_type'] == QuestionnairesComponent::TYPE_TEXT) {
-			$errors = array_merge($errors,
-				$this->QuestionnaireAnswerValidation->checkNumericType($question, $answer));
-			$errors = array_merge($errors,
-				$this->QuestionnaireAnswerValidation->checkRange($question, $answer, 'number'));
-		}
-		//
-		// 日付回答チェック
-		//
-		if ($question['question_type'] == QuestionnairesComponent::TYPE_DATE_AND_TIME) {
-			$errors = array_merge($errors,
-				$this->QuestionnaireAnswerValidation->checkDatetimeType($question, $answer));
-			$errors = array_merge($errors,
-				$this->QuestionnaireAnswerValidation->checkDateRange($question, $answer, 'date'));
-		}
-
-		//
-		// 択一選択式
-		// リスト
-		// 複数選択式
-		// 異常値入力されてないか
-		// その他がチェックされているのにその他の項目に入力されていないことはないか
-		//
-		if (isset($this->data['QuestionnaireAnswer']['answer_values'])) {
-			$list = Hash::combine($question['QuestionnaireChoice'], '{n}.id', '{n}.origin_id');
-			$choiceIds = array_keys($this->data['QuestionnaireAnswer']['answer_values']);
-			foreach ($choiceIds as $choiceId) {
-				$errors = array_merge($errors,
-					$this->QuestionnaireAnswerValidation->checkAnswerInList($question, $choiceId, $list));
-				$errors = array_merge($errors,
-					$this->QuestionnaireAnswerValidation->checkOtherAnswer($question, $answer, $choiceId, $this->data['QuestionnaireAnswer']));
-			}
-		}
-
-		// マトリクス
-		// マトリクス択一
-		// マトリクス複数
-		// マトリクスの場合はデフォルト全部の行に回答する/または全く回答しないことを求める
-		// 異常値入力されてないか
-		// その他がチェックされているのにその他の項目に入力されていないことはないか
-		if (isset($this->data['QuestionnaireAnswer']['matrix_answer_values'])) {
-			$list = Hash::combine($question['QuestionnaireChoice'], '{n}.id', '{n}.origin_id');
-			$errors = array_merge($errors,
-				$this->QuestionnaireAnswerValidation->checkMatrixAnswerInList($question, $this->data['QuestionnaireAnswer']['matrix_answer_values'], $list));
-			$errors = array_merge($errors,
-				$this->QuestionnaireAnswerValidation->checkMatrixOtherAnswer($question, $this->data['QuestionnaireAnswer']['matrix_answer_values'], $this->data['QuestionnaireAnswer']));
-			$errors = array_merge($errors,
-				$this->QuestionnaireAnswerValidation->checkMatrixAnswerFill($question, $this->data['QuestionnaireAnswer']['matrix_answer_values'], $answers));
-		}
-
+		// 質問種別に合わせてチェックCALL
+		$errors = array_merge($errors,
+			call_user_func_array(array($this, $this->answerTypeValidate[$question['question_type']]), array(&$answer, &$question, &$answers))
+		);
 		//
 		// なんらかのエラーメッセージが設定されていたらfalseリターン
 		//
@@ -372,7 +346,7 @@ class QuestionnaireAnswer extends QuestionnairesAppModel {
 						'checkAnswerValue',
 						$targetQuestion[0],
 						$answer,
-						'message' => ''
+						'message' => '',
 					)));
 
 				// データ保存

@@ -9,12 +9,12 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 
-App::uses('QuestionnaireTestBase', 'Questionnaires.Test/Case/Model');
+App::uses('QuestionnaireAnswerTestBase', 'Questionnaires.Test/Case/Model');
 
 /**
  * Summary for QuestionnaireAnswer Test Case
  */
-class QuestionnaireAnswerValidationTest extends QuestionnaireTestBase {
+class QuestionnaireAnswerValidationTest extends QuestionnaireAnswerTestBase {
 
 /**
  * setUp method
@@ -221,6 +221,7 @@ class QuestionnaireAnswerValidationTest extends QuestionnaireTestBase {
 				'question_type_option' => 1,
 				'is_choice_random' => 1,
 				'is_skip' => 1,
+				'is_range' => 1,
 				'min' => '2',
 				'max' => '3',
 				'is_result_display' => 1,
@@ -251,11 +252,10 @@ class QuestionnaireAnswerValidationTest extends QuestionnaireTestBase {
 		$this->assertFalse($result);
 
 		//validationErrorsチェック
-		$type = 'number';
 		$expected = array(
 				'answer_value' => array(
 				__d('questionnaires', 'Number required'),
-				sprintf(__d('questionnaires', 'Please enter the %s between %s and %s.', $type, $question['min'], $question['max'])))
+				sprintf(__d('questionnaires', 'Please enter the answer between %s and %s.', $question['min'], $question['max'])))
 				);
 		$this->assertEquals($this->QuestionnaireAnswer->validationErrors, $expected);
 
@@ -327,7 +327,6 @@ class QuestionnaireAnswerValidationTest extends QuestionnaireTestBase {
 
 		// 処理実行
 		$result = $this->QuestionnaireAnswer->set($data);
-		$result = $this->QuestionnaireAnswer->validates();
 		$result = $this->QuestionnaireAnswer->checkAnswerValue($data, $question, $answers);
 
 		// テスト実施
@@ -410,7 +409,6 @@ class QuestionnaireAnswerValidationTest extends QuestionnaireTestBase {
 
 		// 処理実行
 		$result = $this->QuestionnaireAnswer->set($data);
-		$result = $this->QuestionnaireAnswer->validates();
 		$result = $this->QuestionnaireAnswer->checkAnswerValue($data, $question, $answers);
 
 		// テスト実施
@@ -491,7 +489,6 @@ class QuestionnaireAnswerValidationTest extends QuestionnaireTestBase {
 
 		// 処理実行
 		$result = $this->QuestionnaireAnswer->set($data);
-		$result = $this->QuestionnaireAnswer->validates();
 		$result = $this->QuestionnaireAnswer->checkAnswerValue($data, $question, $answers);
 
 		// テスト実施

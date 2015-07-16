@@ -46,7 +46,7 @@ class QuestionnaireAnswerSummaryFixture extends CakeTestFixture {
 		array(
 			'id' => 1,
 			'answer_status' => 1,
-			'test_status' => 1,
+			'test_status' => 0,
 			'answer_number' => 1,
 			'answer_time' => '2015-04-13 06:41:13',
 			'questionnaire_origin_id' => 1,

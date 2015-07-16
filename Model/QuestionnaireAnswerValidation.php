@@ -92,14 +92,22 @@ class QuestionnaireAnswerValidation extends QuestionnairesAppModel {
  *
  * @param array $question question
  * @param string $answer answer value
- * @param string $type question type
  * @return array error message
  */
-	public function checkRange($question, $answer, $type) {
+	public function checkRange($question, $answer) {
 		$errors = array();
-		if (!is_null($question['min']) && !is_null($question['max'])) {
-			if (!Validation::range($answer, intval($question['min']), intval($question['max']))) {
-				$errors[] = sprintf(__d('questionnaires', 'Please enter the %s between %s and %s.', $type, $question['min'], $question['max']));
+		// 現在の機能は数値型か文字列型のみ
+		if ($question['question_type_option'] == QuestionnairesComponent::TYPE_OPTION_NUMERIC) {
+			if ($question['is_range'] == QuestionnairesComponent::USES_USE) {
+				if (!Validation::range($answer, intval($question['min']), intval($question['max']))) {
+					$errors[] = sprintf(__d('questionnaires', 'Please enter the answer between %s and %s.', $question['min'], $question['max']));
+				}
+			}
+		} else {
+			if ($question['is_range'] == QuestionnairesComponent::USES_USE) {
+				if (!Validation::minLength($answer, intval($question['min'])) || !Validation::maxLength($answer, intval($question['max']))) {
+					$errors[] = sprintf(__d('questionnaires', 'Please enter the answer between %s letters and %s letters.', $question['min'], $question['max']));
+				}
 			}
 		}
 		return $errors;

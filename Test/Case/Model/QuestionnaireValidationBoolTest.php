@@ -14,7 +14,7 @@ App::uses('QuestionnaireValidationTestBase', 'Questionnaires.Test/Case/Model');
 /**
  * Summary for Questionnaire Test Case
  */
-class QuestionnaireValidationTest extends QuestionnaireValidationTestBase {
+class QuestionnaireValidationBoolTest extends QuestionnaireValidationTestBase {
 
 /**
  * setUp method
@@ -61,17 +61,18 @@ class QuestionnaireValidationTest extends QuestionnaireValidationTestBase {
  * @return void
  */
 	public function testbeforeValidate1() {
-		$field = 'block_id';
+		$field = 'is_auto_translated';
 
 		$data = array(
+			'block_id' => 1,
+			'is_auto_translated' => 3,
 			'title' => 'test1',
 			'status' => NetCommonsBlockComponent::STATUS_IN_DRAFT,
-			'block_id' => 'a',
 		);
 
 		$expected = array(
 				$field => array(
-				__d('net_commons', 'Invalid request.')));
+					__d('net_commons', 'Invalid request.')));
 
 		$this->__assertValidationError($field, $data, $expected);
 	}
@@ -81,16 +82,17 @@ class QuestionnaireValidationTest extends QuestionnaireValidationTestBase {
  * @return void
  */
 	public function testbeforeValidate2() {
-		$field = 'title';
+		$field = 'is_period';
 
 		$data = array(
 			'block_id' => 1,
 			'is_auto_translated' => 1,
-			'title' => '',
+			'title' => 'title',
 			'status' => NetCommonsBlockComponent::STATUS_IN_DRAFT,
+			'is_period' => 'a',
 		);
 		$expected = array(
-				$field => array( sprintf( __d('net_commons', 'Please input %s.'), __d('questionnaires', 'Title'))));
+				$field => array( __d('net_commons', 'Invalid request.')));
 
 		$this->__assertValidationError($field, $data, $expected);
 	}
@@ -100,73 +102,7 @@ class QuestionnaireValidationTest extends QuestionnaireValidationTestBase {
  * @return void
  */
 	public function testbeforeValidate3() {
-		$field = 'start_period';
-
-		$data = array(
-			'block_id' => 1,
-			'is_auto_translated' => 1,
-			'title' => 'title',
-			'status' => NetCommonsBlockComponent::STATUS_IN_DRAFT,
-			'start_period' => 'aaa',
-			'end_period' => '',
-			'is_period' => 0,
-		);
-		$expected = array(
-				$field => array( __d('questionnaires', 'Invalid datetime format.')));
-
-		$this->__assertValidationError($field, $data, $expected);
-	}
-
-/**
- * validate method
- * @return void
- */
-	public function testbeforeValidate4() {
-		$field = 'end_period';
-
-		$data = array(
-			'block_id' => 1,
-			'is_auto_translated' => 1,
-			'title' => 'title',
-			'status' => NetCommonsBlockComponent::STATUS_IN_DRAFT,
-			'start_period' => '2015-06-04 11:45:22',
-			'end_period' => 'aaa',
-			'is_period' => 0,
-		);
-		$expected = array(
-				$field => array( __d('questionnaires', 'Invalid datetime format.')));
-
-		$this->__assertValidationError($field, $data, $expected);
-	}
-
-/**
- * validate method
- * @return void
- */
-	public function testbeforeValidateDateComp() {
-		$field = 'end_period';
-
-		$data = array(
-			'block_id' => 1,
-			'is_auto_translated' => 1,
-			'title' => 'title',
-			'status' => NetCommonsBlockComponent::STATUS_IN_DRAFT,
-			'start_period' => '2015-06-04 11:45:22',
-			'end_period' => '2015-06-02 11:45:22',
-			'is_period' => 0,
-		);
-		$expected = array(
-				$field => array( __d('questionnaires', 'start period must be smaller than end period')));
-
-		$this->__assertValidationError($field, $data, $expected);
-	}
-
-/**
- * validate method
- * @return void
- */
-	public function testbeforeValidate5() {
-		$field = 'total_show_start_period';
+		$field = 'is_no_member_allow';
 
 		$data = array(
 			'block_id' => 1,
@@ -176,10 +112,126 @@ class QuestionnaireValidationTest extends QuestionnaireValidationTestBase {
 			'start_period' => '2015-06-04 11:45:22',
 			'end_period' => '2015-06-04 11:45:22',
 			'is_period' => 0,
-			'total_show_start_period' => 'a',
+			'is_no_member_allow' => 3,
 		);
 		$expected = array(
-				$field => array( __d('questionnaires', 'Invalid datetime format.')));
+				$field => array(__d('net_commons', 'Invalid request.')));
+
+		$this->__assertValidationError($field, $data, $expected);
+	}
+
+/**
+ * validate method
+ * @return void
+ */
+	public function testbeforeValidate4() {
+		$field = 'is_anonymity';
+
+		$data = array(
+			'block_id' => 1,
+			'is_auto_translated' => 1,
+			'title' => 'title',
+			'status' => NetCommonsBlockComponent::STATUS_IN_DRAFT,
+			'start_period' => '2015-06-04 11:45:22',
+			'end_period' => '2015-06-04 11:45:22',
+			'is_period' => 0,
+			'is_anonymity' => 2,
+		);
+		$expected = array(
+				$field => array(__d('net_commons', 'Invalid request.')));
+
+		$this->__assertValidationError($field, $data, $expected);
+	}
+
+/**
+ * validate method
+ * @return void
+ */
+	public function testbeforeValidate5() {
+		$field = 'is_key_pass_use';
+
+		$data = array(
+			'block_id' => 1,
+			'is_auto_translated' => 1,
+			'title' => 'title',
+			'status' => NetCommonsBlockComponent::STATUS_IN_DRAFT,
+			'start_period' => '2015-06-04 11:45:22',
+			'end_period' => '2015-06-04 11:45:22',
+			'is_period' => 0,
+			'is_key_pass_use' => 2,
+		);
+		$expected = array(
+				$field => array(__d('net_commons', 'Invalid request.')));
+
+		$this->__assertValidationError($field, $data, $expected);
+	}
+
+/**
+ * validate method
+ * @return void
+ */
+	public function testbeforeValidate6() {
+		$field = 'is_repeat_allow';
+
+		$data = array(
+			'block_id' => 1,
+			'is_auto_translated' => 1,
+			'title' => 'title',
+			'status' => NetCommonsBlockComponent::STATUS_IN_DRAFT,
+			'start_period' => '2015-06-04 11:45:22',
+			'end_period' => '2015-06-04 11:45:22',
+			'is_period' => 0,
+			'is_repeat_allow' => 2,
+		);
+		$expected = array(
+				$field => array(__d('net_commons', 'Invalid request.')));
+
+		$this->__assertValidationError($field, $data, $expected);
+	}
+
+/**
+ * validate method
+ * @return void
+ */
+	public function testbeforeValidate7() {
+		$field = 'is_image_authentication';
+
+		$data = array(
+			'block_id' => 1,
+			'is_auto_translated' => 1,
+			'title' => 'title',
+			'status' => NetCommonsBlockComponent::STATUS_IN_DRAFT,
+			'start_period' => '2015-06-04 11:45:22',
+			'end_period' => '2015-06-04 11:45:22',
+			'is_period' => 0,
+			'is_image_authentication' => 2,
+		);
+		$expected = array(
+				$field => array(__d('net_commons', 'Invalid request.')));
+
+		$this->__assertValidationError($field, $data, $expected);
+	}
+
+/**
+ * validate method
+ * @return void
+ */
+
+	public function testbeforeValidate8() {
+		$field = 'is_answer_mail_send';
+
+		$data = array(
+			'block_id' => 1,
+			'is_auto_translated' => 1,
+			'title' => 'title',
+			'status' => NetCommonsBlockComponent::STATUS_IN_DRAFT,
+			'start_period' => '2015-06-04 11:45:22',
+			'end_period' => '2015-06-04 11:45:22',
+			'is_period' => 0,
+			'is_answer_mail_send' => 2,
+		);
+		$expected = array(
+				$field => array(__d('net_commons', 'Invalid request.')));
 
 		$this->__assertValidationError($field, $data, $expected);
 	}
