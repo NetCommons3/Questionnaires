@@ -118,7 +118,7 @@ class QuestionnaireAnswerValidateBehavior extends ModelBehavior {
 		$errors = array_merge($errors,
 			$model->QuestionnaireAnswerValidation->checkDatetimeType($question, $data));
 		$errors = array_merge($errors,
-			$model->QuestionnaireAnswerValidation->checkDateRange($question, $data, 'date'));
+			$model->QuestionnaireAnswerValidation->checkDateRange($question, $data));
 		return $errors;
 	}
 }

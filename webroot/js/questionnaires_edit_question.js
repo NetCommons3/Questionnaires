@@ -89,6 +89,15 @@ NetCommonsApp.controller('Questionnaires.edit.question',
        * @return {Date}
        */
       $scope.Date = function(dateStr) {
+        // もしも時刻表示の場合は本日の日付文字列を付加して日時文字列扱いにする
+        var regTime = /^\d{2}:\d{2}:\d{2}$/;
+        if (dateStr.match(regTime)) {
+          var today = new Date();
+          dateStr = today.getFullYear() +
+              '-' + (today.getMonth() + 1) +
+              '-' + today.getDate() +
+              ' ' + dateStr;
+        }
         if (Date.parse(dateStr)) {
           return new Date(dateStr);
         } else {

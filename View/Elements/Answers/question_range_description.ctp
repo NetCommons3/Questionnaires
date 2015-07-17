@@ -18,6 +18,14 @@
             <span class="help-block"><?php echo sprintf(__d('questionnaires', 'Please enter between %s letters and %s letters'), $question['min'], $question['max']); ?></span>
         <?php endif; ?>
     <?php elseif ($question['question_type'] == QuestionnairesComponent::TYPE_DATE_AND_TIME): ?>
-        <span class="help-block"><?php echo sprintf(__d('questionnaires', 'Please enter at %s to %s'), $question['min'], $question['max']); ?></span>
+        <span class="help-block">
+        <?php if ($question['question_type_option'] == QuestionnairesComponent::TYPE_OPTION_DATE): ?>
+            <?php echo sprintf(__d('questionnaires', 'Please enter at %s to %s'), date('Y-m-d', strtotime($question['min'])), date('Y-m-d', strtotime($question['max']))); ?>
+        <?php elseif ($question['question_type_option'] == QuestionnairesComponent::TYPE_OPTION_TIME): ?>
+            <?php echo sprintf(__d('questionnaires', 'Please enter at %s to %s'), date('H:i', strtotime($question['min'])), date('H:i', strtotime($question['max']))); ?>
+        <?php else: ?>
+            <?php echo sprintf(__d('questionnaires', 'Please enter at %s to %s'), date('Y-m-d H:i', strtotime($question['min'])), date('Y-m-d H:i', strtotime($question['max']))); ?>
+        <?php endif; ?>
+        </span>
     <?php endif; ?>
 <?php endif;

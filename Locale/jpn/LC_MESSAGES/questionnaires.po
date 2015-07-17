@@ -189,6 +189,7 @@ msgstr "回答は%s文字から%s文字の範囲で入力してください。"
 msgid "the answer is too long. Please enter under %s letters."
 msgstr "回答が長すぎます。%d文字以下で答えてください。"
 
+
 #: /Model/QuestionnaireAnswerValidation.php:146;163;168
 msgid "Invalid choice"
 msgstr "選択が不正です"

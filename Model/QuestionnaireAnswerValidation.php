@@ -118,16 +118,21 @@ class QuestionnaireAnswerValidation extends QuestionnairesAppModel {
  *
  * @param array $question question
  * @param string $answer answer value
- * @param string $type question type
  * @return array error message
  */
-	public function checkDateRange($question, $answer, $type) {
+	public function checkDateRange($question, $answer) {
 		$errors = array();
-		if (!empty($question['min']) && !empty($question['max'])) {
-			if ($question['question_type_option'] != QuestionnairesComponent::TYPE_OPTION_TIME) {
-				if (!Validation::range(strtotime($answer), strtotime($question['min']) - 1, strtotime($question['max']) + 1)) {
-					$errors[] = sprintf(__d('questionnaires', 'Please enter the %s between %s and %s.', $type, $question['min'], $question['max']));
+		if ($question['is_range'] == QuestionnairesComponent::USES_USE) {
+			if (!Validation::range(strtotime($answer), strtotime($question['min']) - 1, strtotime($question['max']) + 1)) {
+				if ($question['question_type_option'] == QuestionnairesComponent::TYPE_OPTION_DATE) {
+					$fmt = 'Y-m-d';
+				} elseif ($question['question_type_option'] == QuestionnairesComponent::TYPE_OPTION_TIME) {
+					$fmt = 'H:i';
+				} else {
+					$fmt = 'Y-m-d H:i';
 				}
+				$errors[] = sprintf(__d('questionnaires', 'Please enter the answer between %s and %s.',
+					date($fmt, strtotime($question['min'])), date($fmt, strtotime($question['max']))));
 			}
 		}
 		return $errors;

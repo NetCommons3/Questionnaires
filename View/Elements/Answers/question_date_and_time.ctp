@@ -12,69 +12,48 @@
 <?php if ($readonly): ?>
 		<?php echo $answer[0]['answer_value']; ?>
 <?php else: ?>
-	<?php
-		$initStr = "questionnaireDateTimeAnswer" . $question['id'] . "= Date('" . $answer[0]['answer_value'] . "')";
+		<div class="row">
+
+		<?php
+		$icon = 'glyphicon-calendar';
+		$options = '{';
+		if ($question['question_type_option'] == QuestionnairesComponent::TYPE_OPTION_DATE) {
+			$options .= "format:'YYYY-MM-DD'";
+			if ($question['is_range'] == QuestionnairesComponent::USES_USE) {
+				$options .= ", minDate:'" . $question['min'] . "', maxDate:'" . $question['max'] . "'";
+			}
+		} elseif ($question['question_type_option'] == QuestionnairesComponent::TYPE_OPTION_TIME) {
+			$options .= "format:'HH:mm'";
+			$icon = 'glyphicon-time';
+			if ($question['is_range'] == QuestionnairesComponent::USES_USE) {
+				$options .= ", minDate:'" . date('Y-m-d ', time()) . $question['min'] . "', maxDate:'" . date('Y-m-d ', time()) . $question['max'] . "'";
+			}
+		} elseif ($question['question_type_option'] == QuestionnairesComponent::TYPE_OPTION_DATE_TIME) {
+			$options .= "format:'YYYY-MM-DD HH:mm'";
+			if ($question['is_range'] == QuestionnairesComponent::USES_USE) {
+				$options .= ", minDate:'" . $question['min'] . "', maxDate:'" . $question['max'] . "'";
+			}
+		}
+		$options .= '}';
 		?>
 
-		<div class="row" ng-init="<?php echo $initStr; ?>">
 
-		<?php if ($question['question_type_option'] == QuestionnairesComponent::TYPE_OPTION_DATE): ?>
-		<div class="col-sm-3 form-group">
-			 <div class="input-group">
+		<div class="col-sm-4">
+			<?php echo $this->element('NetCommons.datetimepicker'); ?>
+			<div class="input-group">
 				<?php echo
 				$this->Form->input('QuestionnaireAnswer.' . $index . '.answer_value',
 				array('type' => 'text',
 				'class' => 'form-control',
-				'datepicker-popup' => 'yyyy-MM-dd',
-				'ng-model' => 'questionnaireDateTimeAnswer' . $question['id'],
-				'show-weeks' => 'false',
-				'min' => 'Date(\'' . $question['min'] . '\')',
-				'max' => 'Date(\'' . $question['max'] . '\')',
+				'ng-model' => 'dateAnswer[' . $question['origin_id'] . ']',
+				'datetimepicker',
+				'datetimepicker-options' => $options,
 				'label' => false));
 				?>
-				<div class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></div>
-			 </div>
-			<?php echo $this->element('Questionnaires.Answers/question_range_description', array('question' => $question)); ?>
-		</div>
-		<?php endif ?>
-
-		<?php if ($question['question_type_option'] == QuestionnairesComponent::TYPE_OPTION_TIME): ?>
-		<div class="col-sm-3">
-			<timepicker
-					ng-model="questionnaireDateTimeAnswer<?php echo $question['id']; ?>"
-					hour-step="1"
-					minute-step="15" >
-
-			</timepicker>
-			<?php echo
-				$this->Form->input('QuestionnaireAnswer.' . $index . '.answer_value', array(
-				'type' => 'hidden',
-				'ng-value' => "questionnaireDateTimeAnswer" . $question['id'] . " | date : 'yyyy-MM-dd HH:mm:ss'"
-				));
-				?>
-			<?php echo $this->element('Questionnaires.Answers/question_range_description', array('question' => $question)); ?>
-		</div>
-		<?php endif ?>
-
-		<?php if ($question['question_type_option'] == QuestionnairesComponent::TYPE_OPTION_DATE_TIME): ?>
-			<div class="col-sm-4">
-				<?php echo $this->element('NetCommons.datetimepicker'); ?>
-				<div class="input-group">
-					<?php echo
-					$this->Form->input('QuestionnaireAnswer.' . $index . '.answer_value',
-					array('type' => 'text',
-					'class' => 'form-control',
-					'ng-model' => 'questionnaireDateTimeAnswer' . $question['id'],
-					'datetimepicker',
-					'min' => 'Date(\'' . $question['min'] . '\')',
-					'max' => 'Date(\'' . $question['max'] . '\')',
-					'label' => false));
-					?>
-					<div class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></div>
-				</div>
-				<?php echo $this->element('Questionnaires.Answers/question_range_description', array('question' => $question)); ?>
+				<div class="input-group-addon"><i class="glyphicon <?php echo $icon; ?>"></i></div>
 			</div>
-		<?php endif ?>
+			<?php echo $this->element('Questionnaires.Answers/question_range_description', array('question' => $question)); ?>
+		</div>
 
 		<?php echo $this->Form->hidden('QuestionnaireAnswer.' . $index . '.matrix_choice_id', array(
 		'value' => null

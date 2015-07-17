@@ -180,9 +180,11 @@ class QuestionnaireAnswer extends QuestionnairesAppModel {
 				$this->QuestionnaireAnswerValidation->checkRequire($question, $this->data['QuestionnaireAnswer']));
 		}
 		// 質問種別に合わせてチェックCALL
-		$errors = array_merge($errors,
-			call_user_func_array(array($this, $this->answerTypeValidate[$question['question_type']]), array(&$answer, &$question, &$answers))
-		);
+		if (!empty($answer)) {
+			$errors = array_merge($errors,
+				call_user_func_array(array($this, $this->answerTypeValidate[$question['question_type']]), array(&$answer, &$question, &$answers))
+			);
+		}
 		//
 		// なんらかのエラーメッセージが設定されていたらfalseリターン
 		//

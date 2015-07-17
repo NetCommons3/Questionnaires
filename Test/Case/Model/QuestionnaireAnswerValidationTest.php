@@ -303,6 +303,7 @@ class QuestionnaireAnswerValidationTest extends QuestionnaireAnswerTestBase {
 				'question_type_option' => QuestionnairesComponent::TYPE_OPTION_DATE,
 				'is_choice_random' => 1,
 				'is_skip' => 1,
+				'is_range' => 1,
 				'min' => '2015-04-15',
 				'max' => '2015-06-30',
 				'is_result_display' => 1,
@@ -333,11 +334,10 @@ class QuestionnaireAnswerValidationTest extends QuestionnaireAnswerTestBase {
 		$this->assertFalse($result);
 
 		//validationErrorsチェック
-		$type = 'date';
 		$expected = array(
 				'answer_value' => array(
 					sprintf(__d('questionnaires', 'Please enter a valid date in YY-MM-DD format.')),
-					sprintf(__d('questionnaires', 'Please enter the %s between %s and %s.', $type, $question['min'], $question['max']))
+					sprintf(__d('questionnaires', 'Please enter the answer between %s and %s.', $question['min'], $question['max']))
 				));
 		$this->assertEquals($this->QuestionnaireAnswer->validationErrors, $expected);
 
@@ -385,8 +385,9 @@ class QuestionnaireAnswerValidationTest extends QuestionnaireAnswerTestBase {
 				'question_type_option' => QuestionnairesComponent::TYPE_OPTION_TIME,
 				'is_choice_random' => 1,
 				'is_skip' => 1,
-				'min' => '2015-04-15',
-				'max' => '2015-06-30',
+				'is_range' => 1,
+				'min' => '12:30',
+				'max' => '15:45',
 				'is_result_display' => 1,
 				'result_display_type' => 1,
 				'is_auto_translated' => 1,
@@ -417,7 +418,8 @@ class QuestionnaireAnswerValidationTest extends QuestionnaireAnswerTestBase {
 		//validationErrorsチェック
 		$expected = array(
 				'answer_value' => array(
-					sprintf(__d('questionnaires', 'Please enter the time.'))
+					sprintf(__d('questionnaires', 'Please enter the time.')),
+					sprintf(__d('questionnaires', 'Please enter the answer between %s and %s.', $question['min'], $question['max']))
 				));
 		$this->assertEquals($this->QuestionnaireAnswer->validationErrors, $expected);
 
@@ -465,8 +467,9 @@ class QuestionnaireAnswerValidationTest extends QuestionnaireAnswerTestBase {
 				'question_type_option' => QuestionnairesComponent::TYPE_OPTION_DATE_TIME,
 				'is_choice_random' => 1,
 				'is_skip' => 1,
-				'min' => '2015-04-15',
-				'max' => '2015-06-30',
+				'is_range' => 1,
+				'min' => '2015-04-15 12:30',
+				'max' => '2015-06-30 15:45',
 				'is_result_display' => 1,
 				'result_display_type' => 1,
 				'is_auto_translated' => 1,
@@ -495,11 +498,10 @@ class QuestionnaireAnswerValidationTest extends QuestionnaireAnswerTestBase {
 		$this->assertFalse($result);
 
 		//validationErrorsチェック
-		$type = 'date';
 		$expected = array(
 				'answer_value' => array(
 					sprintf(__d('questionnaires', 'Please enter a valid date and time.')),
-					sprintf(__d('questionnaires', 'Please enter the %s between %s and %s.', $type, $question['min'], $question['max']))
+					sprintf(__d('questionnaires', 'Please enter the answer between %s and %s.', $question['min'], $question['max']))
 				));
 		$this->assertEquals($this->QuestionnaireAnswer->validationErrors, $expected);
 
