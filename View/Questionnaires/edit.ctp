@@ -65,7 +65,7 @@
 				'label' => __d('questionnaires', 'set the answer period'),
 				'help' => __d('questionnaires', 'After approval will be immediately published . Stop of the questionnaire to select the stop from the questionnaire data list .')
 				]) ?>
-			<div class="row" ng-show="questionnaires.questionnaire.isPeriod">
+			<div class="row" ng-show="questionnaires.questionnaire.isPeriod != 0">
 				<div class="col-sm-5">
 					<?php echo $this->element(
 					'Questionnaires.Questionnaires/datetime', [
@@ -101,7 +101,7 @@
 			'help' => __d('questionnaires', 'If not set , it will be displayed after the respondent answers.')
 			]) ?>
 
-			<div class="row" ng-show="questionnaires.questionnaire.totalShowTiming">
+			<div class="row" ng-show="questionnaires.questionnaire.totalShowTiming != 0">
 				<div class="col-sm-5">
 					<?php echo $this->element(
 					'Questionnaires.Questionnaires/datetime', [
@@ -140,7 +140,7 @@
 			array(
 			'label' => false,
 			'class' => 'form-control',
-			'ng-show' => 'questionnaires.questionnaire.isKeyPassUse',
+			'ng-show' => 'questionnaires.questionnaire.isKeyPassUse != 0',
 			'ng-model' => 'questionnaires.questionnaire.keyPhrase'
 			)
 			);

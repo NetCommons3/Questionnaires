@@ -32,7 +32,7 @@
 		<label class="checkbox-inline" ng-if="question.questionType != <?php echo QuestionnairesComponent::TYPE_MULTIPLE_SELECTION; ?>">
 			<?php echo $this->Form->checkbox('QuestionnairePage.' . $pageIndex . '.QuestionnaireQuestion.' . $qIndex . '.is_skip',
 			array(
-			'value' => QuestionnairesComponent::USES_USE,
+			'value' => QuestionnairesComponent::SKIP_FLAGS_NO_SKIP,
 			'ng-model' => 'question.isSkip',
 			'ng-checked' => 'question.isSkip == ' . QuestionnairesComponent::SKIP_FLAGS_SKIP,
 			'ng-disabled' => 'isDisabledSetSkip(page, question)'
@@ -54,19 +54,17 @@
 							ng-model="choice.skipPageSequence"
 							ng-if="question.isSkip == <?php echo QuestionnairesComponent::SKIP_FLAGS_SKIP; ?>
 							&& question.questionType != <?php echo QuestionnairesComponent::TYPE_MULTIPLE_SELECTION; ?>">
-						<option ng-if="questionnaire.questionnairePage.length-1-pageIndex"
-								ng-repeat="skipPage in questionnaire.questionnairePage | filter: greaterThan('pageSequence', page)"
-								ng-value="{{skipPage.pageSequence}}"
+						<option ng-repeat="skipPage in questionnaire.questionnairePage | filter: greaterThan('pageSequence', page)"
+								value="{{skipPage.pageSequence}}"
 								ng-selected="choice.skipPageSequence == skipPage.pageSequence || (choice.skipPageSequence == null && skipPage.pageSequence == pageIndex+1)">
 							{{1 * skipPage.pageSequence + 1}}
 						</option>
-						<option ng-value="<?php echo QuestionnairesComponent::SKIP_GO_TO_END ?>"
+						<option value="<?php echo QuestionnairesComponent::SKIP_GO_TO_END ?>"
 								ng-selected="choice.skipPageSequence == <?php echo QuestionnairesComponent::SKIP_GO_TO_END ?> || (choice.skipPageSequence == null && questionnaire.questionnairePage.length-1==pageIndex)">
 							<?php echo __d('questionnaires', 'goto end'); ?>
 						</option>
 						<option
 								value="{{questionnaire.questionnairePage.length}}"
-								ng-value="{{questionnaire.questionnairePage.length}}"
 								title="<?php echo __d('questionnaires', '(new page will be created)'); ?>">
 							<?php echo __d('questionnaires', 'create new page for this skip'); ?>
 						</option>

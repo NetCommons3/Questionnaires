@@ -93,7 +93,7 @@
 								<?php echo $this->element('Questionnaires.status_label',
 								array('status' => 'item.questionnaire.status')); ?>
 
-								<span ng-if="item.questionnaire.isPeriod">
+								<span ng-if="item.questionnaire.isPeriod != 0">
 								(
 									{{item.questionnaire.startPeriod | ncDatetime}}
 									<?php echo __d('questionnaires', ' - '); ?>

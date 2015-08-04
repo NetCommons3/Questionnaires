@@ -22,6 +22,8 @@ NetCommonsApp.controller('Questionnaires.edit.question',
          */
       $scope.serverValidationClear = NetCommonsBase.serverValidationClear;
 
+      $scope.isTrue = '1';
+
       /**
          * variables
          *
@@ -127,10 +129,6 @@ NetCommonsApp.controller('Questionnaires.edit.question',
                   questionnaireQuestion[qIdx].isResultDisplay =
                   variables.EXPRESSION_NOT_SHOW;
             }
-            // 日付け型の設定画面でカレンダーの開閉オプション
-            $scope.questionnaire.questionnairePage[pIdx].
-                questionnaireQuestion[qIdx].calendarOpened = [false, false];
-
             // この質問の中にエラーがあるか
             if (question.errorMessages) {
               $scope.questionnaire.questionnairePage[pIdx].
@@ -277,7 +275,6 @@ NetCommonsApp.controller('Questionnaires.edit.question',
           targetElId = elId.substring(0, elId.lastIndexOf('.')) + '.min';
         }
         var targetEl = document.getElementById(targetElId);
-        console.dir(targetEl);
         var limitDate = $(targetEl).val();
 
         // 自分のMinまたはMaxを設定する
@@ -363,6 +360,10 @@ NetCommonsApp.controller('Questionnaires.edit.question',
         question['questionSequence'] = newIndex;
         question['questionType'] = variables.TYPE_SELECTION;
         question['originId'] = 0;
+        question['isRequire'] = 0;
+        question['isSkip'] = 0;
+        question['isChoiceRandom'] = 0;
+        question['isRange'] = 0;
         question['isResultDisplay'] = 1;
         question['resultDisplayType'] =
             variables.RESULT_DISPLAY_TYPE_BAR_CHART;

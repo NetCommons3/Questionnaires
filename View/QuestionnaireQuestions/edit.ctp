@@ -110,15 +110,13 @@ array(
 							<label><?php echo __d('questionnaires', 'next display page'); ?></label>
 							<select name="data[QuestionnairePage][{{pageIndex}}][next_page_sequence]"
 									class="form-control input-sm"
-									ng-disabled="isDisabledSetSkip(page, null)"
-									ng-model="page.nextPageSequence">
-								<option ng-if="questionnaire.questionnairePage.length-1-pageIndex"
-										ng-repeat="nextPage in questionnaire.questionnairePage | filter: greaterThan('pageSequence', page)"
-										ng-value="{{nextPage.pageSequence}}"
-										ng-selected="page.nextPageSequence == nextPage.pageSequence || (page.nextPageSequence == null && nextPage.pageSequence == pageIndex+1)">
+									ng-disabled="isDisabledSetSkip(page, null)">
+								<option ng-repeat="nextPage in questionnaire.questionnairePage | filter: greaterThan('pageSequence', page)"
+										ng-selected="page.nextPageSequence == nextPage.pageSequence || (page.nextPageSequence == null && nextPage.pageSequence == pageIndex+1)"
+										value="{{nextPage.pageSequence}}">
 									{{1 * nextPage.pageSequence + 1}}
 								</option>
-								<option ng-value="<?php echo QuestionnairesComponent::SKIP_GO_TO_END ?>"
+								<option value="<?php echo QuestionnairesComponent::SKIP_GO_TO_END ?>"
 										ng-selected="page.nextPageSequence == <?php echo QuestionnairesComponent::SKIP_GO_TO_END ?> || (page.nextPageSequence >= questionnaire.questionnairePage.length)">
 									<?php echo __d('questionnaires', 'goto end'); ?>
 								</option>
@@ -198,10 +196,10 @@ array(
 
 								<span class="questionnaire-accordion-header-title">
 									{{question.questionValue}}
-									<strong ng-if="question.isRequire" class="text-danger h4">
+									<strong ng-if="question.isRequire != 0" class="text-danger h4">
 										<?php echo __d('net_commons', 'Required'); ?>
 									</strong>
-									<span ng-if="question.isSkip" class="badge">
+									<span ng-if="question.isSkip != 0" class="badge">
 										<?php echo __d('questionnaires', 'Skip'); ?>
 									</span>
 								</span>

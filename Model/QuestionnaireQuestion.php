@@ -183,6 +183,10 @@ class QuestionnaireQuestion extends QuestionnairesAppModel {
 			'question_sequence' => 0,
 			'question_value' => __d('questionnaires', 'New Question') . '1',
 			'question_type' => QuestionnairesComponent::TYPE_SELECTION,
+			'is_require' => QuestionnairesComponent::USES_NOT_USE,
+			'is_skip' => QuestionnairesComponent::SKIP_FLAGS_NO_SKIP,
+			'is_choice_random' => QuestionnairesComponent::USES_NOT_USE,
+			'is_range' => QuestionnairesComponent::USES_NOT_USE,
 			'is_result_display' => QuestionnairesComponent::EXPRESSION_SHOW,
 			'result_display_type' => QuestionnairesComponent::RESULT_DISPLAY_TYPE_BAR_CHART
 		);
