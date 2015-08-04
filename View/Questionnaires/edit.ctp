@@ -71,8 +71,8 @@
 					'Questionnaires.Questionnaires/datetime', [
 					'fieldName' => 'start_period',
 					'ngModelName' => 'questionnaires.questionnaire.startPeriod',
-					'min' => 'minDate',
-					'max' => 'questionnaires.questionnaire.endPeriod',
+					'min' => '',
+					'max' => 'end_period',
 					'model' => 'Questionnaire',
 					]) ?>
 				</div>
@@ -84,7 +84,7 @@
 					'Questionnaires.Questionnaires/datetime', [
 					'fieldName' => 'end_period',
 					'ngModelName' => 'questionnaires.questionnaire.endPeriod',
-					'min' => 'questionnaires.questionnaire.startPeriod',
+					'min' => 'start_period',
 					'max' => '',
 					'model' => 'Questionnaire',
 					]) ?>

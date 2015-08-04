@@ -54,16 +54,35 @@ NetCommonsApp.controller('Questionnaires.setting',
       $scope.initialize = function(frameId, questionnaires) {
         $scope.frameId = frameId;
         $scope.questionnaires = questionnaires;
-
-        $scope.questionnaires.questionnaire.startPeriod =
-            $scope.Date($scope.questionnaires.questionnaire.startPeriod);
-        $scope.questionnaires.questionnaire.endPeriod =
-            $scope.Date($scope.questionnaires.questionnaire.endPeriod);
-        $scope.questionnaires.questionnaire.totalShowStartPeriod =
-            $scope.Date(
-                $scope.questionnaires.questionnaire.totalShowStartPeriod);
-        $scope.minDate = new Date();
       };
+
+      /**
+       * focus DateTimePicker
+       *
+       * @return {void}
+       */
+      $scope.setMinMaxDate = function(ev, min, max) {
+        // 自分
+        var curEl = ev.currentTarget;
+        var elId = curEl.id;
+
+        // minの制限は
+        var minDate = $('#start_period').val();
+        // maxの制限は
+        var maxDate = $('#end_period').val();
+
+        if (elId == 'start_period') {
+          $('#start_period').data('DateTimePicker').maxDate(maxDate);
+        } else {
+          $('#end_period').data('DateTimePicker').minDate(minDate);
+        }
+      };
+
+      /**
+       * publish button click
+       *
+       * @return {void}
+       */
       $scope.publishQuestionnaire = function(e, isPublished, message) {
         if (isPublished == 0) {
           if (!confirm(message)) {
@@ -75,6 +94,12 @@ NetCommonsApp.controller('Questionnaires.setting',
             $scope.frameId).submit();
         return true;
       };
+
+      /**
+       * delete button click
+       *
+       * @return {void}
+       */
       $scope.deleteQuestionnaire = function(e, message) {
         if (confirm(message)) {
           angular.element('#questionnaireDeleteForm-' +

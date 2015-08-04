@@ -23,7 +23,8 @@
 							QuestionnairesComponent::TYPE_OPTION_DATE_TIME => __d('questionnaires', 'Date and Time')),
 		'legend' => false,
 		'label' => false,
-		'ng-model' => 'question.questionTypeOption'
+		'ng-model' => 'question.questionTypeOption',
+		'ng-click' => 'changeDatetimepickerType(pageIndex, qIndex)'
 	));
 	?>
 	<div class="col-sm-3">
@@ -60,10 +61,11 @@
 			echo $this->element(
 			'Questionnaires.Questions/edit/question_setting_date_element', array(
 			'field' => 'QuestionnairePage.' . $pageIndex . '.QuestionnaireQuestion.' . $qIndex . '.min',
-			'model' => 'question.min',
 			'calOpenId' => 0,
+			'model' => 'question.min',
 			'min' => '',
 			'max' => 'question.max',
+			'limitTarget' => 'QuestionnairePage.' . $pageIndex . '.QuestionnaireQuestion.' . $qIndex . '.max',
 			'error' => 'question.errorMessages.min',
 			));
 			?>
@@ -76,10 +78,11 @@
 			echo $this->element(
 			'Questionnaires.Questions/edit/question_setting_date_element', array(
 			'field' => 'QuestionnairePage.' . $pageIndex . '.QuestionnaireQuestion.' . $qIndex . '.max',
-			'model' => 'question.max',
 			'calOpenId' => 1,
+			'model' => 'question.max',
 			'min' => 'question.min',
 			'max' => '',
+			'limitTarget' => 'QuestionnairePage.' . $pageIndex . '.QuestionnaireQuestion.' . $qIndex . '.min',
 			'error' => 'question.errorMessages.max',
 			));
 			?>

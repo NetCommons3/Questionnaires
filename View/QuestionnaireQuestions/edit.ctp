@@ -10,6 +10,19 @@
  */
 ?>
 <?php echo $this->element('Questionnaires.scripts'); ?>
+<?php echo $this->Html->script(
+array(
+'/components/moment/min/moment.min.js',
+'/components/moment/min/moment-with-locales.min.js',
+),
+array(
+'plugin' => false,
+'once' => true,
+'inline' => false
+)
+);
+?>
+
 <?php echo $this->Html->script('Questionnaires.questionnaires_edit.js');?>
 <?php echo $this->Html->script('Questionnaires.questionnaires_edit_question.js');?>
 

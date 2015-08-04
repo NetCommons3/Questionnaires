@@ -2,10 +2,10 @@
  * Created by りか on 2015/02/18.
  */
 
-
+NetCommonsApp.constant('moment', moment);
 NetCommonsApp.controller('Questionnaires.edit.question',
     function($scope, NetCommonsBase, NetCommonsWysiwyg,
-             $timeout) {
+             $timeout, moment) {
 
       /**
          * tinymce
@@ -82,29 +82,6 @@ NetCommonsApp.controller('Questionnaires.edit.question',
         }
       };
 
-
-      /**
-       * get Date Object
-       *
-       * @return {Date}
-       */
-      $scope.Date = function(dateStr) {
-        // もしも時刻表示の場合は本日の日付文字列を付加して日時文字列扱いにする
-        var regTime = /^\d{2}:\d{2}:\d{2}$/;
-        if (dateStr.match(regTime)) {
-          var today = new Date();
-          dateStr = today.getFullYear() +
-              '-' + (today.getMonth() + 1) +
-              '-' + today.getDate() +
-              ' ' + dateStr;
-        }
-        if (Date.parse(dateStr)) {
-          return new Date(dateStr);
-        } else {
-          return null;
-        }
-      };
-
       /**
          * Initialize
          *
@@ -142,14 +119,6 @@ NetCommonsApp.controller('Questionnaires.edit.question',
             var question = $scope.questionnaire.questionnairePage[pIdx].
                 questionnaireQuestion[qIdx];
 
-            // 各質問が日付・時刻のタイプならば、範囲設定があるかの確認
-
-            if ($scope.isDateTimeType(question.questionTypeOption)) {
-              $scope.questionnaire.questionnairePage[pIdx].
-                  questionnaireQuestion[qIdx].min = $scope.Date(question.min);
-              $scope.questionnaire.questionnairePage[pIdx].
-                  questionnaireQuestion[qIdx].max = $scope.Date(question.max);
-            }
             // テキスト、１行テキスト、日付け型は集計結果を出さない設定
             if (question.questionType == variables.TYPE_TEXT ||
                 question.questionType == variables.TYPE_TEXT_AREA ||
@@ -213,6 +182,110 @@ NetCommonsApp.controller('Questionnaires.edit.question',
         if (e.which === 13) {
           e.stopPropagation();
           return false;
+        }
+      };
+
+      /**
+       * get Date String
+       *
+       * @return {String}
+       */
+      $scope.getDateStr = function(dateStr, format) {
+        // もしも時刻表示の場合は本日の日付文字列を付加して日時文字列扱いにする
+        var regTime = /^\d{2}:\d{2}:\d{2}$/;
+        var regTime2 = /^\d{2}:\d{2}$/;
+        if (dateStr.match(regTime) || dateStr.match(regTime2)) {
+          var today = new Date();
+          dateStr = today.getFullYear() +
+              '-' + (today.getMonth() + 1) +
+              '-' + today.getDate() +
+              ' ' + dateStr;
+        }
+        // もしも年月日表示の場合は00：00を付加して日時文字列扱いにする
+        var regTime3 = /^\d{2}-\d{2}-\d{2}$/;
+        if (dateStr.match(regTime3)) {
+          dateStr += '00:00';
+        }
+
+        if (format) {
+          var d = new moment(dateStr);
+          dateStr = d.format(format);
+        }
+
+        return dateStr;
+      };
+
+      /**
+       * get Date Object
+       *
+       * @return {Date}
+       */
+      $scope.Date = function(dateStr) {
+        dateStr = $scope.getDateStr(dateStr);
+        if (Date.parse(dateStr)) {
+          return new Date(dateStr);
+        } else {
+          return null;
+        }
+      };
+
+      /**
+       * change DateTimePickerType
+       *
+       * @return {void}
+       */
+      $scope.changeDatetimepickerType = function(pIdx, qIdx) {
+        var type = $scope.questionnaire.questionnairePage[pIdx].
+            questionnaireQuestion[qIdx].questionTypeOption;
+        var format;
+        if (type == variables.TYPE_OPTION_DATE) {
+          format = 'YYYY-MM-DD';
+        } else if (type == variables.TYPE_OPTION_TIME) {
+          format = 'HH:mm';
+        } else if (type == variables.TYPE_OPTION_DATE_TIME) {
+          format = 'YYYY-MM-DD HH:mm';
+        }
+        $scope.questionnaire.questionnairePage[pIdx].
+            questionnaireQuestion[qIdx].min =
+            $scope.getDateStr($scope.questionnaire.questionnairePage[pIdx].
+                questionnaireQuestion[qIdx].min, format);
+        $scope.questionnaire.questionnairePage[pIdx].
+            questionnaireQuestion[qIdx].max =
+            $scope.getDateStr($scope.questionnaire.questionnairePage[pIdx].
+                questionnaireQuestion[qIdx].max, format);
+      };
+
+      /**
+       * focus DateTimePicker
+       *
+       * @return {void}
+       */
+      $scope.setMinMaxDate = function(ev, pIdx, qIdx) {
+        // 自分のタイプがMinかMaxかを知る
+        var curEl = ev.currentTarget;
+        var elId = curEl.id;
+
+        var typeMinMax;
+        typeMinMax = elId.substr(elId.lastIndexOf('.') + 1);
+        var targetEl;
+        var targetElId;
+
+        // 相方のデータを取り出す
+        if (typeMinMax == 'min') {
+          targetElId = elId.substring(0, elId.lastIndexOf('.')) + '.max';
+        } else {
+          targetElId = elId.substring(0, elId.lastIndexOf('.')) + '.min';
+        }
+        var targetEl = document.getElementById(targetElId);
+        console.dir(targetEl);
+        var limitDate = $(targetEl).val();
+
+        // 自分のMinまたはMaxを設定する
+        var el = document.getElementById(elId);
+        if (typeMinMax == 'min') {
+          $(el).data('DateTimePicker').maxDate(limitDate);
+        } else {
+          $(el).data('DateTimePicker').minDate(limitDate);
         }
       };
 
