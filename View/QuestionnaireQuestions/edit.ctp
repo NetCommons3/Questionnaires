@@ -159,8 +159,8 @@ array(
 							<accordion-heading>
 
 								<div class="pull-right" ng-if="isPublished == 0">
-									<div class="btn-group">
-										<button type="button" class="btn btn-default dropdown-toggle" >
+									<div class="btn-group" dropdown dropdown-append-to-body>
+										<button type="button" class="btn btn-default" dropdown-toggle >
 											<?php echo __d('questionnaires', 'copy to another page'); ?>
 											<span class="caret"></span>
 										</button>
