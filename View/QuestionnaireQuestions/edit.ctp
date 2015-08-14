@@ -305,6 +305,7 @@ array(
 									array(
 										'class' => 'form-control',
 										'ng-model' => 'question.questionType',
+										'ng-change' => 'changeQuestionType($event, {{pageIndex}}, {{qIndex}})',
 										'ng-disabled' => 'isPublished != 0',
 										'empty' => null
 									)),
@@ -361,7 +362,7 @@ array(
 					</div>
 				</div>
 			</tab>
-			<tab class="questionnaire-add-page-tab" select="addPage($event)" ng-if="isPublished == 0">
+			<tab class="questionnaire-add-page-tab" ng-click="addPage($event)" ng-if="isPublished == 0">
 				<tab-heading>
 					<span class="glyphicon glyphicon-plus">
 					</span>

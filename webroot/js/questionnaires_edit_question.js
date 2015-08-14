@@ -326,6 +326,8 @@ NetCommonsApp.controller('Questionnaires.edit.question',
         if (confirm(message)) {
           $scope.questionnaire.questionnairePage.splice(idx, 1);
           $scope._resetQuestionnairePageSequence();
+          // 削除された場合は１枚目のタブを選択するようにする
+          $scope.questionnaire.questionnairePage[0].tabActive = true;
         }
       };
 
@@ -636,6 +638,34 @@ NetCommonsApp.controller('Questionnaires.edit.question',
         }
       };
       /**
+         * change Question Type
+         *
+         * @return {void}
+         */
+      $scope.changeQuestionType = function($event, pIdx, qIdx) {
+        var questionType = $scope.questionnaire.questionnairePage[pIdx].
+            questionnaireQuestion[qIdx].questionType;
+        if (questionType != variables.TYPE_SELECTION &&
+            questionType != variables.TYPE_SINGLE_SELECT_BOX) {
+          $scope.questionnaire.questionnairePage[pIdx].
+              questionnaireQuestion[qIdx].isSkip = 0;
+          $scope.questionnaire.questionnairePage[pIdx].
+              questionnaireQuestion[qIdx].isChoiceRandom = 0;
+        }
+        if (!$scope.questionnaire.questionnairePage[pIdx].
+            questionnaireQuestion[qIdx].questionnaireChoice ||
+            $scope.questionnaire.questionnairePage[pIdx].
+            questionnaireQuestion[qIdx].questionnaireChoice.length == 0) {
+          $scope.addChoice($event,
+              pIdx,
+              $scope.questionnaire.questionnairePage[pIdx].
+                  questionnaireQuestion.length - 1,
+              0,
+              variables.OTHER_CHOICE_TYPE_NO_OTHER_FILED,
+              variables.MATRIX_TYPE_ROW_OR_NO_MATRIX);
+        }
+      };
+      /**
          * Questionnaire Date Time Option Calendar open
          *
          * @return {void}
@@ -674,6 +704,19 @@ NetCommonsApp.controller('Questionnaires.edit.question',
             // return true is disabled
             return true;
           }
+        }
+        return false;
+      };
+      /**
+       * Questionnaire type is able display result ?
+       *
+       * @return {bool}
+       */
+      $scope.isDisabledDisplayResult = function(questionType) {
+        if (questionType == variables.TYPE_TEST ||
+            questionType == variables.TYPE_TEST_AREA ||
+            questionType == variables.TYPE_DATE_AND_TIME) {
+          return true;
         }
         return false;
       };

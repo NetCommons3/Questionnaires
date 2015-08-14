@@ -11,6 +11,17 @@
 ?>
 <div class="row">
 	<div class="col-sm-12">
+		<?php
+		echo $this->Form->hidden('QuestionnairePage.' . $pageIndex . '.QuestionnaireQuestion.' . $qIndex . '.is_choice_random',
+		array(
+		'value' => QuestionnairesComponent::USES_NOT_USE,
+		));
+		echo $this->Form->hidden('QuestionnairePage.' . $pageIndex . '.QuestionnaireQuestion.' . $qIndex . '.is_skip',
+		array(
+		'value' => QuestionnairesComponent::SKIP_FLAGS_NO_SKIP,
+		));
+		?>
+
 		<div class="form-group">
 			<label class="checkbox-inline">
 				<?php echo $this->Form->checkbox('QuestionnairePage.' . $pageIndex . '.QuestionnaireQuestion.' . $qIndex . '.question_type_option',

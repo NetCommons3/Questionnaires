@@ -133,6 +133,7 @@ class QuestionnaireChoice extends QuestionnairesAppModel {
 				'matrix_type' => QuestionnairesComponent::MATRIX_TYPE_ROW_OR_NO_MATRIX,
 				'choice_label' => __d('questionnaires', 'new choice') . '1',
 				'other_choice_type' => QuestionnairesComponent::OTHER_CHOICE_TYPE_NO_OTHER_FILED,
+				'graph_color' => '#f38631',
 				'skip_page_sequence' => QuestionnairesComponent::SKIP_GO_TO_END
 			);
 	}

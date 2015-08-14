@@ -22,10 +22,6 @@ QuestionnaireCommon.directive('selectChange', function() {
 });
 
 QuestionnaireCommon.directive('colorPalettePicker', [function() {
-  var defaultColors = ['#f38631', '#e0e4cd', '#69d2e7', '#68e2a7', '#f64649',
-    '#4d5361', '#47bfbd', '#7c4f6c', '#23313c', '#9c9b7f',
-    '#be5945', '#cccccc'];
-
   return {
     scope: {
       selected: '=',
@@ -38,7 +34,7 @@ QuestionnaireCommon.directive('colorPalettePicker', [function() {
         '<span class="input-group-btn">' +
         '<div class="input-group-addon" ' +
         'ng-attr-style="background-color:{{selected}};">&nbsp;</div>' +
-        '</span><input name={{name}} type="text" ' +
+        '</span><input ng-attr-name={{name}} type="text" ' +
         'ng-model="selected" ng-value="{{selected}}" class="form-control">' +
         '<div class="input-group-btn">' +
         '<button type="button" class="btn btn-default dropdown-toggle" ' +
@@ -50,6 +46,10 @@ QuestionnaireCommon.directive('colorPalettePicker', [function() {
         'style="background-color:{{color}};" ng-click="pick(color)">' +
         '</div></li></ul></div></div>',
     link: function(scope, element, attr) {
+      var defaultColors = ['#f38631', '#e0e4cd', '#69d2e7', '#68e2a7',
+        '#f64649', '#4d5361', '#47bfbd', '#7c4f6c',
+        '#23313c', '#9c9b7f', '#be5945', '#cccccc'];
+
       scope.colors = scope.customizedColors || defaultColors;
       scope.selected = scope.ngModel;
 

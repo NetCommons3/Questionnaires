@@ -11,6 +11,17 @@
  */
 ?>
 <div class="row">
+	<?php
+		echo $this->Form->hidden('QuestionnairePage.' . $pageIndex . '.QuestionnaireQuestion.' . $qIndex . '.is_choice_random',
+	array(
+	'value' => QuestionnairesComponent::USES_NOT_USE,
+	));
+	echo $this->Form->hidden('QuestionnairePage.' . $pageIndex . '.QuestionnaireQuestion.' . $qIndex . '.is_skip',
+	array(
+	'value' => QuestionnairesComponent::SKIP_FLAGS_NO_SKIP,
+	));
+	?>
+
 	<?php echo $this->Form->input(
 	'QuestionnairePage.' . $pageIndex . '.QuestionnaireQuestion.' . $qIndex . '.question_type_option',
 	array(

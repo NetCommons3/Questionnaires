@@ -88,12 +88,12 @@ array(
 					</div>
 				</div>
 
-				<div class="form-group questionnaire-group">
+				<div class="questionnaire-group">
 					<label><?php echo __d('questionnaires', 'Question you want to display the aggregate results'); ?></label>
 					<accordion ng-repeat="(pageIndex, page) in questionnaire.questionnairePage">
 						<accordion-group ng-repeat="(qIndex, question) in page.questionnaireQuestion" ng-class="{'panel-danger':(question.hasError)}">
 							<accordion-heading>
-								<span class="glyphicon" 
+								<span class="glyphicon"
 									ng-class="{
 									'glyphicon-eye-open': question.isResultDisplay == <?php echo QuestionnairesComponent::EXPRESSION_SHOW; ?>,
 									'glyphicon-eye-close': question.isResultDisplay == <?php echo QuestionnairesComponent::EXPRESSION_NOT_SHOW; ?>}">
@@ -106,25 +106,29 @@ array(
 
 							<div class="form-group">
 								<label><?php echo __d('questionnaires', 'aggregate display');?></label>
-								<?php echo $this->Form->input('QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.is_result_display',
-								array('type' => 'radio',
-								'options' => array(QuestionnairesComponent::EXPRESSION_NOT_SHOW => __d('questionnaires', 'The results of this question will not be displayed'),
-													QuestionnairesComponent::EXPRESSION_SHOW => __d('questionnaires', 'The results of this question will be displayed')),
-								'legend' => false,
-								'label' => false,
-								'value' => false,
-								'before' => '<div class="radio"><label>',
-								'separator' => '</label></div><div class="radio"><label>',
-								'after' => '</label></div>',
-								'hiddenField' => true,
-								'ng-model' => 'question.isResultDisplay',
-								'ng-disabled' => 'question.questionType == ' . QuestionnairesComponent::TYPE_TEXT . ' || question.questionType == ' . QuestionnairesComponent::TYPE_TEXT_AREA . ' || question.questionType == ' . QuestionnairesComponent::TYPE_DATE_AND_TIME,
-								)); ?>
-								<?php echo $this->Form->hidden('QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.is_result_display',
-								array(
-								'ng-if' => 'question.questionType == ' . QuestionnairesComponent::TYPE_TEXT . ' || question.questionType == ' . QuestionnairesComponent::TYPE_TEXT_AREA . ' || question.questionType == ' . QuestionnairesComponent::TYPE_DATE_AND_TIME,
-								'ng-value' => 'question.isResultDisplay',
-								)); ?>
+								<div class="radio"><label>
+									<!-- Formヘルパー使うとAngularのrepeatとバッティングしてradioのcheckedがうまく動作しなくなる -->
+									<input type="radio"
+									   ng-attr-name="data[QuestionnairePage][{{pageIndex}}][QuestionnaireQuestion][{{qIndex}}][is_result_display]"
+									   value="<?php echo QuestionnairesComponent::EXPRESSION_NOT_SHOW; ?>"
+									   ng-model="question.isResultDisplay"
+									   ng-disabled="isDisabledDisplayResult(question.questionType)"
+									   />
+									<?php echo __d('questionnaires', 'The results of this question will not be displayed'); ?>
+								</label></div>
+								<div class="radio"><label>
+									<input type="radio"
+										   ng-attr-name="data[QuestionnairePage][{{pageIndex}}][QuestionnaireQuestion][{{qIndex}}][is_result_display]"
+										   value="<?php echo QuestionnairesComponent::EXPRESSION_SHOW; ?>"
+										   ng-model="question.isResultDisplay"
+										   ng-disabled="isDisabledDisplayResult(question.questionType)"
+											/>
+									<?php echo __d('questionnaires', 'The results of this question will be displayed'); ?>
+								</label></div>
+								<?php echo $this->Form->hidden(
+									'QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.is_result_display',
+									array('ng-value' => 'question.isResultDisplay'));
+								?>
 								<?php echo $this->element(
 								'Questionnaires.errors', array(
 								'errorArrayName' => 'question.errorMessages.isResultDisplay',
@@ -133,18 +137,35 @@ array(
 							<div ng-show="question.isResultDisplay == <?php echo QuestionnairesComponent::EXPRESSION_SHOW; ?>">
 								<div class="form-group">
 									<label><?php echo __d('questionnaires', 'display type');?></label>
-									<?php echo $this->Form->input('QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.result_display_type',
-									array('type' => 'radio',
-									'options' => array(QuestionnairesComponent::RESULT_DISPLAY_TYPE_BAR_CHART => __d('questionnaires', 'Bar Chart'),
-														QuestionnairesComponent::RESULT_DISPLAY_TYPE_PIE_CHART => __d('questionnaires', 'Pie Chart'),
-														QuestionnairesComponent::RESULT_DISPLAY_TYPE_TABLE => __d('questionnaires', 'Table')),
-									'legend' => false,
-									'label' => false,
-									'before' => '<div class="radio"><label>',
-									'separator' => '</label></div><div class="radio"><label>',
-									'after' => '</label></div>',
-									'ng-model' => 'question.resultDisplayType'
-									)); ?>
+
+									<div class="radio"><label>
+										<input type="radio"
+											   ng-attr-name="data[QuestionnairePage][{{pageIndex}}][QuestionnaireQuestion][{{qIndex}}][result_display_type]"
+											   value="<?php echo QuestionnairesComponent::RESULT_DISPLAY_TYPE_BAR_CHART; ?>"
+											   ng-model="question.resultDisplayType"
+												/>
+										<?php echo __d('questionnaires', 'Bar Chart'); ?>
+									</label></div>
+									<div class="radio"><label>
+										<input type="radio"
+											   ng-attr-name="data[QuestionnairePage][{{pageIndex}}][QuestionnaireQuestion][{{qIndex}}][result_display_type]"
+											   value="<?php echo QuestionnairesComponent::RESULT_DISPLAY_TYPE_PIE_CHART; ?>"
+											   ng-model="question.resultDisplayType"
+												/>
+										<?php echo __d('questionnaires', 'Pie Chart'); ?>
+									</label></div>
+									<div class="radio"><label>
+										<input type="radio"
+											   ng-attr-name="data[QuestionnairePage][{{pageIndex}}][QuestionnaireQuestion][{{qIndex}}][result_display_type]"
+											   value="<?php echo QuestionnairesComponent::RESULT_DISPLAY_TYPE_TABLE; ?>"
+											   ng-model="question.resultDisplayType"
+												/>
+										<?php echo __d('questionnaires', 'Table'); ?>
+									</label></div>
+									<?php echo $this->Form->hidden(
+									'QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.result_display_type',
+									array('ng-value' => 'question.resultDisplayType'));
+									?>
 								</div>
 								<?php echo $this->element(
 								'Questionnaires.errors', array(
@@ -153,7 +174,7 @@ array(
 
 								<div class="form-group" ng-show="question.resultDisplayType != <?php echo QuestionnairesComponent::RESULT_DISPLAY_TYPE_TABLE; ?>">
 									<label><?php echo __d('questionnaires', 'graph color');?></label>
-									<table class="table table-condensed" 
+									<table class="table table-condensed"
 										ng-show="question.questionType != <?php echo QuestionnairesComponent::TYPE_MATRIX_SELECTION_LIST; ?>
 											&& question.questionType != <?php echo QuestionnairesComponent::TYPE_MATRIX_MULTIPLE; ?>">
 										<tr ng-repeat="(cIndex, choice) in question.questionnaireChoice">
@@ -168,12 +189,16 @@ array(
 
 												</div>
 												<div class="col-sm-3">
-													<color-palette-picker selected='selected' name='data[QuestionnairePage][{{pageIndex}}][QuestionnaireQuestion][{{qIndex}}][QuestionnaireChoice][{{cIndex}}][graph_color]' ng-model='choice.graphColor'></color-palette-picker>
+													<color-palette-picker
+															selected='selected'
+															ng-attr-name='data[QuestionnairePage][{{pageIndex}}][QuestionnaireQuestion][{{qIndex}}][QuestionnaireChoice][{{choice.choiceSequence}}][graph_color]'
+															ng-model='choice.graphColor'>
+													</color-palette-picker>
 												</div>
 											</td>
 										</tr>
 									</table>
-									<table class="table table-condensed" 
+									<table class="table table-condensed"
 										ng-show="question.questionType == <?php echo QuestionnairesComponent::TYPE_MATRIX_SELECTION_LIST; ?>
 										|| question.questionType == <?php echo QuestionnairesComponent::TYPE_MATRIX_MULTIPLE; ?>">
 										<tr ng-repeat="(cIndex, choice) in question.questionnaireChoice | filter : {matrixType:<?php echo QuestionnairesComponent::MATRIX_TYPE_COLUMN; ?>}">
@@ -189,8 +214,8 @@ array(
 												</div>
 												<div class="col-sm-3">
 													<color-palette-picker
-															selected='choice.graphColor'
-															name='QuestionnairePage[{{pageIndex}}][QuestionnaireQuestion][{{qIndex}}][QuestionnaireChoice][{{cIndex}}][graph_color]'
+															selected='selected'
+															ng-attr-name='data[QuestionnairePage][{{pageIndex}}][QuestionnaireQuestion][{{qIndex}}][QuestionnaireChoice][{{choice.choiceSequence}}][graph_color]'
 															ng-model='choice.graphColor'>
 													</color-palette-picker>
 												</div>

@@ -32,7 +32,7 @@
 		<label class="checkbox-inline" ng-if="question.questionType != <?php echo QuestionnairesComponent::TYPE_MULTIPLE_SELECTION; ?>">
 			<?php echo $this->Form->checkbox('QuestionnairePage.' . $pageIndex . '.QuestionnaireQuestion.' . $qIndex . '.is_skip',
 			array(
-			'value' => QuestionnairesComponent::SKIP_FLAGS_NO_SKIP,
+			'value' => QuestionnairesComponent::SKIP_FLAGS_SKIP,
 			'ng-model' => 'question.isSkip',
 			'ng-checked' => 'question.isSkip == ' . QuestionnairesComponent::SKIP_FLAGS_SKIP,
 			'ng-disabled' => 'isDisabledSetSkip(page, question)'

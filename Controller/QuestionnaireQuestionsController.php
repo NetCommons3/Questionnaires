@@ -150,7 +150,6 @@ class QuestionnaireQuestionsController extends QuestionnairesAppController {
 
 			// 集計設定画面では集計に纏わる情報のみがPOSTされる
 			$questionnaire = Hash::merge($questionnaire, $postQuestionnaire);
-
 			if (! $this->__validateQuestionnaireResultDisplaySetting($questionnaire)) {
 				$this->__setupViewParameters($questionnaire, '/questionnaires/questionnaire_questions/edit/');
 				return;
@@ -220,7 +219,6 @@ class QuestionnaireQuestionsController extends QuestionnairesAppController {
 
 		foreach ($data['QuestionnairePage'] as $pIndex => $p) {
 			foreach ($p['QuestionnaireQuestion'] as $qqIndex => $qq) {
-
 				$this->QuestionnaireQuestion->set($qq);
 				$this->QuestionnaireQuestion->validates(array(
 					'fieldList' => array(
@@ -228,6 +226,7 @@ class QuestionnaireQuestionsController extends QuestionnairesAppController {
 						'result_display_type',
 					)
 				));
+
 				if ($this->QuestionnaireQuestion->validationErrors) {
 					$errors['QuestionnairePage'][$pIndex]['QuestionnaireQuestion'][$qqIndex] = $this->QuestionnaireQuestion->validationErrors;
 				}
@@ -283,6 +282,7 @@ class QuestionnaireQuestionsController extends QuestionnairesAppController {
 			}
 		}
 		$questionnaire = Hash::merge($questionnaire, Hash::expand($newFlatError));
+
 		$this->set('jsQuestionnaire', $this->camelizeKeyRecursive($this->_changeBooleansToNumbers($this->_sorted($questionnaire))));
 		$this->set('backUrl', $backUrl . $this->viewVars['frameId']);
 		$this->set('questionTypeOptions', $this->Questionnaires->getQuestionTypeOptionsWithLabel());
