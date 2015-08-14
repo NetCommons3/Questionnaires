@@ -44,7 +44,7 @@ class QuestionnaireFrameSettingFixture extends CakeTestFixture {
 	public $records = array(
 		array(
 			'id' => 1,
-			'display_type' => 1,
+			'display_type' => QuestionnairesComponent::DISPLAY_TYPE_SINGLE,
 			'display_num_per_page' => 1,
 			'sort_type' => QuestionnairesComponent::QUESTIONNAIRE_SORT_CREATED,
 			'frame_key' => 'frame_1',
@@ -81,6 +81,17 @@ class QuestionnaireFrameSettingFixture extends CakeTestFixture {
 			'display_num_per_page' => 1,
 			'sort_type' => QuestionnairesComponent::QUESTIONNAIRE_SORT_END,
 			'frame_key' => 'frame_4',
+			'created_user' => 1,
+			'created' => '2015-02-03 06:08:23',
+			'modified_user' => 1,
+			'modified' => '2015-02-03 06:08:23'
+		),
+		array(
+			'id' => 10,
+			'display_type' => QuestionnairesComponent::DISPLAY_TYPE_SINGLE,
+			'display_num_per_page' => 1,
+			'sort_type' => QuestionnairesComponent::QUESTIONNAIRE_SORT_CREATED,
+			'frame_key' => 'frame_10',
 			'created_user' => 1,
 			'created' => '2015-02-03 06:08:23',
 			'modified_user' => 1,

@@ -447,6 +447,14 @@ class QuestionnairesComponent extends Component {
 	const FIRST_PAGE_SEQUENCE = 0;
 
 /**
+ * default graph colors
+ *
+ * @var string
+ */
+	static public $defaultGraphColors = array('#f38631', '#e0e4cd', '#69d2e7', '#68e2a7', '#f64649',
+		'#4d5361', '#47bfbd', '#7c4f6c', '#23313c', '#9c9b7f', '#be5945', '#cccccc');
+
+/**
  * test answer status, peform( means on air or HONBAN )
  *
  * @var string

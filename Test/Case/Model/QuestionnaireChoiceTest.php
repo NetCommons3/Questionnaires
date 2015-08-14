@@ -228,11 +228,12 @@ class QuestionnaireChoiceTest extends QuestionnaireTestBase {
 
 		// 期待値の生成
 		$expected = array(
-		'choice_sequence' => 0,
-		'matrix_type' => QuestionnairesComponent::MATRIX_TYPE_ROW_OR_NO_MATRIX,
-		'choice_label' => __d('questionnaires', 'new choice') . '1',
-		'other_choice_type' => QuestionnairesComponent::OTHER_CHOICE_TYPE_NO_OTHER_FILED,
-		'skip_page_sequence' => QuestionnairesComponent::SKIP_GO_TO_END
+			'choice_sequence' => 0,
+			'matrix_type' => QuestionnairesComponent::MATRIX_TYPE_ROW_OR_NO_MATRIX,
+			'choice_label' => __d('questionnaires', 'new choice') . '1',
+			'other_choice_type' => QuestionnairesComponent::OTHER_CHOICE_TYPE_NO_OTHER_FILED,
+			'skip_page_sequence' => QuestionnairesComponent::SKIP_GO_TO_END,
+			'graph_color' => QuestionnairesComponent::$defaultGraphColors[0]
 		);
 
 		// 処理実行

@@ -70,12 +70,12 @@ class QuestionnaireFixture extends CakeTestFixture {
 	public $records = array(
 		array(
 			'id' => 1,
-			'key' => '41ef6012e7574886c9a52fb598f8c5f8',
+			'key' => 'frame_1',
 			'language_id' => 1,
 			'origin_id' => 1,
 			'is_active' => 1,
 			'is_latest' => 1,
-			'block_id' => 1,
+			'block_id' => 5,
 			'status' => 3,
 			'title' => 'Lorem ipsum dolor sit amet',
 			'sub_title' => 'Lorem ipsum dolor sit amet',

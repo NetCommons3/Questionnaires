@@ -184,12 +184,9 @@ class QuestionnaireTest extends QuestionnaireTestBase {
 
 		//処理実行
 		$result = $this->Questionnaire->saveQuestionnaire($questionnaire);
-
 		//テスト実施
 		$result = $this->Questionnaire->findByTitle('test3');
 
-		//$this->assertEquals(
-		//	$questionnaire['Questionnaire']['key'], $result['Questionnaire']['key']);
 		$this->assertFalse($result);//検索結果は見つからない
 
 		//終了処理
@@ -203,34 +200,86 @@ class QuestionnaireTest extends QuestionnaireTestBase {
  */
 	public function testsaveQuestionnaireErr3() {
 		//InternalErrorException例外テスト
-
 		$this->setExpectedException('InternalErrorException');
-
-		$questionMock = $this->getMockForModel('Comments.Comment', array('save'));
-		$questionMock->expects($this->any())
-			->method('save')
-			->will($this->returnValue(false));
 
 		//初期処理
 		$this->setUp();
+
+		$commentMock = $this->getMockForModel('Comments.Comment', array('save'));
+		$commentMock->expects($this->any())
+			->method('save')
+			->will($this->returnValue(false));
 
 		//データ設定
 		// 一つすでに存在しているデータを取り出して、タイトルを変更した体でUPDATE（実質はINSERT)してみる
 		$questionnaire = array();
 		$data = $this->Questionnaire->find('all');
 
-		//$data[0]['Questionnaire']['id'] = 2;
 		$data[0]['Questionnaire']['title'] = 'testsaveQuestionnaireErr3';
-		//$data[0]['Questionnaire']['key'] = 'key4';
 		$data[0]['Questionnaire']['status'] = 3;
 		$data[0]['Questionnaire']['is_period'] = 1;
 		$data[0]['Questionnaire']['start_period'] = '2020-07-07 10:20:00';
 		$data[0]['Questionnaire']['end_period'] = '2021-07-07 10:20:00';
 		$data[0]['Frame']['id'] = 1;
-		//$data[0]['QuestionnairePage'][0]['id'] = 4;
 		$data[0]['QuestionnairePage'][0]['page_sequence'] = 0;
 		$data[0]['QuestionnairePage'][0]['next_page_sequence'] = 99999;
-		//unset($data[0]['QuestionnairePage'][0]['QuestionnaireQuestion']);
+
+		$questionnaire = Hash::merge( array(
+			'Comment' => array(
+				'comment' => 'aaa',
+				'data' => array(
+					'data' => 'aaa'))),
+			$data[0]);
+
+		//$comments = $this->Comment->getComments(null,false);
+		//print_r($comments);
+
+		//処理実行
+		$this->Questionnaire->saveQuestionnaire($questionnaire);
+
+		//テスト実施
+		$result = $this->Questionnaire->findByTitle('testsaveQuestionnaireErr3');
+
+		$this->assertFalse($result);//検索結果は見つからない
+
+		//終了処理
+		$this->tearDown();
+	}
+
+/**
+ * saveQuestionnaire method
+ *
+ * @return void
+ */
+	public function testsaveQuestionnaireErr4() {
+		//InternalErrorException例外テスト
+
+		$this->setExpectedException('InternalErrorException');
+
+		$questionMock = $this->getMockForModel('Questionnaires.QuestionnaireFrameDisplayQuestionnaire', array('saveFrameDisplayQuestionnaire'));
+		$questionMock->expects($this->once())
+			->method('saveFrameDisplayQuestionnaire')
+			->will($this->returnValue(false));
+
+		//初期処理
+		$this->setUp();
+
+		//データ設定
+		$questionnaire = array();
+		$data = $this->Questionnaire->find('all');
+
+		$data[0]['Questionnaire']['id'] = 3;
+		$data[0]['Questionnaire']['title'] = 'test3';
+		$data[0]['Questionnaire']['key'] = 'key3';
+		$data[0]['Questionnaire']['status'] = 3;
+		$data[0]['Questionnaire']['is_period'] = 1;
+		$data[0]['Questionnaire']['start_period'] = '2020-07-07 10:20:00';
+		$data[0]['Questionnaire']['end_period'] = '2021-07-07 10:20:00';
+		$data[0]['Frame']['id'] = 1;
+		$data[0]['QuestionnairePage'][0]['id'] = 2;
+		$data[0]['QuestionnairePage'][0]['page_sequence'] = 0;
+		$data[0]['QuestionnairePage'][0]['next_page_sequence'] = 1;
+		unset($data[0]['QuestionnairePage'][0]['QuestionnaireQuestion']);
 
 		$questionnaire = Hash::merge( array(
 			'Comment' => array(
@@ -238,10 +287,9 @@ class QuestionnaireTest extends QuestionnaireTestBase {
 			$data[0]);
 
 		//処理実行
-		$this->Questionnaire->saveQuestionnaire($questionnaire);
-
+		$result = $this->Questionnaire->saveQuestionnaire($questionnaire);
 		//テスト実施
-		$result = $this->Questionnaire->findByTitle('testsaveQuestionnaireErr3');
+		$result = $this->Questionnaire->findByTitle('test3');
 
 		$this->assertFalse($result);//検索結果は見つからない
 
@@ -271,6 +319,40 @@ class QuestionnaireTest extends QuestionnaireTestBase {
 		$result = $this->Questionnaire->findByKey('41ef6012e7574886c9a52fb598f8c5f8');
 		$expected = array();
 		$this->assertEquals( $result, $expected );
+
+		//終了処理
+		$this->tearDown();
+	}
+
+/**
+ * deleteQuestionnaire method
+ *
+ * @return void
+ */
+	public function testdeleteQuestionnaireErr1() {
+		//InternalErrorException例外テスト
+		$this->setExpectedException('InternalErrorException');
+
+		$questionMock = $this->getMockForModel('Questionnaires.Questionnaire', array('deleteAll'));
+		$questionMock->expects($this->once())
+			->method('deleteAll')
+			->will($this->returnValue(false));
+
+		//初期処理
+		$this->setUp();
+
+		//データ設定
+		$data = array();
+		$data['Questionnaire']['origin_id'] = 1;
+		$data['Questionnaire']['key'] = '41ef6012e7574886c9a52fb598f8c5f8';
+
+		//処理実行
+		$result = $this->Questionnaire->deleteQuestionnaire($data);
+
+		//テスト実施
+		$this->assertFalse($result);
+		$result = $this->Questionnaire->findByKey('41ef6012e7574886c9a52fb598f8c5f8');
+		$this->assertEquals( $result['Questionnaire']['origin_id'], 1 );//ロールバックのため削除されない
 
 		//終了処理
 		$this->tearDown();

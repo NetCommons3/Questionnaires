@@ -125,9 +125,9 @@ class QuestionnaireFrameSettingTest extends QuestionnaireTestBase {
 		//期待値の生成
 		$expected = array(
 			'QuestionnaireFrameSetting' => array(
-				'display_type' => QuestionnairesComponent::DISPLAY_TYPE_LIST,
-				'display_num_per_page' => QuestionnairesComponent::QUESTIONNAIRE_DEFAULT_DISPLAY_NUM_PER_PAGE,
-				'sort_type' => QuestionnairesComponent::DISPLAY_SORT_TYPE_NEW_ARRIVALS,
+				'display_type' => QuestionnairesComponent::DISPLAY_TYPE_SINGLE, //QuestionnairesComponent::DISPLAY_TYPE_LIST,
+				'display_num_per_page' => 1,
+				'sort_type' => QuestionnairesComponent::DISPLAY_SORT_TYPE_RESPONSE_TIME_DESC,
 				'frame_key' => $frameKey,
 			)
 		);
@@ -157,20 +157,23 @@ class QuestionnaireFrameSettingTest extends QuestionnaireTestBase {
 		//初期処理
 		$this->setUp();
 
-		$frameKey = 'frame_1';
+		$frameKey = 'frame_2';
 
 		//データの生成
 		$records = array(
 			'QuestionnaireFrameSetting' => array(
-				'display_type' => 1,
+				'display_type' => 1, //QuestionnairesComponent::DISPLAY_TYPE_SINGLE,
 				'display_num_per_page' => 1,
-				'sort_type' => 1,
+				'sort_type' => 0,
 			),
 			'QuestionnaireFrameDisplayQuestionnaires' => array(
 				'List' => array(
 					'questionnaire_origin_id' => array(1),
 				)
 			)
+			//'QuestionnaireFrameDisplayQuestionnaires' => array(
+			//'Single' => array(
+			//'questionnaire_origin_id' => array(1),
 		);
 		// 処理実行
 		$this->QuestionnaireFrameSetting->saveFrameSettings($frameKey, $records);

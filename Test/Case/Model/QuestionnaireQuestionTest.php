@@ -55,13 +55,18 @@ class QuestionnaireQuestionTest extends QuestionnaireTestBase {
 			'question_type' => QuestionnairesComponent::TYPE_SELECTION,
 			'is_result_display' => QuestionnairesComponent::EXPRESSION_SHOW,
 			'result_display_type' => QuestionnairesComponent::RESULT_DISPLAY_TYPE_BAR_CHART,
+			'is_require' => QuestionnairesComponent::USES_NOT_USE,
+			'is_skip' => QuestionnairesComponent::SKIP_FLAGS_NO_SKIP,
+			'is_choice_random' => QuestionnairesComponent::USES_NOT_USE,
+			'is_range' => QuestionnairesComponent::USES_NOT_USE,
 			);
 		$expected['QuestionnaireChoice'][0] = array(
 			'choice_sequence' => 0,
 			'matrix_type' => QuestionnairesComponent::MATRIX_TYPE_ROW_OR_NO_MATRIX,
 			'choice_label' => __d('questionnaires', 'new choice') . '1',
 			'other_choice_type' => QuestionnairesComponent::OTHER_CHOICE_TYPE_NO_OTHER_FILED,
-			'skip_page_sequence' => QuestionnairesComponent::SKIP_GO_TO_END
+			'skip_page_sequence' => QuestionnairesComponent::SKIP_GO_TO_END,
+			'graph_color' => QuestionnairesComponent::$defaultGraphColors[0]
 			);
 
 		// 処理実行

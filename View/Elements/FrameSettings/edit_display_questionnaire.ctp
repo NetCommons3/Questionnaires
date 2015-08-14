@@ -36,7 +36,7 @@
 				<?php echo $this->Paginator->sort('Questionnaire.modified', __d('net_commons', 'Updated date')); ?>
 			</th>
 		</tr>
-		<?php foreach ($questionnaires as $quest): ?>
+		<?php foreach ((array)$questionnaires as $quest): ?>
 		<tr class="animate-repeat btn-default">
 			<td>
 				<div class="text-center" ng-show="questionnaireFrameSettings.display_type == <?php echo QuestionnairesComponent::DISPLAY_TYPE_LIST; ?>">

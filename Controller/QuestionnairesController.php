@@ -278,6 +278,7 @@ class QuestionnairesController extends QuestionnairesAppController {
 				$this->Session->write('Questionnaires.questionnaire', $questionnaire);
 				// 次の画面へリダイレクト
 				$this->redirect('questionnaire_questions/edit/' . $this->viewVars['frameId']);
+				return;
 			}
 		}
 
@@ -382,6 +383,8 @@ class QuestionnairesController extends QuestionnairesAppController {
  */
 	public function delete() {
 		if ($this->request->isPost()) {
+			// viewを使用しない
+			$this->autoRender = false;
 			// 削除処理
 			if (! $this->Questionnaire->deleteQuestionnaire($this->request->data)) {
 				return;

@@ -144,6 +144,9 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
  * @return void
  */
 	public function download($frameId, $questionnaireId) {
+		// viewを使用しない
+		$this->autoRender = false;
+
 		$questionnaire = $this->Questionnaire->find('first', array(
 			'conditions' => array(
 				'origin_id' => $questionnaireId,
@@ -154,6 +157,7 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
 			$this->Session->setFlash(__d('questionnaires', 'download error'));
 			return;
 		}
+
 		$downloadFileName = $questionnaire['Questionnaire']['title'] . '.csv';
 		$fileName = date('Ymd_his') . '.csv';
 		$offset = 0;

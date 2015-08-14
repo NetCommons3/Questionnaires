@@ -102,7 +102,8 @@ class QuestionnaireFrameSetting extends QuestionnairesAppModel {
  */
 	public function getDefaultFrameSetting() {
 		$frame = array(
-			'QuestionnaireFrameSettings' => array(
+			'QuestionnaireFrameSetting' => array(
+				'id' => '',
 				'display_type' => QuestionnairesComponent::DISPLAY_TYPE_LIST,
 				'display_num_per_page' => QuestionnairesComponent::QUESTIONNAIRE_DEFAULT_DISPLAY_NUM_PER_PAGE,
 				'sort_type' => QuestionnairesComponent::DISPLAY_SORT_TYPE_NEW_ARRIVALS,

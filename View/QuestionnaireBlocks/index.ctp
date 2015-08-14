@@ -46,7 +46,7 @@
 				</tr>
 				</thead>
 				<tbody>
-					<?php foreach ($questionnaires as $questionnaire) : ?>
+					<?php foreach ((array)$questionnaires as $questionnaire) : ?>
 					<tr>
 						<td>
 							<?php echo $this->QuestionnaireStatusLabel->statusLabelManagementWidget($questionnaire);?>

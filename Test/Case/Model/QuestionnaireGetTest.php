@@ -244,10 +244,13 @@ class QuestionnaireGetTest extends QuestionnaireTestBase {
 		$expected = array();
 		$expected['Questionnaire'] = Hash::merge(
 			array(
-			'title' => '',
-			'key' => '',
-			'status' => NetCommonsBlockComponent::STATUS_IN_DRAFT,
-			'is_total_show' => QuestionnairesComponent::EXPRESSION_SHOW),
+				'title' => '',
+				'key' => '',
+				'status' => NetCommonsBlockComponent::STATUS_IN_DRAFT,
+				'is_total_show' => QuestionnairesComponent::EXPRESSION_SHOW,
+				'is_period' => QuestionnairesComponent::USES_NOT_USE,
+				'is_key_pass_use' => QuestionnairesComponent::USES_NOT_USE,
+				'total_show_timing' => QuestionnairesComponent::USES_NOT_USE,),
 			$addData);
 		$expected['QuestionnairePage'] = array(
 			array(

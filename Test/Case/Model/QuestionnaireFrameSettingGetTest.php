@@ -76,7 +76,7 @@ class QuestionnaireFrameSettingGetTest extends QuestionnaireTestBase {
 		$frameKey = 'frame_1';
 
 		$expected = array(
-			QuestionnairesComponent::DISPLAY_TYPE_LIST,
+			QuestionnairesComponent::DISPLAY_TYPE_SINGLE, //QuestionnairesComponent::DISPLAY_TYPE_LIST,
 			1,
 			'created',
 			'DESC'
@@ -190,10 +190,11 @@ class QuestionnaireFrameSettingGetTest extends QuestionnaireTestBase {
 
 		//期待値の生成
 		$expected = array(
-			'QuestionnaireFrameSettings' => array(
+			'QuestionnaireFrameSetting' => array(
 				'display_type' => QuestionnairesComponent::DISPLAY_TYPE_LIST,
 				'display_num_per_page' => QuestionnairesComponent::QUESTIONNAIRE_DEFAULT_DISPLAY_NUM_PER_PAGE,
 				'sort_type' => QuestionnairesComponent::DISPLAY_SORT_TYPE_NEW_ARRIVALS,
+				'id' => ''
 			)
 		);
 
