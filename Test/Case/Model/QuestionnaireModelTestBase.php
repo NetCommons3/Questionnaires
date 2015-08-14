@@ -43,9 +43,6 @@ class QuestionnaireModelTestBase extends YACakeTestCase {
  * @var array
  */
 	public $fixtures = array(
-		'plugin.blocks.block',
-		'plugin.blocks.block_role_permission',
-		'plugin.boxes.box',
 		'plugin.comments.comment',
 		'plugin.questionnaires.questionnaire',
 		'plugin.questionnaires.questionnaire_page',
@@ -56,14 +53,6 @@ class QuestionnaireModelTestBase extends YACakeTestCase {
 		'plugin.questionnaires.questionnaire_frame_setting',
 		'plugin.questionnaires.questionnaire_frame_display_questionnaire',
 		'plugin.questionnaires.questionnaire_blocks_setting',
-		'plugin.frames.frame',
-		'plugin.m17n.language',
-		'plugin.plugin_manager.plugin',
-		'plugin.rooms.roles_room',
-		'plugin.rooms.room',
-		'plugin.users.user_attributes_user',
-		'plugin.users.user',
-		'plugin.comments.comment',
 	);
 
 /**
