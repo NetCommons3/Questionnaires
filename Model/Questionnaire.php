@@ -355,6 +355,7 @@ class Questionnaire extends QuestionnairesAppModel {
 		if (!$permissions['contentEditable']) {
 			$conditions['is_active'] = true;
 			$conditions['OR'] = array(
+				'total_show_timing' => QuestionnairesComponent::USES_NOT_USE,
 				'total_show_start_period <' => $currentDateTime,
 			);
 		} else {

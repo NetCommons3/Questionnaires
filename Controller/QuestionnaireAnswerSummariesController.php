@@ -80,6 +80,7 @@ class QuestionnaireAnswerSummariesController extends QuestionnairesAppController
 			$this->viewVars['blockId'],
 			$this->Auth->user('id'),
 			$this->viewVars,
+			$this->getNowTime(),
 			array('origin_id' => $questionnaireId)
 		);
 
