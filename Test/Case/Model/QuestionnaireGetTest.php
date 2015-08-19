@@ -175,12 +175,13 @@ class QuestionnaireGetTest extends QuestionnaireTestBase {
 		//期待値
 		$expect = array(
 			'block_id' => 1,
-			'is_total_show' => true,
-			'is_active' => 1,
+			'is_total_show' => '1',
+			'is_active' => true,
 			'OR' => array(
+						'total_show_timing' => '0',
 						'total_show_start_period <' => '2015-06-24 22:22:22',
 			),
-			'is_no_member_allow' => 1,
+			'is_no_member_allow' => '1',
 		);
 
 		//テスト実施

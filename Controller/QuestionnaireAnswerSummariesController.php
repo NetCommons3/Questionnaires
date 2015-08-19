@@ -142,18 +142,8 @@ class QuestionnaireAnswerSummariesController extends QuestionnairesAppController
  * @return void
  */
 	private function __aggrigateAnswer($questionnaire, $contentEditable, &$questions) {
-		//公開時は本番時回答、テスト時(=非公開時)はテスト時回答を対象とする。
-		if ($this->_isDuringTest($questionnaire)) {
-			$testStatus = QuestionnairesComponent::TEST_ANSWER_STATUS_TEST;
-		} else {
-			$testStatus = QuestionnairesComponent::TEST_ANSWER_STATUS_PEFORM;
-		}
-
-		$baseConditions = array(
-			'QuestionnaireAnswerSummary.answer_status' => QuestionnairesComponent::ACTION_ACT,
-			'QuestionnaireAnswerSummary.test_status' => $testStatus,
-			'QuestionnaireAnswerSummary.questionnaire_origin_id' => $questionnaire['Questionnaire']['origin_id']
-		);
+		// 集計データを集める際の基本条件
+		$baseConditions = $this->QuestionnaireAnswerSummary->getResultCondition($questionnaire);
 
 		//質問毎に、まとめあげる.
 		//$questionsは、questionnaire_question_origin_idをキーとし、questionnaire_question配下が代入されている。

@@ -60,18 +60,18 @@ class QuestionnairesControllerTestBase extends YAControllerTestCase {
 		'plugin.net_commons.site_setting',
 		'plugin.pages.languages_page',
 		'plugin.pages.page',
-		'plugin.pages.space',
+		'plugin.rooms.space',
 		'plugin.plugin_manager.plugin',
 		'plugin.roles.role',
 		'plugin.roles.default_role_permission',
-		'plugin.rooms.plugins_room',
+		//'plugin.rooms.plugins_room',
 		'plugin.rooms.roles_rooms_user',
 		'plugin.rooms.roles_room',
 		'plugin.rooms.room',
 		'plugin.rooms.room_role',
 		'plugin.rooms.room_role_permission',
 		'plugin.users.user',
-		'plugin.users.user_attributes_user',
+		//'plugin.users.user_attributes_user',
 	);
 
 /**

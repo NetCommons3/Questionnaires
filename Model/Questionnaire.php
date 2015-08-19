@@ -239,7 +239,8 @@ class Questionnaire extends QuestionnairesAppModel {
 
 			$val['Questionnaire']['all_answer_count'] = $this->QuestionnaireAnswerSummary->find('count', array(
 				'conditions' => array(
-					'questionnaire_origin_id' => $val['Questionnaire']['origin_id']
+					'questionnaire_origin_id' => $val['Questionnaire']['origin_id'],
+					'test_status' => QuestionnairesComponent::TEST_ANSWER_STATUS_PEFORM
 				),
 				'recursive' => -1
 			));

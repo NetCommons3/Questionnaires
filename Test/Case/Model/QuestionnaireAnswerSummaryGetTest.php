@@ -92,7 +92,7 @@ class QuestionnaireAnswerSummaryGetTest extends QuestionnaireAnswerTestBase {
 		$this->setUp();
 
 		//データの生成
-		$questionnaireId = 2;
+		$questionnaireId = 3;
 		$userId = 2;
 		$sessionId = '2';
 
@@ -111,7 +111,7 @@ class QuestionnaireAnswerSummaryGetTest extends QuestionnaireAnswerTestBase {
 		$result = $this->QuestionnaireAnswerSummary->getProgressiveSummaryOfThisUser( $questionnaireId, $userId, $sessionId );
 
 		// テスト実施
-		$this->assertEquals($result['QuestionnaireAnswerSummary']['id'], 2);
+		$this->assertEquals($result['QuestionnaireAnswerSummary']['id'], 3);
 
 		//終了処理
 		$this->tearDown();
@@ -192,7 +192,7 @@ class QuestionnaireAnswerSummaryGetTest extends QuestionnaireAnswerTestBase {
 		$result = $this->QuestionnaireAnswerSummary->forceGetAnswerSummary( $questionnaire, $userId, $sessionId, $conditions );
 
 		// テスト実施
-		$this->assertEquals($result['QuestionnaireAnswerSummary']['id'], 2 );
+		$this->assertEquals($result['QuestionnaireAnswerSummary']['id'], 3 );
 
 		//終了処理
 		$this->tearDown();

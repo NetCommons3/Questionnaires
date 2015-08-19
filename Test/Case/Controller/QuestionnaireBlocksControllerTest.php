@@ -136,32 +136,4 @@ class QuestionnaireBlocksControllerTest extends QuestionnairesControllerTestBase
 		AuthGeneralControllerTest::logout($this);
 	}
 
-/**
- * Expect download action
- *
- * @return void
- */
-	public function testdownloadcompress() {
-		//compressFile
-		$this->setExpectedException('NotFoundException');
-		RolesControllerTest::login($this);
-		$frameId = 1;
-		$questionnaireId = 1;
-
-		$data = array();
-
-		$this->testAction(
-				'/questionnaires/questionnaire_blocks/download/' . $frameId . '/' . $questionnaireId,
-				array(
-					'method' => 'POST',
-					'data' => $data,
-					'return' => 'vars', //vars(setメソッドでviewに渡された値)
-				)
-			);
-		$this->assertTextEquals('download', $this->controller->view);
-		//print_r($this->controller->response);
-
-		AuthGeneralControllerTest::logout($this);
-	}
-
 }

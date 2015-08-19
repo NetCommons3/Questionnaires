@@ -49,7 +49,7 @@ class QuestionnairesControllerIndexTest extends QuestionnairesControllerTestBase
 	public function testIndex() {
 		RolesControllerTest::login($this);
 
-		$this->Questionnaire->unbindModel(array('belongsTo' => array('Block')));
+		//$this->Questionnaire->unbindModel(array('belongsTo' => array('Block')));
 
 		$frameId = '1';
 

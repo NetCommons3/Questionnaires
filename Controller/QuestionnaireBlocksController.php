@@ -189,9 +189,8 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
 		if ($this->__compressFile($filePath)) {
 			$downloadFileName = substr($downloadFileName, 0, strrpos($downloadFileName, '.')) . '.zip';
 		}
-
 		// 出力
-		$this->response->file($filePath, array('download' => true, 'name' => $downloadFileName));
+		$this->response->file($filePath, array('download' => true, 'name' => rawurlencode($downloadFileName)));
 		return $this->response;
 	}
 

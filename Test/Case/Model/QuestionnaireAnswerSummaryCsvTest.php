@@ -133,7 +133,7 @@ class QuestionnaireAnswerSummaryCsvTest extends QuestionnaireAnswerTestBase {
 
 		// テスト実施
 		//print_r($result);print_r($expect);
-		$this->assertEquals($result[0], $expect[0] );
+		$this->assertEquals($result[0], array_map(array($this->QuestionnaireAnswerSummaryCsv, 'convertCode'), $expect[0]));
 
 		//終了処理
 		$this->tearDown();
@@ -238,7 +238,7 @@ class QuestionnaireAnswerSummaryCsvTest extends QuestionnaireAnswerTestBase {
 		$result = $this->QuestionnaireAnswerSummaryCsv->getAnswerSummaryCsv( $questionnaire, $limit, $offset );
 
 		// テスト実施
-		$this->assertEquals($result, $expect );
+		$this->assertEquals($result[0], array_map(array($this->QuestionnaireAnswerSummaryCsv, 'convertCode'), $expect[0]));
 
 		//終了処理
 		$this->tearDown();
@@ -342,7 +342,7 @@ class QuestionnaireAnswerSummaryCsvTest extends QuestionnaireAnswerTestBase {
 		// 処理実行
 		$result = $this->QuestionnaireAnswerSummaryCsv->getAnswerSummaryCsv( $questionnaire, $limit, $offset );
 		// テスト実施
-		$this->assertEquals($result[0], $expect[0] );
+		$this->assertEquals($result[0], array_map(array($this->QuestionnaireAnswerSummaryCsv, 'convertCode'), $expect[0]));
 		//終了処理
 		$this->tearDown();
 	}
@@ -445,7 +445,7 @@ class QuestionnaireAnswerSummaryCsvTest extends QuestionnaireAnswerTestBase {
 		// 処理実行
 		$result = $this->QuestionnaireAnswerSummaryCsv->getAnswerSummaryCsv( $questionnaire, $limit, $offset );
 		// テスト実施
-		$this->assertEquals($result[0], $expect[0] );
+		$this->assertEquals($result[0], array_map(array($this->QuestionnaireAnswerSummaryCsv, 'convertCode'), $expect[0]));
 		//終了処理
 		$this->tearDown();
 	}
@@ -548,7 +548,7 @@ class QuestionnaireAnswerSummaryCsvTest extends QuestionnaireAnswerTestBase {
 		// 処理実行
 		$result = $this->QuestionnaireAnswerSummaryCsv->getAnswerSummaryCsv( $questionnaire, $limit, $offset );
 		// テスト実施
-		$this->assertEquals($result[0], $expect[0] );
+		$this->assertEquals($result[0], array_map(array($this->QuestionnaireAnswerSummaryCsv, 'convertCode'), $expect[0]));
 		//終了処理
 		$this->tearDown();
 	}
@@ -651,7 +651,7 @@ class QuestionnaireAnswerSummaryCsvTest extends QuestionnaireAnswerTestBase {
 		// 処理実行
 		$result = $this->QuestionnaireAnswerSummaryCsv->getAnswerSummaryCsv( $questionnaire, $limit, $offset );
 		// テスト実施
-		$this->assertEquals($result[0], $expect[0] );
+		$this->assertEquals($result[0], array_map(array($this->QuestionnaireAnswerSummaryCsv, 'convertCode'), $expect[0]));
 		//終了処理
 		$this->tearDown();
 	}
@@ -754,7 +754,7 @@ class QuestionnaireAnswerSummaryCsvTest extends QuestionnaireAnswerTestBase {
 		// 処理実行
 		$result = $this->QuestionnaireAnswerSummaryCsv->getAnswerSummaryCsv( $questionnaire, $limit, $offset );
 		// テスト実施
-		$this->assertEquals($result[0], $expect[0] );
+		$this->assertEquals($result[0], array_map(array($this->QuestionnaireAnswerSummaryCsv, 'convertCode'), $expect[0]));
 		//終了処理
 		$this->tearDown();
 	}

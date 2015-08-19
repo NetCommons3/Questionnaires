@@ -61,6 +61,18 @@ class QuestionnaireAnswerFixture extends CakeTestFixture {
 			'modified_user' => 1,
 			'modified' => '2015-04-13 06:42:33'
 		),
+		array(
+			'id' => 2,
+			'matrix_choice_id' => 1,
+			'answer_value' => '|1:新規選択肢1|aaa',
+			'other_answer_value' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.',
+			'questionnaire_answer_summary_id' => 2,
+			'questionnaire_question_origin_id' => 1,
+			'created_user' => 1,
+			'created' => '2015-04-13 06:42:33',
+			'modified_user' => 1,
+			'modified' => '2015-04-13 06:42:33'
+		),
 	);
 
 }

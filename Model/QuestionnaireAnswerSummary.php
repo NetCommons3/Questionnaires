@@ -190,6 +190,25 @@ class QuestionnaireAnswerSummary extends QuestionnairesAppModel {
 	}
 
 /**
+ * getResultCondition
+ *
+ * @param int $questionnaire Questionnaire
+ * @return array
+ */
+	public function getResultCondition($questionnaire) {
+		// 指定されたアンケートを集計するときのサマリ側の条件を返す
+		$baseConditions = array(
+			'QuestionnaireAnswerSummary.answer_status' => QuestionnairesComponent::ACTION_ACT,
+			'QuestionnaireAnswerSummary.questionnaire_origin_id' => $questionnaire['Questionnaire']['origin_id']
+		);
+		//公開時は本番時回答のみ、テスト時(=非公開時)は本番回答＋テスト回答を対象とする。
+		if ($questionnaire['Questionnaire']['status'] == NetCommonsBlockComponent::STATUS_PUBLISHED) {
+			$baseConditions['QuestionnaireAnswerSummary.test_status'] = QuestionnairesComponent::TEST_ANSWER_STATUS_PEFORM;
+		}
+		return $baseConditions;
+	}
+
+/**
  * forceGetAnswerSummary
  * get answer summary record if there is no summary , then create
  *

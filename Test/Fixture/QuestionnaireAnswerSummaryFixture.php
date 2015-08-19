@@ -57,6 +57,20 @@ class QuestionnaireAnswerSummaryFixture extends CakeTestFixture {
 			'modified_user' => 1,
 			'modified' => '2015-04-13 06:41:13'
 		),
+		array(
+			'id' => 2,
+			'answer_status' => 1,
+			'test_status' => 1,
+			'answer_number' => 1,
+			'answer_time' => '2015-04-13 06:41:13',
+			'questionnaire_origin_id' => 1,
+			'session_value' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.',
+			'user_id' => 1,
+			'created_user' => 1,
+			'created' => '2015-04-13 06:41:13',
+			'modified_user' => 1,
+			'modified' => '2015-04-13 06:41:13'
+		),
 	);
 
 }

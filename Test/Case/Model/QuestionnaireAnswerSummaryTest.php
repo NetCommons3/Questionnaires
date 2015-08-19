@@ -184,4 +184,55 @@ class QuestionnaireAnswerSummaryTest extends QuestionnaireAnswerTestBase {
 		$this->tearDown();
 	}
 
+/**
+ *  Test getResultCondition method
+ *
+ * @return void
+ */
+	public function testgetResultCondition() {
+		//初期処理
+		$this->setUp();
+
+		//
+		// 発行済みアンケートの状態で集計条件取得する
+		//
+
+		//データ
+		$questionnaire = $this->Questionnaire->findById(1);
+		// 処理実行
+		$result = $this->QuestionnaireAnswerSummary->getResultCondition($questionnaire);
+
+		//期待値
+		$expected = array(
+			'QuestionnaireAnswerSummary.answer_status' => QuestionnairesComponent::ACTION_ACT,
+			'QuestionnaireAnswerSummary.questionnaire_origin_id' => 1,
+			'QuestionnaireAnswerSummary.test_status' => QuestionnairesComponent::TEST_ANSWER_STATUS_PEFORM
+		);
+
+		$cond = $this->QuestionnaireAnswerSummary->getResultCondition($questionnaire);
+		//テスト実施
+		$this->_assertArray($expected, $cond);
+
+		//
+		// テスト中アンケートの状態で集計条件取得する
+		//
+		//データ
+		$questionnaire = $this->Questionnaire->findById(2);
+		// 処理実行
+		$result = $this->QuestionnaireAnswerSummary->getResultCondition($questionnaire);
+
+		//期待値
+		$expected = array(
+			'QuestionnaireAnswerSummary.answer_status' => QuestionnairesComponent::ACTION_ACT,
+			'QuestionnaireAnswerSummary.questionnaire_origin_id' => 1,
+		);
+
+		$cond = $this->QuestionnaireAnswerSummary->getResultCondition($questionnaire);
+		//テスト実施
+		$this->_assertArray($expected, $cond);
+
+		//終了処理
+		$this->tearDown();
+	}
+
 }
