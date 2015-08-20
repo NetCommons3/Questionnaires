@@ -721,6 +721,12 @@ msgstr "新しいアンケートを作成します。作成方法を選んでく
 msgid "Create new questionnaire"
 msgstr "新規にアンケート作成"
 
+
+msgid "Create from Template"
+msgstr "テンプレートを読み込んで作成"
+msgid "Questionnaire template file"
+msgstr "アンケートテンプレートファイル"
+
 #: /View/Questionnaires/add.ctp:93
 msgid "Re-use past questionnaire"
 msgstr "過去のアンケートを流用して作成"

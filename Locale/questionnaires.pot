@@ -721,6 +721,11 @@ msgstr ""
 msgid "Create new questionnaire"
 msgstr ""
 
+msgid "Create from Template"
+msgstr ""
+msgid "Questionnaire template file"
+msgstr ""
+
 #: /View/Questionnaires/add.ctp:92
 msgid "Re-use past questionnaire"
 msgstr ""

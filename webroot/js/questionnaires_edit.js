@@ -11,6 +11,21 @@ NetCommonsApp.requires.push('QuestionnaireCommon');
 
 NetCommonsApp.controller('Questionnaires.add',
     function($scope, NetCommonsBase, NetCommonsWysiwyg) {
+      /**
+       * variables
+       *
+       * @type {Object.<string>}
+       */
+      var variables = {
+        /**
+         * Relative path to login form
+         *
+         * @const
+         */
+        QUESTIONNAIRE_CREATE_OPT_NEW: 'create',
+        QUESTIONNAIRE_CREATE_OPT_REUSE: 'reuse',
+        QUESTIONNAIRE_CREATE_OPT_TEMPLATE: 'template'
+      };
 
       /**
          * Initialize
@@ -21,6 +36,9 @@ NetCommonsApp.controller('Questionnaires.add',
         $scope.frameId = frameId;
         $scope.questionnaires = questionnaires;
         $scope.createOption = createOption;
+        $scope.newTitle = '';
+        $scope.templateFile = '';
+        $scope.pastQuestionnaireSelect = '';
       };
       /**
          * Questionnaire EnterSubmit gard
@@ -32,6 +50,28 @@ NetCommonsApp.controller('Questionnaires.add',
           e.stopPropagation();
           return false;
         }
+      };
+      /**
+       * Questionnaire be disable to goto next
+       *
+       * @return {bool}
+       */
+      $scope.isDisableToGoNext = function() {
+        if ($scope.createOption == variables.QUESTIONNAIRE_CREATE_OPT_NEW) {
+          if ($scope.newTitle == '') {
+            return true;
+          }
+        } else if ($scope.createOption == variables.QUESTIONNAIRE_CREATE_OPT_TEMPLATE) {
+          if ($scope.templateFile == '') {
+            return true;
+          }
+        } else if ($scope.createOption == variables.QUESTIONNAIRE_CREATE_OPT_REUSE) {
+          if ($scope.pastQuestionnaireSelect == '') {
+            return true;
+          }
+        }
+
+        return false;
       };
 
     });

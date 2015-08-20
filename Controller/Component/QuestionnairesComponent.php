@@ -47,6 +47,7 @@ class QuestionnairesComponent extends Component {
  */
 	const QUESTIONNAIRE_CREATE_OPT_NEW = 'create';
 	const QUESTIONNAIRE_CREATE_OPT_REUSE = 'reuse';
+	const QUESTIONNAIRE_CREATE_OPT_TEMPLATE = 'template';
 
 /**
  * questionnaire view filter

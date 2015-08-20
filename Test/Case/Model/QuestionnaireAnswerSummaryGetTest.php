@@ -92,7 +92,7 @@ class QuestionnaireAnswerSummaryGetTest extends QuestionnaireAnswerTestBase {
 		$this->setUp();
 
 		//データの生成
-		$questionnaireId = 3;
+		$questionnaireId = 2;
 		$userId = 2;
 		$sessionId = '2';
 
@@ -129,7 +129,7 @@ class QuestionnaireAnswerSummaryGetTest extends QuestionnaireAnswerTestBase {
 		//データの生成
 		$summary = '';
 
-		// 処理実行
+
 		$result = $this->QuestionnaireAnswerSummary->getProgressiveAnswerOfThisSummary( $summary );
 
 		$answers = array();

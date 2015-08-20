@@ -36,9 +36,11 @@
 					</p>
 				</div>
 
+				<?php /* ファイル送信は、FormHelperでform作成時、'type' => 'file' 必要。記述すると enctype="multipart/form-data" が追加される */ ?>
 				<?php echo $this->Form->create('Questionnaire', array(
 				'type' => 'post',
 				'novalidate' => true,
+				'type' => 'file',
 				'ng-keydown' => 'handleKeydown($event)'
 				)); ?>
 				<?php $this->Form->unlockField('create_option'); ?>
@@ -69,6 +71,31 @@
 						'errors' => $this->validationErrors,
 						'model' => 'Questionnaire',
 						'field' => 'title',
+						]) ?>
+					</div>
+				</div><!-- /form-group 1-->
+
+				<div class="form-group col-lg-12">
+					<div class="radio">
+						<label>
+							<input type="radio" name="create_option" value="<?php echo QuestionnairesComponent::QUESTIONNAIRE_CREATE_OPT_TEMPLATE; ?>" ng-model="createOption">
+							<?php echo __d('questionnaires', 'Create from Template'); ?>
+						</label>
+					</div>
+					<div  collapse="createOption != '<?php echo QuestionnairesComponent::QUESTIONNAIRE_CREATE_OPT_TEMPLATE; ?>'">
+						<label for="questionnaires_past_search_filter">
+							<?php echo __d('questionnaires', 'Questionnaire template file'); ?>
+							<?php echo $this->element('NetCommons.required'); ?>
+						</label>
+						<?php echo $this->Form->file('template_file', array(
+							'accept' => "text/comma-separated-values",
+							'ng-model' => 'templateFile',
+						)); ?>
+						<?php echo $this->element(
+						'NetCommons.errors', [
+						'errors' => $this->validationErrors,
+						'model' => 'Questionnaire',
+						'field' => 'template_file',
 						]) ?>
 					</div>
 				</div><!-- /form-group 1-->
@@ -120,7 +147,7 @@
 					array(
 					'class' => 'btn btn-primary',
 					'name' => 'next_' . '',
-					'ng-disabled' => "!((createOption=='" . QuestionnairesComponent::QUESTIONNAIRE_CREATE_OPT_NEW . "' && newTitle) || (createOption=='" . QuestionnairesComponent::QUESTIONNAIRE_CREATE_OPT_REUSE . "' && pastQuestionnaireSelect))",
+					'ng-disabled' => "isDisableToGoNext()",
 					)) ?>
 				</div>
 
