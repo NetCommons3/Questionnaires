@@ -166,7 +166,7 @@ array(
 										</button>
 										<ul class="dropdown-menu" role="menu">
 											<li role="presentation" class="dropdown-header"><?php echo __d('questionnaires', 'destination page number'); ?></li>
-											<li ng-repeat="(copyPageIndex, copyPage) in questionnaire.questionnairePage | filter: {pageSequence: '!' + page.pageSequence}">
+											<li ng-repeat="(copyPageIndex, copyPage) in questionnaire.questionnairePage">
 												<a href="#" ng-click="copyQuestionToAnotherPage($event, pageIndex, qIndex, copyPage.pageSequence)">{{1 * copyPage.pageSequence + 1}}</a>
 											</li>
 										</ul>
