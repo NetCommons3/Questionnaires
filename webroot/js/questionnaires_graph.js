@@ -11,7 +11,7 @@
  * @param {function($scope)} Controller
  */
 NetCommonsApp.controller('QuestionnairesAnswerSummary',
-    function($scope, $sce, $timeout, $log, NetCommonsBase, NetCommonsFlash) {
+    function($scope, $window, $sce, $timeout, $log, NetCommonsBase, NetCommonsFlash) {
 
       /**
        * variables
@@ -104,6 +104,14 @@ NetCommonsApp.controller('QuestionnairesAnswerSummary',
       };
       $scope.getBarConf = function(question) {
         var obj = new Object();
+        // 選択肢が１２超過、または画面幅が768より小さかったらXラベルを斜めにして納める
+        // 12 は　月の数より多い選択肢の場合は、という意味で決めた
+        // 768の画面サイズはbootstrapのxsの時のサイズに合わせた
+        var colors = $scope.getColorArray(question);
+        var rotate = 0;
+        if (colors.length > 12 || $window.innerWidth < 768) {
+          rotate = 50;
+        }
         obj = {
           type: 'discreteBarChart',
           height: 450,
@@ -122,6 +130,7 @@ NetCommonsApp.controller('QuestionnairesAnswerSummary',
           },
           xAxis: {
             //axisLabel: 'Time (ms)',
+            rotateLabels: rotate,
             showMaxMin: false
             //tickFormat: function(d) {
             //  return d3.format(',f')(d);
@@ -134,7 +143,7 @@ NetCommonsApp.controller('QuestionnairesAnswerSummary',
               return d3.format(',f')(d);
             }
           },
-          color: $scope.getColorArray(question)
+          color: colors
         };
         return obj;
       };
