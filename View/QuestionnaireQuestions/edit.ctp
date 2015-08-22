@@ -155,7 +155,7 @@ array(
 								class="form-horizontal"
 								ng-repeat="(qIndex, question) in page.questionnaireQuestion"
 								is-open="question.isOpen"
-								ng-class="{'panel-danger':(question.hasError)}">
+								>
 							<accordion-heading>
 
 								<div class="pull-right" ng-if="isPublished == 0">
@@ -195,6 +195,9 @@ array(
 								</button>
 
 								<span class="questionnaire-accordion-header-title">
+
+									<span class="glyphicon glyphicon-exclamation-sign text-danger" ng-if="question.hasError"></span>
+
 									{{question.questionValue}}
 									<strong ng-if="question.isRequire != 0" class="text-danger h4">
 										<?php echo __d('net_commons', 'Required'); ?>

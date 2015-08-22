@@ -105,7 +105,11 @@ NetCommonsApp.controller('Questionnaires.edit.question',
 
           $scope.questionnaire.questionnairePage[pIdx].tabActive = false;
 
+          // 質問アコーディオンクローズ
+          //$scope.questionnaire.questionnairePage[pIdx].isOpen = false;
+
           // このページの中にエラーがあるか
+          $scope.questionnaire.questionnairePage[pIdx].hasError = false;
           if (page.errorMessages) {
             $scope.questionnaire.questionnairePage[pIdx].hasError = true;
           }
@@ -457,7 +461,8 @@ NetCommonsApp.controller('Questionnaires.edit.question',
               questionnaireQuestion.splice(idx, 1);
           $scope._resetQuestionnaireQuestionSequence(pageIndex);
         }
-        $event.stopPropagation();
+        // ここでやってはいけない！ページの再読み込みが走る
+        //$event.stopPropagation();
       };
 
       /**

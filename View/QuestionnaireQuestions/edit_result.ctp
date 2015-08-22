@@ -91,7 +91,7 @@ array(
 				<div class="questionnaire-group">
 					<label><?php echo __d('questionnaires', 'Question you want to display the aggregate results'); ?></label>
 					<accordion ng-repeat="(pageIndex, page) in questionnaire.questionnairePage">
-						<accordion-group ng-repeat="(qIndex, question) in page.questionnaireQuestion" ng-class="{'panel-danger':(question.hasError)}">
+						<accordion-group ng-repeat="(qIndex, question) in page.questionnaireQuestion">
 							<accordion-heading>
 								<span class="glyphicon"
 									ng-class="{
@@ -100,6 +100,7 @@ array(
 								</span>
 								{{question.questionValue|htmlToPlaintext}}
 								<span ng-if="question.hasError">
+									<span class="glyphicon glyphicon-exclamation-sign text-danger"></span>
 									<?php echo __d('questionnaires', 'There is an error'); ?>
 								</span>
 							</accordion-heading>
