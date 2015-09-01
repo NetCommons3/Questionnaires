@@ -302,7 +302,7 @@ NetCommonsApp.controller('Questionnaires.edit.question',
             ($scope.questionnaire.questionnairePage.length + 1);
         page['pageSequence'] =
             $scope.questionnaire.questionnairePage.length;
-        page['nextPageSequence'] = page['pageSequence'] + 1;
+        page['routeNumber'] = 0;
         page['originId'] = 0;
         page['questionnaireQuestion'] = new Array();
         $scope.questionnaire.questionnairePage.push(page);

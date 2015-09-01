@@ -47,7 +47,7 @@ class QuestionnaireValidation extends QuestionnairesAppModel {
 					'questionnaire_id',
 					'page_title',
 					'page_sequence',
-					'next_page_sequence',
+					'route_number',
 				)
 			));
 			if ($this->QuestionnairePage->validationErrors) {

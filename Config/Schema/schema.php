@@ -1,4 +1,4 @@
-<?php
+<?php 
 /** QuestionnairesSchema file
  *
  * @author Noriko Arai <arai@nii.ac.jp>
@@ -7,7 +7,6 @@
  * @license http://www.netcommons.org/license.txt NetCommons License
  * @copyright Copyright 2014, NetCommons Project
  */
-
 /**
  * Schema file
  *
@@ -30,7 +29,7 @@ class QuestionnairesSchema extends CakeSchema {
  * @param array $event event
  * @return bool
  */
-	public function before($event = array()) {
+ 	public function before($event = array()) {
 		return true;
 	}
 
@@ -40,7 +39,7 @@ class QuestionnairesSchema extends CakeSchema {
  * @param array $event event
  * @return void
  */
-	public function after($event = array()) {
+ 	public function after($event = array()) {
 	}
 
 /**
@@ -48,7 +47,7 @@ class QuestionnairesSchema extends CakeSchema {
  *
  * @var array
  */
-	public $questionnaire_answer_summaries = array(
+ 	public $questionnaire_answer_summaries = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false, 'key' => 'primary'),
 		'answer_status' => array('type' => 'integer', 'null' => true, 'default' => null, 'length' => 4, 'unsigned' => false, 'comment' => '回答状態 1ページずつ表示するようなアンケートの場合、途中状態か否か | 0:回答未完了 | 1:回答完了'),
 		'test_status' => array('type' => 'integer', 'null' => true, 'default' => null, 'length' => 4, 'unsigned' => false, 'comment' => 'テスト時の回答かどうか 0:本番回答 | 1:テスト時回答'),
@@ -73,7 +72,7 @@ class QuestionnairesSchema extends CakeSchema {
  *
  * @var array
  */
-	public $questionnaire_answers = array(
+ 	public $questionnaire_answers = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false, 'key' => 'primary'),
 		'matrix_choice_id' => array('type' => 'integer', 'null' => true, 'default' => null, 'unsigned' => false, 'comment' => 'マトリクスの質問の場合のみ、選択肢IDを設定する | 選択肢IDはマトリクスの行側の選択肢のIDを入れる'),
 		'answer_value' => array('type' => 'text', 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '回答した文字列を設定する
@@ -99,12 +98,13 @@ class QuestionnairesSchema extends CakeSchema {
 		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'InnoDB')
 	);
 
+
 /**
  * questionnaire_blocks_settings table
  *
  * @var array
  */
-	public $questionnaire_blocks_settings = array(
+ 	public $questionnaire_blocks_settings = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false, 'key' => 'primary'),
 		'block_key' => array('type' => 'string', 'null' => false, 'default' => null, 'key' => 'index', 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
 		'use_workflow' => array('type' => 'boolean', 'null' => false, 'default' => '1'),
@@ -124,7 +124,7 @@ class QuestionnairesSchema extends CakeSchema {
  *
  * @var array
  */
-	public $questionnaire_choices = array(
+ 	public $questionnaire_choices = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false, 'key' => 'primary'),
 		'key' => array('type' => 'string', 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
 		'language_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false),
@@ -140,6 +140,7 @@ class QuestionnairesSchema extends CakeSchema {
 		'choice_label' => array('type' => 'text', 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '\'選択肢ラベル\'', 'charset' => 'utf8'),
 		'choice_value' => array('type' => 'text', 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '選択肢の値　デフォルトでidと同じ値が入る（将来、選択肢の値を任意に設定して重みアンケができるよう）', 'charset' => 'utf8'),
 		'skip_page_sequence' => array('type' => 'integer', 'null' => true, 'default' => null, 'unsigned' => false, 'comment' => 'questionnairesのskip_flagがスキップ有りの時、スキップ先のページ'),
+		'jump_route_number' => array('type' => 'integer', 'null' => true, 'default' => null, 'unsigned' => false, 'comment' => 'questionnaire_questionsのis_jumpが有りのとき、分岐先のルート'),
 		'is_auto_translated' => array('type' => 'boolean', 'null' => false, 'default' => '0'),
 		'graph_color' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 16, 'collate' => 'utf8_general_ci', 'comment' => 'グラフ描画時の色', 'charset' => 'utf8'),
 		'questionnaire_question_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false, 'key' => 'index'),
@@ -160,7 +161,7 @@ class QuestionnairesSchema extends CakeSchema {
  *
  * @var array
  */
-	public $questionnaire_frame_display_questionnaires = array(
+ 	public $questionnaire_frame_display_questionnaires = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false, 'key' => 'primary'),
 		'frame_key' => array('type' => 'string', 'null' => false, 'default' => null, 'key' => 'index', 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
 		'questionnaire_origin_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false, 'key' => 'index'),
@@ -181,7 +182,7 @@ class QuestionnairesSchema extends CakeSchema {
  *
  * @var array
  */
-	public $questionnaire_frame_settings = array(
+ 	public $questionnaire_frame_settings = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false, 'key' => 'primary'),
 		'display_type' => array('type' => 'integer', 'null' => true, 'default' => null, 'length' => 4, 'unsigned' => false, 'comment' => '0:単一表示(default)|1:リスト表示'),
 		'display_num_per_page' => array('type' => 'integer', 'null' => true, 'default' => null, 'length' => 3, 'unsigned' => false, 'comment' => 'リスト表示の場合、１ページ当たりに表示するアンケート件数'),
@@ -203,7 +204,7 @@ class QuestionnairesSchema extends CakeSchema {
  *
  * @var array
  */
-	public $questionnaire_pages = array(
+ 	public $questionnaire_pages = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false, 'key' => 'primary'),
 		'key' => array('type' => 'string', 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
 		'language_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false),
@@ -213,8 +214,8 @@ class QuestionnairesSchema extends CakeSchema {
 		'status' => array('type' => 'integer', 'null' => true, 'default' => null, 'length' => 4, 'unsigned' => false),
 		'questionnaire_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false, 'key' => 'index'),
 		'page_title' => array('type' => 'string', 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => 'ページ名', 'charset' => 'utf8'),
+		'route_number' => array('type' => 'integer', 'null' => false, 'default' => '0', 'unsigned' => false),
 		'page_sequence' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false, 'comment' => 'ページ表示順'),
-		'next_page_sequence' => array('type' => 'integer', 'null' => true, 'default' => null, 'unsigned' => false, 'comment' => '次ページ順番数値'),
 		'is_auto_translated' => array('type' => 'boolean', 'null' => false, 'default' => '0'),
 		'created_user' => array('type' => 'integer', 'null' => true, 'default' => null, 'unsigned' => false),
 		'created' => array('type' => 'datetime', 'null' => true, 'default' => null),
@@ -233,7 +234,7 @@ class QuestionnairesSchema extends CakeSchema {
  *
  * @var array
  */
-	public $questionnaire_questions = array(
+ 	public $questionnaire_questions = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false, 'key' => 'primary'),
 		'key' => array('type' => 'string', 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
 		'language_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false),
@@ -250,6 +251,7 @@ class QuestionnairesSchema extends CakeSchema {
 		'question_type_option' => array('type' => 'integer', 'null' => true, 'default' => null, 'length' => 4, 'unsigned' => false, 'comment' => '1: 数値 | 2:日付(未実装) | 3:時刻(未実装) | 4:メール(未実装) | 5:URL(未実装) | 6:電話番号(未実装) | HTML５チェックで将来的に実装されそうなものに順次対応'),
 		'is_choice_random' => array('type' => 'boolean', 'null' => false, 'default' => '0', 'comment' => '選択肢表示順序ランダム化 | 質問タイプが1:択一選択 2:複数選択 6:マトリクス（択一） 7:マトリクス（複数） のとき有効 ただし、６，７については行がランダムになるだけで列はランダム化されない'),
 		'is_skip' => array('type' => 'boolean', 'null' => false, 'default' => '0', 'comment' => 'アンケート回答のスキップ有無  0:スキップ 無し  1:スキップ有り'),
+		'is_jump' => array('type' => 'boolean', 'null' => false, 'default' => '0', 'comment' => 'アンケート回答の分岐'),
 		'is_range' => array('type' => 'boolean', 'null' => false, 'default' => '0', 'comment' => '範囲設定しているか否か'),
 		'min' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 32, 'collate' => 'utf8_general_ci', 'comment' => '最小値　question_typeがテキストで数値タイプのときのみ有効 ', 'charset' => 'utf8'),
 		'max' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 32, 'collate' => 'utf8_general_ci', 'comment' => '最大値　question_typeがテキストで数値タイプのときのみ有効 ', 'charset' => 'utf8'),
@@ -275,7 +277,7 @@ class QuestionnairesSchema extends CakeSchema {
  *
  * @var array
  */
-	public $questionnaires = array(
+ 	public $questionnaires = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false, 'key' => 'primary'),
 		'key' => array('type' => 'string', 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
 		'language_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false),

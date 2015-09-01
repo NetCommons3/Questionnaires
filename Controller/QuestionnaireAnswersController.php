@@ -192,8 +192,7 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 			// 回答データがある場合は回答をDBに書きこむ
 			if (isset($this->data['QuestionnaireAnswer'])) {
 				// 次に表示するべきページのシーケンス番号を取得する
-				//$nextPageSeq = $this->data['QuestionnairePage']['page_sequence'] + 1;
-				$nextPageSeq = $this->data['QuestionnairePage']['next_page_sequence'];
+				$nextPageSeq = $this->data['QuestionnairePage']['page_sequence'] + 1;
 
 				$ret = $this->QuestionnaireAnswer->saveAnswer($questionnaire, $userId, $this->Session->id(), $this->data['QuestionnaireAnswer'], $errors);
 				if ($ret == false) {

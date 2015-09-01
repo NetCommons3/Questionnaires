@@ -89,6 +89,7 @@ class QuestionnaireQuestionsController extends QuestionnairesAppController {
 			// （質問作成画面では質問データ属性全てをPOSTしています）
 			$questionnaire['Questionnaire'] = Hash::merge($questionnaire['Questionnaire'], $postQuestionnaire['Questionnaire']);
 			// 発行後のアンケートは質問情報は書き換えない
+			// 未発行の場合はPostデータを上書き設定して
 			if ($this->__checkPublished($questionnaire) == 0) {
 				$questionnaire['QuestionnairePage'] = $postQuestionnaire['QuestionnairePage'];
 			}

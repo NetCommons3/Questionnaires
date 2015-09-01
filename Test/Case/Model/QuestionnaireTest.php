@@ -79,7 +79,7 @@ class QuestionnaireTest extends QuestionnaireTestBase {
 		$data[0]['Frame']['id'] = 1;
 		$data[0]['QuestionnairePage'][0]['id'] = 2;
 		$data[0]['QuestionnairePage'][0]['page_sequence'] = 0;
-		$data[0]['QuestionnairePage'][0]['next_page_sequence'] = 1;
+		$data[0]['QuestionnairePage'][0]['route_number'] = 0;
 		unset($data[0]['QuestionnairePage'][0]['QuestionnaireQuestion']);
 
 		$questionnaire = Hash::merge( array(
@@ -124,7 +124,7 @@ class QuestionnaireTest extends QuestionnaireTestBase {
 		$data[0]['Frame']['id'] = 1;
 		$data[0]['QuestionnairePage'][0]['id'] = 2;
 		$data[0]['QuestionnairePage'][0]['page_sequence'] = 0;
-		$data[0]['QuestionnairePage'][0]['next_page_sequence'] = 1;
+		$data[0]['QuestionnairePage'][0]['route_number'] = 0;
 		unset($data[0]['QuestionnairePage'][0]['QuestionnaireQuestion']);
 
 		$questionnaire = Hash::merge( array(
@@ -174,7 +174,7 @@ class QuestionnaireTest extends QuestionnaireTestBase {
 		$data[0]['Frame']['id'] = 1;
 		$data[0]['QuestionnairePage'][0]['id'] = 2;
 		$data[0]['QuestionnairePage'][0]['page_sequence'] = 0;
-		$data[0]['QuestionnairePage'][0]['next_page_sequence'] = 1;
+		$data[0]['QuestionnairePage'][0]['route_number'] = 0;
 		unset($data[0]['QuestionnairePage'][0]['QuestionnaireQuestion']);
 
 		$questionnaire = Hash::merge( array(
@@ -222,7 +222,7 @@ class QuestionnaireTest extends QuestionnaireTestBase {
 		$data[0]['Questionnaire']['end_period'] = '2021-07-07 10:20:00';
 		$data[0]['Frame']['id'] = 1;
 		$data[0]['QuestionnairePage'][0]['page_sequence'] = 0;
-		$data[0]['QuestionnairePage'][0]['next_page_sequence'] = 99999;
+		$data[0]['QuestionnairePage'][0]['route_number'] = 0;
 
 		$questionnaire = Hash::merge( array(
 			'Comment' => array(
@@ -278,7 +278,7 @@ class QuestionnaireTest extends QuestionnaireTestBase {
 		$data[0]['Frame']['id'] = 1;
 		$data[0]['QuestionnairePage'][0]['id'] = 2;
 		$data[0]['QuestionnairePage'][0]['page_sequence'] = 0;
-		$data[0]['QuestionnairePage'][0]['next_page_sequence'] = 1;
+		$data[0]['QuestionnairePage'][0]['route_number'] = 0;
 		unset($data[0]['QuestionnairePage'][0]['QuestionnaireQuestion']);
 
 		$questionnaire = Hash::merge( array(

@@ -57,15 +57,18 @@ NetCommonsApp.controller('Questionnaires.add',
        * @return {bool}
        */
       $scope.isDisableToGoNext = function() {
-        if ($scope.createOption == variables.QUESTIONNAIRE_CREATE_OPT_NEW) {
+        if ($scope.createOption ==
+            variables.QUESTIONNAIRE_CREATE_OPT_NEW) {
           if ($scope.newTitle == '') {
             return true;
           }
-        } else if ($scope.createOption == variables.QUESTIONNAIRE_CREATE_OPT_TEMPLATE) {
+        } else if ($scope.createOption ==
+            variables.QUESTIONNAIRE_CREATE_OPT_TEMPLATE) {
           if ($scope.templateFile == '') {
             return true;
           }
-        } else if ($scope.createOption == variables.QUESTIONNAIRE_CREATE_OPT_REUSE) {
+        } else if ($scope.createOption ==
+            variables.QUESTIONNAIRE_CREATE_OPT_REUSE) {
           if ($scope.pastQuestionnaireSelect == '') {
             return true;
           }

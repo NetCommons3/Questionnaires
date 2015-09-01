@@ -149,7 +149,7 @@ class QuestionnaireQuestionsControllerEditTest extends QuestionnairesControllerT
 					'questionnaire_id' => 1,
 					'page_title' => 'pagetitle',
 					'page_sequence' => 0,
-					'next_page_sequence' => 99999,
+					'route_number' => 0,
 					'QuestionnaireQuestion' => array(
 						0 => array(
 							'id' => 1,
@@ -268,7 +268,7 @@ class QuestionnaireQuestionsControllerEditTest extends QuestionnairesControllerT
 					'questionnaire_id' => 1,
 					'page_title' => 'pagetitle',
 					'page_sequence' => 0,
-					'next_page_sequence' => 99999,
+					'route_number' => 0,
 					'QuestionnaireQuestion' => array(
 						0 => array(
 							'id' => 1,

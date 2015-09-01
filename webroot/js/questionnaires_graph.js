@@ -11,7 +11,8 @@
  * @param {function($scope)} Controller
  */
 NetCommonsApp.controller('QuestionnairesAnswerSummary',
-    function($scope, $window, $sce, $timeout, $log, NetCommonsBase, NetCommonsFlash) {
+    function($scope, $window, $sce, $timeout, $log,
+             NetCommonsBase, NetCommonsFlash) {
 
       /**
        * variables
