@@ -255,6 +255,7 @@ NetCommonsApp.controller('QuestionnairesAnswerSummary',
               {label: $scope.getChartLabelText(choice.choiceLabel),
                 value: y});
         }
+        dataArray.sort(function(d1, d2) {return d2.value - d1.value});
         return dataArray;
       };
       $scope.getMatrixBarData = function(question) {
