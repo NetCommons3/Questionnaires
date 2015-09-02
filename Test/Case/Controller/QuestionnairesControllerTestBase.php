@@ -13,6 +13,7 @@ App::uses('QuestionnaireQuestionsController', 'Questionnaires.Controller');
 App::uses('QuestionnairesAppController', 'Questionnaires.Controller');
 App::uses('QuestionnairesQuestionController', 'Questionnaires.Controller');
 App::uses('Questionnaire', 'Questionnaires.Model');
+App::uses('QuestionnairesComponent', 'Questionnaires.Controller/Component');
 
 App::uses('NetCommonsFrameComponent', 'NetCommons.Controller/Component');
 App::uses('NetCommonsBlockComponent', 'NetCommons.Controller/Component');
@@ -24,7 +25,7 @@ App::uses('RolesControllerTest', 'Roles.Test/Case/Controller');
 App::uses('AuthGeneralControllerTest', 'AuthGeneral.Test/Case/Controller');
 
 /**
- * CategoriesController Test Case
+ * QuestionnaireController Test Case
  *
  * @author Shohei Nakajima <nakajimashouhei@gmail.com>
  * @package NetCommons\Questionnaires\Test\Case\Controller
@@ -37,6 +38,8 @@ class QuestionnairesControllerTestBase extends YAControllerTestCase {
  * @var array
  */
 	public $fixtures = array(
+		'plugin.categories.category',
+		'plugin.comments.comment',
 		'plugin.questionnaires.questionnaire',
 		'plugin.questionnaires.questionnaire_page',
 		'plugin.questionnaires.questionnaire_question',

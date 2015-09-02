@@ -33,7 +33,6 @@ class QuestionnairesControllerIndexTest extends QuestionnairesControllerTestBase
 					'Auth' => ['user'],
 					'Session',
 					'Security',
-					'Paginator'
 				]
 			]
 		);
@@ -49,9 +48,7 @@ class QuestionnairesControllerIndexTest extends QuestionnairesControllerTestBase
 	public function testIndex() {
 		RolesControllerTest::login($this);
 
-		//$this->Questionnaire->unbindModel(array('belongsTo' => array('Block')));
-
-		$frameId = '1';
+		$frameId = '3';
 
 		$this->controller->Session->expects($this->any())
 				->method('id')
@@ -69,7 +66,6 @@ class QuestionnairesControllerIndexTest extends QuestionnairesControllerTestBase
 
 		AuthGeneralControllerTest::logout($this);
 	}
-
 /**
  * Expect index action
  *
@@ -81,12 +77,12 @@ class QuestionnairesControllerIndexTest extends QuestionnairesControllerTestBase
 
 		$frameId = '100';
 		$this->testAction(
-				'/questionnaires/questionnaires/index/' . $frameId,
-				array(
-					'method' => 'get',
-					'return' => 'view',
-				)
-			);
+			'/questionnaires/questionnaires/index/' . $frameId,
+			array(
+				'method' => 'get',
+				'return' => 'view',
+			)
+		);
 
 		$this->assertTextEquals('Questionnaires/noQuestionnaire', $this->controller->view);
 
@@ -102,18 +98,17 @@ class QuestionnairesControllerIndexTest extends QuestionnairesControllerTestBase
 		//単独表示 Questionnaireが存在しない
 		RolesControllerTest::login($this);
 		$frameId = '10';
-		$this->Questionnaire->unbindModel(array('belongsTo' => array('Block')));
 		$this->controller->Session->expects($this->any())
-				->method('id')
-				->will($this->returnValue(1));
+			->method('id')
+			->will($this->returnValue(1));
 
 		$this->testAction(
-				'/questionnaires/questionnaires/index/' . $frameId,
-				array(
-					'method' => 'get',
-					'return' => 'view',
-				)
-			);
+			'/questionnaires/questionnaires/index/' . $frameId,
+			array(
+				'method' => 'get',
+				'return' => 'view',
+			)
+		);
 
 		$this->assertTextEquals('Questionnaires/noQuestionnaire', $this->controller->view);
 		AuthGeneralControllerTest::logout($this);
@@ -127,8 +122,6 @@ class QuestionnairesControllerIndexTest extends QuestionnairesControllerTestBase
 	public function testIndexNoFrameD() {
 		RolesControllerTest::login($this);
 
-		$this->Questionnaire->unbindModel(array('belongsTo' => array('Block')));
-
 		$frameId = '1';
 
 		//QuestionnaireFrameDisplayQuestionnaireが存在しない
@@ -138,12 +131,12 @@ class QuestionnairesControllerIndexTest extends QuestionnairesControllerTestBase
 			->will($this->returnValue(null));
 
 		$this->testAction(
-				'/questionnaires/questionnaires/index/' . $frameId,
-				array(
-					'method' => 'get',
-					'return' => 'view',
-				)
-			);
+			'/questionnaires/questionnaires/index/' . $frameId,
+			array(
+				'method' => 'get',
+				'return' => 'view',
+			)
+		);
 
 		$this->assertTextEquals('QuestionnaireAnswers/noMoreAnswer', $this->controller->view);
 
@@ -176,5 +169,4 @@ class QuestionnairesControllerIndexTest extends QuestionnairesControllerTestBase
 
 		//AuthGeneralControllerTest::logout($this);
 	}
-
 }

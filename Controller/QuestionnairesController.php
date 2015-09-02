@@ -52,7 +52,7 @@ class QuestionnairesController extends QuestionnairesAppController {
 			),
 		),
 		'Questionnaires.Questionnaires',
-		'Paginator'
+		'Paginator',
 	);
 
 /**
@@ -178,7 +178,7 @@ class QuestionnairesController extends QuestionnairesAppController {
 			);
 		} elseif ($answerStatus == QuestionnairesComponent::QUESTIONNAIRE_ANSWER_TEST) {
 			$filter = array(
-				'status !=' => NetCommonsBlockComponent::STATUS_PUBLISHED
+				'Questionnaire.status !=' => NetCommonsBlockComponent::STATUS_PUBLISHED
 			);
 		} else {
 			$filter = array();

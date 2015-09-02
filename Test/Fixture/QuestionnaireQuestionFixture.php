@@ -90,6 +90,34 @@ class QuestionnaireQuestionFixture extends CakeTestFixture {
 			'modified_user' => 1,
 			'modified' => '2015-04-13 06:39:20'
 		),
+		array(
+			'id' => 3,
+			'key' => 'question3',
+			'language_id' => 2,
+			'origin_id' => 3,
+			'is_active' => 1,
+			'is_latest' => 1,
+			'status' => 1,
+			'question_sequence' => 1,
+			'question_value' => 'アンケート３の質問　テキストタイプ.',
+			'question_type' => 3,
+			'description' => 'Lorem ipsum dolor sit amet',
+			'is_require' => 1,
+			'question_type_option' => 1,
+			'is_choice_random' => 1,
+			'is_skip' => 1,
+			'is_jump' => 0,
+			'min' => null,
+			'max' => null,
+			'is_result_display' => 1,
+			'result_display_type' => 1,
+			'is_auto_translated' => 1,
+			'questionnaire_page_id' => 1,
+			'created_user' => 1,
+			'created' => '2015-04-13 06:39:20',
+			'modified_user' => 1,
+			'modified' => '2015-04-13 06:39:20'
+		),
 	);
 
 }

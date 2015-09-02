@@ -99,6 +99,23 @@ class QuestionnairePageFixture extends CakeTestFixture {
 			'modified_user' => 1,
 			'modified' => '2015-04-13 06:38:28'
 		),
+		array(
+			'id' => 4,
+			'key' => 'page4',
+			'language_id' => 2,
+			'is_active' => 1,
+			'is_latest' => 1,
+			'status' => 1,
+			'questionnaire_id' => 3,
+			'page_title' => 'アンケート３のページ',
+			'page_sequence' => 1,
+			'route_number' => 0,
+			'is_auto_translated' => 1,
+			'created_user' => 1,
+			'created' => '2015-04-13 06:38:28',
+			'modified_user' => 1,
+			'modified' => '2015-04-13 06:38:28'
+		),
 	);
 
 }

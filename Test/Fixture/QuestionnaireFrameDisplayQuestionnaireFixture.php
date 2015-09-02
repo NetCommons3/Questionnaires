@@ -50,6 +50,15 @@ class QuestionnaireFrameDisplayQuestionnaireFixture extends CakeTestFixture {
 			'modified_user' => 1,
 			'modified' => '2015-02-03 06:09:54'
 		),
+		array(
+			'id' => 3,
+			'frame_key' => 'frame_3',
+			'questionnaire_origin_id' => 3,
+			'created_user' => 1,
+			'created' => '2015-02-03 06:09:54',
+			'modified_user' => 1,
+			'modified' => '2015-02-03 06:09:54'
+		),
 	);
 
 }

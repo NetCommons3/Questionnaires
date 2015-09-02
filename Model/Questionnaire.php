@@ -263,8 +263,9 @@ class Questionnaire extends QuestionnairesAppModel {
  */
 	public function getQuestionnairesList($conditions, $sessionId, $userId, $filter, $sort = 'modified DESC', $offset = 0, $limit = QuestionnairesComponent::QUESTIONNAIRE_DEFAULT_DISPLAY_NUM_PER_PAGE) {
 		$subQuery = $this->getQuestionnairesCommonForAnswer($sessionId, $userId);
+		// サブクエリ使用のため、もｔもと結びついていたものをばらさないといけなくなってしまった
 		$this->unbindModel(
-			array('hasMany' => array('QuestionnairePage'))
+			array('hasMany' => array('QuestionnairePage'), 'belongsTo' => array('Block'))
 		);
 		$list = $this->find('all', array(
 			'fields' => array(
