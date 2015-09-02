@@ -139,7 +139,7 @@ class QuestionnaireQuestionTest extends QuestionnaireTestBase {
 
 		// 処理実行
 		$this->QuestionnaireQuestion->setQuestionToPage($questionnaire, $page);
-
+var_dump($questionnaire['Questionnaire']);
 		// テスト実施
 		$this->assertEquals($questionnaire['Questionnaire']['question_count'], $expected);
 

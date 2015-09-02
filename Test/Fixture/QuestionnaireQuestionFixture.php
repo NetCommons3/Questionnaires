@@ -112,7 +112,7 @@ class QuestionnaireQuestionFixture extends CakeTestFixture {
 			'is_result_display' => 1,
 			'result_display_type' => 1,
 			'is_auto_translated' => 1,
-			'questionnaire_page_id' => 1,
+			'questionnaire_page_id' => 4,
 			'created_user' => 1,
 			'created' => '2015-04-13 06:39:20',
 			'modified_user' => 1,
