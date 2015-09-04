@@ -52,9 +52,7 @@ class QuestionnairesAppModel extends AppModel {
  */
 	public function getQuestionnairesCommonForAnswer($sessionId, $userId) {
 		$dbo = $this->getDataSource();
-		$this->loadModels([
-			'QuestionnaireAnswerSummary' => 'Questionnaires.QuestionnaireAnswerSummary',
-		]);
+		$this->QuestionnaireAnswerSummary = ClassRegistry::init('Questionnaires.QuestionnaireAnswerSummary', true);
 		if ($userId) {
 			$conditions = array(
 				'user_id' => $userId,
@@ -92,14 +90,6 @@ class QuestionnairesAppModel extends AppModel {
 				'type' => 'left',
 				'conditions' => array(
 					'Questionnaire.origin_id = QuestionnaireFrameDisplayQuestionnaires.questionnaire_origin_id'
-				)
-			),
-			array(
-				'table' => 'blocks',
-				'alias' => 'Block',
-				'type' => 'left',
-				'conditions' => array(
-					'Questionnaire.block_id = Block.id'
 				)
 			),
 		);

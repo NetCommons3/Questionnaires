@@ -34,7 +34,6 @@ class QuestionnaireQuestionsControllerEditResultTest extends QuestionnairesContr
 					'Auth' => ['user'],
 					'Session',
 					'Security',
-					'Paginator',
 					'NetCommons.NetCommonsWorkflow'
 				]
 			]

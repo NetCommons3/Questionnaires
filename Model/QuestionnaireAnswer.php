@@ -155,6 +155,31 @@ class QuestionnaireAnswer extends QuestionnairesAppModel {
 	}
 
 /**
+ * getProgressiveAnswerOfThisSummary
+ *
+ * @param array $summary questionnaire summary ( one record )
+ * @return array
+ */
+	public function getProgressiveAnswerOfThisSummary($summary) {
+		$answers = array();
+		if (empty($summary)) {
+			return $answers;
+		}
+		$answer = $this->find('all', array(
+			'conditions' => array(
+				'questionnaire_answer_summary_id' => $summary['QuestionnaireAnswerSummary']['id']
+			),
+			'recursive' => -1
+		));
+		if (!empty($answer)) {
+			foreach ($answer as $ans) {
+				$answers[$ans['QuestionnaireAnswer']['questionnaire_question_origin_id']][] = $ans['QuestionnaireAnswer'];
+			}
+		}
+		return $answers;
+	}
+
+	/**
  * checkAnswerValue 入力回答の正当性をチェックする
  *
  * @param array $data Postされた回答データ
@@ -163,9 +188,7 @@ class QuestionnaireAnswer extends QuestionnairesAppModel {
  * @return bool
  */
 	public function checkAnswerValue($data, $question, $answers) {
-		$this->loadModels([
-			'QuestionnaireAnswerValidation' => 'Questionnaires.QuestionnaireAnswerValidation',
-		]);
+		$this->QuestionnaireAnswerValidation = ClassRegistry::init('Questionnaires.QuestionnaireAnswerValidation', true);
 
 		$errors = array();
 

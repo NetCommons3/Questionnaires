@@ -33,7 +33,6 @@ class QuestionnaireAnswersControllerTest extends QuestionnairesControllerTestBas
 					'Auth' => ['user'],
 					'Session',
 					'Security',
-					'Paginator'
 				]
 			]
 		);

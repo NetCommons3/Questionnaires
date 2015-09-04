@@ -215,7 +215,7 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 		// （すでに回答している場合もあるので、回答も合わせて取り出すこと）
 		if (count($errors) == 0) {
 			$summary = $this->QuestionnaireAnswerSummary->getProgressiveSummaryOfThisUser($questionnaireId, $userId, $this->Session->id());
-			$setAnswers = $this->QuestionnaireAnswerSummary->getProgressiveAnswerOfThisSummary($summary);
+			$setAnswers = $this->QuestionnaireAnswer->getProgressiveAnswerOfThisSummary($summary);
 			$this->set('answers', $setAnswers);
 			$this->set('jsAnswers', $this->camelizeKeyRecursive($this->_changeBooleansToNumbers($setAnswers)));
 		} else {
@@ -266,7 +266,7 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 		// 回答情報取得
 		// 回答情報並べ替え
 		$setAnswers = array();
-		$setAnswers = $this->QuestionnaireAnswerSummary->getProgressiveAnswerOfThisSummary($summary);
+		$setAnswers = $this->QuestionnaireAnswer->getProgressiveAnswerOfThisSummary($summary);
 
 		// 質問情報をView変数にセット
 		$this->set('questionnaireId', $questionnaireId);

@@ -212,11 +212,8 @@ class Questionnaire extends QuestionnairesAppModel {
  * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
  */
 	public function afterFind($results, $primary = false) {
-		$this->loadModels([
-			'QuestionnairePage' => 'Questionnaires.QuestionnairePage',
-			'QuestionnaireAnswerSummary' => 'Questionnaires.QuestionnaireAnswerSummary',
-			'Comment' => 'Comments.Comment',
-		]);
+		$this->QuestionnairePage = ClassRegistry::init('Questionnaires.QuestionnairePage', true);
+		$this->QuestionnaireAnswerSummary = ClassRegistry::init('Questionnaires.QuestionnaireAnswerSummary', true);
 
 		foreach ($results as &$val) {
 			// これらの場合はcount か deleteか
@@ -263,10 +260,6 @@ class Questionnaire extends QuestionnairesAppModel {
  */
 	public function getQuestionnairesList($conditions, $sessionId, $userId, $filter, $sort = 'modified DESC', $offset = 0, $limit = QuestionnairesComponent::QUESTIONNAIRE_DEFAULT_DISPLAY_NUM_PER_PAGE) {
 		$subQuery = $this->getQuestionnairesCommonForAnswer($sessionId, $userId);
-		// サブクエリ使用のため、もｔもと結びついていたものをばらさないといけなくなってしまった
-		$this->unbindModel(
-			array('hasMany' => array('QuestionnairePage'), 'belongsTo' => array('Block'))
-		);
 		$list = $this->find('all', array(
 			'fields' => array(
 				'Block.*',
@@ -275,6 +268,7 @@ class Questionnaire extends QuestionnairesAppModel {
 				'TrackableUpdater.*',
 				'CountAnswerSummary.*'
 			),
+			'recursive' => 0,
 			'joins' => $subQuery,
 			'conditions' => $conditions,
 			'order' => 'Questionnaire.modified DESC',
@@ -380,9 +374,7 @@ class Questionnaire extends QuestionnairesAppModel {
  * @return array
  */
 	public function getDefaultQuestionnaire($addData) {
-		$this->loadModels([
-			'QuestionnairePage' => 'Questionnaires.QuestionnairePage',
-		]);
+		$this->QuestionnairePage = ClassRegistry::init('Questionnaires.QuestionnairePage', true);
 		$questionnaire = array();
 		$questionnaire['Questionnaire'] = Hash::merge(
 			array(

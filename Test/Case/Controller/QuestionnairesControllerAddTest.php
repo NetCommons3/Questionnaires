@@ -33,7 +33,6 @@ class QuestionnairesControllerAddTest extends QuestionnairesControllerTestBase {
 					'Auth' => ['user'],
 					'Session',
 					'Security',
-					'Paginator'
 				]
 			]
 		);
@@ -49,8 +48,6 @@ class QuestionnairesControllerAddTest extends QuestionnairesControllerTestBase {
 		//新規作成
 		RolesControllerTest::login($this);
 		$frameId = '1';
-
-		$this->Questionnaire->unbindModel(array('belongsTo' => array('Block')));
 
 		$data = array(
 			'Questionnaire' => array(
@@ -121,8 +118,6 @@ class QuestionnairesControllerAddTest extends QuestionnairesControllerTestBase {
 		RolesControllerTest::login($this);
 		$frameId = '1';
 
-		$this->Questionnaire->unbindModel(array('belongsTo' => array('Block')));
-
 		$data = array(
 			'Questionnaire' => array(
 				'title' => 'testtitle',
@@ -155,7 +150,6 @@ class QuestionnairesControllerAddTest extends QuestionnairesControllerTestBase {
 		RolesControllerTest::login($this);
 		$frameId = '1';
 
-		$this->Questionnaire->unbindModel(array('belongsTo' => array('Block')));
 		// PENDING Errorになるため追加。↑
 		//1) QuestionnairesControllerAddTest::testAdd
 		//PDOException: SQLSTATE[42000]: Syntax error or access violation: 1066 Not unique table/alias: 'Block'

@@ -56,7 +56,6 @@ class QuestionnaireGetTest extends QuestionnaireTestBase {
 		$limit = QuestionnairesComponent::QUESTIONNAIRE_DEFAULT_DISPLAY_NUM_PER_PAGE;
 
 		//処理実行
-		$this->Questionnaire->unbindModel(array('belongsTo' => array('Block')));
 		$result = $this->Questionnaire->getQuestionnairesList($conditions, $sessionId, $userId, $filter, $sort, $offset, $limit);
 
 		//テスト実施

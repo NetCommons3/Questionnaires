@@ -151,9 +151,7 @@ class QuestionnairePage extends QuestionnairesAppModel {
  * @return array
  */
 	public function getDefaultPage() {
-		$this->loadModels([
-			'QuestionnaireQuestion' => 'Questionnaires.QuestionnaireQuestion',
-		]);
+		$this->QuestionnaireQuestion = ClassRegistry::init('Questionnaires.QuestionnaireQuestion', true);
 
 		$page['page_title'] = __d('questionnaires', 'First Page');
 		$page['page_sequence'] = 0;
@@ -171,9 +169,7 @@ class QuestionnairePage extends QuestionnairesAppModel {
  * @return void
  */
 	public function setPageToQuestionnaire(&$questionnaire) {
-		$this->loadModels([
-			'QuestionnaireQuestion' => 'Questionnaires.QuestionnaireQuestion',
-		]);
+		$this->QuestionnaireQuestion = ClassRegistry::init('Questionnaires.QuestionnaireQuestion', true);
 		// ページデータがアンケートデータの中にない状態でここが呼ばれている場合、
 		if (!isset($questionnaire['QuestionnairePage'])) {
 			/*

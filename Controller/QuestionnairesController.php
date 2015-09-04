@@ -129,6 +129,26 @@ class QuestionnairesController extends QuestionnairesAppController {
 		// ここではtype属性を指定することでカスタムFindを呼び出すように指示している
 		try {
 			$subQuery = $this->Questionnaire->getQuestionnairesCommonForAnswer($this->Session->id(), $this->Auth->user('id'));
+			$this->Paginator->settings = array_merge(
+				$this->Paginator->settings,
+				array(
+					'conditions' => $conditions,
+					'page' => 1,
+					'sort' => $sort,
+					'limit' => $displayNum,
+					'direction' => $dir,
+					'recursive' => 0,
+					'joins' => $subQuery,
+					'fields' => array(
+						'Block.*',
+						'Questionnaire.*',
+						'TrackableCreator.*',
+						'TrackableUpdater.*',
+						'CountAnswerSummary.*'
+					)
+				)
+			);
+/*
 			$this->paginate = array(
 				'conditions' => $conditions,
 				'page' => 1,
@@ -145,6 +165,7 @@ class QuestionnairesController extends QuestionnairesAppController {
 					'CountAnswerSummary.*'
 				)
 			);
+*/
 			$questionnaire = $this->paginate('Questionnaire', $this->_getPaginateFilter());
 		} catch (NotFoundException $e) {
 			// NotFoundの例外

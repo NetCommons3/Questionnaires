@@ -29,9 +29,7 @@ class QuestionnaireValidation extends QuestionnairesAppModel {
  * @return array error message
  */
 	public function checkPage($questionnaire) {
-		$this->loadModels([
-			'QuestionnairePage' => 'Questionnaires.QuestionnairePage',
-		]);
+		$this->QuestionnairePage = ClassRegistry::init('Questionnaires.QuestionnairePage', true);
 
 		// 少なくとも１ページは存在すること
 		if (empty($questionnaire['QuestionnairePage'])) {
@@ -80,9 +78,7 @@ class QuestionnaireValidation extends QuestionnairesAppModel {
  * @return array error message
  */
 	public function checkQuestion($questionnaire, $page, &$errors) {
-		$this->loadModels([
-			'QuestionnaireQuestion' => 'Questionnaires.QuestionnaireQuestion',
-		]);
+		$this->QuestionnaireQuestion = ClassRegistry::init('Questionnaires.QuestionnaireQuestion', true);
 
 		// 少なくとも１質問は存在すること
 		if (empty($page['QuestionnaireQuestion'])) {
@@ -146,9 +142,7 @@ class QuestionnaireValidation extends QuestionnairesAppModel {
 			return;
 		}
 
-		$this->loadModels([
-			'QuestionnaireChoice' => 'Questionnaires.QuestionnaireChoice',
-		]);
+		$this->QuestionnaireChoice = ClassRegistry::init('Questionnaires.QuestionnaireChoice', true);
 
 		// 少なくとも１選択肢は存在すること
 		$this->__checkChoiceExists($question, $question['QuestionnaireChoice'], $errors);

@@ -33,7 +33,6 @@ class QuestionnairesControllerDeleteTest extends QuestionnairesControllerTestBas
 					'Auth' => ['user'],
 					'Session',
 					'Security',
-					'Paginator',
 					'NetCommons.NetCommonsWorkflow'
 				]
 			]

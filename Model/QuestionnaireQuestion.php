@@ -176,9 +176,7 @@ class QuestionnaireQuestion extends QuestionnairesAppModel {
  * @return array
  */
 	public function getDefaultQuestion() {
-		$this->loadModels([
-			'QuestionnaireChoice' => 'Questionnaires.QuestionnaireChoice',
-		]);
+		$this->QuestionnaireChoice = ClassRegistry::init('Questionnaires.QuestionnaireChoice', true);
 		$question = array(
 			'question_sequence' => 0,
 			'question_value' => __d('questionnaires', 'New Question') . '1',

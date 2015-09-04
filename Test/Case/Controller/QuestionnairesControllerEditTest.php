@@ -33,7 +33,6 @@ class QuestionnairesControllerEditTest extends QuestionnairesControllerTestBase 
 					'Auth' => ['user'],
 					'Session',
 					'Security',
-					'Paginator',
 					'NetCommons.NetCommonsWorkflow'
 				]
 			]
@@ -94,8 +93,6 @@ class QuestionnairesControllerEditTest extends QuestionnairesControllerTestBase 
 		$this->setExpectedException('BadRequestException');
 		RolesControllerTest::login($this);
 		$frameId = '1';
-
-		$this->Questionnaire->unbindModel(array('belongsTo' => array('Block')));
 
 		$data = array(
 			'Questionnaire' => array(

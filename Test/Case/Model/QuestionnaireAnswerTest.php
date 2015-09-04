@@ -316,5 +316,49 @@ class QuestionnaireAnswerTest extends QuestionnaireAnswerTestBase {
 		//終了処理
 		$this->tearDown();
 	}
+/**
+ * getProgressiveAnswerOfThisSummary method
+ * summaryがempty
+ * @return void
+ */
+	public function testgetProgressiveAnswerOfThisSummary1() {
+		//初期処理
+		$this->setUp();
+
+		//データの生成
+		$summary = '';
+
+		$result = $this->QuestionnaireAnswer->getProgressiveAnswerOfThisSummary( $summary );
+
+		$answers = array();
+		// テスト実施
+		$this->assertEquals($result, $answers);
+
+		//終了処理
+		$this->tearDown();
+	}
+
+/**
+ * getProgressiveAnswerOfThisSummary method
+ * summaryがemptyではない
+ * @return void
+ */
+	public function testgetProgressiveAnswerOfThisSummary2() {
+		//初期処理
+		$this->setUp();
+
+		//データの生成
+		$summary = array();
+		$summary['QuestionnaireAnswerSummary']['id'] = 1;
+
+		// 処理実行
+		$result = $this->QuestionnaireAnswer->getProgressiveAnswerOfThisSummary( $summary );
+
+		// テスト実施
+		$this->assertEquals($result[1][0]['id'], 1);
+
+		//終了処理
+		$this->tearDown();
+	}
 
 }
