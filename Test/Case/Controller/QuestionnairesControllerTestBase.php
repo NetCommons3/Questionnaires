@@ -40,6 +40,7 @@ class QuestionnairesControllerTestBase extends YAControllerTestCase {
 	public $fixtures = array(
 		'plugin.categories.category',
 		'plugin.comments.comment',
+		'plugin.files.file',
 		'plugin.questionnaires.questionnaire',
 		'plugin.questionnaires.questionnaire_page',
 		'plugin.questionnaires.questionnaire_question',

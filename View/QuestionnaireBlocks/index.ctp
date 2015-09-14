@@ -63,21 +63,21 @@
 						<td>
 							<?php echo $this->Date->dateFormat($questionnaire['Questionnaire']['modified']); ?>
 						</td>
-
-						<td>
-							<a class="btn btn-warning"
-							   href="<?php echo $this->Html->url(
-										'templateExport/' . $frameId . '/' . $questionnaire['Questionnaire']['origin_id']) ?>">
-								<span class="glyphicon glyphicon-export" ></span>
-							</a>
-						</td>
-
 						<td>
 							<?php if ($questionnaire['Questionnaire']['all_answer_count'] > 0): ?>
 							<a class="btn btn-success"
 							   href="<?php echo $this->Html->url(
 										'download/' . $frameId . '/' . $questionnaire['Questionnaire']['origin_id']) ?>">
 								<span class="glyphicon glyphicon-download" ></span>
+							</a>
+							<?php endif; ?>
+						</td>
+						<td>
+							<?php if ($questionnaire['Questionnaire']['status'] == NetCommonsBlockComponent::STATUS_PUBLISHED): ?>
+							<a class="btn btn-warning"
+							   href="<?php echo $this->Html->url(
+										'export/' . $frameId . '/' . $questionnaire['Questionnaire']['origin_id']) ?>">
+								<span class="glyphicon glyphicon-export" ></span>
 							</a>
 							<?php endif; ?>
 						</td>

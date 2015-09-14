@@ -12,7 +12,7 @@
 
 <?php if($this->viewVars['contentEditable'] == true): ?>
 		<span class="nc-tooltip" tooltip="<?php echo __d('net_commons', 'Add'); ?>">
-			<a href="<?php echo $this->Html->url('/questionnaires/questionnaires/add/' . $frameId) ?>" class="btn btn-success">
+			<a href="<?php echo $this->Html->url('/questionnaires/questionnaire_add/add/' . $frameId) ?>" class="btn btn-success">
 				<span class="glyphicon glyphicon-plus"> </span>
 			</a>
 		</span>

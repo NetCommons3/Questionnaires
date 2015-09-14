@@ -38,6 +38,8 @@ msgstr ""
 #: /Controller/QuestionnaireBlocksController.php:141
 msgid "download error"
 msgstr ""
+msgid "export error"
+msgstr ""
 
 #: /Controller/QuestionnaireQuestionsController.php:261
 msgid "page"

@@ -45,6 +45,7 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
 		'Questionnaires.QuestionnaireAnswerSummaryCsv',
 		'Comments.Comment',
 		'Categories.Category',
+		'PluginManager.Plugin',
 	);
 
 /**
@@ -58,10 +59,11 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
 		'NetCommons.NetCommonsRoomRole' => array(
 			//コンテンツの権限設定
 			'allowedActions' => array(
-				'blockEditable' => array('index', 'download')
+				'blockEditable' => array('index', 'download', 'export')
 			),
 		),
-		'Questionnaires.Questionnaires',
+		'Questionnaires.QuestionnairesDownload',
+		'Questionnaires.QuestionnairesWysIsWyg',
 		'Paginator',
 	);
 
@@ -71,6 +73,7 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
  * @var array
  */
 	public $helpers = array(
+		'Session',
 		'NetCommons.Date',
 	);
 
@@ -147,104 +150,241 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
 		// viewを使用しない
 		$this->autoRender = false;
 
-		$questionnaire = $this->Questionnaire->find('first', array(
-			'conditions' => array(
-				'origin_id' => $questionnaireId,
-				'is_active' => true,
-			)
-		));
-		if (empty($questionnaire)) {
+		try {
+			$questionnaire = $this->_getQuestionnaireForAnswerCsv($questionnaireId);
+
+			// テンポラリフォルダ作成とカレントディレクトリ変更
+			$folder = $this->QuestionnairesDownload->createTemporaryFolder($this);
+			// ダウンロードファイル作成とオープン
+			$fileName = date('Ymd_his') . '.csv';
+			$fp = $this->QuestionnairesDownload->createDownloadFile($folder, $fileName);
+
+			// 回答データを一気に全部取得するのは、データ爆発の可能性があるので
+			// QUESTIONNAIRE_CSV_UNIT_NUMBER分に制限して取得する
+			$offset = 0;
+			do {
+				$datas = $this->QuestionnaireAnswerSummaryCsv->getAnswerSummaryCsv($questionnaire, QuestionnairesComponent::QUESTIONNAIRE_CSV_UNIT_NUMBER, $offset);
+				// テンポラリファイルにCSV形式で書きこみ
+				foreach ($datas as $data) {
+					fputcsv($fp, $data);
+				}
+				$dataCount = count($datas);    // データ数カウント
+				$offset += $dataCount;        // 次の取得開始位置をずらす
+			} while ($dataCount == QuestionnairesComponent::QUESTIONNAIRE_CSV_UNIT_NUMBER);
+			// データ取得数が制限値分だけとれている間は繰り返す
+
+			// ファイルクローズ
+			fclose($fp);
+
+			// 暗号圧縮？現時点ではコマンドでしか実行できない
+			$filePath = $this->QuestionnairesDownload->compressFile($this->Auth->user('username'));
+		} catch (Exception $e) {
 			$this->Session->setFlash(__d('questionnaires', 'download error'));
-			return;
+			$this->redirect('/questionnaires/questionnaire_blocks/index/' . $this->viewVars['frameId']);
+			return false;
 		}
-
-		$downloadFileName = $questionnaire['Questionnaire']['title'] . '.csv';
-		$fileName = date('Ymd_his') . '.csv';
-		$offset = 0;
-
-		// テンポラリファイルオープン
-		$folder = new Folder();
-		$folderName = TMP . 'Questionnaires' . DS . 'download' . DS . microtime(true);
-		$folder->create($folderName);
-		$folder->cd($folderName);
-
-		// フォルダ内のお掃除
-		$this->__cleanupDownloadFolder(TMP . 'Questionnaires' . DS . 'download');
-
-		$filePath = $folder->pwd() . DS . $fileName;
-		$fp = fopen($filePath, 'w+');
-		do {
-			$datas = $this->QuestionnaireAnswerSummaryCsv->getAnswerSummaryCsv($questionnaire, QuestionnairesComponent::QUESTIONNAIRE_CSV_UNIT_NUMBER, $offset);
-			// テンポラリファイルにCSV形式で書きこみ
-			foreach ($datas as $data) {
-				fputcsv($fp, $data);
-			}
-			$offset += count($datas);
-			$dataCount = count($datas);
-		} while ($dataCount == QuestionnairesComponent::QUESTIONNAIRE_CSV_UNIT_NUMBER);
-		// ファイルクローズ
-		fclose($fp);
-
-		// 暗号圧縮？現時点ではコマンドでしか実行できない
-		if ($this->__compressFile($filePath)) {
-			$downloadFileName = substr($downloadFileName, 0, strrpos($downloadFileName, '.')) . '.zip';
-		}
+		// ダウンロードファイル名
+		$downloadFileName = $questionnaire['Questionnaire']['title'] . '.' . $this->QuestionnairesDownload->getDownloadFileExtension();
 		// 出力
 		$this->response->file($filePath, array('download' => true, 'name' => rawurlencode($downloadFileName)));
 		return $this->response;
 	}
 
 /**
- * __cleanupDownloadFolder
+ * export
  *
- * @param string $folderPath download folder path
- * @return bool
+ * template file about questionnaire export action
+ *
+ * @param int $frameId frame id
+ * @param int $questionnaireId questionnaire origin id
+ * @return void
  */
-	private function __cleanupDownloadFolder($folderPath) {
-		$folder = new Folder($folderPath);
-		$files = $folder->read(true, true, true);
-		// フォルダは返される配列の０番目の配列に設定されている
-		if (isset($files[0])) {
-			$nowTime = time();
-			foreach ($files[0] as $dir) {
-				// 作成時間を確認
-				$stat = stat($dir);
-				// 既定時間より以前に作成されたものなら消してしまう
-				if ($stat['mtime'] < ($nowTime - 60 * 10)) {
-					$delFolder = new Folder($dir);
-					$delFolder->delete();
-				}
-			}
-		}
-		return true;
-	}
+	public function export($frameId, $questionnaireId)
+	{
+		// viewを使用しない
+		$this->autoRender = false;
 
+		try {
+			// テンポラリフォルダとカレントディレクトリ変更
+			$folder = $this->QuestionnairesDownload->createTemporaryFolder($this);
+
+			// ダウンロード用のZIPアーカイブ作成,オープン
+			$zip = $this->QuestionnairesDownload->createDownloadZipFile($folder, QuestionnairesComponent::QUESTIONNAIRE_TEMPLATE_EXPORT_FILENAME);
+
+			// バージョン情報を取得するためComposer情報を得る
+			$composer = $this->Plugin->getComposer('netcommons/questionnaires');
+
+			// アンケートデータZIPファイルを取得
+			$questionnaireZipFile = $this->_createQuestionnaireZip($folder, $composer['version'], $questionnaireId);
+
+			// アンケートデータZIPファイルをアーカイブに加える
+			$zip->addFile($questionnaireZipFile, QuestionnairesComponent::QUESTIONNAIRE_TEMPLATE_FILENAME);
+
+			// アンケートデータファイルのフィンガープリントを得る
+			$fingerPrint = sha1_file($questionnaireZipFile, false);
+
+			// フィンガープリントをアーカイブに加える
+			$zip->addFromString(QuestionnairesComponent::QUESTIONNAIRE_FINGER_PRINT_FILENAME, $fingerPrint);
+
+			// アーカイブ閉じる
+			$zip->close();
+
+			// アンケートデータファイルを削除（アーカイブを閉じてからでないと削除はエラーになる）
+			@unlink($questionnaireZipFile);
+
+			// ダウンロード用ファイル名取得
+			$questionnaire = $this->_getQuestionnaireForExport($questionnaireId);
+			$questionnaireTitle = $questionnaire['Questionnaire']['title'];
+
+			// ダウンロード出力ファイル名確定
+			$exportFilePath = $this->QuestionnairesDownload->getDownloadFilePath();
+			$exportFileName = $questionnaireTitle . '.zip';
+
+		} catch(Exception $e) {
+			$this->Session->setFlash(__d('questionnaires', 'export error') . $e->getMessage());
+			$this->redirect('/questionnaires/questionnaire_blocks/index/' . $this->viewVars['frameId']);
+			return false;
+		}
+		// export-key 設定
+		$this->Questionnaire->saveExportKey($questionnaire['Questionnaire']['id'], $fingerPrint);
+
+		// 出力
+		$this->response->file($exportFilePath, array('download' => true, 'name' => rawurlencode($exportFileName)));
+		return $this->response;
+	}
 /**
- * __compressFile
+ * _createQuestionnaireZip
  *
- * @param string &$filePath input file path
- * @return bool
+ * @param Folder $folder folder object
+ * @param string $version version
+ * @param int $questionnaireId questionnaire origin_id
+ * @return string zip file path
  */
-	private function __compressFile(&$filePath) {
-		$cmd = '/usr/bin/zip';
-		if (!file_exists($cmd)) {
+	protected function _createQuestionnaireZip($folder, $version, $questionnaireId) {
+		// アンケートデータをjsonにして記述した内容を含むZIPファイルを作成する
+		$questionnaires = array();
+		$zipData = array();
+		$zipData['version'] = $version;
+
+		// ZIPファイル作成＆オープン
+		$qZipFilePath = $folder->pwd() . DS . QuestionnairesComponent::QUESTIONNAIRE_TEMPLATE_FILENAME;
+		$zip = new ZipArchive();
+		$ret = $zip->open($qZipFilePath, ZipArchive::CREATE);
+		if ($ret === false) {
 			return false;
 		}
 
-		$outputFilePath = $filePath . '.zip';
+		// 言語数分
+		$langs = array(
+			'english' => 1,
+			'japanese' => 0,
+			'chinese' => 3
+		);
+		foreach ($langs as $langId) {
+			// 指定のアンケートデータを取得
+			$questionnaire = $this->Questionnaire->find('first', array(
+				'conditions' => array(
+					'Questionnaire.origin_id' => $questionnaireId,
+					'Questionnaire.is_active' => true,
+					'Questionnaire.is_latest' => true,
+					'Questionnaire.language_id' => $langId
+				),
+				'recursive' => -1
+			));
+			// 指定の言語データがない場合もあることを想定
+			if (empty($questionnaire)) {
+				continue;
+			}
+			// アンケートデータの中でもWYSISWYGデータのものについては
+			// フォルダ別に確保(フォルダの中にZIPがある）
+			$this->_createWysIsWygZIP($folder, $zip, $questionnaire);
+			$questionnaires[] = $questionnaire;
+		}
+		$zipData['Questionnaires'] = $questionnaires;
+		// jsonデータにして書き込み
+		$zip->addFromString(QuestionnairesComponent::QUESTIONNAIRE_JSON_FILENAME, json_encode($zipData));
+		// アーカイブ閉じる
+		$zip->close();
 
-		$execCmd = sprintf('%s -j -e -P %s %s %s', $cmd, $this->Auth->user('username'), $outputFilePath, $filePath);
-
-		// コマンドを実行する
-		exec(escapeshellcmd($execCmd));
-
-		// 入力ファイルを削除する
-		unlink($filePath);
-
-		$filePath = $outputFilePath;
-		return true;
+		return $qZipFilePath;
 	}
-
+/**
+ * _getQuestionnaireForExport
+ *
+ * @param int $questionnaireId questionnaire origin_id
+ * @return array questionnaire data
+ */
+	protected function _getQuestionnaireForExport($questionnaireId) {
+		// 指定のアンケートデータを取得
+		$questionnaire = $this->Questionnaire->find('first', array(
+			'conditions' => array(
+				'Questionnaire.origin_id' => $questionnaireId,
+				'Questionnaire.is_active' => true,
+				'Questionnaire.is_latest' => true,
+			),
+			'recursive' => -1
+		));
+		if (!$questionnaire) {
+			throw new NotFoundException();
+		}
+		return $questionnaire;
+	}
+/**
+ * _getQuestionnaireForAnswerCsv
+ *
+ * @param int $questionnaireId questionnaire origin_id
+ * @return array questionnaire data
+ */
+	protected function _getQuestionnaireForAnswerCsv($questionnaireId) {
+		// 指定のアンケートデータを取得
+		$questionnaire = $this->Questionnaire->find('first', array(
+			'conditions' => array(
+				'Questionnaire.origin_id' => $questionnaireId,
+				'Questionnaire.is_active' => true,
+			),
+			'recursive' => -1
+		));
+		if (!$questionnaire) {
+			throw new NotFoundException();
+		}
+		return $questionnaire;
+	}
+/**
+ * _createWysIsWygZIP
+ *
+ * @param Folder $folder
+ * @param ZipArchive $zip
+ * @param array $questionnaire questionnaire data
+ * @return void
+ */
+	protected function  _createWysIsWygZIP($folder, $zip, &$questionnaire) {
+		// アンケートデータの中でもWYSISWYGデータのものについては
+		// フォルダ別に確保(フォルダの中にZIPがある）
+		$flatQuestionnaire = Hash::flatten($questionnaire);
+		foreach ($flatQuestionnaire as $key => &$value) {
+			$model = null;
+			if (strpos($key, 'QuestionnaireQuestion.') !== false) {
+				$model = $this->QuestionnaireQuestion;
+			} else if (strpos($key, 'QuestionnairePage.') !== false) {
+				$model = $this->QuestionnairePage;
+			} else if (strpos($key, 'Questionnaire.') !== false) {
+				$model = $this->Questionnaire;
+			}
+			if (!$model) {
+				continue;
+			}
+			$columnName = substr($key, strrpos($key, '.') + 1);
+			if ($model->hasField($columnName)) {
+				if ($model->getColumnType($columnName) == 'text') {
+					$zip->addEmptyDir($key);
+					$wysiswygZipFile = $this->QuestionnairesWysIsWyg->createWysIsWygZIP($folder, $key, $value);
+					$zip->addFile($wysiswygZipFile, $key . DS . $key . '.zip');
+					$value = $key;
+				}
+			}
+		}
+		$questionnaire = Hash::expand($flatQuestionnaire);
+	}
 /**
  * initTabs
  *

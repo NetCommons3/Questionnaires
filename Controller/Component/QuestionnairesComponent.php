@@ -515,6 +515,16 @@ class QuestionnairesComponent extends Component {
 	const QUESTIONNAIRE_SORT_END = 3;
 
 /**
+ * questionnaire template exoprt file name
+ *
+ * @var string
+ */
+	const QUESTIONNAIRE_TEMPLATE_EXPORT_FILENAME = 'ExportQuestionnaire.zip';
+	const QUESTIONNAIRE_TEMPLATE_FILENAME = 'Questionnaires.zip';
+	const QUESTIONNAIRE_JSON_FILENAME = 'Questionnaires.json';
+	const QUESTIONNAIRE_FINGER_PRINT_FILENAME = 'finger_print.txt';
+
+	/**
  * getDisplayNumberOptions
  *
  * @return array

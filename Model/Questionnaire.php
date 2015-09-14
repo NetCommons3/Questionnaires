@@ -409,21 +409,21 @@ class Questionnaire extends QuestionnairesAppModel {
 			return $this->getDefaultQuestionnaire(array('title' => ''));
 		}
 		// ID値のみクリア
-		$this->__clearQuestionnaireId($questionnaire);
+		$this->clearQuestionnaireId($questionnaire);
 
 		return $questionnaire;
 	}
 
 /**
- * __clearQuestionnaireId アンケートデータからＩＤのみをクリアする
+ * clearQuestionnaireId アンケートデータからＩＤのみをクリアする
  *
  * @param array &$questionnaire アンケートデータ
  * @return void
  */
-	private function __clearQuestionnaireId(&$questionnaire) {
+	public function clearQuestionnaireId(&$questionnaire) {
 		foreach ($questionnaire as $qKey => $q) {
 			if (is_array($q)) {
-				$this->__clearQuestionnaireId($questionnaire[$qKey]);
+				$this->clearQuestionnaireId($questionnaire[$qKey]);
 			} elseif (preg_match('/(.*?)id$/', $qKey) ||
 				preg_match('/^key$/', $qKey) ||
 				preg_match('/^created(.*?)/', $qKey) ||
@@ -555,4 +555,29 @@ class Questionnaire extends QuestionnairesAppModel {
 		return true;
 	}
 
+/**
+ * saveExportKey
+ * update export key
+ *
+ * @param int $questionnaireId id of questionnaire
+ * @param string $exportKey exported key ( finger print)
+ * @throws InternalErrorException
+ * @return bool
+ */
+	public function saveExportKey($questionnaireId, $exportKey) {
+		$this->setDataSource('master');
+		$dataSource = $this->getDataSource();
+		$dataSource->begin();
+		try {
+			$this->id = $questionnaireId;
+			$this->saveField('export_key', $exportKey);
+		} catch (Exception $ex) {
+			//トランザクションRollback
+			$dataSource->rollback();
+			//エラー出力
+			CakeLog::error($ex);
+			throw $ex;
+		}
+		return true;
+	}
 }

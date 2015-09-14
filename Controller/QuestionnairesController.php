@@ -48,7 +48,7 @@ class QuestionnairesController extends QuestionnairesAppController {
 		'NetCommons.NetCommonsRoomRole' => array(
 			//コンテンツの権限設定
 			'allowedActions' => array(
-				'contentEditable' => array('add', 'edit', 'delete')
+				'contentEditable' => array('edit', 'delete')
 			),
 		),
 		'Questionnaires.Questionnaires',
@@ -148,24 +148,6 @@ class QuestionnairesController extends QuestionnairesAppController {
 					)
 				)
 			);
-/*
-			$this->paginate = array(
-				'conditions' => $conditions,
-				'page' => 1,
-				'sort' => $sort,
-				'limit' => $displayNum,
-				'direction' => $dir,
-				'recursive' => 0,
-				'joins' => $subQuery,
-				'fields' => array(
-					'Block.*',
-					'Questionnaire.*',
-					'TrackableCreator.*',
-					'TrackableUpdater.*',
-					'CountAnswerSummary.*'
-				)
-			);
-*/
 			$questionnaire = $this->paginate('Questionnaire', $this->_getPaginateFilter());
 		} catch (NotFoundException $e) {
 			// NotFoundの例外
@@ -246,87 +228,6 @@ class QuestionnairesController extends QuestionnairesAppController {
 	}
 
 /**
- * add questionnaire display method
- *
- * @return void
- */
-	public function add() {
-		// 作成中データ
-		$pastQuestionnaires = array();
-		$createOption = QuestionnairesComponent::QUESTIONNAIRE_CREATE_OPT_NEW;
-
-		// POSTされたデータを読み取り
-		if ($this->request->isPost()) {
-
-			$questionnaire = null;
-
-			// 選択生成方法設定
-			if (isset($this->data['create_option'])) {
-
-				$createOption = $this->data['create_option'];
-
-				// 空の新規作成
-				if ($createOption == QuestionnairesComponent::QUESTIONNAIRE_CREATE_OPT_NEW) {
-					//
-					$this->Questionnaire->set($this->request->data);
-					// 新規作成時のvalidation実行
-					if ($this->Questionnaire->validates(array(
-						'fieldList' => array(	'title')))) {
-						// デフォルトデータをもとに新規作成
-						$questionnaire = $this->Questionnaire->getDefaultQuestionnaire(array(
-							'title' => $this->data['Questionnaire']['title']));
-					}
-				} elseif ($createOption == QuestionnairesComponent::QUESTIONNAIRE_CREATE_OPT_REUSE) {
-
-					if (isset($this->data['past_questionnaire_id'])) {
-						// 過去のアンケートのコピー・クローンで作成
-						$questionnaire = $this->Questionnaire->getQuestionnaireCloneById($this->data['past_questionnaire_id']);
-					} else {
-						// Modelにはない属性のエラーを入れる
-						$this->validationErrors['Questionnaire']['past_questionnaire_id'] = __d('questionnaires', 'Please select past questionnaire.');
-					}
-				}
-				if ($questionnaire) {
-					$questionnaire['Questionnaire']['block_id'] = $this->viewVars['blockId'];
-				}
-			} else {
-				// 作成方法の指示がないのにPOSTされている場合は、画面の再表示とする
-				$this->validationErrors['Questionnaire']['create_option'] = __d('questionnaires', 'Please choose create option.');
-			}
-
-			if ($questionnaire) {
-				// 作成中アンケートデータをキャッシュに書く
-				$this->Session->write('Questionnaires.questionnaire', $questionnaire);
-				// 次の画面へリダイレクト
-				$this->redirect('questionnaire_questions/edit/' . $this->viewVars['frameId']);
-				return;
-			}
-		}
-
-		// 過去データ 取り出し
-		// 表示方法設定値取得
-		$settings = $this->QuestionnaireFrameSetting->getQuestionnaireFrameSetting($this->viewVars['frameId']);
-		$conditions = $this->Questionnaire->getConditionForAnswer(
-			$this->viewVars['blockId'],
-			$this->Auth->user('id'),
-			$this->viewVars,
-			$this->getNowTime()
-		);
-		$pastQuestionnaires['items'] = $this->Questionnaire->getQuestionnairesList(
-			$conditions,
-			$this->Session->id(),
-			$this->Auth->user('id'),
-			array(),
-			$settings[1] . ' ' . $settings[2],	// 1:sort 2:direction
-			0,
-			1000
-		);
-
-		$this->set('jsPastQuestionnaires', $this->camelizeKeyRecursive($this->_changeBooleansToNumbers($pastQuestionnaires)));
-		$this->set('createOption', $createOption);
-	}
-
-/**
  * edit method
  *
  * @throws BadRequestException
@@ -358,7 +259,6 @@ class QuestionnairesController extends QuestionnairesAppController {
 				$this->__setupViewParameters($questionnaire);
 				return;
 			}
-
 			// それをDBに書く
 			$saveQuestionnaire = $this->Questionnaire->saveQuestionnaire($questionnaire);
 			if ($saveQuestionnaire == false) {

@@ -39,6 +39,8 @@ msgstr "不正な回答です。"
 #: /Controller/QuestionnaireBlocksController.php:141
 msgid "download error"
 msgstr "ダウンロードエラー"
+msgid "export error"
+msgstr "エクスポートエラー"
 
 #: /Controller/QuestionnaireQuestionsController.php:253
 msgid "page"

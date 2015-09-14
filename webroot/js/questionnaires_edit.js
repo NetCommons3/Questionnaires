@@ -56,6 +56,15 @@ NetCommonsApp.controller('Questionnaires.add',
        *
        * @return {bool}
        */
+      $scope.templateFileSet = function() {
+        var el = jQuery('#templateFile');
+        $scope.templateFile = el[0].value;
+      };
+      /**
+       * Questionnaire be disable to goto next
+       *
+       * @return {bool}
+       */
       $scope.isDisableToGoNext = function() {
         if ($scope.createOption ==
             variables.QUESTIONNAIRE_CREATE_OPT_NEW) {
@@ -73,10 +82,8 @@ NetCommonsApp.controller('Questionnaires.add',
             return true;
           }
         }
-
         return false;
       };
-
     });
 
 NetCommonsApp.controller('Questionnaires.setting',
