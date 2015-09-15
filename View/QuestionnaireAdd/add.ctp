@@ -36,7 +36,7 @@
 					</p>
 				</div>
 
-				<?php /* ƒtƒ@ƒCƒ‹‘—M‚ÍAFormHelper‚Åformì¬A'type' => 'file' •K—vB‹Lq‚·‚é‚Æ enctype="multipart/form-data" ‚ª’Ç‰Á‚³‚ê‚é */ ?>
+				<?php /* ãƒ•ã‚¡ã‚¤ãƒ«é€ä¿¡ã¯ã€FormHelperã§formä½œæˆæ™‚ã€'type' => 'file' å¿…è¦ã€‚è¨˜è¿°ã™ã‚‹ã¨ enctype="multipart/form-data" ãŒè¿½åŠ ã•ã‚Œã‚‹ */ ?>
 				<?php echo $this->Form->create('Questionnaire', array(
 				'type' => 'post',
 				'novalidate' => true,
@@ -87,7 +87,7 @@
 							<?php echo __d('questionnaires', 'Questionnaire template file'); ?>
 							<?php echo $this->element('NetCommons.required'); ?>
 						</label>
-						<?php /* –{“–‚Í‚±‚Ì•Ó‚Í‹¤’Ê•”•i‚É‚È‚é‚Í‚¸ ‚Æ‚è‚ ‚¦‚¸’¼Ú‘‚¢‚Ä‚¨‚­ */ ?>
+						<?php /* æœ¬å½“ã¯ã“ã®è¾ºã¯å…±é€šéƒ¨å“ã«ãªã‚‹ã¯ãš ã¨ã‚Šã‚ãˆãšç›´æ¥æ›¸ã„ã¦ãŠã */ ?>
 						<?php echo $this->Form->file('template_file', array(
 							'accept' => "text/comma-separated-values",
 						)); ?>

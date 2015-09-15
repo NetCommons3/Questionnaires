@@ -21,9 +21,9 @@ class QuestionnairesWysIsWygComponent extends Component {
 /**
  * getFromWysIsWygZIP
  *
- * ‚±‚Ìƒƒ\ƒbƒh‚Í‚¢‚¸‚ê‚ÍWYSISWYGƒGƒfƒBƒ^ƒ_ƒEƒ“ƒ[ƒhƒRƒ“ƒ|[ƒlƒ“ƒg‚ÖˆÚ“®‚µ‚Ü‚·
- * @param string $zipFilePath Zipƒtƒ@ƒCƒ‹‚Ö‚ÌƒpƒX
- * @param string $file Zipƒtƒ@ƒCƒ‹‚Ì’†‚É‚ ‚é“Ç‚ÝŽæ‚é‚×‚«ƒtƒ@ƒCƒ‹–¼
+ * ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã¯ã„ãšã‚Œã¯WYSISWYGã‚¨ãƒ‡ã‚£ã‚¿ãƒ€ã‚¦ãƒ³ãƒ­ãƒ¼ãƒ‰ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã¸ç§»å‹•ã—ã¾ã™
+ * @param string $zipFilePath Zipãƒ•ã‚¡ã‚¤ãƒ«ã¸ã®ãƒ‘ã‚¹
+ * @param string $file Zipãƒ•ã‚¡ã‚¤ãƒ«ã®ä¸­ã«ã‚ã‚‹èª­ã¿å–ã‚‹ã¹ããƒ•ã‚¡ã‚¤ãƒ«å
  * @return string wysiswyg editor data
  */
     public function getFromWysIsWygZIP($zipFilePath, $file) {
@@ -37,7 +37,7 @@ class QuestionnairesWysIsWygComponent extends Component {
         $zip->close();
 
         //
-        // –{“–‚Í‚±‚Ì•Ó‚Å“Y•tƒtƒ@ƒCƒ‹‚ðUPLOADS‚ÉÝ’è‚·‚éˆ—‚ª“ü‚é
+        // æœ¬å½“ã¯ã“ã®è¾ºã§æ·»ä»˜ãƒ•ã‚¡ã‚¤ãƒ«ã‚’UPLOADSã«è¨­å®šã™ã‚‹å‡¦ç†ãŒå…¥ã‚‹
         //
 
         $filePath = pathinfo($zipFilePath, PATHINFO_DIRNAME) . DS . $file;
@@ -53,7 +53,7 @@ class QuestionnairesWysIsWygComponent extends Component {
 /**
  * createWysIsWygZIP
  *
- * ‚±‚Ìƒƒ\ƒbƒh‚Í‚¢‚¸‚ê‚ÍWYSISWYGƒGƒfƒBƒ^ƒ_ƒEƒ“ƒ[ƒhƒRƒ“ƒ|[ƒlƒ“ƒg‚ÖˆÚ“®‚µ‚Ü‚·
+ * ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã¯ã„ãšã‚Œã¯WYSISWYGã‚¨ãƒ‡ã‚£ã‚¿ãƒ€ã‚¦ãƒ³ãƒ­ãƒ¼ãƒ‰ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã¸ç§»å‹•ã—ã¾ã™
  * @param Folder $folder
  * @param string $zipFileName
  * @param string $data wysiswyg editor content
@@ -71,8 +71,8 @@ class QuestionnairesWysIsWygComponent extends Component {
         }
 
         //
-        // –{“–‚Í‚±‚±‚ÉWysISWygƒGƒfƒBƒ^‚Ì’†‚É“Y•t‚³‚ê‚Ä‚¢‚é‰æ‘œƒtƒ@ƒCƒ‹‚È‚Ç‚ð
-        // zip‚É“Ë‚Áž‚Þˆ—‚ª“ü‚é
+        // æœ¬å½“ã¯ã“ã“ã«WysISWygã‚¨ãƒ‡ã‚£ã‚¿ã®ä¸­ã«æ·»ä»˜ã•ã‚Œã¦ã„ã‚‹ç”»åƒãƒ•ã‚¡ã‚¤ãƒ«ãªã©ã‚’
+        // zipã«çªã£è¾¼ã‚€å‡¦ç†ãŒå…¥ã‚‹
         //
 
         $zip->close();

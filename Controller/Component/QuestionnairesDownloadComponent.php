@@ -138,7 +138,7 @@ class QuestionnairesDownloadComponent extends Component {
  * @return string
  */
     public function compressFile($password) {
-        // ˆÃ†‰»ZIP‚É‚·‚é‚Ì‚Íƒm[ƒ}ƒ‹ƒtƒ@ƒCƒ‹‚Ìê‡‚Ì‚Ý‚Æl‚¦‚é
+        // æš—å·åŒ–ZIPã«ã™ã‚‹ã®ã¯ãƒŽãƒ¼ãƒžãƒ«ãƒ•ã‚¡ã‚¤ãƒ«ã®å ´åˆã®ã¿ã¨è€ƒãˆã‚‹
         $filePath = $this->_workingFolder->pwd() . DS . $this->_downloadFileName;
 
         $cmd = '/usr/bin/zip';
@@ -152,10 +152,10 @@ class QuestionnairesDownloadComponent extends Component {
 
         $execCmd = sprintf('%s -j -e -P %s %s %s', $cmd, $password, $outputFilePath, $filePath);
 
-        // ƒRƒ}ƒ“ƒh‚ðŽÀs‚·‚é
+        // ã‚³ãƒžãƒ³ãƒ‰ã‚’å®Ÿè¡Œã™ã‚‹
         exec(escapeshellcmd($execCmd));
 
-        // “ü—Íƒtƒ@ƒCƒ‹‚ðíœ‚·‚é
+        // å…¥åŠ›ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å‰Šé™¤ã™ã‚‹
         @unlink($filePath);
 
         $this->_downloadFileExt = 'zip';

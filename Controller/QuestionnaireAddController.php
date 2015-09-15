@@ -47,7 +47,7 @@ class QuestionnaireAddController extends QuestionnairesAppController
         'NetCommons.NetCommonsBlock', //Use Questionnaire model
         'NetCommons.NetCommonsFrame',
         'NetCommons.NetCommonsRoomRole' => array(
-            //ƒRƒ“ƒeƒ“ƒc‚ÌŒ ŒÀİ’è
+            //ã‚³ãƒ³ãƒ†ãƒ³ãƒ„ã®æ¨©é™è¨­å®š
             'allowedActions' => array(
                 'contentEditable' => array('add')
             ),
@@ -75,39 +75,39 @@ class QuestionnaireAddController extends QuestionnairesAppController
  * @return void
  */
     public function add() {
-        // ì¬’†ƒf[ƒ^
+        // ä½œæˆä¸­ãƒ‡ãƒ¼ã‚¿
         $pastQuestionnaires = array();
         $createOption = QuestionnairesComponent::QUESTIONNAIRE_CREATE_OPT_NEW;
 
-        // POST‚³‚ê‚½ƒf[ƒ^‚ğ“Ç‚İæ‚è
+        // POSTã•ã‚ŒãŸãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿å–ã‚Š
         if ($this->request->isPost()) {
 
             $questionnaire = null;
 
-            // ‘I‘ğ¶¬•û–@İ’è
+            // é¸æŠç”Ÿæˆæ–¹æ³•è¨­å®š
             if (isset($this->data['create_option'])) {
 
                 $createOption = $this->data['create_option'];
 
-                // w’è‚³‚ê‚½ì¬‚ÌƒIƒvƒVƒ‡ƒ“‚É‚æ‚Á‚Äˆ—•ªŠò
+                // æŒ‡å®šã•ã‚ŒãŸä½œæˆã®ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã«ã‚ˆã£ã¦å‡¦ç†åˆ†å²
                 if ($createOption == QuestionnairesComponent::QUESTIONNAIRE_CREATE_OPT_NEW) {
-                    // ‹ó‚ÌV‹Kì¬
+                    // ç©ºã®æ–°è¦ä½œæˆ
                     $questionnaire = $this->_createNew();
                 } elseif ($createOption == QuestionnairesComponent::QUESTIONNAIRE_CREATE_OPT_REUSE) {
-                    // ‰ß‹ƒf[ƒ^‚©‚ç‚Ìì¬
+                    // éå»ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰ã®ä½œæˆ
                     $questionnaire = $this->_createFromReuse();
                 } elseif ($createOption == QuestionnairesComponent::QUESTIONNAIRE_CREATE_OPT_TEMPLATE) {
-                    // ƒeƒ“ƒvƒŒ[ƒgƒtƒ@ƒCƒ‹‚©‚ç‚Ìì¬
+                    // ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ã®ä½œæˆ
                     $questionnaire = $this->_createFromTemplate();
                 }
             }
 
             if ($questionnaire) {
                 $questionnaire['Questionnaire']['block_id'] = $this->viewVars['blockId'];
-                // ì¬’†ƒAƒ“ƒP[ƒgƒf[ƒ^‚ğƒZƒbƒVƒ‡ƒ“ƒLƒƒƒbƒVƒ…‚É‘‚­
+                // ä½œæˆä¸­ã‚¢ãƒ³ã‚±ãƒ¼ãƒˆãƒ‡ãƒ¼ã‚¿ã‚’ã‚»ãƒƒã‚·ãƒ§ãƒ³ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã«æ›¸ã
                 $this->Session->write('Questionnaires.questionnaire', $questionnaire);
 
-                // Ÿ‚Ì‰æ–Ê‚ÖƒŠƒ_ƒCƒŒƒNƒg
+                // æ¬¡ã®ç”»é¢ã¸ãƒªãƒ€ã‚¤ãƒ¬ã‚¯ãƒˆ
                 $this->redirect(array(
                     'controller' => 'questionnaire_questions',
                     'action' => 'edit',
@@ -115,13 +115,13 @@ class QuestionnaireAddController extends QuestionnairesAppController
                 ));
                 return;
             } else {
-                // ì¬•û–@‚Ìw¦‚ª‚È‚¢‚Ì‚ÉPOST‚³‚ê‚Ä‚¢‚é‚È‚Ç‚ÌƒGƒ‰[‚Ìê‡‚ÍA‰æ–Ê‚ÌÄ•\¦‚Æ‚·‚é
+                // ä½œæˆæ–¹æ³•ã®æŒ‡ç¤ºãŒãªã„ã®ã«POSTã•ã‚Œã¦ã„ã‚‹ãªã©ã®ã‚¨ãƒ©ãƒ¼ã®å ´åˆã¯ã€ç”»é¢ã®å†è¡¨ç¤ºã¨ã™ã‚‹
                 $this->validationErrors['Questionnaire']['create_option'] = __d('questionnaires', 'Please choose create option.');
             }
         }
 
-        // ‰ß‹ƒf[ƒ^ æ‚èo‚µ
-        // •\¦•û–@İ’è’læ“¾
+        // éå»ãƒ‡ãƒ¼ã‚¿ å–ã‚Šå‡ºã—
+        // è¡¨ç¤ºæ–¹æ³•è¨­å®šå€¤å–å¾—
         $settings = $this->QuestionnaireFrameSetting->getQuestionnaireFrameSetting($this->viewVars['frameId']);
         $conditions = $this->Questionnaire->getConditionForAnswer(
             $this->viewVars['blockId'],
@@ -149,27 +149,27 @@ class QuestionnaireAddController extends QuestionnairesAppController
  * @return array QuestionnaireData
  */
     protected function _createNew() {
-        // ƒAƒ“ƒP[ƒgƒf[ƒ^‚ğV‹K‚Éì¬‚·‚é
-        // V‹Kì¬‚Ìê‡Aƒ^ƒCƒgƒ‹•¶š‚Ì‚İ‰æ–Ê‚Åİ’è‚³‚êPOST‚³‚ê‚é
-        // Title‚ğ‚à‚Æ‚ÉAƒAƒ“ƒP[ƒgƒf[ƒ^Šî–{\¬‚ğì¬‚µ•Ô‚·
+        // ã‚¢ãƒ³ã‚±ãƒ¼ãƒˆãƒ‡ãƒ¼ã‚¿ã‚’æ–°è¦ã«ä½œæˆã™ã‚‹
+        // æ–°è¦ä½œæˆã®å ´åˆã€ã‚¿ã‚¤ãƒˆãƒ«æ–‡å­—ã®ã¿ç”»é¢ã§è¨­å®šã•ã‚ŒPOSTã•ã‚Œã‚‹
+        // Titleã‚’ã‚‚ã¨ã«ã€ã‚¢ãƒ³ã‚±ãƒ¼ãƒˆãƒ‡ãƒ¼ã‚¿åŸºæœ¬æ§‹æˆã‚’ä½œæˆã—è¿”ã™
         $questionnaire = null;
 
-        // POSTƒf[ƒ^‚ğƒZƒbƒg
+        // POSTãƒ‡ãƒ¼ã‚¿ã‚’ã‚»ãƒƒãƒˆ
         $this->Questionnaire->set($this->request->data);
 
-        // V‹Kì¬‚ÌvalidationÀs
+        // æ–°è¦ä½œæˆæ™‚ã®validationå®Ÿè¡Œ
         if ($this->Questionnaire->validates(array(
             'fieldList' => array('title')))) {
-            // ƒfƒtƒHƒ‹ƒgƒf[ƒ^‚ğ‚à‚Æ‚ÉV‹Kì¬
+            // ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆãƒ‡ãƒ¼ã‚¿ã‚’ã‚‚ã¨ã«æ–°è¦ä½œæˆ
             $questionnaire = $this->Questionnaire->getDefaultQuestionnaire(array(
                 'title' => $this->data['Questionnaire']['title']));
         } else {
             $this->validationErrors = $this->Questionnaire->validationErrors;
         }
-        // ‚±‚Ìê‡ATitle•¶š‚É•s”õ‚ª‚ ‚Á‚½‚çvalidate‚Å©“®“I‚ÉƒGƒ‰[ƒƒbƒZ[ƒW‚ª“ü‚Á‚Ä‚¢‚é‚©‚ç
-        // else‚ğ—pˆÓ‚·‚é•K—v‚ª‚È‚¢
+        // ã“ã®å ´åˆã€Titleæ–‡å­—ã«ä¸å‚™ãŒã‚ã£ãŸã‚‰validateã§è‡ªå‹•çš„ã«ã‚¨ãƒ©ãƒ¼ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãŒå…¥ã£ã¦ã„ã‚‹ã‹ã‚‰
+        // elseã‚’ç”¨æ„ã™ã‚‹å¿…è¦ãŒãªã„
 
-        // ƒAƒ“ƒP[ƒgƒf[ƒ^‚ğ•Ô‚·
+        // ã‚¢ãƒ³ã‚±ãƒ¼ãƒˆãƒ‡ãƒ¼ã‚¿ã‚’è¿”ã™
         return $questionnaire;
    }
 /**
@@ -178,64 +178,64 @@ class QuestionnaireAddController extends QuestionnairesAppController
  * @return array QuestionnaireData
  */
     protected function _createFromTemplate() {
-        // ƒAƒ“ƒP[ƒgƒf[ƒ^‚ğUPLOAD‚³‚ê‚½ƒAƒ“ƒP[ƒgƒeƒ“ƒvƒŒ[ƒgƒtƒ@ƒCƒ‹‚Ìƒf[ƒ^‚ğ‚à‚Æ‚É‚µ‚Äì¬‚·‚é
-        // ƒeƒ“ƒvƒŒ[ƒg‚©‚ç‚Ìì¬‚Ìê‡Aƒeƒ“ƒvƒŒ[ƒgƒtƒ@ƒCƒ‹‚ªUPLOAD‚³‚ê‚Ä‚­‚é
-        // ƒAƒbƒv‚³‚ê‚½ƒtƒ@ƒCƒ‹‚ğ‚à‚Æ‚ÉAƒAƒ“ƒP[ƒgƒf[ƒ^‚ğ‰ğ“€Aæ“¾‚µA
-        // ‚»‚Ìƒf[ƒ^‚©‚ç¡‰ñì¬‚·‚éƒAƒ“ƒP[ƒgƒf[ƒ^Šî–{\¬‚ğì¬‚µ•Ô‚·
+        // ã‚¢ãƒ³ã‚±ãƒ¼ãƒˆãƒ‡ãƒ¼ã‚¿ã‚’UPLOADã•ã‚ŒãŸã‚¢ãƒ³ã‚±ãƒ¼ãƒˆãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‡ãƒ¼ã‚¿ã‚’ã‚‚ã¨ã«ã—ã¦ä½œæˆã™ã‚‹
+        // ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã‹ã‚‰ã®ä½œæˆã®å ´åˆã€ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ãŒUPLOADã•ã‚Œã¦ãã‚‹
+        // ã‚¢ãƒƒãƒ—ã•ã‚ŒãŸãƒ•ã‚¡ã‚¤ãƒ«ã‚’ã‚‚ã¨ã«ã€ã‚¢ãƒ³ã‚±ãƒ¼ãƒˆãƒ‡ãƒ¼ã‚¿ã‚’è§£å‡ã€å–å¾—ã—ã€
+        // ãã®ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰ä»Šå›ä½œæˆã™ã‚‹ã‚¢ãƒ³ã‚±ãƒ¼ãƒˆãƒ‡ãƒ¼ã‚¿åŸºæœ¬æ§‹æˆã‚’ä½œæˆã—è¿”ã™
 
-        // ƒAƒbƒvƒ[ƒhƒtƒ@ƒCƒ‹‚ğó‚¯æ‚èA
+        // ã‚¢ãƒƒãƒ—ãƒ­ãƒ¼ãƒ‰ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å—ã‘å–ã‚Šã€
         $file = $this->FileUpload->upload('Questionnaire', 'template_file');
 
-        // ƒeƒ“ƒ|ƒ‰ƒŠƒtƒHƒ‹ƒ_ì¬‚ÆƒJƒŒƒ“ƒgƒfƒBƒŒƒNƒgƒŠ•ÏX
+        // ãƒ†ãƒ³ãƒãƒ©ãƒªãƒ•ã‚©ãƒ«ãƒ€ä½œæˆã¨ã‚«ãƒ¬ãƒ³ãƒˆãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå¤‰æ›´
         $folder = $this->QuestionnairesDownload->createTemporaryFolder($this, 'template');
 
-        // ƒtƒ@ƒCƒ‹‚ğˆÚ“®
+        // ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ç§»å‹•
         $importFilePath = $folder->pwd() . DS . QuestionnairesComponent::QUESTIONNAIRE_TEMPLATE_EXPORT_FILENAME;
         move_uploaded_file($file['tmp_name'], $importFilePath);
 
-        // ‰ğ“€
+        // è§£å‡
         if ($this->__extractZip($importFilePath, $folder->pwd()) === false) {
             $this->validationErrors['Questionnaire']['template_file'] = __d('questionnaires', 'illegal import file.');
             return null;
         }
 
-        // ƒtƒBƒ“ƒK[ƒvƒŠƒ“ƒgŠm”F
+        // ãƒ•ã‚£ãƒ³ã‚¬ãƒ¼ãƒ—ãƒªãƒ³ãƒˆç¢ºèª
         $fingerPrint = $this->__checkFingerPrint($folder->pwd());
         if ($fingerPrint === false) {
             $this->validationErrors['Questionnaire']['template_file'] = __d('questionnaires', 'illegal import file.');
             return null;
         }
 
-        // ƒtƒ@ƒCƒ‹“à—e‚ğƒeƒ“ƒ|ƒ‰ƒŠƒtƒHƒ‹ƒ_‚É“WŠJ‚·‚éB
+        // ãƒ•ã‚¡ã‚¤ãƒ«å†…å®¹ã‚’ãƒ†ãƒ³ãƒãƒ©ãƒªãƒ•ã‚©ãƒ«ãƒ€ã«å±•é–‹ã™ã‚‹ã€‚
         $questionnaireZipFile = $folder->pwd() . DS . QuestionnairesComponent::QUESTIONNAIRE_TEMPLATE_FILENAME;
         if ($this->__extractZip($questionnaireZipFile, $folder->pwd()) === false) {
             $this->validationErrors['Questionnaire']['template_file'] = __d('questionnaires', 'illegal import file.');
             return null;
         }
 
-        // jsonƒtƒ@ƒCƒ‹‚ğ“Ç‚İæ‚èAPHPƒIƒuƒWƒFƒNƒg‚É•ÏŠ·
+        // jsonãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿å–ã‚Šã€PHPã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«å¤‰æ›
         $jsonFilePath = $folder->pwd() . DS . QuestionnairesComponent::QUESTIONNAIRE_JSON_FILENAME;
         $jsonFileFp = fopen($jsonFilePath, 'rb');
         $jsonData = fread($jsonFileFp, filesize($jsonFilePath));
         $jsonQuestionnaire = json_decode($jsonData, true);
 
-        // ‰‚ß‚Éƒtƒ@ƒCƒ‹‚É‹LÚ‚³‚ê‚Ä‚¢‚éƒAƒ“ƒP[ƒgƒvƒ‰ƒOƒCƒ“‚Ìƒo[ƒWƒ‡ƒ“‚Æ
-        // Œ»ƒTƒCƒg‚ÌƒAƒ“ƒP[ƒgƒvƒ‰ƒOƒCƒ“‚Ìƒo[ƒWƒ‡ƒ“‚ğ“Ë‡‚µA·•ª‚ª‚ ‚éê‡‚ÍƒCƒ“ƒ|[ƒgˆ—‚ğ’†’f‚·‚éB
+        // åˆã‚ã«ãƒ•ã‚¡ã‚¤ãƒ«ã«è¨˜è¼‰ã•ã‚Œã¦ã„ã‚‹ã‚¢ãƒ³ã‚±ãƒ¼ãƒˆãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ãƒãƒ¼ã‚¸ãƒ§ãƒ³ã¨
+        // ç¾ã‚µã‚¤ãƒˆã®ã‚¢ãƒ³ã‚±ãƒ¼ãƒˆãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ãƒãƒ¼ã‚¸ãƒ§ãƒ³ã‚’çªåˆã—ã€å·®åˆ†ãŒã‚ã‚‹å ´åˆã¯ã‚¤ãƒ³ãƒãƒ¼ãƒˆå‡¦ç†ã‚’ä¸­æ–­ã™ã‚‹ã€‚
         if ($this->__checkVersion($jsonQuestionnaire) === false) {
             $this->validationErrors['Questionnaire']['template_file'] = __d('questionnaires', 'version is different.');
             return null;
         }
 
-        // ƒo[ƒWƒ‡ƒ“‚ªˆê’v‚µ‚½ê‡AƒAƒ“ƒP[ƒgƒf[ƒ^‚ğƒƒ‚ƒŠã‚É\’z
+        // ãƒãƒ¼ã‚¸ãƒ§ãƒ³ãŒä¸€è‡´ã—ãŸå ´åˆã€ã‚¢ãƒ³ã‚±ãƒ¼ãƒˆãƒ‡ãƒ¼ã‚¿ã‚’ãƒ¡ãƒ¢ãƒªä¸Šã«æ§‹ç¯‰
         $questionnaires = $this->_getQuestionnaires(
             $folder->pwd(),
             $jsonQuestionnaire['Questionnaires'],
             $fingerPrint);
 
-        // ƒCƒ“ƒ|[ƒgƒf[ƒ^uƒIƒŠƒWƒiƒ‹ƒf[ƒ^v‚ğƒZƒbƒVƒ‡ƒ“‚É‘‚«‚±‚ñ‚Å‚¨‚­
+        // ã‚¤ãƒ³ãƒãƒ¼ãƒˆãƒ‡ãƒ¼ã‚¿ã€Œã‚ªãƒªã‚¸ãƒŠãƒ«ãƒ‡ãƒ¼ã‚¿ã€ã‚’ã‚»ãƒƒã‚·ãƒ§ãƒ³ã«æ›¸ãã“ã‚“ã§ãŠã
         $this->Session->write('Questionnaires.importQuestionnaire', $questionnaires);
 
-        return $questionnaires[0];  // ‘ã•\ƒf[ƒ^‚ğ•Ô‚·
+        return $questionnaires[0];  // ä»£è¡¨ãƒ‡ãƒ¼ã‚¿ã‚’è¿”ã™
    }
 /**
  * _createFromReuse
@@ -243,18 +243,18 @@ class QuestionnaireAddController extends QuestionnairesAppController
  * @return array QuestionnaireData
  */
     protected function _createFromReuse() {
-        // ƒAƒ“ƒP[ƒgƒf[ƒ^‚ğ‰ß‹‚ÌƒAƒ“ƒP[ƒgƒf[ƒ^‚ğ‚à‚Æ‚É‚µ‚Äì¬‚·‚é
-        // ‰ß‹‚©‚ç‚Ìì¬‚Ìê‡AQl‚É‚·‚é‰ß‹‚ÌƒAƒ“ƒP[ƒg‚Ìid‚Ì‚İPOST‚³‚ê‚Ä‚­‚é
-        // (orgin_id‚Å‚Í‚È‚­id‚Å‚ ‚é“_‚É’ˆÓI)
-        // id‚ğ‚à‚Æ‚ÉA‰ß‹‚ÌƒAƒ“ƒP[ƒgƒf[ƒ^‚ğæ“¾‚µA
-        // ‚»‚Ìƒf[ƒ^‚©‚ç¡‰ñì¬‚·‚éƒAƒ“ƒP[ƒgƒf[ƒ^Šî–{\¬‚ğì¬‚µ•Ô‚·
+        // ã‚¢ãƒ³ã‚±ãƒ¼ãƒˆãƒ‡ãƒ¼ã‚¿ã‚’éå»ã®ã‚¢ãƒ³ã‚±ãƒ¼ãƒˆãƒ‡ãƒ¼ã‚¿ã‚’ã‚‚ã¨ã«ã—ã¦ä½œæˆã™ã‚‹
+        // éå»ã‹ã‚‰ã®ä½œæˆã®å ´åˆã€å‚è€ƒã«ã™ã‚‹éå»ã®ã‚¢ãƒ³ã‚±ãƒ¼ãƒˆã®idã®ã¿POSTã•ã‚Œã¦ãã‚‹
+        // (orgin_idã§ã¯ãªãidã§ã‚ã‚‹ç‚¹ã«æ³¨æ„ï¼)
+        // idã‚’ã‚‚ã¨ã«ã€éå»ã®ã‚¢ãƒ³ã‚±ãƒ¼ãƒˆãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—ã—ã€
+        // ãã®ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰ä»Šå›ä½œæˆã™ã‚‹ã‚¢ãƒ³ã‚±ãƒ¼ãƒˆãƒ‡ãƒ¼ã‚¿åŸºæœ¬æ§‹æˆã‚’ä½œæˆã—è¿”ã™
         $questionnaire = null;
 
         if (isset($this->data['past_questionnaire_id'])) {
-            // ‰ß‹‚ÌƒAƒ“ƒP[ƒg‚ÌƒRƒs[EƒNƒ[ƒ“‚Åì¬
+            // éå»ã®ã‚¢ãƒ³ã‚±ãƒ¼ãƒˆã®ã‚³ãƒ”ãƒ¼ãƒ»ã‚¯ãƒ­ãƒ¼ãƒ³ã§ä½œæˆ
             $questionnaire = $this->Questionnaire->getQuestionnaireCloneById($this->data['past_questionnaire_id']);
         } else {
-            // Model‚É‚Í‚È‚¢‘®«‚ÌƒGƒ‰[‚ğ“ü‚ê‚é
+            // Modelã«ã¯ãªã„å±æ€§ã®ã‚¨ãƒ©ãƒ¼ã‚’å…¥ã‚Œã‚‹
             $this->validationErrors['Questionnaire']['past_questionnaire_id'] = __d('questionnaires', 'Please select past questionnaire.');
         }
         return $questionnaire;
@@ -270,10 +270,10 @@ class QuestionnaireAddController extends QuestionnairesAppController
     protected function _getQuestionnaires($folderPath, $questionnaires, $importKey) {
 
         foreach ($questionnaires as &$q) {
-            // id, key‚ÍƒNƒŠƒA‚·‚é
+            // id, keyã¯ã‚¯ãƒªã‚¢ã™ã‚‹
             $this->Questionnaire->clearQuestionnaireId($q);
 
-            // WysIsWyg‚Ìƒf[ƒ^‚ğ“ü‚ê‚È‚¨‚·
+            // WysIsWygã®ãƒ‡ãƒ¼ã‚¿ã‚’å…¥ã‚ŒãªãŠã™
             $flatQuestionnaire = Hash::flatten($q);
             foreach ($flatQuestionnaire as $key => &$value) {
                 $model = null;
@@ -290,8 +290,8 @@ class QuestionnaireAddController extends QuestionnairesAppController
                 $columnName = substr($key, strrpos($key, '.') + 1);
                 if ($model->hasField($columnName)) {
                     if ($model->getColumnType($columnName) == 'text') {
-                        // key‚Æ“¯‚¶–¼‘O‚ÌƒtƒHƒ‹ƒ_‚Ì‰º‚É‚ ‚ékey‚Ì–¼‘O‚ÌZIPƒtƒ@ƒCƒ‹‚ğ“n‚µ‚Ä
-                        // ‚»‚Ì•Ô‚Á‚Ä‚«‚½’l‚ğ‚±‚ÌƒJƒ‰ƒ€‚Éİ’è
+                        // keyã¨åŒã˜åå‰ã®ãƒ•ã‚©ãƒ«ãƒ€ã®ä¸‹ã«ã‚ã‚‹keyã®åå‰ã®ZIPãƒ•ã‚¡ã‚¤ãƒ«ã‚’æ¸¡ã—ã¦
+                        // ãã®è¿”ã£ã¦ããŸå€¤ã‚’ã“ã®ã‚«ãƒ©ãƒ ã«è¨­å®š
                         $value = $this->QuestionnairesWysIsWyg->getFromWysIsWygZIP($folderPath . DS . $key . DS . $key . '.zip', $key);
                     }
                 }
@@ -326,15 +326,15 @@ class QuestionnaireAddController extends QuestionnairesAppController
  * @return string finger print string
  */
     private function __checkFingerPrint($folderPath) {
-        // ƒtƒBƒ“ƒK[ƒvƒŠƒ“ƒgƒtƒ@ƒCƒ‹‚ğæ“¾
+        // ãƒ•ã‚£ãƒ³ã‚¬ãƒ¼ãƒ—ãƒªãƒ³ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã‚’å–å¾—
         $fingerPrintFp = fopen($folderPath . DS . QuestionnairesComponent::QUESTIONNAIRE_FINGER_PRINT_FILENAME, 'rb');
         if ($fingerPrintFp === false) {
             return false;
         }
         $fingerPrint = fread($fingerPrintFp, 1024);
 
-        // ƒtƒ@ƒCƒ‹“à—e‚©‚çZo‚³‚ê‚éƒnƒbƒVƒ…’l‚Æw’è‚³‚ê‚½ƒtƒbƒgƒvƒŠƒ“ƒg’l‚ğ”äŠr‚µ
-        // “¯ˆê‚Å‚ ‚ê‚Î³“–«‚ª•ÛØ‚³‚ê‚½‚Æ”»’f‚·‚éiƒtƒH[ƒ}ƒbƒgƒ`ƒFƒbƒN‚È‚Ç‚Ís‚í‚È‚¢j
+        // ãƒ•ã‚¡ã‚¤ãƒ«å†…å®¹ã‹ã‚‰ç®—å‡ºã•ã‚Œã‚‹ãƒãƒƒã‚·ãƒ¥å€¤ã¨æŒ‡å®šã•ã‚ŒãŸãƒ•ãƒƒãƒˆãƒ—ãƒªãƒ³ãƒˆå€¤ã‚’æ¯”è¼ƒã—
+        // åŒä¸€ã§ã‚ã‚Œã°æ­£å½“æ€§ãŒä¿è¨¼ã•ã‚ŒãŸã¨åˆ¤æ–­ã™ã‚‹ï¼ˆãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆãƒã‚§ãƒƒã‚¯ãªã©ã¯è¡Œã‚ãªã„ï¼‰
         $questionnaireZipFile = $folderPath . DS . QuestionnairesComponent::QUESTIONNAIRE_TEMPLATE_FILENAME;
         if (sha1_file($questionnaireZipFile, false) != $fingerPrint) {
             return false;
