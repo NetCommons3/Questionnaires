@@ -34,8 +34,6 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
  * @var array
  */
 	public $uses = array(
-		'Blocks.Block',
-		'Frames.Frame',
 		'Questionnaires.Questionnaire',
 		'Questionnaires.QuestionnaireFrameSetting',
 		'Questionnaires.QuestionnairePage',
@@ -43,9 +41,6 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
 		'Questionnaires.QuestionnaireChoice',
 		'Questionnaires.QuestionnaireAnswerSummary',
 		'Questionnaires.QuestionnaireAnswerSummaryCsv',
-		'Comments.Comment',
-		'Categories.Category',
-		'PluginManager.Plugin',
 	);
 
 /**
@@ -54,17 +49,25 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
  * @var array
  */
 	public $components = array(
-		'NetCommons.NetCommonsBlock',
-		'NetCommons.NetCommonsFrame',
-		'NetCommons.NetCommonsRoomRole' => array(
-			//コンテンツの権限設定
-			'allowedActions' => array(
-				'blockEditable' => array('index', 'download', 'export')
+		'Blocks.BlockTabs' => array(
+			'mainTabs' => array('block_index'),
+			'blockTabs' => array('block_settings', 'role_permissions'),
+		),
+		'NetCommons.Permission' => array(
+			//アクセスの権限
+			'allow' => array(
+				'index,add,edit,delete' => 'block_editable',
 			),
 		),
 		'Questionnaires.QuestionnairesDownload',
 		'Questionnaires.QuestionnairesWysIsWyg',
 		'Paginator',
+		'AuthorizationKeys.AuthorizationKey' => array(
+			'operationType' => 'popup',
+			'targetAction' => 'download',
+			'model' => 'Questionnaire',
+			'contentId' => 0,
+			),
 	);
 
 /**
@@ -74,7 +77,9 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
  */
 	public $helpers = array(
 		'Session',
+		'NetCommons.NetCommonsForm',
 		'NetCommons.Date',
+		'AuthorizationKeys.AuthorizationKey',
 	);
 
 /**
@@ -86,11 +91,17 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
 		parent::beforeFilter();
 		$this->Auth->deny('index');
 
-		$results = $this->camelizeKeyRecursive($this->NetCommonsFrame->data);
-		$this->set($results);
-
-		//タブの設定
-		$this->initTabs('block_index');
+		// DEBUG For AuthorizationKeys あとで消してね
+		if ($this->action == 'download') {
+			if (isset($this->params['pass'][QuestionnairesComponent::QUESTIONNAIRE_KEY_PASS_INDEX])) {
+				$questionnaireKey = $this->params['pass'][QuestionnairesComponent::QUESTIONNAIRE_KEY_PASS_INDEX];
+			}
+			$questionnaire = $this->_getQuestionnaireForAnswerCsv($questionnaireKey);
+			$this->log($questionnaire, 'debug');
+			$this->AuthorizationKey->contentId = $questionnaire['Questionnaire']['id'];	//FUJI
+		}
+		if ($this->request->isPost()) {
+		}
 	}
 
 /**
@@ -101,40 +112,25 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
  */
 	public function index() {
 		// 条件設定値取得
-		$conditions = $this->Questionnaire->getConditionForAnswer(
-			$this->viewVars['blockId'],
-			$this->Auth->user('id'),
-			$this->viewVars,
-			$this->getNowTime()
-		);
+		// 条件設定値取得
+		$conditions = $this->Questionnaire->getCondition();
+
 		// データ取得
 		// Modelの方ではカスタムfindメソッドを装備している
 		// ここではtype属性を指定することでカスタムFindを呼び出すように指示している
-		try {
-			$subQuery = $this->Questionnaire->getQuestionnairesCommonForAnswer($this->Session->id(), $this->Auth->user('id'));
-			$this->paginate = array(
-				'conditions' => $conditions,
-				'page' => 1,
-				'sort' => QuestionnairesComponent::DISPLAY_SORT_TYPE_NEW_ARRIVALS,
-				'limit' => QuestionnairesComponent::QUESTIONNAIRE_DEFAULT_DISPLAY_NUM_PER_PAGE,
-				'direction' => 'desc',
-				'recursive' => 0,
-				'joins' => $subQuery,
-				'fields' => array(
-					'Block.*',
-					'Questionnaire.*',
-					'TrackableCreator.*',
-					'TrackableUpdater.*',
-					'CountAnswerSummary.*'
-				),
-				'sessionId' => $this->Session->id(),
-				'userId' => $this->Auth->user('id')
-			);
-			$questionnaire = $this->paginate('Questionnaire');
-		} catch (NotFoundException $e) {
-			// NotFoundの例外
-			// アンケートデータが存在しないこととする
-			$questionnaire = array();
+		$subQuery = $this->Questionnaire->getQuestionnaireSubQuery();
+		$this->paginate = array(
+			'conditions' => $conditions,
+			'page' => 1,
+			'sort' => QuestionnairesComponent::DISPLAY_SORT_TYPE_NEW_ARRIVALS,
+			'limit' => QuestionnairesComponent::QUESTIONNAIRE_DEFAULT_DISPLAY_NUM_PER_PAGE,
+			'direction' => 'desc',
+			'recursive' => 0,
+			'joins' => $subQuery,
+		);
+		$questionnaire = $this->paginate('Questionnaire');
+		if (! $questionnaire) {
+			// FUJI
 		}
 		$this->set('questionnaires', $questionnaire);
 	}
@@ -142,16 +138,15 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
 /**
  * download
  *
- * @param int $frameId frame id
- * @param int $questionnaireId questionnaire origin id
+ * @param int $questionnaireKey questionnaire Key
  * @return void
  */
-	public function download($frameId, $questionnaireId) {
+	public function download($questionnaireKey) {
 		// viewを使用しない
 		$this->autoRender = false;
 
 		try {
-			$questionnaire = $this->_getQuestionnaireForAnswerCsv($questionnaireId);
+			$questionnaire = $this->_getQuestionnaireForAnswerCsv($questionnaireKey);
 
 			// テンポラリフォルダ作成とカレントディレクトリ変更
 			$folder = $this->QuestionnairesDownload->createTemporaryFolder($this);
@@ -168,8 +163,8 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
 				foreach ($datas as $data) {
 					fputcsv($fp, $data);
 				}
-				$dataCount = count($datas);    // データ数カウント
-				$offset += $dataCount;        // 次の取得開始位置をずらす
+				$dataCount = count($datas);	// データ数カウント
+				$offset += $dataCount;		// 次の取得開始位置をずらす
 			} while ($dataCount == QuestionnairesComponent::QUESTIONNAIRE_CSV_UNIT_NUMBER);
 			// データ取得数が制限値分だけとれている間は繰り返す
 
@@ -180,13 +175,14 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
 			$filePath = $this->QuestionnairesDownload->compressFile($this->Auth->user('username'));
 		} catch (Exception $e) {
 			$this->Session->setFlash(__d('questionnaires', 'download error'));
-			$this->redirect('/questionnaires/questionnaire_blocks/index/' . $this->viewVars['frameId']);
+			$this->redirect('/questionnaires/questionnaire_blocks/index/?frame_id=' . Current::read('Frame.id'));
 			return false;
 		}
 		// ダウンロードファイル名
 		$downloadFileName = $questionnaire['Questionnaire']['title'] . '.' . $this->QuestionnairesDownload->getDownloadFileExtension();
 		// 出力
 		$this->response->file($filePath, array('download' => true, 'name' => rawurlencode($downloadFileName)));
+
 		return $this->response;
 	}
 
@@ -199,8 +195,7 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
  * @param int $questionnaireId questionnaire origin id
  * @return void
  */
-	public function export($frameId, $questionnaireId)
-	{
+	public function export($frameId, $questionnaireId) {
 		// viewを使用しない
 		$this->autoRender = false;
 
@@ -230,7 +225,7 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
 			$zip->close();
 
 			// アンケートデータファイルを削除（アーカイブを閉じてからでないと削除はエラーになる）
-			@unlink($questionnaireZipFile);
+			unlink($questionnaireZipFile);
 
 			// ダウンロード用ファイル名取得
 			$questionnaire = $this->_getQuestionnaireForExport($questionnaireId);
@@ -312,6 +307,7 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
  * _getQuestionnaireForExport
  *
  * @param int $questionnaireId questionnaire origin_id
+ * @throws NotFoundException
  * @return array questionnaire data
  */
 	protected function _getQuestionnaireForExport($questionnaireId) {
@@ -332,14 +328,15 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
 /**
  * _getQuestionnaireForAnswerCsv
  *
- * @param int $questionnaireId questionnaire origin_id
+ * @param int $questionnaireId questionnaire key
+ * @throws NotFoundException
  * @return array questionnaire data
  */
 	protected function _getQuestionnaireForAnswerCsv($questionnaireId) {
 		// 指定のアンケートデータを取得
 		$questionnaire = $this->Questionnaire->find('first', array(
 			'conditions' => array(
-				'Questionnaire.origin_id' => $questionnaireId,
+				'Questionnaire.key' => $questionnaireId,
 				'Questionnaire.is_active' => true,
 			),
 			'recursive' => -1
@@ -352,12 +349,12 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
 /**
  * _createWysIsWygZIP
  *
- * @param Folder $folder
- * @param ZipArchive $zip
- * @param array $questionnaire questionnaire data
+ * @param Folder $folder フォルダオブジェクト
+ * @param ZipArchive $zip zipファイルオブジェクト
+ * @param array &$questionnaire questionnaire data
  * @return void
  */
-	protected function  _createWysIsWygZIP($folder, $zip, &$questionnaire) {
+	protected function _createWysIsWygZIP($folder, $zip, &$questionnaire) {
 		// アンケートデータの中でもWYSISWYGデータのものについては
 		// フォルダ別に確保(フォルダの中にZIPがある）
 		$flatQuestionnaire = Hash::flatten($questionnaire);
@@ -365,9 +362,9 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
 			$model = null;
 			if (strpos($key, 'QuestionnaireQuestion.') !== false) {
 				$model = $this->QuestionnaireQuestion;
-			} else if (strpos($key, 'QuestionnairePage.') !== false) {
+			} elseif (strpos($key, 'QuestionnairePage.') !== false) {
 				$model = $this->QuestionnairePage;
-			} else if (strpos($key, 'Questionnaire.') !== false) {
+			} elseif (strpos($key, 'Questionnaire.') !== false) {
 				$model = $this->Questionnaire;
 			}
 			if (!$model) {

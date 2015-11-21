@@ -9,38 +9,31 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 ?>
-<?php if ($contentEditable): ?>
+<?php if ($this->Workflow->canEdit('Questionnaire', $questionnaire)) : ?>
 
 	<?php
 		$answerHeaderClass = '';
-		if ($isDuringTest) {
+		if ($questionnaire['Questionnaire']['status'] != WorkflowComponent::STATUS_PUBLISHED) {
 			$answerHeaderClass = 'alert alert-info';
 		}
 	?>
 
 	<div class="<?php echo $answerHeaderClass; ?>">
 		<div class="pull-right">
-			<?php echo $this->Html->link(
-			'<span class="glyphicon glyphicon-edit" ></span>',
-			array(
-				'controller' => 'questionnaire_questions',
-				'action' => 'edit',
-				$frameId,
-				'?' => array('questionnaire_id' => $questionnaire['Questionnaire']['id'])),
-			array(
-				'class' => 'btn btn-primary',
-				'escape' => false,
-			)
-			);
-			?>
+			<?php echo $this->Button->editLink('', array(
+			'plugin' => 'questionnaires',
+			'controller' => 'questionnaire_edit',
+			'action' => 'edit_question',
+			'key' => $questionnaire['Questionnaire']['key'])); ?>
 		</div>
-		<?php if ($isDuringTest): ?>
-		<h3><?php echo __d('questionnaires', 'Test Mode'); ?></h3>
-		<div class="clearfix"></div>
-		<p class="enp-tcome">
-			<?php echo __d('questionnaires',
-				'This questionnaire is being temporarily stored . You can questionnaire test before performed in this page . If you want to modify or change the questionnaire , you will be able to edit by pressing the [ Edit question ] button in the upper-right corner .'); ?>
-		</p>
+
+		<?php if ($questionnaire['Questionnaire']['status'] != WorkflowComponent::STATUS_PUBLISHED): ?>
+			<h3><?php echo __d('questionnaires', 'Test Mode'); ?></h3>
+			<div class="clearfix"></div>
+			<p>
+				<?php echo __d('questionnaires',
+					'This questionnaire is being temporarily stored . You can questionnaire test before performed in this page . If you want to modify or change the questionnaire , you will be able to edit by pressing the [ Edit question ] button in the upper-right corner .'); ?>
+			</p>
 		<?php endif; ?>
 	</div>
 

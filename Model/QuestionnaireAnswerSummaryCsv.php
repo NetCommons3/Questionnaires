@@ -52,8 +52,8 @@ class QuestionnaireAnswerSummaryCsv extends QuestionnairesAppModel {
  */
 	public $belongsTo = array(
 		'Questionnaire' => array(
-			'className' => 'Questionnaire',
-			'foreignKey' => 'questionnaire_origin_id',
+			'className' => 'Questionnaires.Questionnaire',
+			'foreignKey' => 'questionnaire_key',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
@@ -67,7 +67,7 @@ class QuestionnaireAnswerSummaryCsv extends QuestionnairesAppModel {
  */
 	public $hasMany = array(
 		'QuestionnaireAnswer' => array(
-			'className' => 'QuestionnaireAnswer',
+			'className' => 'Questionnaires.QuestionnaireAnswer',
 			'foreignKey' => 'questionnaire_answer_summary_id',
 			'dependent' => false,
 			'conditions' => '',
@@ -86,7 +86,7 @@ class QuestionnaireAnswerSummaryCsv extends QuestionnairesAppModel {
  *
  * @var string
  */
-	protected $toCode = 'SJIS';
+	protected $_toCode = 'SJIS';
 
 /**
  * getAnswerSummaryCsv 
@@ -107,15 +107,15 @@ class QuestionnaireAnswerSummaryCsv extends QuestionnairesAppModel {
 
 		// $questionnaireにはページデータ、質問データが入っていることを前提とする
 
-		// アンケートのorigin_idを取得
-		$originId = $questionnaire['Questionnaire']['origin_id'];
+		// アンケートのkeyを取得
+		$originId = $questionnaire['Questionnaire']['key'];
 
-		// origin_idに一致するsummaryを取得（テストじゃない、完了している）
+		// keyに一致するsummaryを取得（テストじゃない、完了している）
 		$summaries = $this->find('all', array(
 			'conditions' => array(
 				'answer_status' => QuestionnairesComponent::ACTION_ACT,
 				'test_status' => QuestionnairesComponent::TEST_ANSWER_STATUS_PEFORM,
-				'questionnaire_origin_id' => $originId,
+				'questionnaire_key' => $originId,
 			),
 			'limit' => $limit,
 			'offset' => $offset,
@@ -214,7 +214,7 @@ class QuestionnaireAnswerSummaryCsv extends QuestionnairesAppModel {
 	private function __getAns($question, $answers) {
 		$retAns = '';
 		// 回答配列データの中から、現在指定された質問に該当するものを取り出す
-		$ans = Hash::extract($answers, '{n}[questionnaire_question_origin_id=' . $question['origin_id'] . ']');
+		$ans = Hash::extract($answers, '{n}[questionnaire_question_key=' . $question['key'] . ']');
 		// 回答が存在するとき処理
 		if ($ans) {
 			$ans = $ans[0];
@@ -229,7 +229,7 @@ class QuestionnaireAnswerSummaryCsv extends QuestionnairesAppModel {
 				// 選択されていた数分処理
 				foreach ($dividedAnsArray as $dividedAns) {
 					// idから判断して、その他が選ばれていた場合、other_answer_valueを入れる
-					$choice = Hash::extract($question['QuestionnaireChoice'], '{n}[origin_id=' . $dividedAns[0] . ']');
+					$choice = Hash::extract($question['QuestionnaireChoice'], '{n}[key=' . $dividedAns[0] . ']');
 					if ($choice) {
 						if ($choice[0]['other_choice_type'] != QuestionnairesComponent::OTHER_CHOICE_TYPE_NO_OTHER_FILED) {
 							$retAns .= $ans['other_answer_value'];
@@ -257,12 +257,12 @@ class QuestionnaireAnswerSummaryCsv extends QuestionnairesAppModel {
 		$retAns = '';
 		// 回答配列データの中から、現在指定された質問に該当するものを取り出す
 		// マトリクスタイプのときは複数存在する（行数分）
-		$anss = Hash::extract($answers, '{n}[questionnaire_question_origin_id=' . $question['origin_id'] . ']');
+		$anss = Hash::extract($answers, '{n}[questionnaire_question_key=' . $question['key'] . ']');
 		if (empty($anss)) {
 			return $retAns;
 		}
 		// その中かから現在指定された選択肢行に該当するものを取り出す
-		$ans = Hash::extract($anss, '{n}[matrix_choice_id=' . $choice['origin_id'] . ']');
+		$ans = Hash::extract($anss, '{n}[matrix_choice_key=' . $choice['key'] . ']');
 		// 回答が存在するとき処理
 		if ($ans) {
 			$ans = $ans[0];
@@ -295,10 +295,10 @@ class QuestionnaireAnswerSummaryCsv extends QuestionnairesAppModel {
 /**
  * convertCode
  *
- * @param string $data  data
+ * @param string $data data
  * @return string
  */
 	public function convertCode($data) {
-		return mb_convert_encoding($data, $this->toCode);
+		return mb_convert_encoding($data, $this->_toCode);
 	}
 }

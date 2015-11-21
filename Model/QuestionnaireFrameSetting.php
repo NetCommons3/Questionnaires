@@ -25,16 +25,6 @@ class QuestionnaireFrameSetting extends QuestionnairesAppModel {
  * @var array
  */
 	public $validate = array(
-		'frame_key' => array(
-			'notEmpty' => array(
-				'rule' => array('notEmpty'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
 	);
 
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
@@ -46,7 +36,7 @@ class QuestionnaireFrameSetting extends QuestionnairesAppModel {
  */
 	public $belongsTo = array(
 		'Frame' => array(
-			'className' => 'Frame',
+			'className' => 'Frames.Frame',
 			'foreignKey' => 'frame_key',
 			'conditions' => '',
 			'fields' => '',
@@ -54,6 +44,66 @@ class QuestionnaireFrameSetting extends QuestionnairesAppModel {
 		)
 	);
 
+/**
+ * Called during validation operations, before validation. Please note that custom
+ * validation rules can be defined in $validate.
+ *
+ * @param array $options Options passed from Model::save().
+ * @return bool True if validate operation should continue, false to abort
+ * @link http://book.cakephp.org/2.0/en/models/callback-methods.html#beforevalidate
+ * @see Model::save()
+ * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+ */
+	public function beforeValidate($options = array()) {
+		$this->validate = Hash::merge($this->validate, array(
+			'frame_key' => array(
+				'notBlank' => array(
+					'rule' => array('notBlank'),
+					//'message' => 'Your custom message here',
+					'allowEmpty' => false,
+					//'required' => false,
+					//'last' => false, // Stop validation after this rule
+					//'on' => 'create', // Limit validation to 'create' or 'update' operations
+				),
+			),
+			'display_type' => array(
+				'inList' => array(
+					'rule' => array('inList', array(QuestionnairesComponent::DISPLAY_TYPE_SINGLE, QuestionnairesComponent::DISPLAY_TYPE_LIST)),
+					'message' => __d('net_commons', 'Invalid request.'),
+				),
+			),
+			'display_num_per_page' => array(
+				'inList' => array(
+					'rule' => array('inList', array_keys(QuestionnairesComponent::getDisplayNumberOptions())),
+					'message' => __d('net_commons', 'Invalid request.'),
+				),
+			),
+			'sort_type' => array(
+				'inList' => array(
+					'rule' => array('inList', array_keys(QuestionnairesComponent::getSortOrders())),
+					'message' => __d('net_commons', 'Invalid request.'),
+				),
+			),
+		));
+
+		parent::beforeValidate($options);
+
+		return true;
+	}
+
+/**
+ * getQuestionnaireFrameSettingConditions 指定されたframe_keyの設定要件をSQL検索用の配列で取り出す
+ *
+ * @param string $frameKey frame key
+ * @return array ... displayNum sortField sortDirection
+ */
+	public function getQuestionnaireFrameSettingConditions($frameKey) {
+		list(, $limit, $sort, $dir) = $this->getQuestionnaireFrameSetting($frameKey);
+		return array(
+			'offset' => 0,
+			'limit' => $limit,
+			'order' => 'Questionnaire.' . $sort . ' ' . $dir);
+	}
 /**
  * getFrameSetting 指定されたframe_keyの設定要件を取り出す
  *
@@ -69,27 +119,24 @@ class QuestionnaireFrameSetting extends QuestionnairesAppModel {
 		));
 
 		if (!$frameSetting) {
-			$displayType = QuestionnairesComponent::DISPLAY_TYPE_LIST;
-			$displayNum = QuestionnairesComponent::QUESTIONNAIRE_DEFAULT_DISPLAY_NUM_PER_PAGE;
+			$frameSetting = $this->prepareFrameSetting($frameKey);
+		}
+
+		$setting = $frameSetting['QuestionnaireFrameSetting'];
+		$displayType = $setting['display_type'];
+		$displayNum = $setting['display_num_per_page'];
+		if ($setting['sort_type'] == QuestionnairesComponent::QUESTIONNAIRE_SORT_MODIFIED) {
 			$sort = 'modified';
 			$dir = 'DESC';
-		} else {
-			$setting = $frameSetting['QuestionnaireFrameSetting'];
-			$displayType = $setting['display_type'];
-			$displayNum = $setting['display_num_per_page'];
-			if ($setting['sort_type'] == QuestionnairesComponent::QUESTIONNAIRE_SORT_MODIFIED) {
-				$sort = 'modified';
-				$dir = 'DESC';
-			} elseif ($setting['sort_type'] == QuestionnairesComponent::QUESTIONNAIRE_SORT_CREATED) {
-				$sort = 'created';
-				$dir = 'DESC';
-			} elseif ($setting['sort_type'] == QuestionnairesComponent::QUESTIONNAIRE_SORT_TITLE) {
-				$sort = 'title';
-				$dir = 'ASC';
-			} elseif ($setting['sort_type'] == QuestionnairesComponent::QUESTIONNAIRE_SORT_END) {
-				$sort = 'end_period';
-				$dir = 'ASC';
-			}
+		} elseif ($setting['sort_type'] == QuestionnairesComponent::QUESTIONNAIRE_SORT_CREATED) {
+			$sort = 'created';
+			$dir = 'DESC';
+		} elseif ($setting['sort_type'] == QuestionnairesComponent::QUESTIONNAIRE_SORT_TITLE) {
+			$sort = 'title';
+			$dir = 'ASC';
+		} elseif ($setting['sort_type'] == QuestionnairesComponent::QUESTIONNAIRE_SORT_END) {
+			$sort = 'end_period';
+			$dir = 'ASC';
 		}
 		return array($displayType, $displayNum, $sort, $dir);
 	}
@@ -113,97 +160,23 @@ class QuestionnaireFrameSetting extends QuestionnairesAppModel {
 	}
 
 /**
- * prepareBlock
- *
- * @param int $frameId frame id
- * @return bool
- * @throws InternalErrorException
- */
-	public function prepareBlock($frameId) {
-		// 指定のフレームにブロックが結びついているときtrue
-		// まだ結びついてないときfalse
-		// エラー発生時error throw
-		$this->loadModels([
-			'Block' => 'Blocks.Block',
-		]);
-		// このルームにすでにアンケートブロックが存在した場合で、
-		// かつ、現在フレームにまだブロックが結びついてない場合、
-		// すでに存在するブロックと現在フレームを結びつける
-		$frame = $this->Frame->find('first', array(
-			'conditions' => array(
-				'Frame.id' => $frameId
-			)
-		));
-		if (!$frame) {
-			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
-		}
-		// すでに結びついている場合は何もしないでよい
-		if (!empty($frame['Frame']['block_id'])) {
-			return true;
-		}
-		// ルームに存在するブロックを探す
-		$block = $this->Block->find('first', array(
-			'conditions' => array(
-				'Block.room_id' => $frame['Frame']['room_id'],
-				'Block.plugin_key' => 'questionnaires'
-			)
-		));
-		// まだない場合
-		if (empty($block)) {
-			// 作成する
-			$block = $this->Block->saveByFrameId($frameId, false);
-			$block['Block']['plugin_key'] = 'questionnaires';
-			$this->Block->save($block);
-		}
-		$frame['Frame']['block_id'] = $block['Block']['id'];
-		$this->setDataSource('master');
-		$dataSource = $this->getDataSource();
-		$dataSource->begin();
-		try {
-			$this->Frame->save($frame);
-			$dataSource->commit();
-		} catch (Exception $ex) {
-			$dataSource->rollback();
-			CakeLog::error($ex);
-			throw $ex;
-		}
-		return true;
-	}
-
-/**
  * prepareFrameSetting
  *
  * @param string $frameKey frame key
- * @return void
+ * @return mix
  * @throws Exception
  * @throws InternalErrorException
  */
 	public function prepareFrameSetting($frameKey) {
-		// フレームセッティング確認
-		// まだ該当のフレームセッティングがない場合新たに作成しておく
-		$frameSetting = $this->find('first', array(
+		$frameSetting = $this->getDefaultFrameSetting();
+		$this->saveFrameSettings($frameKey, $frameSetting);
+		$ret = $this->find('first', array(
 			'conditions' => array(
 				'frame_key' => $frameKey
-			)
+			),
+			'recursive' => -1
 		));
-		if ($frameSetting) {
-			return;
-		}
-		$this->setDataSource('master');
-		$dataSource = $this->getDataSource();
-		$dataSource->begin();
-		try {
-			$frameSetting['frame_key'] = $frameKey;
-			$frameSetting['display_type'] = QuestionnairesComponent::DISPLAY_TYPE_LIST;
-			$frameSetting['display_num_per_page'] = QuestionnairesComponent::QUESTIONNAIRE_DEFAULT_DISPLAY_NUM_PER_PAGE;
-			$frameSetting['sort_type'] = QuestionnairesComponent::DISPLAY_SORT_TYPE_NEW_ARRIVALS;
-			$this->save($frameSetting);
-			$dataSource->commit();
-		} catch (Exception $ex) {
-			$dataSource->rollback();
-			CakeLog::error($ex);
-			throw $ex;
-		}
+		return $ret;
 	}
 
 /**
@@ -220,31 +193,38 @@ class QuestionnaireFrameSetting extends QuestionnairesAppModel {
 		]);
 
 		//トランザクションBegin
-		$this->setDataSource('master');
-		$dataSource = $this->getDataSource();
-		$dataSource->begin();
+		$this->begin();
 		try {
-			$data['QuestionnairesFrameSetting']['frame_key'] = $frameKey;
+			$data['QuestionnaireFrameSetting']['frame_key'] = $frameKey;
 
 			// フレーム設定のバリデート
-			$this->set($data['QuestionnairesFrameSetting']);
-			if (! $this->validates($data)) {
+			$this->create();
+			$this->set($data);
+			if (! $this->validates()) {
 				return false;
 			}
 
 			// フレームに表示するアンケート一覧設定のバリデート
 			// 一覧表示タイプと単独表示タイプ
+			if (isset($data['QuestionnaireFrameDisplayQuestionnaires'])) {
+				$ret = $this->QuestionnaireFrameDisplayQuestionnaire->validates($data);
+				if ($ret === false) {
+					return false;
+				}
+			}
+			/*
 			if ($data['QuestionnaireFrameSetting']['display_type'] == QuestionnairesComponent::DISPLAY_TYPE_LIST) {
-				$displayQs = $data['QuestionnaireFrameDisplayQuestionnaires']['List']['questionnaire_origin_id'];
+				$displayQs = $data['QuestionnaireFrameDisplayQuestionnaires']['List']['questionnaire_key'];
 				$ret = $this->QuestionnaireFrameDisplayQuestionnaire->validateDisplayQuestionnaireForList($frameKey, $displayQs);
 			} else {
-				$displayQs = $data['QuestionnaireFrameDisplayQuestionnaires']['Single']['questionnaire_origin_id'];
+				$displayQs = $data['QuestionnaireFrameDisplayQuestionnaires']['Single']['questionnaire_key'];
 				$ret = $this->QuestionnaireFrameDisplayQuestionnaire->validateDisplayQuestionnaireForSingle($frameKey, $displayQs);
 			}
 			if ($ret == false) {
 				$this->validationErrors = Hash::merge($this->validationErrors, $this->QuestionnaireFrameDisplayQuestionnaire->validationErrors);
 				return false;
 			}
+			*/
 			// フレーム設定の登録
 			if (! $this->save($data, false)) {
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
@@ -252,22 +232,30 @@ class QuestionnaireFrameSetting extends QuestionnairesAppModel {
 
 			// フレームに表示するアンケート一覧設定の登録
 			// 一覧表示タイプと単独表示タイプ
+			if (isset($data['QuestionnaireFrameDisplayQuestionnaires'])) {
+				$ret = $this->QuestionnaireFrameDisplayQuestionnaire->saveMany($data['QuestionnaireFrameDisplayQuestionnaires']);
+				if ($ret === false) {
+					return false;
+				}
+			}
+			/*
 			if ($data['QuestionnaireFrameSetting']['display_type'] == QuestionnairesComponent::DISPLAY_TYPE_LIST) {
-				$displayQs = $data['QuestionnaireFrameDisplayQuestionnaires']['List']['questionnaire_origin_id'];
+				$displayQs = $data['QuestionnaireFrameDisplayQuestionnaires']['List']['questionnaire_key'];
 				$ret = $this->QuestionnaireFrameDisplayQuestionnaire->saveDisplayQuestionnaireForList($frameKey, $displayQs);
 			} else {
-				$displayQs = $data['QuestionnaireFrameDisplayQuestionnaires']['Single']['questionnaire_origin_id'];
+				$displayQs = $data['QuestionnaireFrameDisplayQuestionnaires']['Single']['questionnaire_key'];
 				$ret = $this->QuestionnaireFrameDisplayQuestionnaire->saveDisplayQuestionnaireForSingle($frameKey, $displayQs);
 			}
 			if ($ret == false) {
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}
+			*/
 
 			//トランザクションCommit
-			$dataSource->commit();
+			$this->commit();
 		} catch (Exception $ex) {
 			//トランザクションRollback
-			$dataSource->rollback();
+			$this->rollback();
 			CakeLog::error($ex);
 			throw $ex;
 		}

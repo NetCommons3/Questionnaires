@@ -12,7 +12,7 @@
 <div class="col-xs-12 questionnaire-chart-wrapper" >
     <?php foreach ($question['QuestionnaireChoice'] as $choiceId => $choice): ?>
     <?php if ($choice['matrix_type'] == QuestionnairesComponent::MATRIX_TYPE_ROW_OR_NO_MATRIX): ?>
-        <?php $dataStr = '[' . $questionId . '][' . $choice['origin_id'] . ']'; ?>
+        <?php $dataStr = '["' . $questionId . '"]["' . $choice['key'] . '"]'; ?>
                 <nvd3 options='config<?php echo $dataStr; ?>'
                       data='data<?php echo $dataStr; ?>'>
                 </nvd3>

@@ -52,6 +52,7 @@ NetCommonsApp.controller('QuestionnairesAnswerSummary',
 
         // question毎に定義を作成
         for (var key in $scope.questions) {
+
           $scope.config[key] = new Object();
 
           if ($scope.questions[key].resultDisplayType ==

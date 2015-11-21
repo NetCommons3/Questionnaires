@@ -14,15 +14,15 @@
 <label><?php echo __d('questionnaires', 'Answer status'); ?></label>
 <?php
 	$list = array(
-		QuestionnairesComponent::QUESTIONNAIRE_ANSWER_VIEW_ALL => __d('questionnaires', 'View All'),
+	QuestionnairesComponent::QUESTIONNAIRE_ANSWER_VIEW_ALL => __d('questionnaires', 'View All'),
 	QuestionnairesComponent::QUESTIONNAIRE_ANSWER_UNANSWERED => __d('questionnaires', 'Unanswered'),
 	QuestionnairesComponent::QUESTIONNAIRE_ANSWER_ANSWERED => __d('questionnaires', 'Answered'),
 	);
-	if ($contentEditable) {
+	if (Current::permission('content_creatable')) {
 		$list[QuestionnairesComponent::QUESTIONNAIRE_ANSWER_TEST] = __d('questionnaires', 'Test');
 	}
 	$url = Hash::merge(
-	array('controller' => 'questionnaires', 'action' => 'index', $frameId),
+	array('controller' => 'questionnaires', 'action' => 'index', Current::read('Frame.id')),
 	$this->params['named']
 	);
 

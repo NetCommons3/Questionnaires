@@ -25,12 +25,12 @@ class QuestionnaireAnswerSummary extends QuestionnairesAppModel {
  * @var array
  */
 	public $validate = array(
-		'questionnaire_origin_id' => array(
-			'numeric' => array(
-				'rule' => array('numeric'),
+		'questionnaire_key' => array(
+			'notBlank' => array(
+				'rule' => array('notBlank'),
 				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
+				'allowEmpty' => false,
+				'required' => true,
 				//'last' => false, // Stop validation after this rule
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
@@ -46,14 +46,14 @@ class QuestionnaireAnswerSummary extends QuestionnairesAppModel {
  */
 	public $belongsTo = array(
 		'Questionnaire' => array(
-			'className' => 'Questionnaire',
-			'foreignKey' => 'questionnaire_origin_id',
+			'className' => 'Questionnaires.Questionnaire',
+			'foreignKey' => 'questionnaire_key',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
 		),
 		'User' => array(
-			'className' => 'User',
+			'className' => 'Users.User',
 			'foreignKey' => 'user_id',
 			'conditions' => '',
 			'fields' => '',
@@ -68,7 +68,7 @@ class QuestionnaireAnswerSummary extends QuestionnairesAppModel {
  */
 	public $hasMany = array(
 		'QuestionnaireAnswer' => array(
-			'className' => 'QuestionnaireAnswer',
+			'className' => 'Questionnaires.QuestionnaireAnswer',
 			'foreignKey' => 'questionnaire_answer_summary_id',
 			'dependent' => true,
 			'conditions' => '',
@@ -85,22 +85,22 @@ class QuestionnaireAnswerSummary extends QuestionnairesAppModel {
 /**
  * getNowSummaryOfThisUser 指定されたアンケートIDと指定ユーザーに合致するアンケート回答を取得する
  *
- * @param int $questionnaireId アンケートID
+ * @param int $questionnaireKey アンケートKey
  * @param int $userId ユーザID （指定しない場合は null)
  * @param string $sessionId セッションID
  * @return array
  */
-	public function getNowSummaryOfThisUser($questionnaireId, $userId, $sessionId) {
+	public function getNowSummaryOfThisUser($questionnaireKey, $userId, $sessionId) {
 		if ($userId) {
 			$conditions = array(
 				'answer_status' => QuestionnairesComponent::ACTION_ACT,
-				'questionnaire_origin_id' => $questionnaireId,
+				'questionnaire_key' => $questionnaireKey,
 				'user_id' => $userId
 			);
 		} else {
 			$conditions = array(
 				'answer_status' => QuestionnairesComponent::ACTION_ACT,
-				'questionnaire_origin_id' => $questionnaireId,
+				'questionnaire_key' => $questionnaireKey,
 				'session_value' => $sessionId
 			);
 		}
@@ -115,21 +115,49 @@ class QuestionnaireAnswerSummary extends QuestionnairesAppModel {
 /**
  * getProgressiveSummaryOfThisUser 指定されたアンケートIDと指定ユーザーに合致する現在回答中のアンケート回答を取得する
  *
- * @param int $questionnaireId アンケートID
+ * @param int $questionnaireKey アンケートKey
  * @param int $userId ユーザID （指定しない場合は null)
  * @param string $sessionId セッションID
  * @return array
  */
-	public function getProgressiveSummaryOfThisUser($questionnaireId, $userId, $sessionId) {
+	public function getProgressiveSummaryOfThisUser($questionnaireKey, $userId, $sessionId) {
 		$conditions = array(
 			'answer_status' => QuestionnairesComponent::ACTION_NOT_ACT,
-			'questionnaire_origin_id' => $questionnaireId,
+			'questionnaire_key' => $questionnaireKey,
 			'user_id' => $userId,
 			'session_value' => $sessionId);
 
 		$summary = $this->find('first', array(
 			'conditions' => $conditions,
 		));
+		return $summary;
+	}
+/**
+ * forceGetProgressiveAnswerSummary
+ * get answer summary record if there is no summary , then create
+ *
+ * @param array $questionnaire questionnaire
+ * @param int $userId user id
+ * @param string $sessionId session id
+ * @return array
+ */
+	public function forceGetProgressiveAnswerSummary($questionnaire, $userId, $sessionId) {
+		$summary = $this->getProgressiveSummaryOfThisUser($questionnaire['Questionnaire']['key'], $userId, $sessionId);
+		// なければ作成
+		if (!$summary) {
+			$this->setDataSource('master');
+			$this->create();
+			$this->save(array(
+				'answer_status' => QuestionnairesComponent::ACTION_NOT_ACT,
+				'test_status' => ($questionnaire['Questionnaire']['status'] != WorkflowComponent::STATUS_PUBLISHED) ? QuestionnairesComponent::TEST_ANSWER_STATUS_TEST : QuestionnairesComponent::TEST_ANSWER_STATUS_PEFORM,
+				'answer_number' => 1,
+				'questionnaire_key' => $questionnaire['Questionnaire']['key'],
+				'session_value' => $sessionId,
+				'user_id' => $userId,
+			));
+			$summary = array();
+			$summary['QuestionnaireAnswerSummary']['id'] = $this->id;
+		}
 		return $summary;
 	}
 
@@ -147,7 +175,7 @@ class QuestionnaireAnswerSummary extends QuestionnairesAppModel {
 			//
 			//つまり、本人回答があるかどうがか表示有無の判断基準
 
-			$summaries = $this->getNowSummaryOfThisUser($questionnaire['Questionnaire']['origin_id'], $userId, $sessionId);
+			$summaries = $this->getNowSummaryOfThisUser($questionnaire['Questionnaire']['key'], $userId, $sessionId);
 			if (count($summaries) > 0) {
 				//本人による「回答」データあり
 				return true;
@@ -171,61 +199,28 @@ class QuestionnaireAnswerSummary extends QuestionnairesAppModel {
 		// 指定されたアンケートを集計するときのサマリ側の条件を返す
 		$baseConditions = array(
 			'QuestionnaireAnswerSummary.answer_status' => QuestionnairesComponent::ACTION_ACT,
-			'QuestionnaireAnswerSummary.questionnaire_origin_id' => $questionnaire['Questionnaire']['origin_id']
+			'QuestionnaireAnswerSummary.questionnaire_key' => $questionnaire['Questionnaire']['key']
 		);
 		//公開時は本番時回答のみ、テスト時(=非公開時)は本番回答＋テスト回答を対象とする。
-		if ($questionnaire['Questionnaire']['status'] == NetCommonsBlockComponent::STATUS_PUBLISHED) {
+		if ($questionnaire['Questionnaire']['status'] == WorkflowComponent::STATUS_PUBLISHED) {
 			$baseConditions['QuestionnaireAnswerSummary.test_status'] = QuestionnairesComponent::TEST_ANSWER_STATUS_PEFORM;
 		}
 		return $baseConditions;
 	}
-
-/**
- * forceGetAnswerSummary
- * get answer summary record if there is no summary , then create
- *
- * @param array $questionnaire questionnaire
- * @param int $userId user id
- * @param string $sessionId session id
- * @param array $conditions conditions
- * @return array
- */
-	public function forceGetAnswerSummary($questionnaire, $userId, $sessionId, $conditions) {
-		$summary = $this->find('first', array(
-			'conditions' => $conditions
-		));
-		// なければ作成
-		if (!$summary) {
-			$this->setDataSource('master');
-			$summary = $this->create();
-			$this->save(array(
-				'answer_status' => QuestionnairesComponent::ACTION_NOT_ACT,
-				'test_status' => ($questionnaire['Questionnaire']['status'] != NetCommonsBlockComponent::STATUS_PUBLISHED) ? QuestionnairesComponent::TEST_ANSWER_STATUS_TEST : QuestionnairesComponent::TEST_ANSWER_STATUS_PEFORM,
-				'answer_number' => 1,
-				'questionnaire_origin_id' => $questionnaire['Questionnaire']['origin_id'],
-				'session_value' => $sessionId,
-				'user_id' => $userId,
-			));
-			$summary = array();
-			$summary['QuestionnaireAnswerSummary']['id'] = $this->id;
-		}
-		return $summary;
-	}
-
 /**
  * deleteTestAnswerSummary
  * when questionnaire is published, delete test answer summary
  *
- * @param int $originId questionnaire originId
+ * @param int $key questionnaire key
  * @param int $status publish status
  * @return bool
  */
-	public function deleteTestAnswerSummary($originId, $status) {
-		if ($status != NetCommonsBlockComponent::STATUS_PUBLISHED) {
+	public function deleteTestAnswerSummary($key, $status) {
+		if ($status != WorkflowComponent::STATUS_PUBLISHED) {
 			return true;
 		}
 		$this->deleteAll(array(
-			'questionnaire_origin_id' => $originId,
+			'questionnaire_key' => $key,
 			'test_status' => QuestionnairesComponent::TEST_ANSWER_STATUS_TEST), true);
 		return true;
 	}

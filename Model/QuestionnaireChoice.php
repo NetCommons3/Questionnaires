@@ -23,7 +23,6 @@ class QuestionnaireChoice extends QuestionnairesAppModel {
  * @var array
  */
 	public $actsAs = array(
-		'NetCommons.Publishable',
 		'NetCommons.OriginalKey',
 	);
 
@@ -44,7 +43,7 @@ class QuestionnaireChoice extends QuestionnairesAppModel {
  */
 	public $belongsTo = array(
 		'QuestionnaireQuestion' => array(
-			'className' => 'QuestionnaireQuestion',
+			'className' => 'Questionnaires.QuestionnaireQuestion',
 			'foreignKey' => 'questionnaire_question_id',
 			'conditions' => '',
 			'fields' => '',
@@ -62,21 +61,14 @@ class QuestionnaireChoice extends QuestionnairesAppModel {
  * @see Model::save()
  */
 	public function beforeValidate($options = array()) {
-		$this->validate = Hash::merge($this->validate, array(
+		$choiceIndex = $options['choiceIndex'];
+		// Choiceモデルは繰り返し判定が行われる可能性高いのでvalidateルールは最初に初期化
+		// mergeはしません
+		$this->validate = array(
 			'choice_label' => array(
-				'notEmpty' => array(
-					'rule' => array('notEmpty'),
+				'notBlank' => array(
+					'rule' => array('notBlank'),
 					'message' => __d('questionnaires', 'Please input choice text.'),
-				),
-			),
-			'questionnaire_question_id' => array(
-				'numeric' => array(
-					'rule' => array('numeric'),
-					//'message' => 'Your custom message here',
-					//'allowEmpty' => false,
-					//'required' => false,
-					//'last' => false, // Stop validation after this rule
-					//'on' => 'create', // Limit validation to 'create' or 'update' operations
 				),
 			),
 			'other_choice_type' => array(
@@ -92,11 +84,10 @@ class QuestionnaireChoice extends QuestionnairesAppModel {
 			'choice_sequence' => array(
 				'numeric' => array(
 					'rule' => array('numeric'),
-					//'message' => 'Your custom message here',
-					//'allowEmpty' => false,
-					//'required' => false,
-					//'last' => false, // Stop validation after this rule
-					//'on' => 'create', // Limit validation to 'create' or 'update' operations
+				),
+				'comparison' => array(
+					'rule' => array('comparison', '==', $choiceIndex),
+					'message' => __d('questionnaires', 'choice sequence is illegal.')
 				),
 			),
 			'graph_color' => array(
@@ -107,20 +98,22 @@ class QuestionnaireChoice extends QuestionnairesAppModel {
 					//'last' => false, // Stop validation after this rule
 					//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
-			'is_auto_translated' => array(
-				'boolean' => array(
-					'rule' => array('boolean'),
-					//'message' => 'Your custom message here',
-					//'allowEmpty' => false,
-					//'required' => false,
-					//'last' => false, // Stop validation after this rule
-					//'on' => 'create', // Limit validation to 'create' or 'update' operations
+		);
+		// ウィザード画面でのセットアップ中の場合はまだ親ページIDの正当性についてのチェックは行わない
+		if (! (isset($options['validate']) && $options['validate'] == QuestionnairesComponent::QUESTIONNAIRE_VALIDATE_TYPE)) {
+			$this->validate = Hash::merge($this->validate, array(
+				'questionnaire_question_id' => array(
+					'numeric' => array(
+						'rule' => array('numeric'),
+						'message' => __d('net_commons', 'Invalid request.'),
+					),
 				),
-			),
-		));
+			));
+		}
+		$this->_checkSkip($options['isSkip'], $options['pageIndex'], $options['maxPageIndex']);
+
 		return parent::beforeValidate($options);
 	}
-
 /**
  * getDefaultChoice
  * get default data of questionnaire choice
@@ -129,13 +122,13 @@ class QuestionnaireChoice extends QuestionnairesAppModel {
  */
 	public function getDefaultChoice() {
 		return	array(
-				'choice_sequence' => 0,
-				'matrix_type' => QuestionnairesComponent::MATRIX_TYPE_ROW_OR_NO_MATRIX,
-				'choice_label' => __d('questionnaires', 'new choice') . '1',
-				'other_choice_type' => QuestionnairesComponent::OTHER_CHOICE_TYPE_NO_OTHER_FILED,
-				'graph_color' => QuestionnairesComponent::$defaultGraphColors[0],
-				'skip_page_sequence' => QuestionnairesComponent::SKIP_GO_TO_END
-			);
+			'choice_sequence' => 0,
+			'matrix_type' => QuestionnairesComponent::MATRIX_TYPE_ROW_OR_NO_MATRIX,
+			'choice_label' => __d('questionnaires', 'new choice') . '1',
+			'other_choice_type' => QuestionnairesComponent::OTHER_CHOICE_TYPE_NO_OTHER_FILED,
+			'graph_color' => QuestionnairesComponent::$defaultGraphColors[0],
+			'skip_page_sequence' => QuestionnairesComponent::SKIP_GO_TO_END
+		);
 	}
 
 /**
@@ -143,24 +136,57 @@ class QuestionnaireChoice extends QuestionnairesAppModel {
  * save QuestionnaireChoice data
  *
  * @param int $questionId questionnaire question id
- * @param int $status status
  * @param array &$choices questionnaire choices
  * @throws InternalErrorException
  * @return bool
  */
-	public function saveQuestionnaireChoice($questionId, $status, &$choices) {
+	public function saveQuestionnaireChoice($questionId, &$choices) {
 		// QuestionnaireChoiceが単独でSaveされることはない
 		// 必ず上位のQuestionnaireのSaveの折に呼び出される
 		// なので、$this->setDataSource('master');といった
 		// 決まり処理は上位で行われる
 		// ここでは行わない
-		foreach ($choices as &$c) {
-			$c = $this->_setupSaveData($c, $status);
-			$c['questionnaire_question_id'] = $questionId;
+		foreach ($choices as &$choice) {
+			// アンケートは履歴を取っていくタイプのコンテンツデータなのでSave前にはID項目はカット
+			// （そうしないと既存レコードのUPDATEになってしまうから）
+			$choice = Hash::remove($choice, 'QuestionnaireChoice.id');
+			$choice['questionnaire_question_id'] = $questionId;
 			$this->create();
-			if (!$this->save($c)) {
-				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+			if (!$this->save($choice, false)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+/**
+ * _checkSkip
+ *
+ * @param bool $isSkip スキップ有無
+ * @param int $pageIndex ページ番号
+ * @param int $maxPageIndex このアンケートでの最後のページ番号
+ * @return void
+ */
+	protected function _checkSkip($isSkip, $pageIndex, $maxPageIndex) {
+		if ($isSkip != QuestionnairesComponent::SKIP_FLAGS_SKIP) {
+			return;
+		}
+		// 質問がスキップ質問である場合
+		// 未設定時はデフォルトの次ページ移動となります
+		if (empty($this->data['QuestionnaireChoice']['skip_page_sequence'])) {
+			$this->data['QuestionnaireChoice'] = $pageIndex + 1;
+		}
+		// 最後ページへの指定ではない場合
+		if ($this->data['QuestionnaireChoice']['skip_page_sequence'] != QuestionnairesComponent::SKIP_GO_TO_END) {
+			// そのジャンプ先は現在ページから戻っていないか
+			if ($this->data['QuestionnaireChoice']['skip_page_sequence'] < $pageIndex) {
+				$this->validationErrors['skip_page_sequence'] = __d('questionnaires', 'Invalid skip page. Please set forward page.');
+			}
+			// そのジャンプ先は存在するページシーケンスか
+			if ($this->data['QuestionnaireChoice']['skip_page_sequence'] > $maxPageIndex) {
+				$this->validationErrors['skip_page_sequence'] = __d('questionnaires', 'Invalid skip page. page does not exist.');
 			}
 		}
 	}
+
 }

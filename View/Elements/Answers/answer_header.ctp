@@ -10,11 +10,7 @@
  */
 ?>
 
-<header>
-    <h1>
-        <?php echo $questionnaire['Questionnaire']['title']; ?>
-        <?php if (isset($questionnaire['Questionnaire']['sub_title'])): ?>
-        <small><?php echo $questionnaire['Questionnaire']['sub_title'];?></small>
-        <?php endif ?>
-    </h1>
-</header>
+<h1>
+    <?php echo $questionnaire['Questionnaire']['title']; ?>
+    <small><?php echo $questionnaire['Questionnaire']['sub_title'];?></small>
+</h1>

@@ -660,8 +660,8 @@ msgid "Results setting"
 msgstr "設定内容"
 
 #: /View/QuestionnaireQuestions/edit_result.ctp:59
-msgid "Please edit return to create the question screen if you want to change the questionnaire title"
-msgstr "タイトルを変更したい場合は、「質問の作成」に戻って編集してください。"
+msgid "If you want to change the questionnaire title, please edit in \"Set questionnaire\" step."
+msgstr "タイトルを変更したい場合は、「アンケートの設定」にて再編集できます。"
 
 #: /View/QuestionnaireQuestions/edit_result.ctp:63
 msgid "Published aggregate results"
@@ -739,7 +739,7 @@ msgstr "過去のアンケート"
 
 #: /View/Questionnaires/add.ctp:101
 msgid "Refine by entering the part of the questionnaire name"
-msgstr "流用するアンケートを選んでください"
+msgstr "ここにアンケート名の一部を入力すると、下のリストの内容を絞り込むことができます"
 
 #: /View/Questionnaires/add.ctp:114
 msgid "Implementation"

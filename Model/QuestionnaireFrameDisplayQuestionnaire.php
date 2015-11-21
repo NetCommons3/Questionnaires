@@ -25,21 +25,21 @@ class QuestionnaireFrameDisplayQuestionnaire extends QuestionnairesAppModel {
  */
 	public $validate = array(
 		'frame_key' => array(
-			'notEmpty' => array(
-				'rule' => array('notEmpty'),
+			'notBlank' => array(
+				'rule' => array('notBlank'),
 				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
+				'allowEmpty' => false,
+				'required' => true,
 				//'last' => false, // Stop validation after this rule
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
 		),
-		'questionnaire_origin_id' => array(
-			'numeric' => array(
-				'rule' => array('numeric'),
+		'questionnaire_key' => array(
+			'notBlank' => array(
+				'rule' => array('notBlank'),
 				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
+				'allowEmpty' => false,
+				'required' => true,
 				//'last' => false, // Stop validation after this rule
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
@@ -55,15 +55,15 @@ class QuestionnaireFrameDisplayQuestionnaire extends QuestionnairesAppModel {
  */
 	public $belongsTo = array(
 		'Frame' => array(
-			'className' => 'Frame',
+			'className' => 'Frames.Frame',
 			'foreignKey' => 'frame_key',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
 		),
 		'Questionnaire' => array(
-			'className' => 'Questionnaire',
-			'foreignKey' => 'questionnaire_origin_id',
+			'className' => 'Questionnaires.Questionnaire',
+			'foreignKey' => 'questionnaire_key',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
@@ -74,30 +74,21 @@ class QuestionnaireFrameDisplayQuestionnaire extends QuestionnairesAppModel {
  * saveFrameDisplayQuestionnaire
  * this function is called when save questionnaire
  *
- * @param int $frameId frame id
- * @param int $questionnaireId questionnaire id
+ * @param int $questionnaireKey questionnaire key
  * @return bool
  */
-	public function saveFrameDisplayQuestionnaire($frameId, $questionnaireId) {
+	public function saveFrameDisplayQuestionnaire($questionnaireKey) {
 		$frame = $this->Frame->find('first', array(
 			'conditions' => array(
-				'Frame.id' => $frameId
+				'Frame.id' => Current::read('Frame.id')
 			)
 		));
 		if (!$frame) {
 			return false;
 		}
-		$questionnaire = $this->Questionnaire->find('first', array(
-			'conditions' => array(
-				'Questionnaire.id' => $questionnaireId
-			)
-		));
-		if (!$questionnaire) {
-			return false;
-		}
 		$qCount = $this->Questionnaire->find('count', array(
 			'conditions' => array(
-				'Questionnaire.origin_id' => $questionnaire['Questionnaire']['origin_id']
+				'Questionnaire.key' => $questionnaireKey
 			)
 		));
 		if ($qCount == 1) {
@@ -113,7 +104,7 @@ class QuestionnaireFrameDisplayQuestionnaire extends QuestionnairesAppModel {
 			if ($setting['QuestionnaireFrameSetting']['display_type'] == QuestionnairesComponent::DISPLAY_TYPE_LIST) {
 				$saveData = array(
 					'frame_key' => $frame['Frame']['key'],
-					'questionnaire_origin_id' => $questionnaire['Questionnaire']['origin_id']);
+					'questionnaire_key' => $questionnaireKey);
 				return $this->saveDisplayQuestionnaire($saveData);
 			}
 		}
@@ -151,7 +142,7 @@ class QuestionnaireFrameDisplayQuestionnaire extends QuestionnairesAppModel {
 	public function validateDisplayQuestionnaireForSingle($frameKey, $displayQuestionnaire) {
 		$this->set(array(
 			'frame_key' => $frameKey,
-			'questionnaire_origin_id' => $displayQuestionnaire
+			'questionnaire_key' => $displayQuestionnaire
 		));
 		if (! $this->validates()) {
 			return false;
@@ -167,10 +158,10 @@ class QuestionnaireFrameDisplayQuestionnaire extends QuestionnairesAppModel {
  * @return bool
  */
 	public function saveDisplayQuestionnaireForList($frameKey, $displayQs) {
-		foreach ($displayQs as $originId => $displayQuestionnaire) {
+		foreach ($displayQs as $key => $displayQuestionnaire) {
 			$saveQs = array(
 				'frame_key' => $frameKey,
-				'questionnaire_origin_id' => $originId
+				'questionnaire_key' => $key
 			);
 			if ($displayQuestionnaire != 0) {
 				if (!$this->saveDisplayQuestionnaire($saveQs)) {
@@ -201,7 +192,7 @@ class QuestionnaireFrameDisplayQuestionnaire extends QuestionnairesAppModel {
 
 		$saveQs = array(
 			'frame_key' => $frameKey,
-			'questionnaire_origin_id' => $displayQs,
+			'questionnaire_key' => $displayQs,
 		);
 		if (!$this->saveDisplayQuestionnaire($saveQs)) {
 			return false;

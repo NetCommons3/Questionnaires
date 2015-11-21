@@ -27,12 +27,7 @@ class QuestionnairesController extends QuestionnairesAppController {
  * @var array
  */
 	public $uses = array(
-		'Questionnaires.Questionnaire',
-		'Questionnaires.QuestionnairePage',
-		'Questionnaires.QuestionnaireQuestion',
-		'Questionnaires.QuestionnaireChoice',
-		'Questionnaires.QuestionnaireAnswerSummary',
-		'Comments.Comment',
+		'Questionnaires.QuestionnaireFrameSetting',
 		'Questionnaires.QuestionnaireFrameDisplayQuestionnaire',
 	);
 
@@ -42,13 +37,10 @@ class QuestionnairesController extends QuestionnairesAppController {
  * @var array
  */
 	public $components = array(
-		'NetCommons.NetCommonsWorkflow',
-		'NetCommons.NetCommonsBlock', //Use Questionnaire model
-		'NetCommons.NetCommonsFrame',
-		'NetCommons.NetCommonsRoomRole' => array(
-			//コンテンツの権限設定
-			'allowedActions' => array(
-				'contentEditable' => array('edit', 'delete')
+		'NetCommons.Permission' => array(
+			//アクセスの権限
+			'allow' => array(
+				'edit,delete' => 'content_creatable',
 			),
 		),
 		'Questionnaires.Questionnaires',
@@ -61,9 +53,10 @@ class QuestionnairesController extends QuestionnairesAppController {
  * @var array
  */
 	public $helpers = array(
-		'NetCommons.Token',
+		'Workflow.Workflow',
 		'NetCommons.Date',
-		'NetCommons.BackToPage',
+		'NetCommons.DisplayNumber',
+		'NetCommons.Button',
 		'Questionnaires.QuestionnaireStatusLabel',
 		'Questionnaires.QuestionnaireUtil'
 	);
@@ -75,60 +68,53 @@ class QuestionnairesController extends QuestionnairesAppController {
  */
 	public function beforeFilter() {
 		parent::beforeFilter();
-		$this->Auth->allow('thanks');
 	}
 
 /**
  * index method
  *
+ * @throws Exception
  * @return void
  */
 	public function index() {
 		// 表示方法設定値取得
 		list($displayType, $displayNum, $sort, $dir) =
-			$this->QuestionnaireFrameSetting->getQuestionnaireFrameSetting($this->viewVars['frameKey']);
+			$this->QuestionnaireFrameSetting->getQuestionnaireFrameSetting(Current::read('Frame.key'));
 
 		// 条件設定値取得
-		$conditions = $this->Questionnaire->getCondition(
-			$this->viewVars['blockId'],
-			$this->Auth->user('id'),
-			$this->viewVars,
-			$this->getNowTime()
-		);
+		$conditions = $this->Questionnaire->getCondition();
 
 		// 単独表示が指定されていた場合
 		if ($displayType == QuestionnairesComponent::DISPLAY_TYPE_SINGLE) {
 			$displayQ = $this->QuestionnaireFrameDisplayQuestionnaire->find('first', array(
-				'frame_key' => $this->viewVars['frameKey'],
+				'frame_key' => Current::read('Frame.key'),
 			));
 			if (!$displayQ) {
 				$this->view = 'QuestionnaireAnswers/noMoreAnswer';
 				return;
 			}
 			$questionnaires = $this->Questionnaire->getQuestionnairesList(
-				$conditions,
-				$this->Session->id(),
-				$this->Auth->user('id'),
-				array('origin_id' => $displayQ['QuestionnaireFrameDisplayQuestionnaire']['questionnaire_origin_id']));
+				array('key' => $displayQ['QuestionnaireFrameDisplayQuestionnaire']['questionnaire_key']));
 			if (!$questionnaires) {
 				$this->view = 'Questionnaires/noQuestionnaire';
 				return;
 			}
-			//$this->redirect('questionnaire_answers/answer/' . $this->viewVars['frameId'] . '/' . $questionnaires[0]['Questionnaire']['origin_id']);
-			//$ret = $this->requestAction('/questionnaires/questionnaire_answers/answer/' . $this->viewVars['frameId'] . '/' . $questionnaires[0]['Questionnaire']['origin_id'], array('return'));
-			$ret = $this->requestAction(
-				array('controller' => 'questionnaire_answers', 'action' => 'answer'),
-				array('pass' => array($this->viewVars['frameId'], $questionnaires[0]['Questionnaire']['origin_id']), 'return'));
+			$url = NetCommonsUrl::actionUrl(array(
+				'controller' => 'questionnaire_answers',
+				'action' => 'answer',
+				$questionnaires[0]['Questionnaire']['key'],
+				'frame_id' => Current::read('Frame.id'),
+			));
+			$ret = $this->requestAction($url, 'return');
 			$this->set('answer', $ret);
 			$this->view = 'Questionnaires/answer';
+
 			return;
 		}
 
 		// データ取得
-		// Modelの方ではカスタムfindメソッドを装備している
-		// ここではtype属性を指定することでカスタムFindを呼び出すように指示している
 		try {
-			$subQuery = $this->Questionnaire->getQuestionnairesCommonForAnswer($this->Session->id(), $this->Auth->user('id'));
+			$subQuery = $this->Questionnaire->getQuestionnaireSubQuery();
 			$this->Paginator->settings = array_merge(
 				$this->Paginator->settings,
 				array(
@@ -139,20 +125,12 @@ class QuestionnairesController extends QuestionnairesAppController {
 					'direction' => $dir,
 					'recursive' => 0,
 					'joins' => $subQuery,
-					'fields' => array(
-						'Block.*',
-						'Questionnaire.*',
-						'TrackableCreator.*',
-						'TrackableUpdater.*',
-						'CountAnswerSummary.*'
-					)
 				)
 			);
 			$questionnaire = $this->paginate('Questionnaire', $this->_getPaginateFilter());
-		} catch (NotFoundException $e) {
-			// NotFoundの例外
-			// アンケートデータが存在しないこととする
-			$questionnaire = array();
+		} catch (Exception $ex) {
+			CakeLog::error($ex);
+			throw $ex;
 		}
 		$this->set('questionnaires', $questionnaire);
 
@@ -188,200 +166,4 @@ class QuestionnairesController extends QuestionnairesAppController {
 		}
 		return $filter;
 	}
-
-/**
- * thanks method
- *
- * @param int $frameId フレームID
- * @param int $questionnaireId アンケートID
- * @throws NotFoundException
- * @throws ForbiddenException
- * @return void
- */
-	public function thanks($frameId = 0, $questionnaireId = 0) {
-		// 指定されたアンケート情報を取り出す
-		$conditions = $this->Questionnaire->getConditionForAnswer(
-			$this->viewVars['blockId'],
-			$this->Auth->user('id'),
-			$this->viewVars,
-			$this->getNowTime(),
-			array('origin_id' => $questionnaireId)
-		);
-		$questionnaire = $this->Questionnaire->find('first', array(
-			'conditions' => $conditions
-		));
-		if (!$questionnaire) {
-			throw new NotFoundException(__d('questionnaires', 'Invalid questionnaire'));
-		}
-
-		// Guard Force URL hack
-		if (!$this->isAbleTo($questionnaire)) {
-			throw new ForbiddenException(__d('net_commons', 'Permission denied'));
-		}
-
-		// 後始末
-		$this->Session->delete('Questionnaires.' . $questionnaireId);
-
-		// View変数にセット
-		$this->set('questionnaire', $questionnaire);
-		$this->set('isDuringTest', $this->_isDuringTest($questionnaire));
-	}
-
-/**
- * edit method
- *
- * @throws BadRequestException
- * @return void
- */
-	public function edit() {
-		if ($this->request->isPost()) {
-
-			$postQuestionnaire = $this->request->data;
-
-			$questionnaire = $this->Session->read('Questionnaires.questionnaire');
-			if (!$questionnaire) {
-				// セッションタイムアウト
-				throw new BadRequestException(__d('net_commons', 'Bad Request'));
-			}
-			$beforeStatus = $questionnaire['Questionnaire']['status'];
-			// 設定画面ではアンケート本体に纏わる情報のみがPOSTされる
-			$questionnaire = Hash::merge($questionnaire, $postQuestionnaire);
-
-			// 指示された編集状態ステータス
-			if (!$status = $this->NetCommonsWorkflow->parseStatus()) {
-				$this->__setupViewParameters($questionnaire);
-				return;
-			}
-			$questionnaire['Questionnaire']['status'] = $status;
-
-			if (! $this->__validateQuestionnaireSetting($questionnaire)) {
-				$questionnaire['Questionnaire']['status'] = $beforeStatus;
-				$this->__setupViewParameters($questionnaire);
-				return;
-			}
-			// それをDBに書く
-			$saveQuestionnaire = $this->Questionnaire->saveQuestionnaire($questionnaire);
-			if ($saveQuestionnaire == false) {
-				$questionnaire['Questionnaire']['status'] = $beforeStatus;
-				$this->__setupViewParameters($questionnaire);
-				return;
-			}
-
-			/////// セッションはまだ消しちゃいけない。表画面で消すこと　$this->Session->delete('Questionnaires');
-
-			// ページトップへリダイレクト
-			$this->redirectByFrameId();
-
-		} else {
-			// redirectで来るか、もしくは本当に直接のURL指定で来るかのどちらか
-			// クエリでアンケートIDの指定がある場合はそちらを優先
-			if (!empty($this->request->query['questionnaire_id'])) {
-				// 指定されたアンケートデータを取得
-				$questionnaire = $this->Questionnaire->find('first', array(
-					'conditions' => array(
-						'Questionnaire.id' => $this->request->query['questionnaire_id']
-					)
-				));
-			} elseif ($this->Session->check('Questionnaires.questionnaire')) {
-				// クエリがない場合はセッションを確認
-				$questionnaire = $this->Session->read('Questionnaires.questionnaire');
-			} else {
-				// それもない場合はエラー
-				throw new BadRequestException(__d('net_commons', 'Bad Request'));
-			}
-
-			// それをキャッシュに書く
-			$this->Session->write('Questionnaires.questionnaire', $questionnaire);
-
-		}
-		$this->__setupViewParameters($questionnaire);
-	}
-
-/**
- * delete method
- *
- * @return void
- */
-	public function delete() {
-		if ($this->request->isPost()) {
-			// viewを使用しない
-			$this->autoRender = false;
-			// 削除処理
-			if (! $this->Questionnaire->deleteQuestionnaire($this->request->data)) {
-				return;
-			}
-			// メッセージ表示
-			$this->Session->setFlash(__d('questionnaires', 'This Questionnaire has been deleted.'));
-			// ページトップの画面へリダイレクト
-			$this->redirectByFrameId();
-		}
-	}
-
-/**
- * validate questionnaire  setting
- *
- * @param array $data received post data
- * @return bool True on success, false on error
- */
-	private function __validateQuestionnaireSetting($data) {
-		$errors = array();
-
-		$this->Questionnaire->set($data);
-		$this->Questionnaire->validates(array(
-			'fieldList' => array(
-				'is_period',
-				'start_period',
-				'end_period',
-				'total_show_timing',
-				'total_show_start_period',
-				'is_no_member_allow',
-				'is_anonymity',
-				'is_key_pass_use',
-				'key_phrase',
-				'is_repeat_allow',
-				'is_image_authentication',
-				'thanks_content',
-				//'is_open_mail_send',
-				//'open_mail_subject',
-				//'open_mail_body',
-				'is_answer_mail_send',
-			)
-		));
-		if ($this->Questionnaire->validationErrors) {
-			$errors['Questionnaire'] = $this->Questionnaire->validationErrors;
-		}
-
-		if (!$this->Comment->validateByStatus($data, array('caller' => 'Questionnaire'))) {
-			$errors = Hash::merge($errors, $this->Comment->validationErrors);
-		}
-
-		if ($errors) {
-			$this->qValidationErrors = $errors;
-			return false;
-		} else {
-			return true;
-		}
-	}
-
-/**
- * __setupViewParameters method
- *
- * @param array $questionnaire アンケートデータ
- * @return void
- */
-	private function __setupViewParameters($questionnaire) {
-		$isPublished = $this->Questionnaire->find('count', array(
-			'conditions' => array(
-				'is_active' => true,
-				'origin_id' => $questionnaire['Questionnaire']['origin_id']
-			)
-		));
-		$this->set('questionnaire', $questionnaire);
-		$this->set('jsQuestionnaire', $this->camelizeKeyRecursive($this->_changeBooleansToNumbers($questionnaire)));
-		$this->set('contentStatus', $questionnaire['Questionnaire']['status']);
-		$this->set('comments', $this->_getComments($questionnaire['Questionnaire']));
-		$this->set('backUrl', '/questionnaires/questionnaire_questions/edit_result/' . $this->viewVars['frameId']);
-		$this->set('isPublished', $isPublished);
-	}
-
 }

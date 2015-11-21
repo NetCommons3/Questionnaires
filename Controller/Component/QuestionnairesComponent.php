@@ -20,6 +20,19 @@ App::uses('Component', 'Controller');
 class QuestionnairesComponent extends Component {
 
 /**
+ * コンテンツキーがパスに含まれる位置
+ *
+ * @var int
+ */
+	const	QUESTIONNAIRE_KEY_PASS_INDEX = 0;
+
+/**
+ * バリデートタイプ
+ * ウィザード画面で形成中の判定をしてほしいときに使う
+ */
+	const	QUESTIONNAIRE_VALIDATE_TYPE = 'duringSetup';
+
+/**
  * answer max length
  *
  * @var int
@@ -524,7 +537,7 @@ class QuestionnairesComponent extends Component {
 	const QUESTIONNAIRE_JSON_FILENAME = 'Questionnaires.json';
 	const QUESTIONNAIRE_FINGER_PRINT_FILENAME = 'finger_print.txt';
 
-	/**
+/**
  * getDisplayNumberOptions
  *
  * @return array

@@ -39,10 +39,7 @@ class QuestionnaireAnswerSummariesController extends QuestionnairesAppController
  * @var array
  */
 	public $components = array(
-		'Security',
-		'NetCommons.NetCommonsBlock', //Use Questionnaire model
-		'NetCommons.NetCommonsFrame',
-		'NetCommons.NetCommonsRoomRole',
+		'NetCommons.Permission',
 		'Questionnaires.Questionnaires',
 	);
 
@@ -51,9 +48,14 @@ class QuestionnaireAnswerSummariesController extends QuestionnairesAppController
  *
  */
 	public $helpers = array(
-		'NetCommons.BackToPage',
-		'NetCommons.Token'
+		'Workflow.Workflow',
 	);
+
+/**
+ * target questionnaire data
+ *
+ */
+	private $__questionnaire = null;
 
 /**
  * beforeFilter
@@ -62,41 +64,47 @@ class QuestionnaireAnswerSummariesController extends QuestionnairesAppController
  */
 	public function beforeFilter() {
 		parent::beforeFilter();
-		$this->Auth->allow('result');
+
+		// ゲストアクセスOKのアクションを設定
+		$this->Auth->allow('view');
+
+		// NetCommonsお約束：編集画面へのURLに編集対象のコンテンツキーが含まれている
+		// まずは、そのキーを取り出す
+		// アンケートキー
+		if (isset($this->params['pass'][QuestionnairesComponent::QUESTIONNAIRE_KEY_PASS_INDEX])) {
+			$questionnaireKey = $this->params['pass'][QuestionnairesComponent::QUESTIONNAIRE_KEY_PASS_INDEX];
+		} else {
+			$this->setAction('throwBadRequest');
+			return;
+		}
+		// キーで指定されたアンケートデータを取り出しておく
+		$conditions = $this->Questionnaire->getBaseCondition(
+			array('Questionnaire.key' => $questionnaireKey)
+		);
+
+		$this->__questionnaire = $this->Questionnaire->find('first', array(
+			'conditions' => $conditions,
+		));
+		if (! $this->__questionnaire) {
+			$this->setAction('throwBadRequest');
+			return;
+		}
 	}
 
 /**
  * result method
  *
- * @param int $frameId フレームID
- * @param int $questionnaireId アンケートID
- * @throws NotFoundException
  * @throws ForbiddenException
  * @return void
  */
-	public function result($frameId = 0, $questionnaireId = 0) {
-		// get conditions for finding specified Questionnaire
-		$conditions = $this->Questionnaire->getConditionForResult(
-			$this->viewVars['blockId'],
-			$this->Auth->user('id'),
-			$this->viewVars,
-			$this->getNowTime(),
-			array('origin_id' => $questionnaireId)
-		);
-
-		// get the specified questionnaire
-		$questionnaire = $this->Questionnaire->find('first', array(
-			'conditions' => $conditions
-		));
-		if (!$questionnaire) {
-			throw new NotFoundException(__d('questionnaires', 'Invalid questionnaire'));
-		}
+	public function view() {
+		$questionnaire = $this->__questionnaire;
 
 		$questions = array();
 		foreach ($questionnaire['QuestionnairePage'] as $page) {	//このアンケートのページ毎
 			foreach ($page['QuestionnaireQuestion'] as $q) {		//このページ中の質問毎
-				//各質問＋選択子($q)情報を、 $questions[(questionnaire_question_id値)]に格納していく。
-				$questions[$q['origin_id']] = $q;
+				//各質問＋選択子($q)情報を、 $questions[(questionnaire_key値)]に格納していく。
+				$questions[$q['key']] = $q;
 			}
 		}
 
@@ -111,7 +119,7 @@ class QuestionnaireAnswerSummariesController extends QuestionnairesAppController
 			throw new ForbiddenException(__d('net_commons', 'Permission denied'));
 		}
 		//集計処理を行います。
-		$this->__aggrigateAnswer($questionnaire, $this->viewVars['contentEditable'], $questions);
+		$this->__aggrigateAnswer($questionnaire, $questions);
 
 		//ニックネームとuser_idを取り出す.　QuestionnaireControllerに合わせる。
 		$username = CakeSession::read('Auth.User.username');
@@ -120,9 +128,7 @@ class QuestionnaireAnswerSummariesController extends QuestionnairesAppController
 		//$user_id = empty($user_id) ? null : $user_id;
 
 		//画面用データをセットする。
-		$this->set('frameId', $frameId);								//ng-initのinitilize()引数用
-		$this->set('questionnaireId', $questionnaireId);
-		$this->set('isDuringTest', $this->_isDuringTest($questionnaire));
+		$this->set('questionnaireId', $this->_getQuestionnaireKey($this->__questionnaire));
 		$this->set('questionnaire', $questionnaire);
 		$this->set('questions', $questions);
 		$this->set('jsQuestionnaire', $this->camelizeKeyRecursive($questionnaire));
@@ -137,16 +143,15 @@ class QuestionnaireAnswerSummariesController extends QuestionnairesAppController
  * 集計処理の実施
  *
  * @param array $questionnaire アンケート情報
- * @param bool $contentEditable 編集可能フラグ
  * @param array &$questions アンケート質問(集計結果を配列追加して返します)
  * @return void
  */
-	private function __aggrigateAnswer($questionnaire, $contentEditable, &$questions) {
+	private function __aggrigateAnswer($questionnaire, &$questions) {
 		// 集計データを集める際の基本条件
 		$baseConditions = $this->QuestionnaireAnswerSummary->getResultCondition($questionnaire);
 
 		//質問毎に、まとめあげる.
-		//$questionsは、questionnaire_question_origin_idをキーとし、questionnaire_question配下が代入されている。
+		//$questionsは、questionnaire_question_keyをキーとし、questionnaire_question配下が代入されている。
 		//
 		foreach ($questions as &$question) {
 			if ($question['is_result_display'] != QuestionnairesComponent::EXPRESSION_SHOW) {
@@ -156,7 +161,7 @@ class QuestionnaireAnswerSummariesController extends QuestionnairesAppController
 			// 戻り値の、この質問の合計回答数を記録しておく。
 			// skip ロジックがあるため、単純にsummaryのcountじゃない..
 			$questionConditions = $baseConditions + array(
-				'QuestionnaireAnswer.questionnaire_question_origin_id' => $question['origin_id'],
+				'QuestionnaireAnswer.questionnaire_question_key' => $question['key'],
 			);
 			$question['answer_total_cnt'] = $this->QuestionnaireAnswer->getAnswerCount($questionConditions);
 
@@ -183,11 +188,11 @@ class QuestionnaireAnswerSummariesController extends QuestionnairesAppController
 			if ($c['matrix_type'] == QuestionnairesComponent::MATRIX_TYPE_ROW_OR_NO_MATRIX) {
 				foreach ($cols as $col) {
 					$conditions = $questionConditions + array(
-							'QuestionnaireAnswer.matrix_choice_id' => $c['origin_id'],
-							'QuestionnaireAnswer.answer_value LIKE ' => '%' . QuestionnairesComponent::ANSWER_DELIMITER . $col['origin_id'] . QuestionnairesComponent::ANSWER_VALUE_DELIMITER . '%',
+							'QuestionnaireAnswer.matrix_choice_key' => $c['key'],
+							'QuestionnaireAnswer.answer_value LIKE ' => '%' . QuestionnairesComponent::ANSWER_DELIMITER . $col['key'] . QuestionnairesComponent::ANSWER_VALUE_DELIMITER . '%',
 						);
 					$cnt = $this->QuestionnaireAnswer->getAnswerCount($conditions);
-					$c['aggrigate_total'][$col['origin_id']] = $cnt;
+					$c['aggrigate_total'][$col['key']] = $cnt;
 				}
 				$rowCnt++;
 			}
@@ -206,7 +211,7 @@ class QuestionnaireAnswerSummariesController extends QuestionnairesAppController
 	private function __aggrigateAnswerForNotMatrix(&$question, $questionConditions) {
 		foreach ($question['QuestionnaireChoice'] as &$c) {
 			$conditions = $questionConditions + array(
-					'QuestionnaireAnswer.answer_value LIKE ' => '%' . QuestionnairesComponent::ANSWER_DELIMITER . $c['origin_id'] . QuestionnairesComponent::ANSWER_VALUE_DELIMITER . '%',
+					'QuestionnaireAnswer.answer_value LIKE ' => '%' . QuestionnairesComponent::ANSWER_DELIMITER . $c['key'] . QuestionnairesComponent::ANSWER_VALUE_DELIMITER . '%',
 				);
 			$cnt = $this->QuestionnaireAnswer->getAnswerCount($conditions);
 			$c['aggrigate_total']['aggrigate_not_matrix'] = $cnt;

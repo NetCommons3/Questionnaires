@@ -30,15 +30,15 @@ class QuestionnaireStatusLabelHelper extends AppHelper {
 		$lblColor = 'danger';
 		$lblMsg = __d('questionnaires', 'Undefined');
 
-		if ($status == NetCommonsBlockComponent::STATUS_IN_DRAFT) {
+		if ($status == WorkflowComponent::STATUS_IN_DRAFT) {
 			//一時保存中
 			$lblColor = 'info';
 			$lblMsg = __d('net_commons', 'Temporary');
-		} elseif ($status == NetCommonsBlockComponent::STATUS_APPROVED) {
+		} elseif ($status == WorkflowComponent::STATUS_APPROVED) {
 			//承認待ち
 			$lblColor = 'warning';
 			$lblMsg = __d('net_commons', 'Approving');
-		} elseif ($status == NetCommonsBlockComponent::STATUS_DISAPPROVED) {
+		} elseif ($status == WorkflowComponent::STATUS_DISAPPROVED) {
 			//差し戻し
 			$lblColor = 'danger';
 			$lblMsg = __d('net_commons', 'Disapproving');

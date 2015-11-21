@@ -660,7 +660,7 @@ msgid "Results setting"
 msgstr ""
 
 #: /View/QuestionnaireQuestions/edit_result.ctp:60
-msgid "Please edit return to create the question screen if you want to change the questionnaire title"
+msgid "If you want to change the questionnaire title, please edit in \"Set questionnaire\" step."
 msgstr ""
 
 #: /View/QuestionnaireQuestions/edit_result.ctp:64

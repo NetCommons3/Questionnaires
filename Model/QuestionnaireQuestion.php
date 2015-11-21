@@ -24,9 +24,7 @@ class QuestionnaireQuestion extends QuestionnairesAppModel {
  * @var array
  */
 	public $actsAs = array(
-		'NetCommons.Publishable',
 		'NetCommons.OriginalKey',
-		'Questionnaires.QuestionnaireValidate',
 	);
 
 /**
@@ -45,7 +43,7 @@ class QuestionnaireQuestion extends QuestionnairesAppModel {
  */
 	public $belongsTo = array(
 		'QuestionnairePage' => array(
-			'className' => 'QuestionnairePage',
+			'className' => 'Questionnaires.QuestionnairePage',
 			'foreignKey' => 'questionnaire_page_id',
 			'conditions' => '',
 			'fields' => '',
@@ -60,7 +58,7 @@ class QuestionnaireQuestion extends QuestionnairesAppModel {
  */
 	public $hasMany = array(
 		'QuestionnaireChoice' => array(
-			'className' => 'QuestionnaireChoice',
+			'className' => 'Questionnaires.QuestionnaireChoice',
 			'foreignKey' => 'questionnaire_question_id',
 			'dependent' => true,
 			'conditions' => '',
@@ -81,20 +79,22 @@ class QuestionnaireQuestion extends QuestionnairesAppModel {
  * @param array $options Options passed from Model::save().
  * @return bool True if validate operation should continue, false to abort
  * @link http://book.cakephp.org/2.0/en/models/callback-methods.html#beforevalidate
+ * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
  * @see Model::save()
  */
 	public function beforeValidate($options = array()) {
-		$this->validate = Hash::merge($this->validate, array(
-			'questionnaire_page_id' => array(
-				'numeric' => array(
-					'rule' => array('numeric'),
-					'message' => __d('net_commons', 'Invalid request.'),
-				),
-			),
+		$qIndex = $options['questionIndex'];
+		// Questionモデルは繰り返し判定が行われる可能性高いのでvalidateルールは最初に初期化
+		// mergeはしません
+		$this->validate = array(
 			'question_sequence' => array(
 				'numeric' => array(
 					'rule' => array('numeric'),
 					'message' => __d('net_commons', 'Invalid request.'),
+				),
+				'comparison' => array(
+					'rule' => array('comparison', '==', $qIndex),
+					'message' => __d('questionnaires', 'question sequence is illegal.')
 				),
 			),
 			'question_type' => array(
@@ -104,8 +104,8 @@ class QuestionnaireQuestion extends QuestionnairesAppModel {
 				),
 			),
 			'question_value' => array(
-				'notEmpty' => array(
-					'rule' => array('notEmpty'),
+				'notBlank' => array(
+					'rule' => array('notBlank'),
 					'message' => __d('questionnaires', 'Please input question text.'),
 				),
 			),
@@ -132,8 +132,8 @@ class QuestionnaireQuestion extends QuestionnairesAppModel {
 					'rule' => array('boolean'),
 					'message' => __d('net_commons', 'Invalid request.'),
 				),
-				'checkRelationshipQuestionType' => array(
-					'rule' => array('checkRelationshipQuestionType'),
+				'inList' => array(
+					'rule' => array('inList', $this->_getResultDisplayList($this->data['QuestionnaireQuestion']['question_type'])),
 					'message' => __d('net_commons', 'Invalid request.'),
 				),
 			),
@@ -148,27 +148,69 @@ class QuestionnaireQuestion extends QuestionnairesAppModel {
 					'rule' => array('boolean'),
 					'message' => __d('net_commons', 'Invalid request.'),
 				),
-				'requireOtherFields' => array(
-					'rule' => array('requireOtherFields', array('min', 'max'), 'AND'),
-					'message' => __d('questionnaires', 'Please enter both the maximum and minimum values.')
-				)
 			),
-			'min' => array(
-				'checkMinMax' => array(
-					'rule' => array('checkMinMax'),
-					'message' => __d('questionnaires', 'Invalid value'),
+		);
+		// 範囲制限設定された質問の場合
+		if ($this->data['QuestionnaireQuestion']['is_range'] == true) {
+			$this->validate = Hash::merge($this->validate, array(
+				'min' => array(
+					'notBlank' => array(
+						'rule' => array('notBlank'),
+						'message' => __d('questionnaires', 'Please enter both the maximum and minimum values.'),
+					),
+					'comparison' => array(
+						'rule' => array('comparison', '<', $this->data['QuestionnaireQuestion']['max']),
+						'message' => __d('questionnaires', 'Please enter smaller value than max.')
+					),
 				),
-			),
-			'max' => array(
-				'checkMinMax' => array(
-					'rule' => array('checkMinMax'),
-					'message' => __d('questionnaires', 'Invalid value'),
+				'max' => array(
+					'notBlank' => array(
+						'rule' => array('notBlank'),
+						'message' => __d('questionnaires', 'Please enter both the maximum and minimum values.'),
+					),
+					'comparison' => array(
+						'rule' => array('comparison', '>', $this->data['QuestionnaireQuestion']['min']),
+						'message' => __d('questionnaires', 'Please enter bigger value than min.')
+					),
 				),
-			),
-		));
-		return parent::beforeValidate($options);
-	}
+			));
 
+		}
+		// ウィザード画面でのセットアップ中の場合はまだ親ページIDの正当性についてのチェックは行わない
+		if (! (isset($options['validate']) && $options['validate'] == QuestionnairesComponent::QUESTIONNAIRE_VALIDATE_TYPE)) {
+			$this->validate = Hash::merge($this->validate, array(
+				'questionnaire_page_id' => array(
+					'numeric' => array(
+						'rule' => array('numeric'),
+						'message' => __d('net_commons', 'Invalid request.'),
+					),
+				),
+			));
+		}
+
+		parent::beforeValidate($options);
+
+		$isSkip = $this->data['QuestionnaireQuestion']['is_skip'];
+		// 付属の選択肢以下のvalidate
+		if ($this->_checkChoiceExists() && isset($this->data['QuestionnaireChoice'])) {
+			// この質問種別に必要な選択肢データがちゃんとあるなら選択肢をバリデート
+			$validationErrors = array();
+			$this->QuestionnaireChoice = ClassRegistry::init('Questionnaires.QuestionnaireChoice', true);
+			foreach ($this->data['QuestionnaireChoice'] as $cIndex => $choice) {
+				// 質問データバリデータ
+				$this->QuestionnaireChoice->create();
+				$this->QuestionnaireChoice->set($choice);
+				$options['choiceIndex'] = $cIndex;
+				$options['isSkip'] = $isSkip;
+				if (! $this->QuestionnaireChoice->validates($options)) {
+					$validationErrors['QuestionnaireChoice'][$cIndex] = $this->QuestionnaireChoice->validationErrors;
+				}
+			}
+			$this->validationErrors += $validationErrors;
+		}
+
+		return true;
+	}
 /**
  * getDefaultQuestion
  * get default data of questionnaire question
@@ -227,12 +269,11 @@ class QuestionnaireQuestion extends QuestionnairesAppModel {
  * save QuestionnaireQuestion data
  *
  * @param int $pageId questionnaire page id
- * @param int $status status
  * @param array &$questions questionnaire questions
  * @throws InternalErrorException
  * @return bool
  */
-	public function saveQuestionnaireQuestion($pageId, $status, &$questions) {
+	public function saveQuestionnaireQuestion($pageId, &$questions) {
 		$this->loadModels([
 			'QuestionnaireChoice' => 'Questionnaires.QuestionnaireChoice',
 		]);
@@ -242,20 +283,70 @@ class QuestionnaireQuestion extends QuestionnairesAppModel {
 		// 決まり処理は上位で行われる
 		// ここでは行わない
 
-		foreach ($questions as &$qq) {
-			$saveQuestion = $this->_setupSaveData($qq, $status);
-			$saveQuestion['questionnaire_page_id'] = $pageId;
+		foreach ($questions as &$question) {
+			// アンケートは履歴を取っていくタイプのコンテンツデータなのでSave前にはID項目はカット
+			// （そうしないと既存レコードのUPDATEになってしまうから）
+			$question = Hash::remove($question, 'QuestionnaireQuestion.id');
+			$question['questionnaire_page_id'] = $pageId;
 
 			$this->create();
-			if (!$this->save($saveQuestion)) {
-				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+			if (!$this->save($question, false)) {
+				return false;
 			};
 
 			$questionId = $this->id;
 
-			if (isset($qq['QuestionnaireChoice'])) {
-				$this->QuestionnaireChoice->saveQuestionnaireChoice($questionId, $status, $qq['QuestionnaireChoice']);
+			if (isset($question['QuestionnaireChoice'])) {
+				if (! $this->QuestionnaireChoice->saveQuestionnaireChoice($questionId, $question['QuestionnaireChoice'])) {
+					return false;
+				}
 			}
 		}
+		return true;
+	}
+/**
+ * _checkChoiceExists
+ *
+ * 適正な選択肢を持っているか
+ *
+ * @return bool
+ */
+	protected function _checkChoiceExists() {
+		// テキストタイプ、テキストエリアタイプの時は選択肢不要
+		if (QuestionnairesComponent::isOnlyInputType($this->data['QuestionnaireQuestion']['question_type'])) {
+			return true;
+		}
+
+		// 上記以外の場合は最低１つは必要
+		if (empty($this->data['QuestionnaireChoice'][0])) {
+			$this->validationErrors['question_type'] = __d('questionnaires', 'please set at least one choice.');
+			return false;
+		}
+
+		// マトリクスタイプの時は行に１つ列に一つ必要
+		// マトリクスタイプのときは、行、カラムの両方ともに最低一つは必要
+		if (QuestionnairesComponent::isMatrixInputType($this->data['QuestionnaireQuestion']['question_type'])) {
+			$rows = Hash::extract($this->data['QuestionnaireChoice'], '{n}[matrix_type=' . QuestionnairesComponent::MATRIX_TYPE_ROW_OR_NO_MATRIX . ']');
+			$cols = Hash::extract($this->data['QuestionnaireChoice'], '{n}[matrix_type=' . QuestionnairesComponent::MATRIX_TYPE_COLUMN . ']');
+
+			if (empty($rows) || empty($cols)) {
+				$this->validationErrors['question_type'] = __d('questionnaires', 'please set at least one choice at row and column.');
+				return false;
+			}
+		}
+		return true;
+	}
+/**
+ * _getResultDisplayList
+ * 質問種別に応じて許されるisResultDisplayの設定値
+ *
+ * @param int $questionType 質問種別
+ * @return array
+ */
+	protected function _getResultDisplayList($questionType) {
+		if (QuestionnairesComponent::isOnlyInputType($questionType)) {
+			return array(QuestionnairesComponent::USES_NOT_USE);
+		}
+		return array(QuestionnairesComponent::USES_USE, QuestionnairesComponent::USES_NOT_USE);
 	}
 }

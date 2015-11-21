@@ -2,8 +2,6 @@
 /**
  * Questionnaire Model
  *
- * @property QuestionnairePage $QuestionnairePage
- *
  * @author Noriko Arai <arai@nii.ac.jp>
  * @author AllCreator <info@allcreator.net>
  * @link http://www.netcommons.org NetCommons Project
@@ -23,19 +21,11 @@ class Questionnaire extends QuestionnairesAppModel {
  * @var array
  */
 	public $actsAs = array(
-		'NetCommons.Publishable',
 		'NetCommons.OriginalKey',
-		'NetCommons.Trackable',
+		'Workflow.Workflow',
+		'Workflow.WorkflowComment',
+		'AuthorizationKeys.AuthorizationKey',
 		'Questionnaires.QuestionnaireValidate',
-	);
-
-/**
- * Custom find methods
- *
- * @var array
- */
-	public $findMethods = array(
-		'getQListWithAnsCnt' => true
 	);
 
 /**
@@ -70,7 +60,7 @@ class Questionnaire extends QuestionnairesAppModel {
  */
 	public $hasMany = array(
 		'QuestionnairePage' => array(
-			'className' => 'QuestionnairePage',
+			'className' => 'Questionnaires.QuestionnairePage',
 			'foreignKey' => 'questionnaire_id',
 			'dependent' => true,
 			'conditions' => '',
@@ -100,21 +90,15 @@ class Questionnaire extends QuestionnairesAppModel {
 				'numeric' => array(
 					'rule' => array('numeric'),
 					'message' => __d('net_commons', 'Invalid request.'),
-					'required' => true,
-				)
-			),
-			'is_auto_translated' => array(
-				'boolean' => array(
-					'rule' => array('boolean'),
-					'message' => __d('net_commons', 'Invalid request.'),
+					'on' => 'update', // Limit validation to 'create' or 'update' operations 新規の時はブロックIDがなかったりするから
 				)
 			),
 			'title' => array(
-				'notEmpty' => array(
-					'rule' => array('notEmpty'),
+					'rule' => 'notBlank',
 					'message' => sprintf(__d('net_commons', 'Please input %s.'), __d('questionnaires', 'Title')),
-					'required' => true
-				),
+					'required' => true,
+					'allowEmpty' => false,
+					'required' => true,
 			),
 			'is_period' => array(
 				'boolean' => array(
@@ -122,7 +106,7 @@ class Questionnaire extends QuestionnairesAppModel {
 					'message' => __d('net_commons', 'Invalid request.'),
 				),
 				'requireOtherFields' => array(
-					'rule' => array('requireOtherFields', array('start_period', 'end_period'), 'OR'),
+					'rule' => array('requireOtherFields', array('Questionnaire.start_period', 'Questionnaire.end_period'), 'OR'),
 					'message' => __d('questionnaires', 'if you set the period, please set time.')
 				)
 			),
@@ -148,7 +132,7 @@ class Questionnaire extends QuestionnairesAppModel {
 					'message' => __d('net_commons', 'Invalid request.'),
 				),
 				'requireOtherFields' => array(
-					'rule' => array('requireOtherFields', array('total_show_start_period'), 'AND'),
+					'rule' => array('requireOtherFields', array('Questionnaire.total_show_start_period'), 'AND'),
 					'message' => __d('questionnaires', 'if you set the period, please set time.')
 				)
 			),
@@ -176,7 +160,7 @@ class Questionnaire extends QuestionnairesAppModel {
 					'message' => __d('net_commons', 'Invalid request.'),
 				),
 				'requireOtherFields' => array(
-					'rule' => array('requireOtherFields', array('key_phrase'), 'AND'),
+					'rule' => array('requireOtherFields', array('AuthorizationKey.authorization_key'), 'AND'),
 					'message' => __d('questionnaires', 'if you set the use key phrase period, please set key phrase text.')
 				)
 			),
@@ -200,9 +184,33 @@ class Questionnaire extends QuestionnairesAppModel {
 			),
 		));
 
-		return parent::beforeValidate($options);
-	}
+		parent::beforeValidate($options);
 
+		// 最低でも１ページは存在しないとエラー
+		if (! isset($this->data['QuestionnairePage'][0])) {
+			$this->validationErrors['pickup_error'] = __d('questionnaires', 'please set at least one page.');
+		} else {
+			// ページデータが存在する場合
+			// 配下のページについてバリデート
+			$validationErrors = array();
+			$this->QuestionnairePage = ClassRegistry::init('Questionnaires.QuestionnairePage', true);
+			$maxPageIndex = count($this->data['QuestionnairePage']);
+			$options['maxPageIndex'] = $maxPageIndex;
+			foreach ($this->data['QuestionnairePage'] as $pageIndex => $page) {
+				// それぞれのページのフィールド確認
+				$this->QuestionnairePage->create();
+				$this->QuestionnairePage->set($page);
+				// ページシーケンス番号の正当性を確認するため、現在の配列インデックスを渡す
+				$options['pageIndex'] = $pageIndex;
+				if (! $this->QuestionnairePage->validates($options)) {
+					$validationErrors['QuestionnairePage'][$pageIndex] = $this->QuestionnairePage->validationErrors;
+				}
+			}
+			$this->validationErrors += $validationErrors;
+		}
+		// 引き続きアンケート本体のバリデートを実施してもらうためtrueを返す
+		return true;
+	}
 /**
  * AfterFind Callback function
  *
@@ -217,8 +225,7 @@ class Questionnaire extends QuestionnairesAppModel {
 
 		foreach ($results as &$val) {
 			// これらの場合はcount か deleteか
-			if (!isset($val['Questionnaire'])
-				|| (count($val['Questionnaire']) == 1 && isset($val['Questionnaire']['id']))) {
+			if (! isset($val['Questionnaire']['id'])) {
 				continue;
 			}
 
@@ -236,7 +243,7 @@ class Questionnaire extends QuestionnairesAppModel {
 
 			$val['Questionnaire']['all_answer_count'] = $this->QuestionnaireAnswerSummary->find('count', array(
 				'conditions' => array(
-					'questionnaire_origin_id' => $val['Questionnaire']['origin_id'],
+					'questionnaire_key' => $val['Questionnaire']['key'],
 					'test_status' => QuestionnairesComponent::TEST_ANSWER_STATUS_PEFORM
 				),
 				'recursive' => -1
@@ -246,34 +253,75 @@ class Questionnaire extends QuestionnairesAppModel {
 	}
 
 /**
+ * After frame save hook
+ *
+ * このルームにすでにアンケートブロックが存在した場合で、かつ、現在フレームにまだブロックが結びついてない場合、
+ * すでに存在するブロックと現在フレームを結びつける
+ *
+ * @param array $data received post data
+ * @return mixed On success Model::$data if its not empty or true, false on failure
+ * @throws InternalErrorException
+ */
+	public function afterFrameSave($data) {
+		// すでに結びついている場合は何もしないでよい
+		if (!empty($data['Frame']['block_id'])) {
+			return $data;
+		}
+		$frame = $data['Frame'];
+		// ルームに存在するブロックを探す
+		$block = $this->Block->find('first', array(
+			'conditions' => array(
+				'Block.room_id' => $frame['room_id'],
+				'Block.plugin_key' => $frame['plugin_key'],
+			)
+		));
+		// まだない場合
+		if (empty($block)) {
+			// 作成する
+			$block = $this->Block->save(array(
+				'room_id' => $frame['room_id'],
+				'language_id' => $frame['language_id'],
+				'plugin_key' => $frame['plugin_key'],
+			));
+			Current::$current['Block'] = $block['Block'];
+		}
+
+		if (empty($frame['block_id'])) {
+			$this->loadModels([
+				'Frame' => 'Frames.Frame',
+			]);
+			$data['Frame']['block_id'] = $block['Block']['id'];
+			$this->Frame->save($data);
+			Current::$current['Frame']['block_id'] = $block['Block']['id'];
+		}
+		return $data;
+	}
+/**
  * geQuestionnairesList
  * get questionnaires by specified block id and specified user id limited number
  *
  * @param array $conditions find condition
- * @param string $sessionId Session id
- * @param int $userId User id （if not specified, null)
- * @param array $filter Narrowing conditions currently envisioned answer status , editing status
- * @param array $sort Sort conditions
- * @param int $offset offset of select
- * @param int $limit limit number of select
+ * @param array $options 検索オプション
  * @return array
  */
-	public function getQuestionnairesList($conditions, $sessionId, $userId, $filter, $sort = 'modified DESC', $offset = 0, $limit = QuestionnairesComponent::QUESTIONNAIRE_DEFAULT_DISPLAY_NUM_PER_PAGE) {
-		$subQuery = $this->getQuestionnairesCommonForAnswer($sessionId, $userId);
+	public function getQuestionnairesList($conditions, $options = array()) {
+		//$limit = QuestionnairesComponent::QUESTIONNAIRE_DEFAULT_DISPLAY_NUM_PER_PAGE}, $offset = 0, $sort = 'modified DESC') {
+		// 絞込条件
+		$baseConditions = $this->getBaseCondition();
+		$conditions = Hash::merge($baseConditions, $conditions);
+
+		// 回答数取得のためのSubQuery
+		$subQuery = $this->getQuestionnaireSubQuery();
+
+		// 取得オプション
+		$this->QuestionnaireFrameSetting = ClassRegistry::init('Questionnaires.QuestionnaireFrameSetting', true);
+		$defaultOptions = $this->QuestionnaireFrameSetting->getQuestionnaireFrameSettingConditions(Current::read('Frame.key'));
+		$options = Hash::merge($defaultOptions, $options);
 		$list = $this->find('all', array(
-			'fields' => array(
-				'Block.*',
-				'Questionnaire.*',
-				'TrackableCreator.*',
-				'TrackableUpdater.*',
-				'CountAnswerSummary.*'
-			),
 			'recursive' => 0,
 			'joins' => $subQuery,
 			'conditions' => $conditions,
-			'order' => 'Questionnaire.modified DESC',
-			'limit' => $limit,
-			'offset' => $offset
+			$options
 		));
 		return $list;
 	}
@@ -281,17 +329,14 @@ class Questionnaire extends QuestionnairesAppModel {
 /**
  * get index sql condition method
  *
- * @param int $blockId block id
- * @param int $userId login user id
- * @param array $permissions ( viewVars )
- * @param datetime $currentDateTime date time
  * @param array $addConditions 追加条件
  * @return array
  */
-	public function getCondition($blockId, $userId, $permissions, $currentDateTime, $addConditions = array()) {
-		$conditions = $this->getConditionForAnswer($blockId, $userId, $permissions, $currentDateTime, $addConditions);
+	public function getCondition($addConditions = array()) {
+		// ベースとなる権限のほかに現在フレームに表示設定されているアンケートか見ている
+		$conditions = $this->getBaseCondition($addConditions);
 		$conditions['NOT'] = array('QuestionnaireFrameDisplayQuestionnaires.id' => null);
-		$conditions['QuestionnaireFrameDisplayQuestionnaires.frame_key'] = $permissions['frameKey'];
+		$conditions['QuestionnaireFrameDisplayQuestionnaires.frame_key'] = Current::read('Frame.key');
 
 		if ($addConditions) {
 			$conditions = array_merge($conditions, $addConditions);
@@ -302,137 +347,78 @@ class Questionnaire extends QuestionnairesAppModel {
 /**
  * get index sql condition method
  *
- * @param int $blockId block id
- * @param int $userId login user id
- * @param array $permissions ( viewVars )
- * @param datetime $currentDateTime date time
  * @param array $addConditions 追加条件
  * @return array
  */
-	public function getConditionForAnswer($blockId, $userId, $permissions, $currentDateTime, $addConditions = array()) {
-		$conditions = array(
-			'block_id' => $blockId,
-		);
-		if (!$permissions['contentEditable']) {
-			$conditions['is_active'] = true;
-			$conditions['OR'] = array(
-				'start_period <' => $currentDateTime,
-				'is_period' => false,
-			);
-		} else {
-			$conditions['is_latest'] = true;
-		}
-		if ($permissions['roomRoleKey'] == NetCommonsRoomRoleComponent::DEFAULT_ROOM_ROLE_KEY) {
-			$conditions['is_no_member_allow'] = QuestionnairesComponent::PERMISSION_PERMIT;
-		}
-
-		if ($addConditions) {
-			$conditions = array_merge($conditions, $addConditions);
-		}
-		return $conditions;
-	}
-
-/**
- * get questionnaire for result display sql condition method
- *
- * @param int $blockId block id
- * @param int $userId login user id
- * @param array $permissions ( viewVars )
- * @param datetime $currentDateTime date time
- * @param array $addConditions 追加条件
- * @return array
- */
-	public function getConditionForResult($blockId, $userId, $permissions, $currentDateTime, $addConditions = array()) {
-		$conditions = array(
-			'block_id' => $blockId,
-			'is_total_show' => QuestionnairesComponent::EXPRESSION_SHOW,
-
-		);
-		if (!$permissions['contentEditable']) {
-			$conditions['is_active'] = true;
-			$conditions['OR'] = array(
-				'total_show_timing' => QuestionnairesComponent::USES_NOT_USE,
-				'total_show_start_period <' => $currentDateTime,
-			);
-		} else {
-			$conditions['is_latest'] = true;
-		}
-		if ($permissions['roomRoleKey'] == NetCommonsRoomRoleComponent::DEFAULT_ROOM_ROLE_KEY) {
-			$conditions['is_no_member_allow'] = QuestionnairesComponent::PERMISSION_PERMIT;
-		}
-		if ($addConditions) {
-			$conditions = array_merge($conditions, $addConditions);
-		}
-		return $conditions;
-	}
-
-/**
- * getDefaultQuestionnaire
- * get default data of questionnaires
- *
- * @param array $addData add data to Default data
- * @return array
- */
-	public function getDefaultQuestionnaire($addData) {
-		$this->QuestionnairePage = ClassRegistry::init('Questionnaires.QuestionnairePage', true);
-		$questionnaire = array();
-		$questionnaire['Questionnaire'] = Hash::merge(
-			array(
-				'title' => '',
-				'key' => '',
-				'status' => NetCommonsBlockComponent::STATUS_IN_DRAFT,
-				'is_total_show' => QuestionnairesComponent::EXPRESSION_SHOW,
-				'is_period' => QuestionnairesComponent::USES_NOT_USE,
-				'is_key_pass_use' => QuestionnairesComponent::USES_NOT_USE,
-				'total_show_timing' => QuestionnairesComponent::USES_NOT_USE,
-			),
-			$addData);
-
-		if (!isset($questionnaire['QuestionnairePage'][0])) {
-			$questionnaire['QuestionnairePage'][0] = $this->QuestionnairePage->getDefaultPage($questionnaire);
-		}
-		return $questionnaire;
-	}
-
-/**
- * getQuestionnaireCloneById 指定されたIDにのアンケートデータのクローンを取得する
- *
- * @param int $questionnaireId アンケートID(編集なのでoriginではなくRAWなIDのほう
- * @return array
- */
-	public function getQuestionnaireCloneById($questionnaireId) {
-		$questionnaire = $this->find('first', array(
-			'conditions' => array('Questionnaire.id' => $questionnaireId),
+	public function getBaseCondition($addConditions = array()) {
+		$conditions = $this->getWorkflowConditions(array(
+			'block_id' => Current::read('Block.id'),
 		));
 
-		if (!$questionnaire) {
-			return $this->getDefaultQuestionnaire(array('title' => ''));
-		}
-		// ID値のみクリア
-		$this->clearQuestionnaireId($questionnaire);
+		/*FUJI:期間判定ロジックはworkflowへ*/
 
-		return $questionnaire;
+		if (! Current::read('User')) {
+			$conditions['is_no_member_allow'] = QuestionnairesComponent::PERMISSION_PERMIT;
+		}
+
+		if ($addConditions) {
+			$conditions = array_merge($conditions, $addConditions);
+		}
+		return $conditions;
 	}
 
 /**
- * clearQuestionnaireId アンケートデータからＩＤのみをクリアする
+ * getQuestionnaireSubQuery アンケートに対する指定ユーザーの回答が存在するか
  *
- * @param array &$questionnaire アンケートデータ
- * @return void
+ * @return array
  */
-	public function clearQuestionnaireId(&$questionnaire) {
-		foreach ($questionnaire as $qKey => $q) {
-			if (is_array($q)) {
-				$this->clearQuestionnaireId($questionnaire[$qKey]);
-			} elseif (preg_match('/(.*?)id$/', $qKey) ||
-				preg_match('/^key$/', $qKey) ||
-				preg_match('/^created(.*?)/', $qKey) ||
-				preg_match('/^modified(.*?)/', $qKey)) {
-				unset($questionnaire[$qKey]);
-			}
+	public function getQuestionnaireSubQuery() {
+		$sessionId = CakeSession::id();
+		$dbo = $this->getDataSource();
+		$this->QuestionnaireAnswerSummary = ClassRegistry::init('Questionnaires.QuestionnaireAnswerSummary', true);
+		if (Current::read('User.id')) {
+			$conditions = array(
+				'user_id' => Current::read('User.id'),
+				'answer_status' => QuestionnairesComponent::ACTION_ACT,
+				'test_status' => QuestionnairesComponent::TEST_ANSWER_STATUS_PEFORM,
+			);
+		} else {
+			$conditions = array(
+				'session_value' => $sessionId,
+				'answer_status' => QuestionnairesComponent::ACTION_ACT,
+				'test_status' => QuestionnairesComponent::TEST_ANSWER_STATUS_PEFORM,
+			);
 		}
+		$answeredSummaryQuery = $dbo->buildStatement(
+			array(
+				'fields' => array('questionnaire_key', 'count(id) AS answer_summary_count'),
+				'table' => $dbo->fullTableName($this->QuestionnaireAnswerSummary),
+				'alias' => 'CountAnswerSummary',
+				'limit' => null,
+				'offset' => null,
+				'conditions' => $conditions,
+				'joins' => array(),
+				'group' => array('questionnaire_key')
+			),
+			$this->QuestionnaireAnswerSummary
+		);
+		$subQueryArray = array(
+			array('type' => 'left',
+				'table' => '(' . $answeredSummaryQuery . ') AS CountAnswerSummary',
+				'conditions' => 'Questionnaire.key = CountAnswerSummary.questionnaire_key'
+			),
+			array(
+				'table' => 'questionnaire_frame_display_questionnaires',
+				'alias' => 'QuestionnaireFrameDisplayQuestionnaires',
+				'type' => 'left',
+				'conditions' => array(
+					'Questionnaire.key = QuestionnaireFrameDisplayQuestionnaires.questionnaire_key'
+				)
+			),
+		);
+		$this->virtualFields = ['answer_summary_count' => 'CountAnswerSummary.answer_summary_count'];
+		return $subQueryArray;
 	}
-
 /**
  * saveQuestionnaire
  * save Questionnaire data
@@ -444,56 +430,47 @@ class Questionnaire extends QuestionnairesAppModel {
 	public function saveQuestionnaire(&$questionnaire) {
 		$this->loadModels([
 			'QuestionnairePage' => 'Questionnaires.QuestionnairePage',
-			'Block' => 'Blocks.Block',
-			'Comment' => 'Comments.Comment',
 			'QuestionnaireFrameDisplayQuestionnaire' => 'Questionnaires.QuestionnaireFrameDisplayQuestionnaire',
 			'QuestionnaireAnswerSummary' => 'Questionnaires.QuestionnaireAnswerSummary',
 		]);
 
 		//トランザクションBegin
-		$this->setDataSource('master');
-		$dataSource = $this->getDataSource();
-		$dataSource->begin();
+		$this->begin();
 
 		try {
 			$status = $questionnaire['Questionnaire']['status'];
+			$this->create();
+			// アンケートは履歴を取っていくタイプのコンテンツデータなのでSave前にはID項目はカット
+			// （そうしないと既存レコードのUPDATEになってしまうから）
+			// （ちなみにこのカット処理をbeforeSaveで共通でやってしまおうとしたが、
+			//   beforeSaveでIDをカットしてもUPDATE動作になってしまっていたのでここに置くことにした)
+			$questionnaire = Hash::remove($questionnaire, 'Questionnaire.id');
 
-			// アンケートデータの準備
-			$saveQuestionnaire = $this->_setupSaveData($questionnaire['Questionnaire'], $status);
+			$this->set($questionnaire);
 
-			// 編集ステータスとコメントの関係性からのチェック
-			if (!$this->Comment->validateByStatus($questionnaire, array('caller' => $this->name))) {
-				$this->validationErrors = Hash::merge($this->validationErrors, $this->Comment->validationErrors);
+			$saveQuestionnaire = $this->save($questionnaire);
+			if (! $saveQuestionnaire) {
+				$this->rollback();
 				return false;
 			}
-
-			$this->create();
-			$saveQuestionnaire = $this->save($saveQuestionnaire);
-			if (!$saveQuestionnaire) {
-				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
-			}
-
 			$questionnaireId = $this->id;
 
-			$this->QuestionnairePage->saveQuestionnairePage($questionnaireId, $status, $questionnaire['QuestionnairePage']);
-
-			//コメントの登録
-			if ($this->Comment->data) {
-				if (! $this->Comment->save(null, false)) {
-					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
-				}
+			// ページ以降のデータを登録
+			if (! $this->QuestionnairePage->saveQuestionnairePage($questionnaireId, $questionnaire['QuestionnairePage'])) {
+				$this->rollback();
+				return false;
 			}
-
 			// フレーム内表示対象アンケートに登録する
-			if (!$this->QuestionnaireFrameDisplayQuestionnaire->saveFrameDisplayQuestionnaire($questionnaire['Frame']['id'], $questionnaireId)) {
-				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+			if (! $this->QuestionnaireFrameDisplayQuestionnaire->saveFrameDisplayQuestionnaire($saveQuestionnaire['Questionnaire']['key'])) {
+				$this->rollback();
+				return false;
 			}
+			// これまでのテスト回答データを消す
+			$this->QuestionnaireAnswerSummary->deleteTestAnswerSummary($saveQuestionnaire['Questionnaire']['key'], $status);
 
-			$this->QuestionnaireAnswerSummary->deleteTestAnswerSummary($saveQuestionnaire['Questionnaire']['origin_id'], $status);
-
-			$dataSource->commit();
+			$this->commit();
 		} catch (Exception $ex) {
-			$dataSource->rollback();
+			$this->rollback();
 			CakeLog::error($ex);
 			throw $ex;
 		}
@@ -510,43 +487,41 @@ class Questionnaire extends QuestionnairesAppModel {
  */
 	public function deleteQuestionnaire($data) {
 		$this->loadModels([
-			'Comment' => 'Comments.Comment',
 			'QuestionnaireFrameSetting' => 'Questionnaires.QuestionnaireFrameSetting',
 			'QuestionnaireFrameDisplayQuestionnaire' => 'Questionnaires.QuestionnaireFrameDisplayQuestionnaire',
 			'QuestionnaireAnswerSummary' => 'Questionnaires.QuestionnaireAnswerSummary',
 		]);
-		$this->setDataSource('master');
-		$dataSource = $this->getDataSource();
-		$dataSource->begin();
+		$this->begin();
 		try {
 			// アンケート質問データ削除
 			if (! $this->deleteAll(array(
-					'Questionnaire.origin_id' => $data['Questionnaire']['origin_id']), true, false)) {
+					'Questionnaire.key' => $data['Questionnaire']['key']), true, false)) {
 				// @codeCoverageIgnoreStart
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 				// @codeCoverageIgnoreEnd
 			}
-			// 編集コメント削除
-			$this->Comment->deleteByContentKey($data['Questionnaire']['key']);
+
+			//コメントの削除
+			$this->deleteCommentsByContentKey($this->data['Questionnaire']['key']);
 
 			// アンケート表示設定削除
 			if (! $this->QuestionnaireFrameDisplayQuestionnaire->deleteAll(array(
-				'questionnaire_origin_id' => $data['Questionnaire']['origin_id']), true, false)) {
+				'questionnaire_key' => $data['Questionnaire']['key']), true, false)) {
 				// @codeCoverageIgnoreStart
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 				// @codeCoverageIgnoreEnd
 			}
 			// アンケート回答削除
 			if (! $this->QuestionnaireAnswerSummary->deleteAll(array(
-				'questionnaire_origin_id' => $data['Questionnaire']['origin_id']), true, false)) {
+				'questionnaire_key' => $data['Questionnaire']['key']), true, false)) {
 				// @codeCoverageIgnoreStart
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 				// @codeCoverageIgnoreEnd
 			}
-			$dataSource->commit();
+			$this->commit();
 		} catch (Exception $ex) {
 			//トランザクションRollback
-			$dataSource->rollback();
+			$this->rollback();
 			//エラー出力
 			CakeLog::error($ex);
 			throw $ex;
@@ -554,7 +529,6 @@ class Questionnaire extends QuestionnairesAppModel {
 
 		return true;
 	}
-
 /**
  * saveExportKey
  * update export key
@@ -565,19 +539,38 @@ class Questionnaire extends QuestionnairesAppModel {
  * @return bool
  */
 	public function saveExportKey($questionnaireId, $exportKey) {
-		$this->setDataSource('master');
-		$dataSource = $this->getDataSource();
-		$dataSource->begin();
+		$this->begin();
 		try {
 			$this->id = $questionnaireId;
 			$this->saveField('export_key', $exportKey);
 		} catch (Exception $ex) {
 			//トランザクションRollback
-			$dataSource->rollback();
+			$this->rollback();
 			//エラー出力
 			CakeLog::error($ex);
 			throw $ex;
 		}
 		return true;
 	}
+/**
+ * hasPublished method
+ *
+ * @param array $questionnaire questionnaire data
+ * @return int
+ */
+	public function hasPublished($questionnaire) {
+		if (isset($questionnaire['Questionnaire']['key'])) {
+			$isPublished = $this->find('count', array(
+				'recursive' => -1,
+				'conditions' => array(
+					'is_active' => true,
+					'key' => $questionnaire['Questionnaire']['key']
+				)
+			));
+		} else {
+			$isPublished = 0;
+		}
+		return $isPublished;
+	}
+
 }

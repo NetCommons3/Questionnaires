@@ -19,6 +19,16 @@
 class QuestionnaireUtilHelper extends AppHelper {
 
 /**
+ * Other helpers used by FormHelper
+ *
+ * @var array
+ */
+	public $helpers = array(
+		'NetCommonsHtml',
+		'Html'
+	);
+
+/**
  * __construct
  *
  * @param View $view View
@@ -62,24 +72,37 @@ class QuestionnaireUtilHelper extends AppHelper {
 		// 繰り返しの回答を許さない = 回答前＝回答する　回答後＝回答済み（Disabled）
 		// 繰り返しの回答を許す = いずれの状態でも「回答する」
 
-		$id = $questionnaire['Questionnaire']['origin_id'];
+		$key = $questionnaire['Questionnaire']['key'];
 
 		// 編集権限がない人が閲覧しているとき、未公開アンケートはFindされていないので対策する必要はない
 		// ボタン表示ができるかできないか
 		// 編集権限がないのに公開状態じゃないアンケートの場合はボタンを表示しない
 		//
-		//if ($questionnaire['Questionnaire']['status'] != NetCommonsBlockComponent::STATUS_PUBLISHED && !$editable) {
+		//if ($questionnaire['Questionnaire']['status'] != WorkflowComponent::STATUS_PUBLISHED && !$editable) {
 		//	return '';
 		//}
 
-		$buttonStr = '<a class="btn btn-%s questionnaire-listbtn %s" %s href="/questionnaires/questionnaire_answers/answer/%d/%d/">%s</a>';
+		$buttonStr = '<a class="btn btn-%s questionnaire-listbtn %s" %s href="%s">%s</a>';
 
 		// ボタンの色
 		// ボタンのラベル
-		if ($questionnaire['Questionnaire']['status'] != NetCommonsBlockComponent::STATUS_PUBLISHED) {
+		if ($questionnaire['Questionnaire']['status'] != WorkflowComponent::STATUS_PUBLISHED) {
 			$answerButtonClass = 'info';
 			$answerButtonLabel = __d('questionnaires', 'Test');
-			return sprintf($buttonStr, $answerButtonClass, '', '', $frameId, $id, $answerButtonLabel);
+			$url = NetCommonsUrl::actionUrl(array(
+				'controller' => 'questionnaire_answers',
+				'action' => 'test_mode',
+				$key,
+				'frame_id' => Current::read('Frame.id'),
+			));
+			return sprintf($buttonStr, $answerButtonClass, '', '', $url, $answerButtonLabel);
+		} else {
+			$url = NetCommonsUrl::actionUrl(array(
+				'controller' => 'questionnaire_answers',
+				'action' => 'view',
+				$key,
+				'frame_id' => Current::read('Frame.id'),
+			));
 		}
 
 		// 何事もなければ回答可能のボタン
@@ -106,7 +129,8 @@ class QuestionnaireUtilHelper extends AppHelper {
 			// 回答済み
 			$answerButtonLabel = __d('questionnaires', 'Finished');
 		}
-		return sprintf($buttonStr, $answerButtonClass, '', $answerButtonDisabled, $frameId, $id, $answerButtonLabel);
+
+		return sprintf($buttonStr, $answerButtonClass, '', $answerButtonDisabled, $url, $answerButtonLabel);
 	}
 
 /**
@@ -124,13 +148,13 @@ class QuestionnaireUtilHelper extends AppHelper {
 		// 集計表示する＝回答すみ、または回答期間終了　集計ボタン
 		// 　　　　　　　アンケート自体が公開状態にない(not editor)
 		//			  未回答＆回答期間内　　　　　　　集計ボタン（disabled）
-		$id = $questionnaire['Questionnaire']['origin_id'];
+		$key = $questionnaire['Questionnaire']['key'];
 
 		if ($questionnaire['Questionnaire']['is_total_show'] == QuestionnairesComponent::EXPRESSION_NOT_SHOW) {
 			return '';
 		}
 		// 編集権限がない人が閲覧しているとき、未公開アンケートはFindされていないので対策する必要はない
-		//if ($questionnaire['Questionnaire']['status'] != NetCommonsBlockComponent::STATUS_PUBLISHED) {
+		//if ($questionnaire['Questionnaire']['status'] != WorkflowComponent::STATUS_PUBLISHED) {
 		//	if (!$editable) {
 		//		return '';
 		//	} else {
@@ -162,13 +186,22 @@ class QuestionnaireUtilHelper extends AppHelper {
 		}
 
 		$btnClass = isset($options['class']) ? $options['class'] : 'btn-default questionnaire-listbtn';
-		$html = '<a class="btn ' . $btnClass . ' ' . $disabled . '" href="/questionnaires/questionnaire_answer_summaries/result/' . $frameId . '/' . $id . '/">';
+		$url = NetCommonsUrl::actionUrl(array(
+			'controller' => 'questionnaire_answer_summaries',
+			'action' => 'view',
+			$key,
+			'frame_id' => Current::read('Frame.id'),
+		));
+
 		if (isset($options['title'])) {
-			$html .= $options['title'];
+			$title = $options['title'];
 		} else {
-			$html .= '<span class="glyphicon glyphicon-stats" aria-hidden="true"></span>';
+			$title = '<span class="glyphicon glyphicon-stats" aria-hidden="true"></span>';
 		}
-		$html .= '</a>';
+		$html = $this->NetCommonsHtml->link($title, $url, array(
+			'class' => 'btn ' . $btnClass . ' ' . $disabled,
+			'escape' => false
+		));
 
 		return $html;
 	}

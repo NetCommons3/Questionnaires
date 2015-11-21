@@ -25,51 +25,54 @@ class QuestionnairesDownloadComponent extends Component {
  *
  * @var Folder
  */
-    protected $_workingFolder = null;
+	protected $_workingFolder = null;
+
 /**
  * file name for download
  *
  * @var string
  */
-    protected $_downloadFileName = '';
+	protected $_downloadFileName = '';
+
 /**
  * extension for download
  *
  * @var string
  */
-    protected $_downloadFileExt = '';
+	protected $_downloadFileExt = '';
 
 /**
  * shutdown
  *
- * @param Controller $controller
+ * @param Controller $controller コントローラー
  * @return void
  */
-    public function shutdown(Controller $controller) {
-        if ($this->_workingFolder) {
-            //$this->_workingFolder->delete();
-        }
-    }
+	public function shutdown(Controller $controller) {
+		if ($this->_workingFolder) {
+			//$this->_workingFolder->delete();
+		}
+	}
 /**
  * createTemporaryFolder
  *
- * @param Controller $controller
+ * @param Controller $controller コントローラー
  * @param string $folderName temporary middle name
+ * @throws Exception
  * @return Folder
  */
-    public function createTemporaryFolder($controller, $folderName = 'download') {
-        $folder = new Folder();
-        if (!$folder) {
-            throw new Exception(__d('net_commons', 'can not create folder'));
-        }
-        $folderName = TMP . $controller->plugin . DS . $folderName . DS . microtime(true);
-        $folder->create($folderName);
-        if (!$folder->cd($folderName)) {
-            throw new Exception(__d('net_commons', 'can not change folder'));
-        }
-        $this->_workingFolder = $folder;
-        return $folder;
-    }
+	public function createTemporaryFolder($controller, $folderName = 'download') {
+		$folder = new Folder();
+		if (!$folder) {
+			throw new Exception(__d('net_commons', 'can not create folder'));
+		}
+		$folderName = TMP . $controller->plugin . DS . $folderName . DS . microtime(true);
+		$folder->create($folderName);
+		if (!$folder->cd($folderName)) {
+			throw new Exception(__d('net_commons', 'can not change folder'));
+		}
+		$this->_workingFolder = $folder;
+		return $folder;
+	}
 
 /**
  * createDownloadZipFile
@@ -78,18 +81,19 @@ class QuestionnairesDownloadComponent extends Component {
  *
  * @param Folder $folder working folder object
  * @param string $fileName filename
+ * @throws Exception
  * @return ZipArchive
  */
-    public function createDownloadZipFile($folder, $fileName) {
-        $zip = new ZipArchive();
-        $this->_downloadFileExt = 'zip';
-        $ret = $zip->open($folder->pwd() . DS . $fileName, ZipArchive::CREATE);
-        if (!$ret) {
-            throw new Exception(__d('net_commons', 'can not create archive file'));
-        }
-        $this->_downloadFileName = $fileName;
-        return $zip;
-    }
+	public function createDownloadZipFile($folder, $fileName) {
+		$zip = new ZipArchive();
+		$this->_downloadFileExt = 'zip';
+		$ret = $zip->open($folder->pwd() . DS . $fileName, ZipArchive::CREATE);
+		if (!$ret) {
+			throw new Exception(__d('net_commons', 'can not create archive file'));
+		}
+		$this->_downloadFileName = $fileName;
+		return $zip;
+	}
 
 /**
  * createDownloadFile
@@ -98,18 +102,19 @@ class QuestionnairesDownloadComponent extends Component {
  *
  * @param Folder $folder working folder object
  * @param string $fileName filename
+ * @throws Exception
  * @return File
  */
-    public function createDownloadFile($folder, $fileName) {
-        $filePath = $folder->pwd() . DS . $fileName;
-        $fp = fopen($filePath, 'w+');
-        if (!$fp) {
-            throw new Exception(__d('net_commons', 'can not create file'));
-        }
-        $this->_downloadFileName = $fileName;
-        $this->_downloadFileExt = pathinfo($filePath, PATHINFO_EXTENSION);
-        return $fp;
-    }
+	public function createDownloadFile($folder, $fileName) {
+		$filePath = $folder->pwd() . DS . $fileName;
+		$fp = fopen($filePath, 'w+');
+		if (!$fp) {
+			throw new Exception(__d('net_commons', 'can not create file'));
+		}
+		$this->_downloadFileName = $fileName;
+		$this->_downloadFileExt = pathinfo($filePath, PATHINFO_EXTENSION);
+		return $fp;
+	}
 
 /**
  * getDownloadFilePath
@@ -118,9 +123,9 @@ class QuestionnairesDownloadComponent extends Component {
  *
  * @return string
  */
-    public function getDownloadFilePath() {
-        return $this->_workingFolder->pwd() . DS . $this->_downloadFileName;
-    }
+	public function getDownloadFilePath() {
+		return $this->_workingFolder->pwd() . DS . $this->_downloadFileName;
+	}
 /**
  * getDownloadFileExtension
  *
@@ -128,40 +133,57 @@ class QuestionnairesDownloadComponent extends Component {
  *
  * @return string
  */
-    public function getDownloadFileExtension() {
-        return $this->_downloadFileExt;
-    }
+	public function getDownloadFileExtension() {
+		return $this->_downloadFileExt;
+	}
 
 /**
  * compressFile
  *
- * @param string &$filePath input file path
+ * @param string $password 圧縮パスワード
  * @return string
  */
-    public function compressFile($password) {
-        // 暗号化ZIPにするのはノーマルファイルの場合のみと考える
-        $filePath = $this->_workingFolder->pwd() . DS . $this->_downloadFileName;
+	public function compressFile($password) {
+		// 暗号化ZIPにするのはノーマルファイルの場合のみと考える
+		$filePath = $this->_workingFolder->pwd() . DS . $this->_downloadFileName;
 
-        $cmd = '/usr/bin/zip';
-        if (!file_exists($cmd)) {
-            return $filePath;
-        }
+		$cmd = '/usr/bin/zip';
+		if (!file_exists($cmd)) {
+			return $filePath;
+		}
 
-        $pathInfo = pathinfo($filePath);
-        $this->_downloadFileName = $pathInfo['filename'] . '.zip';
-        $outputFilePath = $pathInfo['dirname'] . DS . $this->_downloadFileName;
+		$pathInfo = pathinfo($filePath);
+		$this->_downloadFileName = $pathInfo['filename'] . '.zip';
+		$outputFilePath = $pathInfo['dirname'] . DS . $this->_downloadFileName;
 
-        $execCmd = sprintf('%s -j -e -P %s %s %s', $cmd, $password, $outputFilePath, $filePath);
+		$execCmd = sprintf('%s -j -e -P %s %s %s', $cmd, $password, $outputFilePath, $filePath);
 
-        // コマンドを実行する
-        exec(escapeshellcmd($execCmd));
+		// コマンドを実行する
+		exec(escapeshellcmd($execCmd));
 
-        // 入力ファイルを削除する
-        @unlink($filePath);
+		// 入力ファイルを削除する
+		unlink($filePath);
 
-        $this->_downloadFileExt = 'zip';
+		$this->_downloadFileExt = 'zip';
 
-        return $outputFilePath;
-    }
+		return $outputFilePath;
+	}
+/**
+ * extractZip
+ *
+ * @param string $filePath zip file path
+ * @param string $folderPath folder path
+ * @return bool
+ */
+	public function extractZip($filePath, $folderPath) {
+		$zip = new ZipArchive;
+		if ($zip->open($filePath) !== true) {
+			return false;
+		}
+		if ($zip->extractTo($folderPath) === false) {
+			return false;
+		}
+		$zip->close();
+		return true;
+	}
 }
-

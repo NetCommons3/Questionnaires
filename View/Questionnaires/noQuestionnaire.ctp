@@ -12,29 +12,29 @@
 
 <?php echo $this->element('Questionnaires.scripts'); ?>
 
-<div id="nc-questionnaires-<?php echo (int)$frameId; ?>"
-	 ng-controller="Questionnaires">
+<div ng-controller="Questionnaires">
 
-	<div class="pull-right">
-		<?php echo $this->element('Questionnaires.Questionnaires/add_button'); ?>
-	</div>
-
-	<div class="pull-left">
-		<?php echo $this->element('Questionnaires.Questionnaires/answer_status'); ?>
-	</div>
-
-	<div class="clearfix"></div>
 	<article>
+
+		<?php echo $this->element('Questionnaires.Questionnaires/add_button'); ?>
+
+		<div class="pull-left">
+			<?php echo $this->element('Questionnaires.Questionnaires/answer_status'); ?>
+		</div>
+
+		<div class="clearfix"></div>
+
 		<p>
 			<?php echo __d('questionnaires', 'no questionnaire'); ?>
 		</p>
-		<?php if($this->viewVars['contentEditable'] == true): ?>
-		<p>
-			<?php echo __d('questionnaires', 'Please create new questionnaire by pressing the "+" button.'); ?>
-		</p>
+
+		<?php if (Current::permission('content_creatable')) : ?>
+			<p>
+				<?php echo __d('questionnaires', 'Please create new questionnaire by pressing the "+" button.'); ?>
+			</p>
 		<?php endif ?>
+
 	</article>
+
 </div>
-<div class="text-center">
-	<?php echo $this->BackToPage->backToPageButton(__d('questionnaires', 'Back to page'), 'menu-up'); ?>
-</div>
+

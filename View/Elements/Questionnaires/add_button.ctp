@@ -10,10 +10,16 @@
  */
 ?>
 
-<?php if($this->viewVars['contentEditable'] == true): ?>
-		<span class="nc-tooltip" tooltip="<?php echo __d('net_commons', 'Add'); ?>">
-			<a href="<?php echo $this->Html->url('/questionnaires/questionnaire_add/add/' . $frameId) ?>" class="btn btn-success">
-				<span class="glyphicon glyphicon-plus"> </span>
-			</a>
-		</span>
+<?php if (Current::permission('content_creatable')) : ?>
+	<div class="pull-right">
+		<?php echo $this->Button->addLink(
+			'',
+			array(
+				'controller' => 'questionnaire_add',
+				'action' => 'add',
+				'frame_id' => Current::read('Frame.id'),
+				'block_id' => Current::read('Block.id'),
+			),
+			array('tooltip' => __d('questionnaires', 'Create article'))); ?>
+	</div>
 <?php endif;

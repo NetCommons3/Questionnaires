@@ -7,10 +7,8 @@
  * @param {string} Controller name
  */
 
-NetCommonsApp.requires.push('QuestionnaireCommon');
-
 NetCommonsApp.controller('Questionnaires.add',
-    function($scope, NetCommonsBase, NetCommonsWysiwyg) {
+    function($scope, NetCommonsBase) {
       /**
        * variables
        *
@@ -60,41 +58,10 @@ NetCommonsApp.controller('Questionnaires.add',
         var el = jQuery('#templateFile');
         $scope.templateFile = el[0].value;
       };
-      /**
-       * Questionnaire be disable to goto next
-       *
-       * @return {bool}
-       */
-      $scope.isDisableToGoNext = function() {
-        if ($scope.createOption ==
-            variables.QUESTIONNAIRE_CREATE_OPT_NEW) {
-          if ($scope.newTitle == '') {
-            return true;
-          }
-        } else if ($scope.createOption ==
-            variables.QUESTIONNAIRE_CREATE_OPT_TEMPLATE) {
-          if ($scope.templateFile == '') {
-            return true;
-          }
-        } else if ($scope.createOption ==
-            variables.QUESTIONNAIRE_CREATE_OPT_REUSE) {
-          if ($scope.pastQuestionnaireSelect == '') {
-            return true;
-          }
-        }
-        return false;
-      };
     });
 
 NetCommonsApp.controller('Questionnaires.setting',
     function($scope, NetCommonsBase, NetCommonsWysiwyg) {
-
-      /**
-         * tinymce
-         *
-         * @type {object}
-         */
-      $scope.tinymce = NetCommonsWysiwyg.new();
 
       /**
          * Initialize
@@ -105,6 +72,13 @@ NetCommonsApp.controller('Questionnaires.setting',
         $scope.frameId = frameId;
         $scope.questionnaires = questionnaires;
       };
+
+      /**
+       * tinymce
+       *
+       * @type {object}
+       */
+      $scope.tinymce = NetCommonsWysiwyg.new();
 
       /**
        * focus DateTimePicker

@@ -24,7 +24,6 @@ class QuestionnairePage extends QuestionnairesAppModel {
  * @var array
  */
 	public $actsAs = array(
-		'NetCommons.Publishable',
 		'NetCommons.OriginalKey',
 	);
 
@@ -33,78 +32,7 @@ class QuestionnairePage extends QuestionnairesAppModel {
  *
  * @var array
  */
-	public $validate = array(
-		'origin_id' => array(
-			'numeric' => array(
-				'rule' => array('numeric'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
-		'is_active' => array(
-			'boolean' => array(
-				'rule' => array('boolean'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
-		'is_latest' => array(
-			'boolean' => array(
-				'rule' => array('boolean'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
-		'questionnaire_id' => array(
-			'numeric' => array(
-				'rule' => array('numeric'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
-		'page_sequence' => array(
-			'numeric' => array(
-				'rule' => array('numeric'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
-		'route_number' => array(
-			'numeric' => array(
-				'rule' => array('numeric'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
-		'is_auto_translated' => array(
-			'boolean' => array(
-				'rule' => array('boolean'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
-	);
+	public $validate = array();
 
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
@@ -115,7 +43,7 @@ class QuestionnairePage extends QuestionnairesAppModel {
  */
 	public $belongsTo = array(
 		'Questionnaire' => array(
-			'className' => 'Questionnaire',
+			'className' => 'Questionnaires.Questionnaire',
 			'foreignKey' => 'questionnaire_id',
 			'conditions' => '',
 			'fields' => '',
@@ -130,7 +58,7 @@ class QuestionnairePage extends QuestionnairesAppModel {
  */
 	public $hasMany = array(
 		'QuestionnaireQuestion' => array(
-			'className' => 'QuestionnaireQuestion',
+			'className' => 'Questionnaires.QuestionnaireQuestion',
 			'foreignKey' => 'questionnaire_page_id',
 			'dependent' => true,
 			'conditions' => '',
@@ -153,14 +81,68 @@ class QuestionnairePage extends QuestionnairesAppModel {
 	public function getDefaultPage() {
 		$this->QuestionnaireQuestion = ClassRegistry::init('Questionnaires.QuestionnaireQuestion', true);
 
-		$page['page_title'] = __d('questionnaires', 'First Page');
-		$page['page_sequence'] = 0;
-		$page['origin_id'] = 0;
-		$page['route_number'] = 0;
+		$page = array(
+			'page_title' => __d('questionnaires', 'First Page'),
+			'page_sequence' => 0,
+			'key' => '',
+			'route_number' => 0,
+		);
 		$page['QuestionnaireQuestion'][0] = $this->QuestionnaireQuestion->getDefaultQuestion();
+
 		return $page;
 	}
 
+/**
+ * getNextPage
+ * get next answer page number
+ *
+ * @param array $questionnaire questionnaire
+ * @param int $nowPageSeq current page sequence number
+ * @param array $nowAnswers now answer
+ *
+ * @return array
+ */
+	public function getNextPage($questionnaire, $nowPageSeq, $nowAnswers) {
+		// 次ページはデフォルトならば＋１です
+		$nextPageSeq = $nowPageSeq + 1;
+		// 回答にスキップロジックで指定されたものがないかチェックし、行き先があるならそのページ番号を返す
+		foreach ($nowAnswers as $answer) {
+			$targetQuestion = Hash::extract($questionnaire['QuestionnairePage'], '{n}.QuestionnaireQuestion.{n}[key=' . $answer[0]['questionnaire_question_key'] . ']');
+			if ($targetQuestion) {
+				$q = $targetQuestion[0];
+				// skipロジック対象の質問ならば次ページのチェックを行う
+				if ($q['is_skip'] == QuestionnairesComponent::SKIP_FLAGS_SKIP) {
+					$choiceIds = explode(QuestionnairesComponent::ANSWER_VALUE_DELIMITER,
+						trim($answer[0]['answer_value'], QuestionnairesComponent::ANSWER_DELIMITER));
+					// スキップロジックの選択肢みつけた
+					$choice = Hash::extract($q['QuestionnaireChoice'], '{n}[key=' . $choiceIds[0] . ']');
+					if ($choice) {
+						$c = $choice[0];
+						if (!empty($c['skip_page_sequence'])) {
+							// スキップ先ページ
+							$nextPageSeq = $c['skip_page_sequence'];
+							break;
+						}
+					}
+				}
+			}
+		}
+		// 次ページがもしかして存在しない（つまりエンドかも）
+		if ($nextPageSeq == QuestionnairesComponent::SKIP_GO_TO_END) {
+			return false;
+		}
+		// ページ情報がない？終わりにする
+		if (!isset($questionnaire['QuestionnairePage'])) {
+			return false;
+		}
+		// ページ配列はページのシーケンス番号順に取り出されているので
+		$pages = $questionnaire['QuestionnairePage'];
+		$endPage = end($pages);
+		if ($endPage['page_sequence'] < $nextPageSeq) {
+			return false;
+		}
+		return $nextPageSeq;
+	}
 /**
  * setPageToQuestionnaire
  * setup page data to questionnaire array
@@ -172,26 +154,13 @@ class QuestionnairePage extends QuestionnairesAppModel {
 		$this->QuestionnaireQuestion = ClassRegistry::init('Questionnaires.QuestionnaireQuestion', true);
 		// ページデータがアンケートデータの中にない状態でここが呼ばれている場合、
 		if (!isset($questionnaire['QuestionnairePage'])) {
-			/*
-			$questionnaire['Questionnaire']['page_count'] = $this->find('count', array(
-				'conditions' => array(
-					'questionnaire_id' => $questionnaire['Questionnaire']['id'],
-				),
-				'recursive' => -1
-			));
-			$questionnaire['Questionnaire']['question_count'] = $this->QuestionnaireQuestion->find('count', array(
-				'conditions' => array(
-					'questionnaire_page_id' => $questionnaire['Questionnaire']['id']
-				),
-			));
-			return;
-			*/
 			$pages = $this->find('all', array(
 				'conditions' => array(
 					'questionnaire_id' => $questionnaire['Questionnaire']['id'],
 				),
 				'order' => array('page_sequence ASC'),
 				'recursive' => -1));
+
 			$questionnaire['QuestionnairePage'] = Hash::combine($pages, '{n}.QuestionnairePage.page_sequence', '{n}.QuestionnairePage');
 		}
 		$questionnaire['Questionnaire']['page_count'] = 0;
@@ -202,21 +171,90 @@ class QuestionnairePage extends QuestionnairesAppModel {
 			$questionnaire['Questionnaire']['page_count']++;
 		}
 	}
+/**
+ * Called during validation operations, before validation. Please note that custom
+ * validation rules can be defined in $validate.
+ *
+ * @param array $options Options passed from Model::save().
+ * @return bool True if validate operation should continue, false to abort
+ * @link http://book.cakephp.org/2.0/en/models/callback-methods.html#beforevalidate
+ * @see Model::save()
+ * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+ */
+	public function beforeValidate($options = array()) {
+		$pageIndex = $options['pageIndex'];
+		// Pageモデルは繰り返し判定が行われる可能性高いのでvalidateルールは最初に初期化
+		// mergeはしません
+		$this->validate = array(
+			'page_sequence' => array(
+				'numeric' => array(
+					'rule' => array('numeric'),
+					//'message' => 'Your custom message here',
+					//'allowEmpty' => false,
+					//'required' => false,
+				),
+				'comparison' => array(
+					'rule' => array('comparison', '==', $pageIndex),
+					'message' => __d('questionnaires', 'page sequence is illegal.')
+				),
+			),
+			'route_number' => array(
+				'numeric' => array(
+				'rule' => array('numeric'),
+					//'message' => 'Your custom message here',
+					//'allowEmpty' => false,
+					//'required' => false,
+				),
+			),
+		);
+		// ウィザード画面でのセットアップ中の場合はまだ親アンケートIDの正当性についてのチェックは行わない
+		if (! (isset($options['validate']) && $options['validate'] == QuestionnairesComponent::QUESTIONNAIRE_VALIDATE_TYPE)) {
+			$this->validate = Hash::merge($this->validate, array(
+				'questionnaire_id' => array(
+					'numeric' => array(
+						'rule' => array('numeric'),
+						//'message' => 'Your custom message here',
+						'allowEmpty' => false,
+						'required' => true,
+					),
+				),
+			));
+		}
 
+		if (! parent::beforeValidate($options)) {
+			return false;
+		}
+
+		// 付属の質問以下のvalidate
+		if (! isset($this->data['QuestionnaireQuestion'][0])) {
+			$this->validationErrors['pickup_error'] = __d('questionnaires', 'please set at least one question.');
+		}
+		$validationErrors = array();
+		$this->QuestionnaireQuestion = ClassRegistry::init('Questionnaires.QuestionnaireQuestion', true);
+		foreach ($this->data['QuestionnaireQuestion'] as $qIndex => $question) {
+			// 質問データバリデータ
+			$this->QuestionnaireQuestion->create();
+			$this->QuestionnaireQuestion->set($question);
+			$options['questionIndex'] = $qIndex;
+			if (! $this->QuestionnaireQuestion->validates($options)) {
+				$validationErrors['QuestionnaireQuestion'][$qIndex] = $this->QuestionnaireQuestion->validationErrors;
+			}
+		}
+		$this->validationErrors += $validationErrors;
+		return true;
+	}
 /**
  * saveQuestionnairePage
  * save QuestionnairePage data
  *
  * @param int $questionnaireId questionnaire id
- * @param int $status status
  * @param array &$questionnairePages questionnaire pages
  * @throws InternalErrorException
  * @return bool
  */
-	public function saveQuestionnairePage($questionnaireId, $status, &$questionnairePages) {
+	public function saveQuestionnairePage($questionnaireId, &$questionnairePages) {
 		$this->loadModels([
 			'QuestionnaireQuestion' => 'Questionnaires.QuestionnaireQuestion',
-			'QuestionnaireChoice' => 'Questionnaires.QuestionnaireChoice',
 		]);
 
 		// QuestionnairePageが単独でSaveされることはない
@@ -225,19 +263,22 @@ class QuestionnairePage extends QuestionnairesAppModel {
 		// 決まり処理は上位で行われる
 		// ここでは行わない
 
-		foreach ($questionnairePages as &$p) {
-			$savePage = $this->_setupSaveData($p, $status);
-			$savePage['questionnaire_id'] = $questionnaireId;
+		foreach ($questionnairePages as &$page) {
+			// アンケートは履歴を取っていくタイプのコンテンツデータなのでSave前にはID項目はカット
+			// （そうしないと既存レコードのUPDATEになってしまうから）
+			$page = Hash::remove($page, 'QuestionnairePage.id');
+			$page['questionnaire_id'] = $questionnaireId;
 			$this->create();
-			if (! $this->save($savePage)) {
-				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+			if (! $this->save($page, false)) {	// validateは上位のquestionnaireで済んでいるはず
+				return false;
 			}
 
 			$pageId = $this->id;
 
-			if (isset($p['QuestionnaireQuestion'])) {
-				$this->QuestionnaireQuestion->saveQuestionnaireQuestion($pageId, $status, $p['QuestionnaireQuestion']);
+			if (! $this->QuestionnaireQuestion->saveQuestionnaireQuestion($pageId, $page['QuestionnaireQuestion'])) {
+				return false;
 			}
 		}
+		return true;
 	}
 }

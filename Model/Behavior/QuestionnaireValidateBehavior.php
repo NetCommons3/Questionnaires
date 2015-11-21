@@ -37,7 +37,8 @@ class QuestionnaireValidateBehavior extends ModelBehavior {
 		}
 		if ($value == QuestionnairesComponent::USES_USE) {
 			foreach ($others as $other) {
-				$ret = Validation::blank($model->data[$model->name][$other]);
+				$checkData = Hash::get($model->data, $other);
+				$ret = Validation::blank($checkData);
 				if ($ope == 'AND') {
 					if ($ret == true) {
 						return false;
@@ -116,10 +117,7 @@ class QuestionnaireValidateBehavior extends ModelBehavior {
  */
 	public function checkRelationshipQuestionType(&$model, $check) {
 		// $check には array('is_result_display' => '入力値') が入る
-		if ($model->data['QuestionnaireQuestion']['question_type'] == QuestionnairesComponent::TYPE_TEXT
-			|| $model->data['QuestionnaireQuestion']['question_type'] == QuestionnairesComponent::TYPE_TEXT_AREA
-			|| $model->data['QuestionnaireQuestion']['question_type'] == QuestionnairesComponent::TYPE_DATE_AND_TIME
-		) {
+		if (QuestionnairesComponent::isOnlyInputType($this->data['QuestionnaireQuestion']['question_type'])) {
 			if ($check['is_result_display'] == QuestionnairesComponent::EXPRESSION_SHOW) {
 				return false;
 			}
@@ -242,5 +240,4 @@ class QuestionnaireValidateBehavior extends ModelBehavior {
 		}
 		return true;
 	}
-
 }

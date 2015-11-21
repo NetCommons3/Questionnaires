@@ -20,6 +20,15 @@ App::uses('AppController', 'Controller');
 class QuestionnairesAppController extends AppController {
 
 /**
+ * use model
+ *
+ * @var array
+ */
+	public $uses = array(
+		'Questionnaires.Questionnaire',
+	);
+
+/**
  * use components
  *
  * @var array
@@ -29,61 +38,6 @@ class QuestionnairesAppController extends AppController {
 		'Pages.PageLayout',
 		'Questionnaires.Questionnaires',
 	);
-
-/**
- * use models
- *
- * @var array
- */
-	public $uses = array(
-		'Questionnaires.QuestionnaireFrameSetting'
-	);
-
-/**
- *  ValidationErrors
- *
- * @var array
- */
-	public $qValidationErrors = array();
-
-/**
- * beforeFilter
- *
- * @return void
- */
-	public function beforeFilter() {
-		parent::beforeFilter();
-		// このルームにすでにアンケートブロックが存在した場合で、
-		// かつ、現在フレームにまだブロックが結びついてない場合、
-		// すでに存在するブロックと現在フレームを結びつける
-		if (empty($this->viewVars['frameId'])) {
-			return;
-		}
-
-		$this->QuestionnaireFrameSetting->prepareBlock($this->viewVars['frameId']);
-
-		// フレームセッティング確認
-		// まだ該当のフレームセッティングがない場合新たに作成しておく
-		$this->QuestionnaireFrameSetting->prepareFrameSetting($this->viewVars['frameKey']);
-	}
-
-/**
- * _getComments method
- * 指定されたアンケートデータに該当するコメントを取得する
- *
- * @param array $questionnaire アンケート
- * @return array $c コメントデータ
- */
-	protected function _getComments($questionnaire) {
-		$comment = $this->Comment->getComments(
-			array(
-				'plugin_key' => 'questionnaires',
-				'content_key' => isset($questionnaire['key']) ? $questionnaire['key'] : null,
-			)
-		);
-		$comment = $this->camelizeKeyRecursive($comment);
-		return $comment;
-	}
 
 /**
  * getNowTime method
@@ -125,15 +79,15 @@ class QuestionnairesAppController extends AppController {
 	}
 
 /**
- * _changeBooleansToNumbers method
+ * changeBooleansToNumbers method
  * to change the Boolean value of a given array to 0,1
  *
  * @param array $data data array
  * @return array
  */
-	protected function _changeBooleansToNumbers(Array $data) {
+	public static function changeBooleansToNumbers(Array $data) {
 		// Note the order of arguments and the & in front of $value
-		array_walk_recursive($data, array($this, '__converter'));
+		array_walk_recursive($data, 'self::converter');
 		return $data;
 	}
 
@@ -146,7 +100,7 @@ class QuestionnairesAppController extends AppController {
  * @return void
  * @SuppressWarnings("unused")
  */
-	private function __converter(&$value, $key) {
+	public static function converter(&$value, $key) {
 		if (is_bool($value)) {
 			$value = ($value ? '1' : '0');
 		}
@@ -187,23 +141,68 @@ class QuestionnairesAppController extends AppController {
 		// 公開状態が「公開」になっている場合は編集権限の有無にかかわらず共通だ
 		// なのでまずは公開状態だけを確認する
 
-		if ($questionnaire['Questionnaire']['status'] != NetCommonsBlockComponent::STATUS_PUBLISHED) {
-			if (!$this->viewVars['contentEditable']) {
+		// 非公開データの場合は編集権限がなければfalse, あればtrue
+		if ($questionnaire['Questionnaire']['status'] != WorkflowComponent::STATUS_PUBLISHED) {
+			if (! $this->Questionnaire->canEditWorkflowContent($questionnaire)) {
 				return false;
 			} else {
 				return true;
 			}
 		}
 
+		// ここから下は、公開状態データの場合の判定
+
+		if (! $this->Questionnaire->canReadWorkflowContent()) {
+			return false;
+		} else {
+			return true;
+		}
+
 		// 期間外
 		if ($questionnaire['Questionnaire']['is_period'] == QuestionnairesComponent::USES_USE
 			&& $questionnaire['Questionnaire']['period_range_stat'] != QuestionnairesComponent::QUESTIONNAIRE_PERIOD_STAT_IN) {
-			return false;
+			if (! $this->Questionnaire->canEditWorkflowContent($questionnaire)) {
+				return false;
+			} else {
+				return true;
+			}
 		}
 
 		// 会員以外には許していないのに未ログイン
 		if ($questionnaire['Questionnaire']['is_no_member_allow'] == QuestionnairesComponent::PERMISSION_NOT_PERMIT) {
-			if ($this->viewVars['roomRoleKey'] == NetCommonsRoomRoleComponent::DEFAULT_ROOM_ROLE_KEY) {
+			if (empty(Current::read('User.id'))) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+/**
+ * isAbleToAnswer 指定されたIDに回答できるかどうか
+ * 強制URLハックのガード
+ * 指定のアンケートの状態と回答者の権限を照らし合わせてガードをかける
+ * 公開状態にない
+ * 期間外
+ * 停止中
+ * 繰り返し回答
+ * 会員以外には許してないのに未ログインである
+ *
+ * @param array $questionnaire 対象となるアンケートデータ
+ * @return bool
+ */
+	public function isAbleToAnswer($questionnaire) {
+		$answerSummary = ClassRegistry::init('QuestionnaireAnswerSummary');
+
+		if ($questionnaire['Questionnaire']['status'] != WorkflowComponent::STATUS_PUBLISHED) {
+			return true;
+		}
+		// 繰り返し回答を許していないのにすでに回答済みか
+		if ($questionnaire['Questionnaire']['is_repeat_allow'] == QuestionnairesComponent::PERMISSION_NOT_PERMIT) {
+			$summary = $answerSummary->getNowSummaryOfThisUser(
+				$questionnaire['Questionnaire']['key'],
+				Current::read('User.id'),
+				$this->Session->id());
+			if ($summary) {
 				return false;
 			}
 		}
@@ -212,14 +211,13 @@ class QuestionnairesAppController extends AppController {
 	}
 
 /**
- * _isDuringTest
- * is this questionnaire under the test mode
+ * _getQuestionnaireKey
  *
  * @param array $questionnaire Questionnaire data
- * @return bool
+ * @return string
  */
-	protected function _isDuringTest($questionnaire) {
-		return $questionnaire['Questionnaire']['status'] == NetCommonsBlockComponent::STATUS_PUBLISHED ? false : true;
+	protected function _getQuestionnaireKey($questionnaire) {
+		return $questionnaire['Questionnaire']['key'];
 	}
 
 }

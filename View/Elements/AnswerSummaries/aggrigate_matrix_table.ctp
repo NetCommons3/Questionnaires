@@ -20,7 +20,7 @@
 				$colIds = array();
 				foreach ($question['QuestionnaireChoice'] as $choice) {
 					if ($choice['matrix_type'] == QuestionnairesComponent::MATRIX_TYPE_COLUMN) {
-						$colIds[] = $choice['origin_id'];		//順番に列のid配列を作る。
+						$colIds[] = $choice['key'];		//順番に列のid配列を作る。
 						//選択肢の「列」
 						echo '<th>' . h($choice['choice_label']) . '</th>';
 					}

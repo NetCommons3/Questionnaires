@@ -10,6 +10,6 @@
  */
 ?>
 <div class="col-xs-12 questionnaire-chart-wrapper" >
-    <nvd3 options='config[<?php echo $questionId; ?>]'
-          data='data[<?php echo $questionId; ?>]'></nvd3>
+    <nvd3 options='config["<?php echo $questionId; ?>"]'
+          data='data["<?php echo $questionId; ?>"]'></nvd3>
 </div>

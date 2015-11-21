@@ -8,16 +8,13 @@
  * @license http://www.netcommons.org/license.txt NetCommons License
  * @copyright Copyright 2014, NetCommons Project
  */
+
+echo $this->element('Questionnaires.scripts');
 ?>
 
-<?php echo $this->element('Questionnaires.scripts'); ?>
+<div id="nc-questionnaires-<?php echo Current::read('Frame.id'); ?>" ng-controller="Questionnaires">
 
-<div id="nc-questionnaires-<?php echo (int)$frameId; ?>"
-	 ng-controller="Questionnaires">
-
-	<div class="pull-right">
-		<?php echo $this->element('Questionnaires.Questionnaires/add_button'); ?>
-	</div>
+	<?php echo $this->element('Questionnaires.Questionnaires/add_button'); ?>
 
 	<div class="pull-left">
 		<?php echo $this->element('Questionnaires.Questionnaires/answer_status'); ?>
@@ -52,26 +49,26 @@
 						<div class="col-md-4 col-xs-12" >
 							<div class="pull-right h3">
 								<?php echo
-						$this->QuestionnaireUtil->getAnswerButtons($frameId, $questionnaire);
+						$this->QuestionnaireUtil->getAnswerButtons(Current::read('Frame.id'), $questionnaire);
 								?>
 								<?php echo
-						$this->QuestionnaireUtil->getAggregateButtons($frameId, $questionnaire);
+						$this->QuestionnaireUtil->getAggregateButtons(Current::read('Frame.id'), $questionnaire);
 								?>
 								<div class="clearfix"></div>
 							</div>
 						</div>
 					</article>
 
-					<?php if($this->viewVars['contentEditable'] == true): ?>
+					<?php if ($this->Workflow->canEdit('Questionnaire', $questionnaire)) : ?>
 					<div class="row">
 						<div class="col-md-12 col-xs-12">
 							<div class="well well-sm">
 								<div class="pull-right">
-									<a class="btn btn-primary"
-									   href="<?php echo $this->Html->url(
-										'questionnaire_questions/edit/' . $frameId . '/?questionnaire_id=' . $questionnaire['Questionnaire']['id']) ?>">
-										<span class="glyphicon glyphicon-edit" ></span>
-									</a>
+									<?php echo $this->Button->editLink('', array(
+									'plugin' => 'questionnaires',
+									'controller' => 'questionnaire_edit',
+									'action' => 'edit_question',
+									'key' => $questionnaire['Questionnaire']['key'])); ?>
 								</div>
 								<small>
 									<dl class="questionnaire-editor-dl">
@@ -106,7 +103,7 @@
 			<ul class="pagination">
 				<?php echo $this->element('NetCommons.paginator', array(
 				'url' => Hash::merge(
-				array('controller' => 'questionnaires', 'action' => 'index', $frameId),
+				array('controller' => 'questionnaires', 'action' => 'index', Current::read('Frame.id')),
 				$this->Paginator->params['named']
 				)
 				)); ?>

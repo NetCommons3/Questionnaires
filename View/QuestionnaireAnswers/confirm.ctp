@@ -11,7 +11,7 @@
 ?>
 <?php echo $this->element('Questionnaires.scripts'); ?>
 
-<article id="nc-questionnaires-confirm-<?php echo (int)$frameId; ?>"
+<article id="nc-questionnaires-confirm"
 		 ng-controller="QuestionnairesAnswer">
 
 	<?php echo $this->element('Questionnaires.Answers/answer_test_mode_header'); ?>
@@ -22,20 +22,15 @@
 		<?php echo __d('questionnaires', 'Please confirm your answers.'); ?>
 	</p>
 
-	<?php echo $this->Form->create('QuestionnaireAnswer', array(
-	'name' => 'questionnaire_form_answer',
-	'type' => 'post',
-	'novalidate' => true,
-	)); ?>
-	<?php echo $this->Form->hidden('Frame.id', array('value' => $frameId)); ?>
-	<?php echo $this->Form->hidden('Block.id', array('value' => $blockId)); ?>
-	<?php echo $this->Form->hidden('Questionnaire.id', array('value' => $questionnaire['Questionnaire']['id'])); ?>
+	<?php echo $this->NetCommonsForm->create('QuestionnaireAnswer'); ?>
+	<?php echo $this->NetCommonsForm->hidden('Frame.id'); ?>
+	<?php echo $this->NetCommonsForm->hidden('Block.id'); ?>
+	<?php echo $this->NetCommonsForm->hidden('Questionnaire.id', array('value' => $questionnaire['Questionnaire']['id'])); ?>
 
-	<?php $index = 0; ?>
 	<?php foreach($questionnaire['QuestionnairePage'] as $pIndex => $page): ?>
 		<?php foreach($page['QuestionnaireQuestion'] as $qIndex => $question): ?>
 
-			<?php if (isset($answers[$question['origin_id']])): ?>
+			<?php if (isset($answers[$question['key']])): ?>
 
 				<?php if ($question['is_require'] == QuestionnairesComponent::REQUIRES_REQUIRE): ?>
 					<div class="pull-left">
@@ -47,34 +42,10 @@
 					<?php echo $question['question_value']; ?>
 				</label>
 
-				<?php $index++; ?>
 				<div class="well form-control-static">
-
-				<div class="form-group">
-					<?php if ($question['question_type'] == QuestionnairesComponent::TYPE_TEXT): ?>
-					<?php $elementName = 'Questionnaires.Answers/question_text'; ?>
-					<?php elseif ($question['question_type'] == QuestionnairesComponent::TYPE_SELECTION): ?>
-					<?php $elementName = 'Questionnaires.Answers/question_selection'; ?>
-					<?php elseif ($question['question_type'] == QuestionnairesComponent::TYPE_MULTIPLE_SELECTION): ?>
-					<?php $elementName = 'Questionnaires.Answers/question_multiple_selection'; ?>
-					<?php elseif ($question['question_type'] == QuestionnairesComponent::TYPE_TEXT_AREA): ?>
-					<?php $elementName = 'Questionnaires.Answers/question_text_area'; ?>
-					<?php elseif ($question['question_type'] == QuestionnairesComponent::TYPE_MATRIX_SELECTION_LIST): ?>
-					<?php $elementName = 'Questionnaires.Answers/question_matrix_selection_list'; ?>
-					<?php elseif ($question['question_type'] == QuestionnairesComponent::TYPE_MATRIX_MULTIPLE): ?>
-					<?php $elementName = 'Questionnaires.Answers/question_matrix_multiple'; ?>
-					<?php elseif ($question['question_type'] == QuestionnairesComponent::TYPE_DATE_AND_TIME): ?>
-					<?php $elementName = 'Questionnaires.Answers/question_date_and_time'; ?>
-					<?php elseif ($question['question_type'] == QuestionnairesComponent::TYPE_SINGLE_SELECT_BOX): ?>
-					<?php $elementName = 'Questionnaires.Answers/question_single_select_box'; ?>
-					<?php endif ?>
-
-					<?php echo $this->element($elementName,
-					array('index' => $index,
-					'question' => $question,
-					'answer' => $answers[$question['origin_id']],
-					'readonly' => true)); ?>
-				</div>
+					<div class="form-group">
+						 <?php echo $this->QuestionnaireAnswer->answer($question, true); ?>
+					</div>
 				</div>
 			<?php endif ?>
 		<?php endforeach; ?>
@@ -83,18 +54,22 @@
 
 	<div class="text-center">
 
-		<a class="btn btn-default" href="<?php echo '/questionnaires/questionnaire_answers/answer/' . $frameId . '/' . $questionnaireId; ?>">
+		<a class="btn btn-default" href="<?php echo NetCommonsUrl::actionUrl(array(
+																	'controller' => 'questionnaire_answers',
+																	'action' => 'view',
+																	$questionnaire['Questionnaire']['key'],
+																	'frame_id' => Current::read('Frame.id'))); ?>">
 			<span class="glyphicon glyphicon-chevron-left"></span>
 			<?php echo __d('questionnaires', 'Start over'); ?>
 		</a>
 
-		<?php echo $this->Form->button(
+		<?php echo $this->NetCommonsForm->button(
 		__d('net_commons', 'Confirm'),
 		array(
 		'class' => 'btn btn-primary',
 		'name' => 'confirm_' . 'questionnaire',
 		)) ?>
 	</div>
-	<?php echo $this->Form->end(); ?>
+	<?php echo $this->NetCommonsForm->end(); ?>
 
 </article>

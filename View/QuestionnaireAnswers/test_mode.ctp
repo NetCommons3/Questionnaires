@@ -9,28 +9,17 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 ?>
-<articel>
+<article id="nc-questionnaires-answer-<?php Current::read('Frame.id'); ?>">
 
-	<?php
-		echo $this->element('Questionnaires.Answers/answer_test_mode_header');
-	?>
+	<?php echo $this->element('Questionnaires.Answers/answer_test_mode_header'); ?>
 
-	<?php echo $this->Form->create('PreAnswer', array(
-	'name' => 'questionnaire_form_answer',
-	'type' => 'post',
-	'novalidate' => true,
-	)); ?>
+	<?php echo $this->element('Questionnaires.Answers/answer_header'); ?>
 
-	<?php echo $this->Form->hidden('id'); ?>
-	<?php echo $this->Form->hidden('Frame.id', array('value' => $frameId)); ?>
-	<?php echo $this->Form->hidden('Block.id', array('value' => $blockId)); ?>
-	<?php echo $this->Form->hidden('Questionnaire.id', array('value' => $questionnaire['Questionnaire']['id'])); ?>
-	<?php echo $this->Form->hidden('PreAnswer.test_mode', array('value' => true)); ?>
+	<?php echo $this->NetCommonsForm->create('QuestionnaireAnswer'); ?>
 
-	<div class="modal-body">
-		<?php
-		echo $this->element('Questionnaires.Answers/answer_header');
-		?>
+		<?php echo $this->NetCommonsForm->hidden('Frame.id'); ?>
+		<?php echo $this->NetCommonsForm->hidden('Block.id'); ?>
+
 		<div class="row">
 			<div class="col-sm-12">
 				<h3><?php echo __d('questionnaires', 'Questionnaire answer period'); ?></h3>
@@ -73,7 +62,7 @@
 							<?php echo __d('questionnaires', 'use key phrase'); ?>
 								<dl class="dl-horizontal">
 									<dt><?php echo __d('questionnaires', 'key phrase'); ?>:</dt>
-									<dd><?php echo h($questionnaire['Questionnaire']['key_phrase']); ?></dd>
+									<dd><?php echo h($questionnaire['AuthorizationKey']['authorization_key']); ?></dd>
 								</dl>
 						<?php else: ?>
 							<?php echo __d('questionnaires', 'do not use key phrase'); ?>
@@ -111,22 +100,27 @@
 						<?php echo __d('questionnaires', 'do not deliver e-mail when submitted'); ?>
 						<?php endif; ?>
 					</li>
+
+					<li>
+						<?php if ($questionnaire['Questionnaire']['is_open_mail_send'] == QuestionnairesComponent::USES_USE): ?>
+						<?php echo __d('questionnaires', 'Deliver e-mail when started'); ?>
+						<?php else: ?>
+						<?php echo __d('questionnaires', 'do not deliver e-mail when started'); ?>
+						<?php endif; ?>
+					</li>
 				</ul>
 			</div>
 		</div>
 
-	</div>
-	<div class="modal-footer">
 		<div class="text-center">
-			<?php echo $this->BackToPage->backToPageButton(__d('net_commons', 'Cancel'), 'remove'); ?>
-			<?php echo $this->Form->button(
-			__d('questionnaires', 'Start the test answers of this questionnaire') . ' <span class="glyphicon glyphicon-chevron-right"></span>',
+			<?php echo $this->BackTo->pageLinkButton(__d('net_commons', 'Cancel'), array('icon' => 'remove')); ?>
+			<?php echo $this->NetCommonsForm->button(__d('questionnaires', 'Start the test answers of this questionnaire') . ' <span class="glyphicon glyphicon-chevron-right"></span>',
 			array(
 			'class' => 'btn btn-primary',
 			'name' => 'next_' . '',
 			)) ?>
 		</div>
 	</div>
-	<?php echo $this->Form->end(); ?>
+	<?php echo $this->NetCommonsForm->end(); ?>
 
-</articel>
+</article>

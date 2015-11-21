@@ -25,7 +25,14 @@ class QuestionnaireAnswer extends QuestionnairesAppModel {
  * @var array
  */
 	public $actsAs = array(
-		'Questionnaires.QuestionnaireAnswerValidate',
+		'Questionnaires.QuestionnaireAnswerSingleChoice',
+		'Questionnaires.QuestionnaireAnswerMultipleChoice',
+		'Questionnaires.QuestionnaireAnswerSingleList',
+		'Questionnaires.QuestionnaireAnswerTextArea',
+		'Questionnaires.QuestionnaireAnswerText',
+		'Questionnaires.QuestionnaireAnswerMatrixSingleChoice',
+		'Questionnaires.QuestionnaireAnswerMatrixMultipleChoice',
+		'Questionnaires.QuestionnaireAnswerDatetime',
 	);
 
 /**
@@ -34,52 +41,7 @@ class QuestionnaireAnswer extends QuestionnairesAppModel {
  * @var array
  */
 	public $validate = array(
-		'questionnaire_answer_summary_id' => array(
-			'numeric' => array(
-				'rule' => array('numeric'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
-		'questionnaire_question_origin_id' => array(
-			'numeric' => array(
-				'rule' => array('numeric'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
-		'answer_value' => array(
-			'answerValidation' => array(
-				'rule' => array('checkAnswerValue', null),
-				'last' => true,
-				'message' => ''
-			)
-		),
 	);
-
-/**
- * Answer Validation rule by question type
- *
- * @var array
- */
-	public $answerTypeValidate = array(
-		QuestionnairesComponent::TYPE_MATRIX_MULTIPLE => 'checkMatrixSelectionListAnswerValue',
-		QuestionnairesComponent::TYPE_MATRIX_SELECTION_LIST => 'checkMatrixSelectionListAnswerValue',
-		QuestionnairesComponent::TYPE_MULTIPLE_SELECTION => 'checkSelectionAnswerValue',
-		QuestionnairesComponent::TYPE_SELECTION => 'checkSelectionAnswerValue',
-		QuestionnairesComponent::TYPE_TEXT => 'checkTextAnswerValue',
-		QuestionnairesComponent::TYPE_TEXT_AREA => 'checkTextAreaAnswerValue',
-		QuestionnairesComponent::TYPE_SINGLE_SELECT_BOX => 'checkSelectionAnswerValue',
-		QuestionnairesComponent::TYPE_DATE_AND_TIME => 'checkDateAndTimeAnswerValue'
-	);
-
-	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
 /**
  * belongsTo associations
@@ -88,69 +50,86 @@ class QuestionnaireAnswer extends QuestionnairesAppModel {
  */
 	public $belongsTo = array(
 		'QuestionnaireChoice' => array(
-			'className' => 'QuestionnaireChoice',
-			'foreignKey' => 'matrix_choice_id',
-			'conditions' => '',
+			'className' => 'Questionnaires.QuestionnaireChoice',
+			'foreignKey' => false,
+			'conditions' => 'QuestionnaireAnswer.matrix_choice_key=QuestionnaireChoice.key',
 			'fields' => '',
 			'order' => ''
 		),
 		'QuestionnaireAnswerSummary' => array(
-			'className' => 'QuestionnaireAnswerSummary',
+			'className' => 'Questionnaires.QuestionnaireAnswerSummary',
 			'foreignKey' => 'questionnaire_answer_summary_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
 		),
 		'QuestionnaireQuestion' => array(
-			'className' => 'QuestionnaireQuestion',
-			'foreignKey' => 'questionnaire_question_origin_id',
-			'conditions' => '',
+			'className' => 'Questionnaires.QuestionnaireQuestion',
+			'foreignKey' => false,
+			'conditions' => 'QuestionnaireAnswer.questionnaire_question_key=QuestionnaireQuestion.key',
 			'fields' => '',
 			'order' => ''
 		)
 	);
 
 /**
- * AfterFind Callback function
+ * Called during validation operations, before validation. Please note that custom
+ * validation rules can be defined in $validate.
  *
- * @param array $results found data records
- * @param bool $primary indicates whether or not the current model was the model that the query originated on or whether or not this model was queried as an association
- * @return mixed
- * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
+ * @param array $options Options passed from Model::save().
+ * @return bool True if validate operation should continue, false to abort
+ * @link http://book.cakephp.org/2.0/en/models/callback-methods.html#beforevalidate
+ * @see Model::save()
+ * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
  */
-	public function afterFind($results, $primary = false) {
-		// afterFind 選択肢系の回答の場合、answer_value に　[id:value|id:value....]の形で収まっているので
-		// それを使いやすいように展開する
-		foreach ($results as &$val) {
+	public function beforeValidate($options = array()) {
+		// option情報取り出し
+		$summaryId = $options['questionnaire_answer_summary_id'];
+		$this->data['QuestionnaireAnswer']['questionnaire_answer_summary_id'] = $summaryId;
+		$question = $options['question'];
+		$allAnswers = $options['allAnswers'];
 
-			$val['QuestionnaireAnswer']['answer_values'] = array();
+		// Answerモデルは繰り返し判定が行われる可能性高いのでvalidateルールは最初に初期化
+		// mergeはしません
+		$this->validate = array(
+			'questionnaire_answer_summary_id' => array(
+				'numeric' => array(
+					'rule' => array('numeric'),
+					//'message' => 'Your custom message here',
+					'allowEmpty' => true,
+					//'required' => false,
+					//'last' => false, // Stop validation after this rule
+					//'on' => 'create', // Limit validation to 'create' or 'update' operations
+				),
+			),
+			'questionnaire_question_key' => array(
+				'notBlank' => array(
+					'rule' => array('notBlank'),
+					//'message' => 'Your custom message here',
+					'allowEmpty' => false,
+					'required' => true,
+					//'last' => false, // Stop validation after this rule
+					//'on' => 'create', // Limit validation to 'create' or 'update' operations
+				),
+			),
+			'answer_value' => array(
+				'answerRequire' => array(
+					'rule' => array('answerRequire', $question),
+					'message' => __d('questionnaires', 'Input required'),
+				),
+				'answerMaxLength' => array(
+					'rule' => array('answerMaxLength', $question, QuestionnairesComponent::QUESTIONNAIRE_MAX_ANSWER_LENGTH),
+					'message' => sprintf(__d('questionnaires', 'the answer is too long. Please enter under %d letters.', QuestionnairesComponent::QUESTIONNAIRE_MAX_ANSWER_LENGTH)),
+				),
+				'answerValidation' => array(
+					'rule' => array('answerValidation', $question, $allAnswers),
+					'last' => true,
+					'message' => ''
+				),
+			),
+		);
+		parent::beforeValidate($options);
 
-			if (isset($val['QuestionnaireAnswer']['answer_value'])) {
-				$answers = explode(QuestionnairesComponent::ANSWER_DELIMITER, trim($val['QuestionnaireAnswer']['answer_value'], QuestionnairesComponent::ANSWER_DELIMITER));
-				if (!empty($answers)) {
-					foreach ($answers as $ans) {
-						$idValue = explode(QuestionnairesComponent::ANSWER_VALUE_DELIMITER, $ans);
-						$val['QuestionnaireAnswer']['answer_values'][$idValue[0]] = isset($idValue[1]) ? $idValue[1] : null;
-					}
-				}
-			}
-		}
-		return $results;
-	}
-
-/**
- * beforeSave 選択肢系の回答の場合、answer_value に　[id:value|id:value....]の形で収めなくてはいけない
- * 保存前に整える
- *
- * @param array $options オプション
- * @return bool
- */
-	public function beforeSave($options = array()) {
-		if (isset($this->data['QuestionnaireAnswer']['multi_answer_values'])) {
-			$this->data['QuestionnaireAnswer']['answer_value'] = $this->data['QuestionnaireAnswer']['multi_answer_values'];
-		} elseif (isset($this->data['QuestionnaireAnswer']['matrix_answer_values'])) {
-
-		}
 		return true;
 	}
 
@@ -169,132 +148,15 @@ class QuestionnaireAnswer extends QuestionnairesAppModel {
 			'conditions' => array(
 				'questionnaire_answer_summary_id' => $summary['QuestionnaireAnswerSummary']['id']
 			),
-			'recursive' => -1
+			'recursive' => 0
 		));
 		if (!empty($answer)) {
 			foreach ($answer as $ans) {
-				$answers[$ans['QuestionnaireAnswer']['questionnaire_question_origin_id']][] = $ans['QuestionnaireAnswer'];
+				$answers[$ans['QuestionnaireAnswer']['questionnaire_question_key']][] = $ans['QuestionnaireAnswer'];
 			}
 		}
 		return $answers;
 	}
-
-	/**
- * checkAnswerValue 入力回答の正当性をチェックする
- *
- * @param array $data Postされた回答データ
- * @param array $question 回答データに対応する質問
- * @param array $answers all answer data of this question (for matrix)
- * @return bool
- */
-	public function checkAnswerValue($data, $question, $answers) {
-		$this->QuestionnaireAnswerValidation = ClassRegistry::init('Questionnaires.QuestionnaireAnswerValidation', true);
-
-		$errors = array();
-
-		$answer = $data['answer_value'];
-
-		$this->__setupAnswerValue($answer, $question);
-
-		// 共通チェック
-		// 必須なのに入力されていない
-		if ($question['is_require'] == QuestionnairesComponent::REQUIRES_REQUIRE) {
-			$errors = array_merge($errors,
-				$this->QuestionnaireAnswerValidation->checkRequire($question, $this->data['QuestionnaireAnswer']));
-		}
-		// 質問種別に合わせてチェックCALL
-		if (!empty($answer)) {
-			$errors = array_merge($errors,
-				call_user_func_array(array($this, $this->answerTypeValidate[$question['question_type']]), array(&$answer, &$question, &$answers))
-			);
-		}
-		//
-		// なんらかのエラーメッセージが設定されていたらfalseリターン
-		//
-		if (count($errors) > 0) {
-			$this->validationErrors['answer_value'] = $errors;
-			return false;
-		}
-		return true;
-	}
-
-/**
- * __setupAnswerValue
- * setup Answer for check
- *
- * @param array $answer Postされた回答データ
- * @param array $question 回答データに対応する質問
- * @return void
- */
-	private function __setupAnswerValue($answer, $question) {
-		// 質問種別によってチェックする内容が異なるので
-		if ($question['question_type'] == QuestionnairesComponent::TYPE_SELECTION
-			|| $question['question_type'] == QuestionnairesComponent::TYPE_SINGLE_SELECT_BOX) {
-			$this->data['QuestionnaireAnswer']['answer_values'] = array();
-			$this->__getAnswerValueOfSelect($this->data['QuestionnaireAnswer']['answer_values'], $answer);
-		}
-		if ($question['question_type'] == QuestionnairesComponent::TYPE_MULTIPLE_SELECTION) {
-			$this->__setupAnswerValueMultiple($answer);
-		}
-		if ($question['question_type'] == QuestionnairesComponent::TYPE_MATRIX_SELECTION_LIST) {
-			$this->data['QuestionnaireAnswer']['matrix_answer_values'] = array();
-			$this->__getAnswerValueOfSelect($this->data['QuestionnaireAnswer']['matrix_answer_values'][$this->data['QuestionnaireAnswer']['matrix_choice_id']], $answer);
-		}
-		if ($question['question_type'] == QuestionnairesComponent::TYPE_MATRIX_MULTIPLE) {
-			$this->__setupAnswerValueMatrixMultiple($answer);
-		}
-	}
-
-/**
- * __setupAnswerValueMultiple
- * get answer value for selection question
- *
- * @param array $answer 分解された選択肢回答
- * @return void
- */
-	private function __setupAnswerValueMultiple($answer) {
-		$this->data['QuestionnaireAnswer']['answer_values'] = array();
-		$this->data['QuestionnaireAnswer']['multi_answer_values'] = '';
-		if (is_array($answer)) {
-			foreach ($answer as $a) {
-				$this->__getAnswerValueOfSelect($this->data['QuestionnaireAnswer']['answer_values'], $a);
-				$this->data['QuestionnaireAnswer']['multi_answer_values'] .= $a;
-			}
-		}
-	}
-
-/**
- * __setupAnswerValueMatrixMultiple
- * get answer value for selection question
- *
- * @param array $answer 分解された選択肢回答
- * @return void
- */
-	private function __setupAnswerValueMatrixMultiple($answer) {
-		$this->data['QuestionnaireAnswer']['matrix_answer_values'] = array();
-		$this->data['QuestionnaireAnswer']['multi_answer_values'] = '';
-		$matrixChoiceId = $this->data['QuestionnaireAnswer']['matrix_choice_id'];
-		if (is_array($answer)) {
-			foreach ($answer as $ans) {
-				$this->__getAnswerValueOfSelect($this->data['QuestionnaireAnswer']['matrix_answer_values'][$matrixChoiceId], $ans);
-				$this->data['QuestionnaireAnswer']['multi_answer_values'] .= $ans;
-			}
-		}
-	}
-
-/**
- * __getAnswerValueOfSelect
- * get answer value for selection question
- *
- * @param array &$data Postされた回答データ
- * @param array $answer 分解された選択肢回答
- * @return void
- */
-	private function __getAnswerValueOfSelect(&$data, $answer) {
-		$answers = explode(QuestionnairesComponent::ANSWER_VALUE_DELIMITER, trim($answer, QuestionnairesComponent::ANSWER_DELIMITER));
-		$data[$answers[0]] = isset($answers[1]) ? $answers[1] : '';
-	}
-
 /**
  * getAnswerCount
  * It returns the number of responses in accordance with the conditions
@@ -305,14 +167,6 @@ class QuestionnaireAnswer extends QuestionnairesAppModel {
 	public function getAnswerCount($conditions) {
 		$cnt = $this->find('count', array(
 			'conditions' => $conditions,
-			'joins' => array(
-				array('table' => 'questionnaire_answer_summaries',
-					'alias' => 'QuestionnaireAnswerSummary',
-					'type' => 'LEFT',
-					'conditions' => array(
-						'QuestionnaireAnswerSummary.id = QuestionnaireAnswer.questionnaire_answer_summary_id',
-					))
-			)
 		));
 		return $cnt;
 	}
@@ -321,116 +175,55 @@ class QuestionnaireAnswer extends QuestionnairesAppModel {
  * saveAnswer
  * save the answer data
  *
+ * @param array $data Postされた回答データ
  * @param array $questionnaire questionnaire data
  * @param int $userId user id
  * @param string $sessionId session id
- * @param array $data Postされた回答データ
- * @param array &$errors error messages
  * @throws $ex
  * @return bool
  */
-	public function saveAnswer($questionnaire, $userId, $sessionId, $data, &$errors) {
-		$errors = array();
-
+	public function saveAnswer($data, $questionnaire, $userId, $sessionId) {
 		$this->loadModels([
 			'QuestionnaireAnswerSummary' => 'Questionnaires.QuestionnaireAnswerSummary',
 		]);
-
 		//トランザクションBegin
-		$this->setDataSource('master');
-		//$dataSource = $this->getDataSource();
-		//$dataSource->begin();
-
+		$this->begin();
 		try {
-			// 初回回答か再回答かを確認している
+			// サマリレコード取得（存在しない場合は強制的に作成）
 			// 初めは「ID」がPOSTに入っているかどうかで判断しようと思っていたが
 			// Cakeは簡単にブラウザの「戻る」で前画面を表示させたりするので、
-			// POSTのIDは再回答であるにもかかわらず空ってことがありうる
-			// なので毎回DBチェックするしかないかと思う I think so.
-			// サマリレコード取得
-			$summary = $this->QuestionnaireAnswerSummary->forceGetAnswerSummary(
+			// POSTのIDは再回答であるにもかかわらず空ってことがありうるので毎回DBチェックするしかない
+			$summary = $this->QuestionnaireAnswerSummary->forceGetProgressiveAnswerSummary(
 				$questionnaire,
 				$userId,
-				$sessionId,
-				array(
-					'questionnaire_origin_id' => $questionnaire['Questionnaire']['origin_id'],
-					'answer_status' => QuestionnairesComponent::ACTION_NOT_ACT,
-					'session_value' => $sessionId,
-					'user_id' => $userId
-				)
-			);
+				$sessionId);
 			$summaryId = $summary['QuestionnaireAnswerSummary']['id'];
-
-			//
-			foreach ($data as $answer) {
-				// 質問によってバリデーション動作が変わるので
-				$targetQuestion = Hash::extract($questionnaire['QuestionnairePage'], '{n}.QuestionnaireQuestion.{n}[origin_id=' . $answer['questionnaire_question_origin_id'] . ']');
-				$this->validator()->getField('answer_value')->setRule(
-					'answerValidation',
-					array('rule' => array(
-						'checkAnswerValue',
-						$targetQuestion[0],
-						$answer,
-						'message' => '',
-					)));
-
+			// 繰り返しValidationを行うときは、こうやってエラーメッセージを蓄積するところ作らねばならない
+			// 仕方ないCakeでModelObjectを使う限りは
+			$validationErrors = array();
+			foreach ($data['QuestionnaireAnswer'] as $answer) {
+				$targetQuestionKey = $answer[0]['questionnaire_question_key'];
+				$targetQuestion = Hash::extract($questionnaire['QuestionnairePage'], '{n}.QuestionnaireQuestion.{n}[key=' . $targetQuestionKey . ']');
 				// データ保存
-				if (QuestionnairesComponent::isMatrixInputType($targetQuestion[0]['question_type'])) {
-					foreach ($answer as $ans) {
-						if (!$this->__saveAnswer($ans, $summaryId, $summary)) {
-							$errors[$ans['questionnaire_question_origin_id']] = $this->validationErrors;
-						}
-					}
-				} else {
-					if (!$this->__saveAnswer($answer, $summaryId, $summary)) {
-						$errors[$answer['questionnaire_question_origin_id']] = $this->validationErrors;
-					}
+				// Matrixタイプの場合はanswerが配列になっているがsaveでかまわない
+				$this->oneTimeValidateFlag = false;	// saveMany中で１回しかValidateしなくてよい関数のためのフラグ
+				if (!$this->saveMany($answer, array(
+					'questionnaire_answer_summary_id' => $summaryId,
+					'question' => $targetQuestion[0],
+					'allAnswers' => $data['QuestionnaireAnswer']))) {
+					$validationErrors[$targetQuestionKey] = Hash::filter($this->validationErrors);
 				}
 			}
-			//$dataSource->commit();
-
+			if (! empty($validationErrors)) {
+				$this->validationErrors = Hash::filter($validationErrors);
+				$this->rollback();
+				return false;
+			}
+			$this->commit();
 		} catch (Exception $ex) {
-			//$dataSource->rollback();
+			$this->rollback();
 			CakeLog::error($ex);
 			throw $ex;
-		}
-
-		if (count($errors) == 0) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-/**
- * __saveAnswer
- * save the answer data
- *
- * @param array $answer answer data data
- * @param int $summaryId summary id
- * @param array $summary summary data
- * @return bool
- */
-	private function __saveAnswer($answer, $summaryId, $summary) {
-		if (!is_array($answer)) {
-			return true;
-		}
-		$answer['questionnaire_answer_summary_id'] = $summaryId;
-		if (isset($summary['QuestionnaireAnswer'])) {
-			$matcher1 = 'questionnaire_question_origin_id=' . $answer['questionnaire_question_origin_id'];
-			$matcher2 = 'matrix_choice_id=' . $answer['matrix_choice_id'];
-			$past = Hash::extract($summary['QuestionnaireAnswer'], '{n}[' . $matcher1 . '][' . $matcher2 . ']');
-		} else {
-			$past = false;
-		}
-
-		if ($past) {
-			$answer['id'] = $past[0]['id'];
-		} else {
-			$this->create();
-		}
-		if (!$this->save($answer)) {
-			return false;
 		}
 		return true;
 	}
