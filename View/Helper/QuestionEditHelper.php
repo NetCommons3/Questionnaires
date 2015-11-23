@@ -82,14 +82,15 @@ class QuestionEditHelper extends AppHelper {
 	public function questionnaireAttributeCheckbox($fieldName, $label, $options = array(), $help = '') {
 		$ngModel = 'questionnaires.questionnaire.' . Inflector::variable($fieldName);
 		$ret = '<div class=" checkbox"><label>';
-		$options = Hash::merge($options, array(
+		$options = Hash::merge(array(
 			'type' => 'checkbox',
 			'div' => false,
 			'label' => false,
 			'class' => '',
 			'ng-model' => $ngModel,
-			'ng-checked' => $ngModel . '==' . QuestionnairesComponent::USES_USE
-		));
+			'ng-checked' => $ngModel . '==' . QuestionnairesComponent::USES_USE),
+			$options
+		);
 
 		$ret .= $this->NetCommonsForm->input($fieldName, $options);
 		$ret .= $label;

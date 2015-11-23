@@ -91,34 +91,16 @@ NetCommonsApp.controller('Questionnaires.setting',
         var elId = curEl.id;
 
         // minの制限は
-        var minDate = $('#start_period').val();
+        var minDate = $('#publish_start').val();
         // maxの制限は
-        var maxDate = $('#end_period').val();
+        var maxDate = $('#publish_end').val();
 
-        if (elId == 'start_period') {
-          $('#start_period').data('DateTimePicker').maxDate(maxDate);
+        if (elId == 'publish_start') {
+          $('#publish_start').data('DateTimePicker').maxDate(maxDate);
         } else {
-          $('#end_period').data('DateTimePicker').minDate(minDate);
+          $('#publish_end').data('DateTimePicker').minDate(minDate);
         }
       };
-
-      /**
-       * publish button click
-       *
-       * @return {void}
-       */
-      $scope.publishQuestionnaire = function(e, isPublished, message) {
-        if (isPublished == 0) {
-          if (!confirm(message)) {
-            e.stopPropagation();
-            return false;
-          }
-        }
-        angular.element('#questionnairePublishedForm-' +
-            $scope.frameId).submit();
-        return true;
-      };
-
       /**
        * delete button click
        *

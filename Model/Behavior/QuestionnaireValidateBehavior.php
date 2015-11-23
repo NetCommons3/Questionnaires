@@ -24,29 +24,28 @@ class QuestionnaireValidateBehavior extends ModelBehavior {
  *
  * @param object &$model use model
  * @param array $check check data array
+ * @param mix $requireValue when check data value equal this value, then require other field
  * @param array $others require data field names
  * @param string $ope require condition AND or OR
  * @return bool
  */
-	public function requireOtherFields(&$model, $check, $others, $ope) {
+	public function requireOtherFields(&$model, $check, $requireValue, $others, $ope) {
 		$value = array_values($check);
 		$value = $value[0];
 		$ope = strtoupper($ope);
-		if ($value != QuestionnairesComponent::USES_USE) {
+		if ($value != $requireValue) {
 			return true;
 		}
-		if ($value == QuestionnairesComponent::USES_USE) {
-			foreach ($others as $other) {
-				$checkData = Hash::get($model->data, $other);
-				$ret = Validation::blank($checkData);
-				if ($ope == 'AND') {
-					if ($ret == true) {
-						return false;
-					}
-				} elseif ($ope == 'OR') {
-					if ($ret == false) {
-						return true;
-					}
+		foreach ($others as $other) {
+			$checkData = Hash::get($model->data, $other);
+			$ret = Validation::blank($checkData);
+			if ($ope == 'AND') {
+				if ($ret == true) {
+					return false;
+				}
+			} elseif ($ope == 'OR') {
+				if ($ret == false) {
+					return true;
 				}
 			}
 		}
@@ -169,7 +168,7 @@ class QuestionnaireValidateBehavior extends ModelBehavior {
 	public function getPeriodStatus(&$model, $check, $startTime, $endTime) {
 		$ret = QuestionnairesComponent::QUESTIONNAIRE_PERIOD_STAT_IN;
 
-		if ($check == QuestionnairesComponent::USES_USE) {
+		if ($check == WorkflowBehavior::PUBLIC_TYPE_LIMITED) {
 			$nowTime = time();
 			if ($nowTime < strtotime($startTime)) {
 				$ret = QuestionnairesComponent::QUESTIONNAIRE_PERIOD_STAT_BEFORE;

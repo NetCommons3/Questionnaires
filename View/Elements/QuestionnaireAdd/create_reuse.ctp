@@ -38,11 +38,11 @@
 			<?php echo $this->element('Questionnaires.status_label',
 			array('status' => 'item.questionnaire.status')); ?>
 
-			<span ng-if="item.questionnaire.isPeriod != 0">
+			<span ng-if="item.questionnaire.publicType == <?php echo WorkflowBehavior::PUBLIC_TYPE_LIMITED; ?>">
 			(
-				{{item.questionnaire.startPeriod | ncDatetime}}
+				{{item.questionnaire.publishStart | ncDatetime}}
 				<?php echo __d('questionnaires', ' - '); ?>
-				{{item.questionnaire.endPeriod | ncDatetime}}
+				{{item.questionnaire.publishEnd | ncDatetime}}
 				<?php echo __d('questionnaires', 'Implementation'); ?>
 			)
 			</span>

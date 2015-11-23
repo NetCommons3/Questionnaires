@@ -27,7 +27,7 @@
 				<?php echo $this->Paginator->sort('Questionnaire.title', __d('questionnaires', 'Title')); ?>
 			</th>
 			<th>
-				<?php echo $this->Paginator->sort('Questionnaire.start_period', __d('questionnaires', 'Implementation date')); ?>
+				<?php echo $this->Paginator->sort('Questionnaire.publish_start', __d('questionnaires', 'Implementation date')); ?>
 			</th>
 			<th>
 				<?php echo $this->Paginator->sort('Questionnaire.is_total_show', __d('questionnaires', 'Aggregates')); ?>
@@ -70,10 +70,10 @@
 				<?php echo $quest['Questionnaire']['title']; ?>
 			</td>
 			<td>
-				<?php if ($quest['Questionnaire']['is_period'] == QuestionnairesComponent::USES_USE): ?>
-					<?php echo $this->Date->dateFormat($quest['Questionnaire']['start_period']); ?>
+				<?php if ($quest['Questionnaire']['public_type'] == WorkflowBehavior::PUBLIC_TYPE_LIMITED): ?>
+					<?php echo $this->Date->dateFormat($quest['Questionnaire']['publish_start']); ?>
 					<?php echo __d('questionnaires', ' - '); ?>
-					<?php echo $this->Date->dateFormat($quest['Questionnaire']['end_period']); ?>
+					<?php echo $this->Date->dateFormat($quest['Questionnaire']['publish_end']); ?>
 				<?php endif ?>
 			</td>
 			<td>

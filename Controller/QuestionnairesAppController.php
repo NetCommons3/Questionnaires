@@ -141,31 +141,24 @@ class QuestionnairesAppController extends AppController {
 		// 公開状態が「公開」になっている場合は編集権限の有無にかかわらず共通だ
 		// なのでまずは公開状態だけを確認する
 
-		// 非公開データの場合は編集権限がなければfalse, あればtrue
-		if ($questionnaire['Questionnaire']['status'] != WorkflowComponent::STATUS_PUBLISHED) {
-			if (! $this->Questionnaire->canEditWorkflowContent($questionnaire)) {
-				return false;
-			} else {
-				return true;
-			}
-		}
-
-		// ここから下は、公開状態データの場合の判定
-
-		if (! $this->Questionnaire->canReadWorkflowContent()) {
-			return false;
-		} else {
+		// 編集権限があればオールマイティＯＫなのでこの後の各種チェックは不要！
+		if ($this->Questionnaire->canEditWorkflowContent($questionnaire)) {
 			return true;
 		}
+		// 編集権限がない場合は、もろもろのチェックを行うこと
 
+		// 読み取り権限がない？
+		if (! $this->Questionnaire->canReadWorkflowContent()) {
+			// それはだめだ
+			return false;
+		}
+
+		// 基本、権限上、見ることができるコンテンツだ
+		// しかし、アンケート独自の条件部分のチェックを行う必要がある
 		// 期間外
-		if ($questionnaire['Questionnaire']['is_period'] == QuestionnairesComponent::USES_USE
+		if ($questionnaire['Questionnaire']['public_type'] == WorkflowBehavior::PUBLIC_TYPE_LIMITED
 			&& $questionnaire['Questionnaire']['period_range_stat'] != QuestionnairesComponent::QUESTIONNAIRE_PERIOD_STAT_IN) {
-			if (! $this->Questionnaire->canEditWorkflowContent($questionnaire)) {
-				return false;
-			} else {
-				return true;
-			}
+			return false;
 		}
 
 		// 会員以外には許していないのに未ログイン

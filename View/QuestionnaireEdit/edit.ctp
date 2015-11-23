@@ -62,16 +62,22 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 		<div class="form-group questionnaire-group">
 
 			<?php /* アンケート期間設定 */
-				echo $this->QuestionEdit->questionnaireAttributeCheckbox('is_period',
+				echo $this->QuestionEdit->questionnaireAttributeCheckbox('public_type',
 					__d('questionnaires', 'set the answer period'),
-					array(),
+					array(
+					'value' => WorkflowBehavior::PUBLIC_TYPE_LIMITED,
+					'ng-checked' => 'questionnaires.questionnaire.publicType==' . "'" . WorkflowBehavior::PUBLIC_TYPE_LIMITED . "'",
+					'ng-true-value' => WorkflowBehavior::PUBLIC_TYPE_LIMITED,
+					'ng-false-value' => WorkflowBehavior::PUBLIC_TYPE_PUBLIC,
+					'hiddenField' => WorkflowBehavior::PUBLIC_TYPE_PUBLIC
+					),
 					__d('questionnaires', 'After approval will be immediately published . Stop of the questionnaire to select the stop from the questionnaire data list .'));
 			?>
-			<div class="row" ng-show="questionnaires.questionnaire.isPeriod != 0">
+			<div class="row" ng-show="questionnaires.questionnaire.publicType == '<?php echo WorkflowBehavior::PUBLIC_TYPE_LIMITED; ?>'">
 				<div class="col-sm-5">
 					<?php
-						echo $this->QuestionEdit->questionnaireAttributeDatetime('start_period', false,
-							array('min' => '', 'max' => 'end_period'));
+						echo $this->QuestionEdit->questionnaireAttributeDatetime('publish_start', false,
+							array('min' => '', 'max' => 'publish_end'));
 					?>
 				</div>
 				<div class="col-sm-1">
@@ -79,8 +85,8 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 				</div>
 				<div class="col-sm-5">
 					<?php
-						echo $this->QuestionEdit->questionnaireAttributeDatetime('end_period', false,
-							array('min' => 'start_period', 'max' => ''));
+						echo $this->QuestionEdit->questionnaireAttributeDatetime('publish_end', false,
+							array('min' => 'publish_start', 'max' => ''));
 					?>
 				</div>
 			</div>
@@ -98,7 +104,7 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 			<div class="row" ng-show="questionnaires.questionnaire.totalShowTiming != 0">
 				<div class="col-sm-5">
 					<?php
-						echo $this->QuestionEdit->questionnaireAttributeDatetime('start_period', false);
+						echo $this->QuestionEdit->questionnaireAttributeDatetime('publish_start', false);
 					?>
 				</div>
 				<div class="col-sm-6">

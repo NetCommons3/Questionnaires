@@ -100,29 +100,29 @@ class Questionnaire extends QuestionnairesAppModel {
 					'allowEmpty' => false,
 					'required' => true,
 			),
-			'is_period' => array(
-				'boolean' => array(
-					'rule' => array('boolean'),
+			'public_type' => array(
+				'publicTypeCheck' => array(
+					'rule' => array('inList', array(WorkflowBehavior::PUBLIC_TYPE_PUBLIC, WorkflowBehavior::PUBLIC_TYPE_LIMITED)),
 					'message' => __d('net_commons', 'Invalid request.'),
 				),
 				'requireOtherFields' => array(
-					'rule' => array('requireOtherFields', array('Questionnaire.start_period', 'Questionnaire.end_period'), 'OR'),
+					'rule' => array('requireOtherFields', WorkflowBehavior::PUBLIC_TYPE_LIMITED, array('Questionnaire.publish_start', 'Questionnaire.publish_end'), 'OR'),
 					'message' => __d('questionnaires', 'if you set the period, please set time.')
 				)
 			),
-			'start_period' => array(
+			'publish_start' => array(
 				'checkDateTime' => array(
 					'rule' => 'checkDateTime',
 					'message' => __d('questionnaires', 'Invalid datetime format.')
 				)
 			),
-			'end_period' => array(
+			'publish_end' => array(
 				'checkDateTime' => array(
 					'rule' => 'checkDateTime',
 					'message' => __d('questionnaires', 'Invalid datetime format.')
 				),
 				'checkDateComp' => array(
-					'rule' => array('checkDateComp', '>=', 'start_period'),
+					'rule' => array('checkDateComp', '>=', 'publish_start'),
 					'message' => __d('questionnaires', 'start period must be smaller than end period')
 				)
 			),
@@ -132,7 +132,7 @@ class Questionnaire extends QuestionnairesAppModel {
 					'message' => __d('net_commons', 'Invalid request.'),
 				),
 				'requireOtherFields' => array(
-					'rule' => array('requireOtherFields', array('Questionnaire.total_show_start_period'), 'AND'),
+					'rule' => array('requireOtherFields', QuestionnairesComponent::USES_USE, array('Questionnaire.total_show_start_period'), 'AND'),
 					'message' => __d('questionnaires', 'if you set the period, please set time.')
 				)
 			),
@@ -160,7 +160,7 @@ class Questionnaire extends QuestionnairesAppModel {
 					'message' => __d('net_commons', 'Invalid request.'),
 				),
 				'requireOtherFields' => array(
-					'rule' => array('requireOtherFields', array('AuthorizationKey.authorization_key'), 'AND'),
+					'rule' => array('requireOtherFields', QuestionnairesComponent::USES_USE, array('AuthorizationKey.authorization_key'), 'AND'),
 					'message' => __d('questionnaires', 'if you set the use key phrase period, please set key phrase text.')
 				)
 			),
@@ -230,9 +230,9 @@ class Questionnaire extends QuestionnairesAppModel {
 			}
 
 			$val['Questionnaire']['period_range_stat'] = $this->getPeriodStatus(
-				isset($val['Questionnaire']['is_period']) ? $val['Questionnaire']['is_period'] : false,
-				$val['Questionnaire']['start_period'],
-				$val['Questionnaire']['end_period']);
+				isset($val['Questionnaire']['public_type']) ? $val['Questionnaire']['public_type'] : false,
+				$val['Questionnaire']['publish_start'],
+				$val['Questionnaire']['publish_end']);
 
 			//
 			// ページ配下の質問データも取り出す

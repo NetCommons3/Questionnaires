@@ -26,12 +26,12 @@ echo $this->element('Questionnaires.scripts');
 		<?php foreach($questionnaires as $questionnaire): ?>
 			<tr>
 				<td>
-					<?php if ($questionnaire['Questionnaire']['is_period'] == QuestionnairesComponent::USES_USE): ?>
+					<?php if ($questionnaire['Questionnaire']['public_type'] == WorkflowBehavior::PUBLIC_TYPE_LIMITED): ?>
 						<div class="row">
 							<div class="col-md-12 col-xs-12">
-								<?php echo $this->Date->dateFormat($questionnaire['Questionnaire']['start_period']); ?>
+								<?php echo $this->Date->dateFormat($questionnaire['Questionnaire']['publish_start']); ?>
 								<?php echo __d('questionnaires', ' - '); ?>
-								<?php echo $this->Date->dateFormat($questionnaire['Questionnaire']['end_period']); ?>
+								<?php echo $this->Date->dateFormat($questionnaire['Questionnaire']['publish_end']); ?>
 							</div>
 						</div>
 					<?php endif ?>
