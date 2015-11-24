@@ -37,7 +37,7 @@
 				/* 集計ボタン表示Helperは回答数が１つはないと表示されない */
 				/* 今回答したのだから必ず回答は１つはある */
 				/* 強制的に一つ増やしておく */
-				$questionnaire['CountAnswerSummary'] = array('answer_summary_count' => 1);
+				$questionnaire['Questionnaire'] = array('answer_summary_count' => 1);
 				echo $this->QuestionnaireUtil->getAggregateButtons(Current::read('Frame.id'), $questionnaire,
 					array('title' => __d('questionnaires', 'Aggregate'),
 							'class' => 'btn-primary btn-lg'));
