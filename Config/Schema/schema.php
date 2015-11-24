@@ -73,7 +73,6 @@ class QuestionnairesSchema extends CakeSchema {
  *
  * @var array
  */
-
 	public $questionnaire_answers = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false, 'key' => 'primary'),
 		'matrix_choice_key' => array('type' => 'string', 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
@@ -98,6 +97,7 @@ class QuestionnairesSchema extends CakeSchema {
 		),
 		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'InnoDB')
 	);
+
 /**
  * questionnaire_choices table
  *
@@ -128,6 +128,7 @@ class QuestionnairesSchema extends CakeSchema {
 		),
 		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'InnoDB')
 	);
+
 /**
  * questionnaire_frame_display_questionnaires table
  *
@@ -147,6 +148,7 @@ class QuestionnairesSchema extends CakeSchema {
 		),
 		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'InnoDB')
 	);
+
 /**
  * questionnaire_frame_settings table
  *
@@ -168,6 +170,7 @@ class QuestionnairesSchema extends CakeSchema {
 		),
 		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'InnoDB')
 	);
+
 /**
  * questionnaire_pages table
  *
@@ -191,6 +194,7 @@ class QuestionnairesSchema extends CakeSchema {
 		),
 		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'InnoDB')
 	);
+
 /**
  * questionnaire_questions table
  *
@@ -227,6 +231,7 @@ class QuestionnairesSchema extends CakeSchema {
 		),
 		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'InnoDB')
 	);
+
 /**
  * questionnaire_blocks_settings table
  *
@@ -246,6 +251,7 @@ class QuestionnairesSchema extends CakeSchema {
 		),
 		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'InnoDB')
 	);
+
 /**
  * questionnaires table
  *
