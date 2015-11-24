@@ -37,10 +37,9 @@
 				/* 集計ボタン表示Helperは回答数が１つはないと表示されない */
 				/* 今回答したのだから必ず回答は１つはある */
 				/* 強制的に一つ増やしておく */
-				$questionnaire['Questionnaire'] = array('answer_summary_count' => 1);
-				echo $this->QuestionnaireUtil->getAggregateButtons(Current::read('Frame.id'), $questionnaire,
+				echo $this->QuestionnaireUtil->getAggregateButtons($questionnaire,
 					array('title' => __d('questionnaires', 'Aggregate'),
-							'class' => 'btn-primary btn-lg'));
+							'class' => 'btn-primary btn-lg'), true);
 			?>
 		</div>
 	<?php echo $this->NetCommonsForm->end(); ?>

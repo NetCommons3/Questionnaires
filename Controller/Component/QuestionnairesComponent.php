@@ -24,7 +24,7 @@ class QuestionnairesComponent extends Component {
  *
  * @var int
  */
-	const	QUESTIONNAIRE_KEY_PASS_INDEX = 0;
+	const	QUESTIONNAIRE_KEY_PASS_INDEX = 1;
 
 /**
  * バリデートタイプ

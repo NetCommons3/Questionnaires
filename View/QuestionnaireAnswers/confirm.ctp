@@ -57,6 +57,7 @@
 		<a class="btn btn-default" href="<?php echo NetCommonsUrl::actionUrl(array(
 																	'controller' => 'questionnaire_answers',
 																	'action' => 'view',
+																	Current::read('Block.id'),
 																	$questionnaire['Questionnaire']['key'],
 																	'frame_id' => Current::read('Frame.id'))); ?>">
 			<span class="glyphicon glyphicon-chevron-left"></span>

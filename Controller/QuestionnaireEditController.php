@@ -145,6 +145,7 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 			$this->redirect(NetCommonsUrl::actionUrl(array(
 				'controller' => 'questionnaire_edit',
 				'action' => 'edit_result',
+				Current::read('Block.id'),
 				$this->_getQuestionnaireKey($questionnaire),
 				'frame_id' => Current::read('Frame.id')
 			)));
@@ -182,6 +183,7 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 					NetCommonsUrl::actionUrl(array(
 						'controller' => 'questionnaire_edit',
 						'action' => 'edit_question',
+						Current::read('Block.id'),
 						$this->_getQuestionnaireKey($questionnaire),
 						'frame_id' => Current::read('Frame.id')
 					)));
@@ -194,6 +196,7 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 			$this->redirect(NetCommonsUrl::actionUrl(array(
 				'controller' => 'questionnaire_edit',
 				'action' => 'edit',
+				Current::read('Block.id'),
 				$this->_getQuestionnaireKey($questionnaire),
 				'frame_id' => Current::read('Frame.id')
 			)));
@@ -204,6 +207,7 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 				NetCommonsUrl::actionUrl(array(
 					'controller' => 'questionnaire_edit',
 					'action' => 'edit_question',
+					Current::read('Block.id'),
 					$this->_getQuestionnaireKey($this->_questionnaire),
 					'frame_id' => Current::read('Frame.id')
 				)));
@@ -242,6 +246,7 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 					NetCommonsUrl::actionUrl(array(
 						'controller' => 'questionnaire_edit',
 						'action' => 'edit_result',
+						Current::read('Block.id'),
 						$this->_getQuestionnaireKey($questionnaire),
 						'frame_id' => Current::read('Frame.id')
 					)));
@@ -260,6 +265,7 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 				NetCommonsUrl::actionUrl(array(
 					'controller' => 'questionnaire_edit',
 					'action' => 'edit_result',
+					Current::read('Block.id'),
 					$this->_getQuestionnaireKey($this->_questionnaire),
 					'frame_id' => Current::read('Frame.id')
 				)));

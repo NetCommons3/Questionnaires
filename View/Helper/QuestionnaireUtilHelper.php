@@ -55,11 +55,10 @@ class QuestionnaireUtilHelper extends AppHelper {
 /**
  * getAnswerButtons 回答済み 回答する テストのボタン表示
  *
- * @param string $frameId フレームID
  * @param array $questionnaire 回答データ
  * @return string
  */
-	public function getAnswerButtons($frameId, $questionnaire) {
+	public function getAnswerButtons($questionnaire) {
 		//
 		//回答ボタンの(回答済み|回答する|テスト)の決定
 		//
@@ -92,6 +91,7 @@ class QuestionnaireUtilHelper extends AppHelper {
 			$url = NetCommonsUrl::actionUrl(array(
 				'controller' => 'questionnaire_answers',
 				'action' => 'test_mode',
+				Current::read('Block.id'),
 				$key,
 				'frame_id' => Current::read('Frame.id'),
 			));
@@ -100,6 +100,7 @@ class QuestionnaireUtilHelper extends AppHelper {
 			$url = NetCommonsUrl::actionUrl(array(
 				'controller' => 'questionnaire_answers',
 				'action' => 'view',
+				Current::read('Block.id'),
 				$key,
 				'frame_id' => Current::read('Frame.id'),
 			));
@@ -136,12 +137,13 @@ class QuestionnaireUtilHelper extends AppHelper {
 /**
  * getAggregateButtons 集計のボタン表示
  *
- * @param string $frameId フレームID
  * @param array $questionnaire 回答データ
  * @param array $options option
+ * @param bool $force 回答状況を無視して操作可能ボタンを表示するか
  * @return string
+ * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
  */
-	public function getAggregateButtons($frameId, $questionnaire, $options = array()) {
+	public function getAggregateButtons($questionnaire, $options = array(), $force = false) {
 		//
 		// 集計ボタン
 		// 集計表示しない＝ボタン自体ださない
@@ -153,13 +155,6 @@ class QuestionnaireUtilHelper extends AppHelper {
 		if ($questionnaire['Questionnaire']['is_total_show'] == QuestionnairesComponent::EXPRESSION_NOT_SHOW) {
 			return '';
 		}
-		// 編集権限がない人が閲覧しているとき、未公開アンケートはFindされていないので対策する必要はない
-		//if ($questionnaire['Questionnaire']['status'] != WorkflowComponent::STATUS_PUBLISHED) {
-		//	if (!$editable) {
-		//		return '';
-		//	} else {
-		//		$disabled = '';
-		//	}
 
 		$disabled = '';
 
@@ -176,7 +171,9 @@ class QuestionnaireUtilHelper extends AppHelper {
 			} else {
 				// 集計結果公開期間内である
 				// 一つでも回答している
-				if (isset($questionnaire['Questionnaire']['answer_summary_count']) && $questionnaire['Questionnaire']['answer_summary_count'] > 0) {
+				if ((isset($questionnaire['Questionnaire']['answer_summary_count']) &&
+					$questionnaire['Questionnaire']['answer_summary_count'] > 0) ||
+					$force) {
 					$disabled = '';
 				} else {
 					// 未回答
@@ -189,6 +186,7 @@ class QuestionnaireUtilHelper extends AppHelper {
 		$url = NetCommonsUrl::actionUrl(array(
 			'controller' => 'questionnaire_answer_summaries',
 			'action' => 'view',
+			Current::read('Block.id'),
 			$key,
 			'frame_id' => Current::read('Frame.id'),
 		));

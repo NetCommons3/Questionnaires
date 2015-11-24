@@ -82,6 +82,7 @@ class QuestionnaireAddController extends QuestionnairesAppController {
 				$this->redirect(NetCommonsUrl::actionUrl(array(
 					'controller' => 'questionnaire_edit',
 					'action' => 'edit_question',
+					Current::read('Block.id'),
 					'frame_id' => Current::read('Frame.id')
 				)));
 				return;

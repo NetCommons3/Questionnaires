@@ -151,6 +151,7 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 			$this->redirect(NetCommonsUrl::actionUrl(array(
 				'controller' => 'questionnaire_answers',
 				'action' => 'view',
+				Current::read('Block.id'),
 				$this->_getQuestionnaireKey($this->__questionnaire),
 				'frame_id' => Current::read('Frame.id')
 			)));
@@ -200,6 +201,7 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 				$url = NetCommonsUrl::actionUrl(array(
 					'controller' => 'questionnaire_answers',
 					'action' => 'confirm',
+					Current::read('Block.id'),
 					$questionnaireKey,
 					'frame_id' => Current::read('Frame.id'),
 				));
@@ -255,6 +257,7 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 			$url = NetCommonsUrl::actionUrl(array(
 				'controller' => 'questionnaire_answers',
 				'action' => 'thanks',
+				Current::read('Block.id'),
 				$this->_getQuestionnaireKey($this->__questionnaire),
 				'frame_id' => Current::read('Frame.id'),
 			));

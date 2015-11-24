@@ -102,6 +102,7 @@ class QuestionnairesController extends QuestionnairesAppController {
 			$url = NetCommonsUrl::actionUrl(array(
 				'controller' => 'questionnaire_answers',
 				'action' => 'answer',
+				Current::read('Block.id'),
 				$questionnaires[0]['Questionnaire']['key'],
 				'frame_id' => Current::read('Frame.id'),
 			));
@@ -159,7 +160,7 @@ class QuestionnairesController extends QuestionnairesAppController {
 			);
 		} elseif ($answerStatus == QuestionnairesComponent::QUESTIONNAIRE_ANSWER_TEST) {
 			$filter = array(
-				'Questionnaire.status !=' => NetCommonsBlockComponent::STATUS_PUBLISHED
+				'Questionnaire.status !=' => WorkflowComponent::STATUS_PUBLISHED
 			);
 		} else {
 			$filter = array();
