@@ -1,6 +1,6 @@
 <?php
 /**
- * questionnaire aggrigate total table view template
+ * questionnaire aggregate total table view template
  *
  * @author Noriko Arai <arai@nii.ac.jp>
  * @author Allcreator <info@allcreator.net>
@@ -15,7 +15,7 @@
 			<thead>
 				<tr>
 					<th><?php echo __d('questionnaires', 'Item name'); ?></th>
-					<th><?php echo __d('questionnaires', 'Aggrigate value'); ?></th>
+					<th><?php echo __d('questionnaires', 'Aggregate value'); ?></th>
 					<th><?php echo __d('questionnaires', 'The percentage'); ?></th>
 				</tr>
 			</thead>
@@ -27,7 +27,7 @@
 					</td>
 					<td>
 						<?php
-							$cnt = (isset($choice['aggrigate_total']['aggrigate_not_matrix'])) ? $choice['aggrigate_total']['aggrigate_not_matrix'] : '0';
+							$cnt = (isset($choice['aggregate_total']['aggregate_not_matrix'])) ? $choice['aggregate_total']['aggregate_not_matrix'] : '0';
 							echo h($cnt);
 						?>
 					</td>

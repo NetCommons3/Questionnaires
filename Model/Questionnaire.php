@@ -355,8 +355,6 @@ class Questionnaire extends QuestionnairesAppModel {
 			'block_id' => Current::read('Block.id'),
 		));
 
-		/*FUJI:期間判定ロジックはworkflowへ*/
-
 		if (! Current::read('User')) {
 			$conditions['is_no_member_allow'] = QuestionnairesComponent::PERMISSION_PERMIT;
 		}

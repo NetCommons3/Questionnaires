@@ -483,12 +483,6 @@ class QuestionnairesComponent extends Component {
 	const TEST_ANSWER_STATUS_TEST = '1';
 
 /**
- * aggrigate not matrix
- * @var string
-	 */
-	const AGGRIGATE_NOT_MATRIX = 'aggrigate_not_matrix';	//matrixの場合数字がくるので、あえて非数字の文字列にしました。
-
-/**
  * percentage unit
  * @var string
  */

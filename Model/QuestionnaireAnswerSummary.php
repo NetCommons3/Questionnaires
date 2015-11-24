@@ -207,6 +207,92 @@ class QuestionnaireAnswerSummary extends QuestionnairesAppModel {
 		}
 		return $baseConditions;
 	}
+
+/**
+ * getAggrigates
+ * 集計処理の実施
+ *
+ * @param array $questionnaire アンケート情報
+ * @return void
+ */
+	public function getAggregate($questionnaire) {
+		$this->QuestionnaireAnswer = ClassRegistry::init('Questionnaires.QuestionnaireAnswer', true);
+		// 質問データのとりまとめ
+		//$questionsは、questionnaire_question_keyをキーとし、questionnaire_question配下が代入されている。
+		$questions = Hash::combine($questionnaire,
+			'QuestionnairePage.{n}.QuestionnaireQuestion.{n}.key',
+			'QuestionnairePage.{n}.QuestionnaireQuestion.{n}');
+
+		// 集計データを集める際の基本条件
+		$baseConditions = $this->getResultCondition($questionnaire);
+
+		//質問毎に集計
+		foreach ($questions as &$question) {
+			if ($question['is_result_display'] != QuestionnairesComponent::EXPRESSION_SHOW) {
+				//集計表示をしない、なので飛ばす
+				continue;
+			}
+			// 戻り値の、この質問の合計回答数を記録しておく。
+			// skip ロジックがあるため、単純にsummaryのcountじゃない..
+			$questionConditions = $baseConditions + array(
+					'QuestionnaireAnswer.questionnaire_question_key' => $question['key'],
+				);
+			$question['answer_total_cnt'] = $this->QuestionnaireAnswer->getAnswerCount($questionConditions);
+
+			if (QuestionnairesComponent::isMatrixInputType($question['question_type'])) {
+				$this->__aggregateAnswerForMatrix($question, $questionConditions);
+			} else {
+				$this->__aggregateAnswerForNotMatrix($question, $questionConditions);
+			}
+		}
+		return $questions;
+	}
+
+/**
+ * __aggregateAnswerForMatrix
+ * matrix aggregate
+ *
+ * @param array &$question アンケート質問(集計結果を配列追加して返します)
+ * @param array $questionConditions get aggregate base condition
+ * @return void
+ */
+	private function __aggregateAnswerForMatrix(&$question, $questionConditions) {
+		$rowCnt = 0;
+		$cols = Hash::extract($question['QuestionnaireChoice'], '{n}[matrix_type=' . QuestionnairesComponent::MATRIX_TYPE_COLUMN . ']');
+		foreach ($question['QuestionnaireChoice'] as &$c) {
+			if ($c['matrix_type'] == QuestionnairesComponent::MATRIX_TYPE_ROW_OR_NO_MATRIX) {
+				foreach ($cols as $col) {
+					$conditions = $questionConditions + array(
+							'QuestionnaireAnswer.matrix_choice_key' => $c['key'],
+							'QuestionnaireAnswer.answer_value LIKE ' => '%' . QuestionnairesComponent::ANSWER_DELIMITER . $col['key'] . QuestionnairesComponent::ANSWER_VALUE_DELIMITER . '%',
+						);
+					$cnt = $this->QuestionnaireAnswer->getAnswerCount($conditions);
+					$c['aggregate_total'][$col['key']] = $cnt;
+				}
+				$rowCnt++;
+			}
+		}
+		$question['answer_total_cnt'] /= $rowCnt;
+	}
+
+/**
+ * __aggregateAnswerForNotMatrix
+ * not matrix aggregate
+ *
+ * @param array &$question アンケート質問(集計結果を配列追加して返します)
+ * @param array $questionConditions get aggregate base condition
+ * @return void
+ */
+	private function __aggregateAnswerForNotMatrix(&$question, $questionConditions) {
+		foreach ($question['QuestionnaireChoice'] as &$c) {
+			$conditions = $questionConditions + array(
+					'QuestionnaireAnswer.answer_value LIKE ' => '%' . QuestionnairesComponent::ANSWER_DELIMITER . $c['key'] . QuestionnairesComponent::ANSWER_VALUE_DELIMITER . '%',
+				);
+			$cnt = $this->QuestionnaireAnswer->getAnswerCount($conditions);
+			$c['aggregate_total']['aggregate_not_matrix'] = $cnt;
+		}
+	}
+
 /**
  * deleteTestAnswerSummary
  * when questionnaire is published, delete test answer summary

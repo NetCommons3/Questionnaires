@@ -303,7 +303,7 @@ NetCommonsApp.controller('Questionnaires.edit.question',
         page['pageSequence'] =
             $scope.questionnaire.questionnairePage.length;
         page['routeNumber'] = 0;
-        page['originId'] = 0;
+        page['key'] = '';
         page['questionnaireQuestion'] = new Array();
         $scope.questionnaire.questionnairePage.push(page);
 
@@ -365,7 +365,7 @@ NetCommonsApp.controller('Questionnaires.edit.question',
         question['questionValue'] = $scope.newQuestionLabel + (newIndex + 1);
         question['questionSequence'] = newIndex;
         question['questionType'] = variables.TYPE_SELECTION;
-        question['originId'] = 0;
+        question['key'] = '';
         question['isRequire'] = 0;
         question['isSkip'] = 0;
         question['isChoiceRandom'] = 0;
@@ -537,7 +537,7 @@ NetCommonsApp.controller('Questionnaires.edit.question',
 
         choice['otherChoiceType'] = otherType;
         choice['matrixType'] = matrixType;
-        choice['originId'] = 0;
+        choice['key'] = '';
         if (otherType != variables.OTHER_CHOICE_TYPE_NO_OTHER_FILED) {
           choiceColorIdx =
               choice['choiceSequence'] % $scope.colorPickerPalette.length;

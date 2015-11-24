@@ -1,6 +1,6 @@
 <?php
 /**
- * questionnaire aggrigate total matrix table view template
+ * questionnaire aggregate total matrix table view template
  *
  * @author Noriko Arai <arai@nii.ac.jp>
  * @author Allcreator <info@allcreator.net>
@@ -49,7 +49,7 @@
 				foreach ($colIds as $colId) {
 					echo '<td>';
 				//集計値
-				$cnt = (isset($choice['aggrigate_total'][$colId])) ? $choice['aggrigate_total'][$colId] : '0';
+				$cnt = (isset($choice['aggregate_total'][$colId])) ? $choice['aggregate_total'][$colId] : '0';
 				echo h($cnt);
 
 				echo '&nbsp;&nbsp;&nbsp;&nbsp;';

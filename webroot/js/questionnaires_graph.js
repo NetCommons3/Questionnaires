@@ -3,6 +3,8 @@
  * @author info@allcreator.net (Allcreator co.)
  */
 
+NetCommonsApp.requires.push('nvd3');
+
 
 /**
  * Questionnaire Graph Javascript
@@ -39,9 +41,7 @@ NetCommonsApp.controller('QuestionnairesAnswerSummary',
         MATRIX_TYPE_COLUMN: '1'
       };
 
-      $scope.initialize = function(frameId, questionnaire, questions) {
-        $scope.frameId = frameId;
-        $scope.questionnaire = questionnaire;
+      $scope.initialize = function(questions) {
         $scope.questions = questions;
 
         // config オブジェクト生成
@@ -87,9 +87,9 @@ NetCommonsApp.controller('QuestionnairesAnswerSummary',
                     $scope.questions[key]['questionnaireChoice'][choiceId];
                 if (choice.matrixType ==
                     variables.MATRIX_TYPE_ROW_OR_NO_MATRIX) {
-                  $scope.config[key][choice.originId] =
+                  $scope.config[key][choice.key] =
                       $scope.getMatrixPieConf($scope.questions[key], choice);
-                  $scope.data[key][choice.originId] =
+                  $scope.data[key][choice.key] =
                       $scope.getMatrixPieData($scope.questions[key], choice);
                 }
               }
@@ -240,7 +240,7 @@ NetCommonsApp.controller('QuestionnairesAnswerSummary',
         dataObj['values'] = new Array();
         for (var choiceKey in question.questionnaireChoice) {
           var choice = question.questionnaireChoice[choiceKey];
-          var y = choice.aggrigateTotal.aggrigateNotMatrix;
+          var y = choice.aggregateTotal.aggregateNotMatrix;
           dataObj['values'].push(
               {label: $scope.getChartLabelText(choice.choiceLabel),
                 value: y});
@@ -251,7 +251,7 @@ NetCommonsApp.controller('QuestionnairesAnswerSummary',
         var dataArray = new Array();
         for (var choiceKey in question.questionnaireChoice) {
           var choice = question.questionnaireChoice[choiceKey];
-          var y = choice.aggrigateTotal.aggrigateNotMatrix;
+          var y = choice.aggregateTotal.aggregateNotMatrix;
           dataArray.push(
               {label: $scope.getChartLabelText(choice.choiceLabel),
                 value: y});
@@ -283,7 +283,7 @@ NetCommonsApp.controller('QuestionnairesAnswerSummary',
             dataObj['values'].push(
                 {
                   label: $scope.getChartLabelText(rowC.choiceLabel),
-                  value: rowC.aggrigateTotal[choice.originId]
+                  value: rowC.aggregateTotal[choice.key]
                 }
             );
           }
@@ -297,14 +297,14 @@ NetCommonsApp.controller('QuestionnairesAnswerSummary',
         for (var choiceKey in question.questionnaireChoice) {
           if (question.questionnaireChoice[choiceKey].matrixType !=
               variables.MATRIX_TYPE_ROW_OR_NO_MATRIX) {
-            colChoice[question.questionnaireChoice[choiceKey].originId] =
+            colChoice[question.questionnaireChoice[choiceKey].key] =
                 question.questionnaireChoice[choiceKey];
           }
         }
 
         var dataArr = new Array();
-        for (var resultKey in choice.aggrigateTotal) {
-          var y = choice.aggrigateTotal[resultKey];
+        for (var resultKey in choice.aggregateTotal) {
+          var y = choice.aggregateTotal[resultKey];
           var lbl = $scope.getChartLabelText(colChoice[resultKey].choiceLabel);
           dataArr.push({label: lbl, value: y});
         }
