@@ -166,10 +166,13 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 				?>
 			</div>
 		</div>
+	</div>
 
+	<div class="modal-footer">
 		<?php echo $this->Workflow->inputComment('Questionnaire.status'); ?>
-		<?php echo $this->Workflow->buttons('Questionnaire.status'); ?>
-
+		<div class="text-center">
+			<?php echo $this->Workflow->buttons('Questionnaire.status', null, false, $backUrl); ?>
+		</div>
 	</div>
 
 	<?php echo $this->NetCommonsForm->end(); ?>
