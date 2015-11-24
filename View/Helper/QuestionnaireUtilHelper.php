@@ -171,11 +171,7 @@ class QuestionnaireUtilHelper extends AppHelper {
 			} else {
 				// 集計結果公開期間内である
 				// 一つでも回答している
-				if ((isset($questionnaire['Questionnaire']['answer_summary_count']) &&
-					$questionnaire['Questionnaire']['answer_summary_count'] > 0) ||
-					$force) {
-					$disabled = '';
-				} else {
+				if (empty($questionnaire['Questionnaire']['answer_summary_count']) && !$force) {
 					// 未回答
 					$disabled = 'disabled';
 				}
