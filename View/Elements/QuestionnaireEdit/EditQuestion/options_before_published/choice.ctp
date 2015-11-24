@@ -40,10 +40,6 @@
        ng-value="choice.otherChoiceType"
         />
 <input type="hidden"
-       name="data[QuestionnairePage][{{pageIndex}}][QuestionnaireQuestion][{{qIndex}}][QuestionnaireChoice][{{choice.choiceSequence}}][id]"
-       ng-value="choice.id"
-        />
-<input type="hidden"
        name="data[QuestionnairePage][{{pageIndex}}][QuestionnaireQuestion][{{qIndex}}][QuestionnaireChoice][{{choice.choiceSequence}}][key]"
        ng-value="choice.key"
         />

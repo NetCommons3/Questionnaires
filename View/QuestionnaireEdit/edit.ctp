@@ -33,7 +33,7 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 		echo $this->NetCommonsForm->hidden('Block.id');
 		echo $this->NetCommonsForm->hidden('Block.key');
 
-		echo $this->NetCommonsForm->hidden('Questionnaire.id');
+		echo $this->NetCommonsForm->hidden('Questionnaire.key');
 		echo $this->NetCommonsForm->hidden('Questionnaire.import_key');
 		echo $this->NetCommonsForm->hidden('Questionnaire.export_key');
 	?>

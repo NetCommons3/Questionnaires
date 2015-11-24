@@ -13,8 +13,6 @@
 <?php
 	echo $this->NetCommonsForm->hidden('QuestionnairePage.{{pageIndex}}.page_sequence',
 	array('ng-value' => 'page.pageSequence'));
-	echo $this->NetCommonsForm->hidden('QuestionnairePage.{{pageIndex}}.id',
-	array('ng-value' => 'page.id'));
 	echo $this->NetCommonsForm->hidden('QuestionnairePage.{{pageIndex}}.key',
 	array('ng-value' => 'page.key'));
 	$this->NetCommonsForm->hidden('QuestionnairePage.{{pageIndex}}.page_title',
