@@ -10,27 +10,6 @@
  */
 ?>
 <?php echo $this->element('Questionnaires.scripts'); ?>
-//
-//
-//
-/// test code
-//
-//
-//
-
-<?php
-echo $this->Html->script(
-	array(
-		'/authorization_keys/js/authorization_keys.js',
-	),
-	array(
-		'plugin' => false,
-		'once' => true,
-		'inline' => false
-	)
-);
-?>
-
 
 <div class="modal-body">
 	<?php echo $this->BlockTabs->main(BlockTabsComponent::MAIN_TAB_BLOCK_INDEX); ?>
@@ -84,9 +63,7 @@ echo $this->Html->script(
 						</td>
 						<td>
 							<?php if ($questionnaire['Questionnaire']['all_answer_count'] > 0): ?>
-							<a authorization-keys-popup-link
-								frame="<?php echo Current::read('Frame.id'); ?>"
-								url="<?php echo NetCommonsUrl::actionUrl(array(
+							<a href="<?php echo NetCommonsUrl::actionUrl(array(
 									'plugin' => 'questionnaires',
 									'controller' => 'questionnaire_blocks',
 									'action' => 'download',
@@ -117,7 +94,7 @@ echo $this->Html->script(
 			<div class="text-center">
 				<?php echo $this->element('NetCommons.paginator', array(
 				'url' => Hash::merge(
-				array('controller' => 'questionnaire_blocks', 'action' => 'index', $frameId),
+				array('controller' => 'questionnaire_blocks', 'action' => 'index', Current::read('Frame.id')),
 				$this->Paginator->params['named']
 				)
 				)); ?>

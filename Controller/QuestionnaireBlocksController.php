@@ -62,12 +62,6 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
 		'Questionnaires.QuestionnairesDownload',
 		'Questionnaires.QuestionnairesWysIsWyg',
 		'Paginator',
-		'AuthorizationKeys.AuthorizationKey' => array(
-			'operationType' => 'popup',
-			'targetAction' => 'download',
-			'model' => 'Questionnaire',
-			'contentId' => 0,
-			),
 	);
 
 /**
@@ -79,7 +73,6 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
 		'Session',
 		'NetCommons.NetCommonsForm',
 		'NetCommons.Date',
-		'AuthorizationKeys.AuthorizationKey',
 	);
 
 /**
@@ -90,18 +83,6 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
 	public function beforeFilter() {
 		parent::beforeFilter();
 		$this->Auth->deny('index');
-
-		// DEBUG For AuthorizationKeys あとで消してね
-		if ($this->action == 'download') {
-			if (isset($this->params['pass'][QuestionnairesComponent::QUESTIONNAIRE_KEY_PASS_INDEX])) {
-				$questionnaireKey = $this->params['pass'][QuestionnairesComponent::QUESTIONNAIRE_KEY_PASS_INDEX];
-			}
-			$questionnaire = $this->_getQuestionnaireForAnswerCsv($questionnaireKey);
-			$this->log($questionnaire, 'debug');
-			$this->AuthorizationKey->contentId = $questionnaire['Questionnaire']['id'];	//FUJI
-		}
-		if ($this->request->isPost()) {
-		}
 	}
 
 /**
