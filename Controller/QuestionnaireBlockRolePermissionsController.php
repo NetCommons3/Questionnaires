@@ -32,14 +32,7 @@ class QuestionnaireBlockRolePermissionsController extends QuestionnaireBlocksCon
  * @var array
  */
 	public $uses = array(
-		'Roles.Role',
-		'Roles.DefaultRolePermission',
-		'Blocks.Block',
-		'Blocks.BlockRolePermission',
-		'Rooms.RolesRoom',
 		'Questionnaires.Questionnaires',
-		'Questionnaires.QuestionnaireFrameSetting',
-		'Questionnaires.QuestionnaireBlocksSetting',
 	);
 
 /**
@@ -48,12 +41,17 @@ class QuestionnaireBlockRolePermissionsController extends QuestionnaireBlocksCon
  * @var array
  */
 	public $components = array(
-		'NetCommons.NetCommonsBlock',
-		'NetCommons.NetCommonsFrame',
-		'NetCommons.NetCommonsRoomRole' => array(
-			//コンテンツの権限設定
-			'allowedActions' => array(
-				'blockPermissionEditable' => array('edit')
+		'Blocks.BlockTabs' => array(
+			'mainTabs' => array(
+				'block_index' => array('url' => array('controller' => 'questionnaire_blocks')),
+				'role_permissions' => array('url' => array('controller' => 'questionnaire_block_role_permissions')),
+				'frame_settings' => array('url' => array('controller' => 'questionnaire_frame_settings')),
+			),
+		),
+		'NetCommons.Permission' => array(
+			//アクセスの権限
+			'allow' => array(
+				'edit' => 'block_permission_editable',
 			),
 		),
 	);
@@ -64,19 +62,9 @@ class QuestionnaireBlockRolePermissionsController extends QuestionnaireBlocksCon
  * @var array
  */
 	public $helpers = array(
-		'NetCommons.Token'
+		'Blocks.BlockRolePermissionForm',
+		'NetCommons.Date',
 	);
-
-/**
- * beforeFilter
- *
- * @return void
- */
-	public function beforeFilter() {
-		parent::beforeFilter();
-		//タブの設定
-		$this->initTabs('role_permissions');
-	}
 
 /**
  * edit

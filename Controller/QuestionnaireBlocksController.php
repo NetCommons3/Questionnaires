@@ -48,7 +48,11 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
  */
 	public $components = array(
 		'Blocks.BlockTabs' => array(
-			'mainTabs' => array('block_index', 'frame_settings'),
+			'mainTabs' => array(
+				'block_index' => array('url' => array('controller' => 'questionnaire_blocks')),
+				'role_permissions' => array('url' => array('controller' => 'questionnaire_block_role_permissions')),
+				'frame_settings' => array('url' => array('controller' => 'questionnaire_frame_settings')),
+			),
 		),
 		'NetCommons.Permission' => array(
 			//アクセスの権限
@@ -68,6 +72,7 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
  */
 	public $helpers = array(
 		'Session',
+		'Blocks.BlockForm',
 		'NetCommons.NetCommonsForm',
 		'NetCommons.Date',
 	);
@@ -94,8 +99,6 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
 		$conditions = $this->Questionnaire->getBaseCondition();
 
 		// データ取得
-		// Modelの方ではカスタムfindメソッドを装備している
-		// ここではtype属性を指定することでカスタムFindを呼び出すように指示している
 		$subQuery = $this->Questionnaire->getQuestionnaireSubQuery();
 		$this->paginate = array(
 			'conditions' => $conditions,
@@ -108,8 +111,10 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
 		);
 		$questionnaire = $this->paginate('Questionnaire');
 		if (! $questionnaire) {
-			// FUJI
+			$this->view = 'not_found';
+			return;
 		}
+
 		$this->set('questionnaires', $questionnaire);
 	}
 
