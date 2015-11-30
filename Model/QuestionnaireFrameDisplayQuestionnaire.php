@@ -23,28 +23,7 @@ class QuestionnaireFrameDisplayQuestionnaire extends QuestionnairesAppModel {
  *
  * @var array
  */
-	public $validate = array(
-		'frame_key' => array(
-			'notBlank' => array(
-				'rule' => array('notBlank'),
-				//'message' => 'Your custom message here',
-				'allowEmpty' => false,
-				'required' => true,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
-		'questionnaire_key' => array(
-			'notBlank' => array(
-				'rule' => array('notBlank'),
-				//'message' => 'Your custom message here',
-				'allowEmpty' => false,
-				'required' => true,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
-	);
+	public $validate = array();
 
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
@@ -71,130 +50,123 @@ class QuestionnaireFrameDisplayQuestionnaire extends QuestionnairesAppModel {
 	);
 
 /**
+ * Called during validation operations, before validation. Please note that custom
+ * validation rules can be defined in $validate.
+ *
+ * @param array $options Options passed from Model::save().
+ * @return bool True if validate operation should continue, false to abort
+ * @link http://book.cakephp.org/2.0/en/models/callback-methods.html#beforevalidate
+ * @see Model::save()
+ * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+ */
+	public function beforeValidate($options = array()) {
+		$this->validate = Hash::merge($this->validate, array(
+			'questionnaire_key' => array(
+				'notBlank' => array(
+					'rule' => array('notBlank'),
+					'message' => __d('net_commons', 'Invalid request.'),
+					'allowEmpty' => false,
+					'required' => true,
+					//'last' => false, // Stop validation after this rule
+					//'on' => 'create', // Limit validation to 'create' or 'update' operations
+				),
+			),
+		));
+		parent::beforeValidate($options);
+
+		return true;
+	}
+
+/**
+ * validateFrameDisplayQuestionnaire
+ *
+ * @param mix $data PostData
+ * @return bool
+ */
+	public function validateFrameDisplayQuestionnaire($data) {
+		if ($data['QuestionnaireFrameSetting']['display_type'] == QuestionnairesComponent::DISPLAY_TYPE_SINGLE) {
+			$saveData = Hash::extract($data, 'Single.QuestionnaireFrameDisplayQuestionnaires');
+			$this->set($saveData);
+			$ret = $this->validates();
+		} else {
+			$saveData = $data['QuestionnaireFrameDisplayQuestionnaires'];
+			$ret = $this->saveAll($saveData, array('validate' => 'only'));
+		}
+		return $ret;
+	}
+/**
  * saveFrameDisplayQuestionnaire
  * this function is called when save questionnaire
  *
- * @param int $questionnaireKey questionnaire key
+ * @param mix $data PostData
  * @return bool
  */
-	public function saveFrameDisplayQuestionnaire($questionnaireKey) {
-		$frame = $this->Frame->find('first', array(
-			'conditions' => array(
-				'Frame.id' => Current::read('Frame.id')
-			)
-		));
-		if (!$frame) {
-			return false;
+	public function saveFrameDisplayQuestionnaire($data) {
+		//トランザクションは親元のQuestionnaireFrameSettingでやっているので不要
+		if ($data['QuestionnaireFrameSetting']['display_type'] == QuestionnairesComponent::DISPLAY_TYPE_SINGLE) {
+			// このフレームに設定されている全てのレコードを消す
+			// POSTされたアンケートのレコードのみ作成する
+			$ret = $this->saveDisplayQuestionnaireForSingle($data);
+		} else {
+			// hiddenでPOSTされたレコードについて全て処理する
+			// POSTのis_displayが０，１によってdeleteかinsertで処理する
+			$ret = $this->saveDisplayQuestionnaireForList($data);
 		}
-		$qCount = $this->Questionnaire->find('count', array(
-			'conditions' => array(
-				'Questionnaire.key' => $questionnaireKey
-			)
-		));
-		if ($qCount == 1) {
-			// 新規作成
-			$this->loadModels([
-				'QuestionnaireFrameSetting' => 'Questionnaires.QuestionnaireFrameSetting',
-			]);
-			$setting = $this->QuestionnaireFrameSetting->find('first', array(
-				'conditions' => array(
-					'frame_key' => $frame['Frame']['key'],
-				)
-			));
-			if ($setting['QuestionnaireFrameSetting']['display_type'] == QuestionnairesComponent::DISPLAY_TYPE_LIST) {
-				$saveData = array(
-					'frame_key' => $frame['Frame']['key'],
-					'questionnaire_key' => $questionnaireKey);
-				return $this->saveDisplayQuestionnaire($saveData);
-			}
-		}
-		// 編集
-		// 既存データの編集時は、現在の表示設定から変更しない
-		// 単独表示のときは現在の表示設定から変更しない
-		return true;
-	}
-
-/**
- * validateDisplayQuestionnaireForList
- *
- * @param string $frameKey frame key
- * @param array $displayQs validate data
- * @return bool
- */
-	public function validateDisplayQuestionnaireForList($frameKey, $displayQs) {
-		foreach ($displayQs as $displayQuestionnaire) {
-			if ($displayQuestionnaire != 0) {
-				if (!$this->validateDisplayQuestionnaireForSingle($frameKey, $displayQuestionnaire)) {
-					return false;
-				}
-			}
-		}
-		return true;
-	}
-
-/**
- * validateDisplayQuestionnaireForSingle
- *
- * @param string $frameKey frame key
- * @param array $displayQuestionnaire validate data
- * @return bool
- */
-	public function validateDisplayQuestionnaireForSingle($frameKey, $displayQuestionnaire) {
-		$this->set(array(
-			'frame_key' => $frameKey,
-			'questionnaire_key' => $displayQuestionnaire
-		));
-		if (! $this->validates()) {
-			return false;
-		}
-		return true;
+		return $ret;
 	}
 
 /**
  * saveDisplayQuestionnaireForList
  *
- * @param string $frameKey frame key
- * @param array $displayQs save data
+ * @param mix $data PostData
  * @return bool
  */
-	public function saveDisplayQuestionnaireForList($frameKey, $displayQs) {
-		foreach ($displayQs as $key => $displayQuestionnaire) {
+	public function saveDisplayQuestionnaireForList($data) {
+		$frameKey = Current::read('Frame.key');
+
+		foreach ($data['QuestionnaireFrameDisplayQuestionnaires'] as $index => $value) {
+			$questionnaireKey = $value['questionnaire_key'];
+			$isDisplay = $data['List']['QuestionnaireFrameDisplayQuestionnaires'][$index]['is_display'];
 			$saveQs = array(
 				'frame_key' => $frameKey,
-				'questionnaire_key' => $key
+				'questionnaire_key' => $questionnaireKey
 			);
-			if ($displayQuestionnaire != 0) {
+			if ($isDisplay != 0) {
 				if (!$this->saveDisplayQuestionnaire($saveQs)) {
 					return false;
 				}
 			} else {
-				if (!$this->deleteDisplayQuestionnaire($saveQs)) {
+				if (!$this->deleteAll($saveQs, false)) {
 					return false;
 				}
 			}
 		}
-
+		if (!$this->updateFrameDefaultAction("''")) {
+			return false;
+		}
 		return true;
 	}
 
 /**
  * saveDisplayQuestionnaireForSingle
  *
- * @param string $frameKey frame key
- * @param array $displayQs save data
+ * @param mix $data PostData
  * @return bool
  */
-	public function saveDisplayQuestionnaireForSingle($frameKey, $displayQs) {
+	public function saveDisplayQuestionnaireForSingle($data) {
+		$frameKey = Current::read('Frame.key');
 		$deleteQs = array(
 			'frame_key' => $frameKey,
 		);
-		$this->deleteDisplayQuestionnaire($deleteQs);
+		$this->deleteAll($deleteQs, false);
 
-		$saveQs = array(
-			'frame_key' => $frameKey,
-			'questionnaire_key' => $displayQs,
-		);
-		if (!$this->saveDisplayQuestionnaire($saveQs)) {
+		$saveData = Hash::extract($data, 'Single.QuestionnaireFrameDisplayQuestionnaires');
+		$saveData['frame_key'] = $frameKey;
+		if (!$this->saveDisplayQuestionnaire($saveData)) {
+			return false;
+		}
+		$action = "'questionnaires/questionnaire_answers/view/" . Current::read('Block.id') . '/' . $saveData['questionnaire_key'] . "'";
+		if (!$this->updateFrameDefaultAction($action)) {
 			return false;
 		}
 		return true;
@@ -222,22 +194,26 @@ class QuestionnaireFrameDisplayQuestionnaire extends QuestionnairesAppModel {
 		}
 		return true;
 	}
-
 /**
- * deleteDisplayQuestionnaire
- * delete record QuestionnaireFrameDisplayQuestionnaire
+ * updateFrameDefaultAction
+ * update Frame default_action
  *
- * @param array $data delete condition
+ * @param string $action default_action
  * @return bool
  */
-	public function deleteDisplayQuestionnaire($data) {
-		$displayQuestionnaire = $this->find('all', array(
-			'conditions' => $data
-		));
-		if (! empty($displayQuestionnaire)) {
-			foreach ($displayQuestionnaire as $questionnaire) {
-				$this->delete($questionnaire['QuestionnaireFrameDisplayQuestionnaire']['id']);
-			}
+	public function updateFrameDefaultAction($action) {
+		// frameのdefault_actionを変更しておく
+		$this->loadModels([
+			'Frame' => 'Frames.Frame',
+		]);
+		$conditions = array(
+			'Frame.key' => Current::read('Frame.key')
+		);
+		$frameData = array(
+			'default_action' => $action
+		);
+		if (! $this->Frame->updateAll($frameData, $conditions)) {
+			return false;
 		}
 		return true;
 	}

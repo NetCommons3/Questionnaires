@@ -9,15 +9,22 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 ?>
-<label><?php echo __d('questionnaires', 'select display questionnaires.'); ?></label>
+<?php echo $this->NetCommonsForm->label(__d('questionnaires', 'select display questionnaires.')); ?>
 
 <div class="questionnaire-list-wrapper">
 	<table class="table table-hover questionnaire-table-vcenter">
 		<tr>
 			<th>
 				<?php echo __d('questionnaires', 'Display'); ?>
-				<div class="text-center" ng-if="questionnaireFrameSettings.display_type == <?php echo QuestionnairesComponent::DISPLAY_TYPE_LIST; ?>">
-					<input type="checkbox" ng-model="WinBuf.allCheck" ng-change="allCheckClicked()"  />
+				<div class="text-center" ng-if="questionnaireFrameSettings.displayType == <?php echo QuestionnairesComponent::DISPLAY_TYPE_LIST; ?>">
+					<?php $this->NetCommonsForm->unlockField('all_check'); ?>
+					<?php echo $this->NetCommonsForm->checkbox('all_check', array(
+					'ng-model' => 'WinBuf.allCheck',
+					'ng-change' => 'allCheckClicked()',
+					'label' => false,
+					'div' => false,
+					'class' => '',
+					)); ?>
 				</div>
 			</th>
 			<th>
@@ -36,29 +43,31 @@
 				<?php echo $this->Paginator->sort('Questionnaire.modified', __d('net_commons', 'Updated date')); ?>
 			</th>
 		</tr>
-		<?php foreach ((array)$questionnaires as $quest): ?>
+		<?php foreach ((array)$questionnaires as $index => $quest): ?>
 		<tr class="animate-repeat btn-default">
 			<td>
-				<div class="text-center" ng-show="questionnaireFrameSettings.display_type == <?php echo QuestionnairesComponent::DISPLAY_TYPE_LIST; ?>">
-					<?php echo $this->Form->checkbox('QuestionnaireFrameDisplayQuestionnaires.List.questionnaire_origin_id.' . $quest['Questionnaire']['origin_id'], array(
-					'options' => array($quest['Questionnaire']['origin_id'] => ''),
+				<div class="text-center" ng-show="questionnaireFrameSettings.displayType == <?php echo QuestionnairesComponent::DISPLAY_TYPE_LIST; ?>">
+					<?php echo $this->NetCommonsForm->checkbox('List.QuestionnaireFrameDisplayQuestionnaires.' . $index . '.is_display', array(
+					'options' => array(true => ''),
 					'label' => false,
 					'div' => false,
-					'value' => $quest['Questionnaire']['origin_id'],
-					'checked' => (isset($displayQuestionnaire[$quest['Questionnaire']['origin_id']])) ? true : false,
-					'ng-true-value' => $quest['Questionnaire']['origin_id'],
-					'ng-model' => 'displayQuestionnaire.' . $quest['Questionnaire']['origin_id'],
+					'class' => '',
+					//'value' => $quest['Questionnaire']['key'],
+					//'checked' => (isset($quest['QuestionnaireFrameDisplayQuestionnaire']['questionnaire_key'])) ? true : false,
+					'ng-model' => 'isDisplay[' . $index . ']'
 					));
 					?>
+					<?php echo $this->NetCommonsForm->hidden('QuestionnaireFrameDisplayQuestionnaires.' . $index . '.questionnaire_key', array('value' => $quest['Questionnaire']['key'])); ?>
 				</div>
-				<div class="text-center"  ng-show="questionnaireFrameSettings.display_type == <?php echo QuestionnairesComponent::DISPLAY_TYPE_SINGLE; ?>">
-					<?php echo $this->Form->radio('QuestionnaireFrameDisplayQuestionnaires.Single.questionnaire_origin_id',
-					array($quest['Questionnaire']['origin_id'] => ''), array(
+				<div class="text-center"  ng-show="questionnaireFrameSettings.displayType == <?php echo QuestionnairesComponent::DISPLAY_TYPE_SINGLE; ?>">
+					<?php echo $this->NetCommonsForm->radio('Single.QuestionnaireFrameDisplayQuestionnaires.questionnaire_key',
+					array($quest['Questionnaire']['key'] => ''), array(
 					'legend' => false,
 					'label' => false,
 					'div' => false,
+					'class' => false,
 					'hiddenField' => false,
-					'checked' => (isset($displayQuestionnaire[$quest['Questionnaire']['origin_id']])) ? true : false,
+					'checked' => (isset($quest['QuestionnaireFrameDisplayQuestionnaire']['questionnaire_key'])) ? true : false,
 					));
 					?>
 				</div>
@@ -88,12 +97,6 @@
 		<?php endforeach; ?>
 	</table>
 </div>
-<div class="text-center">
-	<?php echo $this->element('NetCommons.paginator', array(
-	'url' => Hash::merge(
-	array('controller' => 'questionnaire_frame_settings', 'action' => 'edit', $frameId, $blockId),
-	$this->Paginator->params['named']
-	)
-	)); ?>
-</div>
+
+<?php echo $this->element('NetCommons.paginator');
 

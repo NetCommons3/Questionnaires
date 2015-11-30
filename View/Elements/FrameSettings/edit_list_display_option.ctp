@@ -11,29 +11,22 @@
 ?>
 
 <div class='form-group'>
-	<?php echo $this->Form->label(__d('questionnaires', 'Visible questionnaire row')); ?>
-	<?php echo $this->Form->input('QuestionnairesFrameSetting.display_num_per_page', array(
-	'label' => false,
-	'type' => 'select',
-	'class' => 'form-control',
-	'options' => QuestionnairesComponent::getDisplayNumberOptions(),
-	'selected' => $questionnaireFrameSettings['display_num_per_page'],
-	'autofocus' => true,
-	)
-	);
+	<?php echo $this->NetCommonsForm->input('display_num_per_page', array(
+		'label' => __d('questionnaires', 'Visible questionnaire row'),
+		'type' => 'select',
+		'options' => QuestionnairesComponent::getDisplayNumberOptions(),
+		'selected' => $questionnaireFrameSettings['display_num_per_page'],
+		'autofocus' => true,
+		));
 	?>
 </div>
 
 <div class='form-group'>
-	<?php echo $this->Form->label(__d('questionnaires', 'Visible row order'));
-	?>
-	<?php echo $this->Form->input('QuestionnairesFrameSetting.sort_type', array(
-	'label' => false,
-	'type' => 'select',
-	'class' => 'form-control',
-	'options' => QuestionnairesComponent::getSortOrders(),
-	'selected' => $questionnaireFrameSettings['sort_type'],
-	)
-	);
+	<?php echo $this->NetCommonsForm->input('sort_type', array(
+		'label' => __d('questionnaires', 'Visible row order'),
+		'type' => 'select',
+		'options' => QuestionnairesComponent::getSortOrders(),
+		'selected' => $questionnaireFrameSettings['sort_type'],
+		));
 	?>
 </div>

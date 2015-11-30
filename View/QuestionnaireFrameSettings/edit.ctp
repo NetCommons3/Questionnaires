@@ -8,25 +8,27 @@
  * @license http://www.netcommons.org/license.txt NetCommons License
  * @copyright Copyright 2014, NetCommons Project
  */
+
+echo $this->element('Questionnaires.scripts');
+$jsQuestionnaireFrameSettings = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesAppController::changeBooleansToNumbers($questionnaireFrameSettings));
+$jsQuestionnaires = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesAppController::changeBooleansToNumbers($questionnaires));
 ?>
-<?php echo $this->element('Questionnaires.scripts'); ?>
 
-<div id="nc-questionnaire-frame-settings-content-list-<?php echo (int)$frameId; ?>"
+<article class="nc-questionnaire-frame-settings-content-list-"
 	 ng-controller="QuestionnairesFrame"
-	 ng-init="initialize(<?php echo (int)$frameId; ?>,
-	 	<?php echo h(json_encode($questionnaires)); ?>,
-	 	<?php echo h(json_encode($questionnaireFrameSettings)); ?>,
-	 	<?php echo h(json_encode($displayQuestionnaire)); ?>)">
+	 ng-init="initialize(<?php echo h(json_encode($jsQuestionnaires)); ?>,
+	 	<?php echo h(json_encode($jsQuestionnaireFrameSettings)); ?>)">
 
-	<div class="modal-body">
-		<?php echo $this->element('NetCommons.setting_tabs', $settingTabs); ?>
-		<div class="tab-content">
-			<?php echo $this->element('Questionnaires.FrameSettings/edit_form', array(
-				'controller' => 'QuestionnaireFrameSettings',
-				'action' => h($this->request->params['action']) . '/' . $frameId . '/' . $blockId,
+	<?php echo $this->BlockTabs->main(BlockTabsComponent::MAIN_TAB_FRAME_SETTING); ?>
+
+	<div class="tab-content">
+
+		<?php echo $this->element('Blocks.edit_form', array(
+				'model' => 'QuestionnaireFrameSetting',
 				'callback' => 'Questionnaires.FrameSettings/edit_form',
-				'cancelUrl' => '/questionnaires/questionnaire_blocks/index/' . $frameId
-				)); ?>
-		</div>
+				'cancelUrl' => NetCommonsUrl::backToPageUrl(),
+			)); ?>
+
 	</div>
-</div>
+
+</article>

@@ -45,13 +45,16 @@ class QuestionnaireFrameSettingsController extends QuestionnaireBlocksController
  * @var array
  */
 	public $components = array(
-		'Security',
-		'NetCommons.NetCommonsBlock', //Use Questionnaire model
-		'NetCommons.NetCommonsFrame',
-		'NetCommons.NetCommonsRoomRole' => array(
-			//コンテンツの権限設定
-			'allowedActions' => array(
-				'pageEditable' => array('edit')
+		'Blocks.BlockTabs' => array(
+			'mainTabs' => array(
+				'block_index' => array('url' => array('controller' => 'questionnaire_blocks')),
+				'frame_settings' => array('url' => array('controller' => 'questionnaire_frame_settings')),
+			),
+		),
+		'NetCommons.Permission' => array(
+			//アクセスの権限
+			'allow' => array(
+				'edit' => 'page_editable',
 			),
 		),
 		'Questionnaires.Questionnaires',
@@ -65,20 +68,8 @@ class QuestionnaireFrameSettingsController extends QuestionnaireBlocksController
  */
 	public $helpers = array(
 		'NetCommons.Date',
-		'NetCommons.Token',
 		'Questionnaires.QuestionnaireUtil'
 	);
-
-/**
- * beforeFilter
- *
- * @return void
- */
-	public function beforeFilter() {
-		parent::beforeFilter();
-		//タブの設定
-		$this->initTabs('frame_settings');
-	}
 
 /**
  * edit method
@@ -87,39 +78,43 @@ class QuestionnaireFrameSettingsController extends QuestionnaireBlocksController
  */
 	public function edit() {
 		// Postデータ登録
-		if ($this->request->isPost()) {
-			$this->QuestionnaireFrameSetting->saveFrameSettings($this->viewVars['frameKey'], $this->data);
-			if ($this->handleValidationError($this->QuestionnaireFrameSetting->validationErrors)) {
-				if (! $this->request->is('ajax')) {
-					$this->redirect('/questionnaires/questionnaire_blocks/index/' . $this->viewVars['frameId']);
-				}
+		if ($this->request->isPut() || $this->request->isPost()) {
+			if ($this->QuestionnaireFrameSetting->saveFrameSettings($this->request->data)) {
+				$this->redirect(NetCommonsUrl::backToPageUrl());
 				return;
 			}
+			$this->NetCommons->handleValidationError($this->QuestionnaireFrameSetting->validationErrors);
 		}
 
 		$conditions = array(
-			'block_id' => $this->viewVars['blockId'],
+			'block_id' => Current::read('Block.id'),
 			'is_latest' => true,
 		);
-		try {
-			$this->paginate = array(
-				'conditions' => $conditions,
-				'page' => 1,
-				'sort' => QuestionnairesComponent::DISPLAY_SORT_TYPE_NEW_ARRIVALS,
-				'limit' => 1000,
-				'direction' => 'desc',
-				'recursive' => -1,
-			);
-			$questionnaires = $this->paginate('Questionnaire');
-		} catch (NotFoundException $e) {
-			// NotFoundの例外
-			// アンケートデータが存在しないこととする
-			$questionnaires = array();
-		}
+		$this->paginate = array(
+			'fields' => array('Questionnaire.*', 'QuestionnaireFrameDisplayQuestionnaire.*'),
+			'conditions' => $conditions,
+			'page' => 1,
+			'sort' => QuestionnairesComponent::DISPLAY_SORT_TYPE_NEW_ARRIVALS,
+			'limit' => 1000,
+			'direction' => 'desc',
+			'recursive' => -1,
+			'joins' => array(
+				array(
+					'table' => 'questionnaire_frame_display_questionnaires',
+					'alias' => 'QuestionnaireFrameDisplayQuestionnaire',
+					'type' => 'LEFT',
+					'conditions' => array(
+						'QuestionnaireFrameDisplayQuestionnaire.questionnaire_key = Questionnaire.key',
+						'QuestionnaireFrameDisplayQuestionnaire.frame_key' => Current::read('Frame.key'),
+					),
+				)
+			)
+		);
+		$questionnaires = $this->paginate('Questionnaire');
 
 		$frame = $this->QuestionnaireFrameSetting->find('first', array(
 			'conditions' => array(
-				'frame_key' => $this->viewVars['frameKey'],
+				'frame_key' => Current::read('Frame.key'),
 			),
 			'order' => 'QuestionnaireFrameSetting.id DESC'
 		));
@@ -127,16 +122,10 @@ class QuestionnaireFrameSettingsController extends QuestionnaireBlocksController
 			$frame = $this->QuestionnaireFrameSetting->getDefaultFrameSetting();
 		}
 
-		$displayQuestionnaire = $this->QuestionnaireFrameDisplayQuestionnaire->find('list', array(
-			'fields' => array(
-				'questionnaire_origin_id', 'questionnaire_origin_id'
-			),
-			'conditions' => array(
-				'frame_key' => $this->viewVars['frameKey'],
-			),
-		));
 		$this->set('questionnaires', $questionnaires);
 		$this->set('questionnaireFrameSettings', $frame['QuestionnaireFrameSetting']);
-		$this->set('displayQuestionnaire', $displayQuestionnaire);
+		$this->request->data['QuestionnaireFrameSetting'] = $frame['QuestionnaireFrameSetting'];
+		$this->request->data['Frame'] = Current::read('Frame');
+		$this->request->data['Block'] = Current::read('Block');
 	}
 }

@@ -80,40 +80,11 @@ class QuestionnairesController extends QuestionnairesAppController {
  */
 	public function index() {
 		// 表示方法設定値取得
-		list($displayType, $displayNum, $sort, $dir) =
+		list(, $displayNum, $sort, $dir) =
 			$this->QuestionnaireFrameSetting->getQuestionnaireFrameSetting(Current::read('Frame.key'));
 
 		// 条件設定値取得
 		$conditions = $this->Questionnaire->getCondition();
-
-		// 単独表示が指定されていた場合
-		if ($displayType == QuestionnairesComponent::DISPLAY_TYPE_SINGLE) {
-			$displayQ = $this->QuestionnaireFrameDisplayQuestionnaire->find('first', array(
-				'frame_key' => Current::read('Frame.key'),
-			));
-			if (!$displayQ) {
-				$this->view = 'QuestionnaireAnswers/noMoreAnswer';
-				return;
-			}
-			$questionnaires = $this->Questionnaire->getQuestionnairesList(
-				array('key' => $displayQ['QuestionnaireFrameDisplayQuestionnaire']['questionnaire_key']));
-			if (!$questionnaires) {
-				$this->view = 'Questionnaires/noQuestionnaire';
-				return;
-			}
-			$url = NetCommonsUrl::actionUrl(array(
-				'controller' => 'questionnaire_answers',
-				'action' => 'answer',
-				Current::read('Block.id'),
-				$questionnaires[0]['Questionnaire']['key'],
-				'frame_id' => Current::read('Frame.id'),
-			));
-			$ret = $this->requestAction($url, 'return');
-			$this->set('answer', $ret);
-			$this->view = 'Questionnaires/answer';
-
-			return;
-		}
 
 		// データ取得
 		try {

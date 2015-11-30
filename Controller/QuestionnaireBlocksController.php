@@ -36,11 +36,9 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
 	public $uses = array(
 		'Questionnaires.Questionnaire',
 		'Questionnaires.QuestionnaireFrameSetting',
-		'Questionnaires.QuestionnairePage',
-		'Questionnaires.QuestionnaireQuestion',
-		'Questionnaires.QuestionnaireChoice',
 		'Questionnaires.QuestionnaireAnswerSummary',
 		'Questionnaires.QuestionnaireAnswerSummaryCsv',
+		'Blocks.Block',
 	);
 
 /**
@@ -50,8 +48,7 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
  */
 	public $components = array(
 		'Blocks.BlockTabs' => array(
-			'mainTabs' => array('block_index'),
-			'blockTabs' => array('block_settings', 'role_permissions'),
+			'mainTabs' => array('block_index', 'frame_settings'),
 		),
 		'NetCommons.Permission' => array(
 			//アクセスの権限
@@ -94,7 +91,7 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
 	public function index() {
 		// 条件設定値取得
 		// 条件設定値取得
-		$conditions = $this->Questionnaire->getCondition();
+		$conditions = $this->Questionnaire->getBaseCondition();
 
 		// データ取得
 		// Modelの方ではカスタムfindメソッドを装備している

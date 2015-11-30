@@ -76,22 +76,25 @@ NetCommonsApp.controller('QuestionnairesAnswer',
     }
 );
 NetCommonsApp.controller('QuestionnairesFrame',
-    function($scope, $sce, $log, NetCommonsBase, NetCommonsFlash,
-    NetCommonsUser, $attrs, $timeout) {
+    function($scope, $sce, $log, NetCommonsBase, $attrs, $timeout) {
       /**
-         * Initialize
-         *
-         * @return {void}
-         */
-      $scope.initialize = function(frameId,
-                                   questionnaires,
-                                   questionnaireFrameSettings,
-                                   displayQuestionnaire) {
-        $scope.frameId = frameId;
+       * Initialize
+       *
+       * @return {void}
+       */
+      $scope.initialize = function(questionnaires,
+                                   questionnaireFrameSettings) {
         $scope.questionnaires = questionnaires;
         $scope.questionnaireFrameSettings = questionnaireFrameSettings;
-        $scope.displayQuestionnaire = displayQuestionnaire;
         $scope.WinBuf = {allCheck: false};
+        $scope.isDisplay = new Array();
+        for (var i = 0; i < $scope.questionnaires.length; i++) {
+          if ($scope.questionnaires[i].questionnaireFrameDisplayQuestionnaire.id) {
+            $scope.isDisplay[i] = true;
+          } else {
+            $scope.isDisplay[i] = false;
+          }
+        }
       };
       /**
        * Questionnaire Frame Setting AllCheckbox clicked
@@ -100,14 +103,12 @@ NetCommonsApp.controller('QuestionnairesFrame',
        */
       $scope.allCheckClicked = function() {
         for (var i = 0; i < $scope.questionnaires.length; i++) {
-          var key = $scope.questionnaires[i].Questionnaire.key;
           if ($scope.WinBuf.allCheck == true) {
-            $scope.displayQuestionnaire[key] = key;
+            $scope.isDisplay[i] = true;
           } else {
-            $scope.displayQuestionnaire[key] = false;
+            $scope.isDisplay[i] = false;
           }
         }
       };
-
     }
 );

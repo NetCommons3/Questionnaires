@@ -220,6 +220,9 @@ class Questionnaire extends QuestionnairesAppModel {
  * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
  */
 	public function afterFind($results, $primary = false) {
+		if ($this->recursive == -1) {
+			return $results;
+		}
 		$this->QuestionnairePage = ClassRegistry::init('Questionnaires.QuestionnairePage', true);
 		$this->QuestionnaireAnswerSummary = ClassRegistry::init('Questionnaires.QuestionnaireAnswerSummary', true);
 

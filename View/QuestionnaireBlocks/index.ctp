@@ -11,7 +11,7 @@
 ?>
 <?php echo $this->element('Questionnaires.scripts'); ?>
 
-<div class="modal-body">
+<article class="block-setting-body">
 	<?php echo $this->BlockTabs->main(BlockTabsComponent::MAIN_TAB_BLOCK_INDEX); ?>
 
 	<div class="tab-content">
@@ -54,7 +54,7 @@
 						</td>
 						<td>
 							<a href="<?php echo $this->Html->url(
-										'/questionnaires/questionnaire_questions/edit/' . $frameId . '/?questionnaire_id=' . $questionnaire['Questionnaire']['id']) ?>">
+										'/questionnaires/questionnaire_questions/edit/' . Current::read('Frame.id') . '/?questionnaire_id=' . $questionnaire['Questionnaire']['id']) ?>">
 								<?php echo h($questionnaire['Questionnaire']['title']); ?>
 							</a>
 						</td>
@@ -101,4 +101,4 @@
 			</div>
 		</div>
 	</div>
-</div>
+</article>
