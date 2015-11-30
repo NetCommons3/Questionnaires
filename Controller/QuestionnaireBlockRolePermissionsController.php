@@ -32,7 +32,7 @@ class QuestionnaireBlockRolePermissionsController extends QuestionnaireBlocksCon
  * @var array
  */
 	public $uses = array(
-		'Questionnaires.Questionnaires',
+		'Questionnaires.QuestionnaireSetting',
 	);
 
 /**
@@ -72,64 +72,31 @@ class QuestionnaireBlockRolePermissionsController extends QuestionnaireBlocksCon
  * @return void
  */
 	public function edit() {
-		if (! $this->QuestionnaireFrameSetting->prepareBlock($this->viewVars['frameId'])) {
-			$this->view = 'QuestionnaireBlockRolePermissions/noQuestionnaireBlock';
-			return;
-		}
-		if (! $this->NetCommonsBlock->validateBlockId()) {
-			$this->throwBadRequest();
+		$questionnaireSetting = $this->QuestionnaireSetting->getSetting();
+		if (! $questionnaireSetting) {
+			$this->setAction('throwBadRequest');
 			return false;
 		}
-		$this->set('blockId', (int)$this->params['pass'][1]);
-
-		$blockSetting = $this->QuestionnaireBlocksSetting->find('first', array(
-			'conditions' => array(
-				'block_key' => $this->viewVars['blockKey']
-			)
-		));
-		if (!$blockSetting) {
-			$this->QuestionnaireBlocksSetting->create();
-			$blockSetting = $this->QuestionnaireBlocksSetting->save(
-				array(
-					'block_key' => $this->viewVars['blockKey'],
-					'use_workflow' => true
-				)
-			);
-		}
-		$this->set($blockSetting);
-
-		if (! $block = $this->Block->find('first', array(
-			'recursive' => -1,
-			'conditions' => array(
-				'Block.id' => $this->viewVars['blockId'],
-			),
-		))) {
-			$this->throwBadRequest();
-			return false;
-		};
-		$this->set('blockId', $block['Block']['id']);
-		$this->set('blockKey', $block['Block']['key']);
-
-		$permissions = $this->NetCommonsBlock->getBlockRolePermissions(
-			$this->viewVars['blockKey'],
-			['content_creatable', 'content_publishable']
+		$permissions = $this->Workflow->getBlockRolePermissions(
+			array('content_creatable', 'content_publishable', 'content_comment_creatable', 'content_comment_publishable')
 		);
+		$this->set('roles', $permissions['Roles']);
 		if ($this->request->isPost()) {
-			$data = $this->data;
-			$this->QuestionnaireBlocksSetting->saveQuestionnaireBlocksSetting($data);
-			if ($this->handleValidationError($this->QuestionnaireBlocksSetting->validationErrors)) {
-				if (! $this->request->is('ajax')) {
-					$this->redirect('/questionnaires/questionnaire_blocks/index/' . $this->viewVars['frameId']);
-				}
+			if ($this->QuestionnaireSetting->saveQuestionnaireSetting($this->request->data)) {
+				$this->redirect(NetCommonsUrl::backToIndexUrl('default_setting_action'));
 				return;
 			}
-		}
-		$results = array(
-			'BlockRolePermissions' => $permissions['BlockRolePermissions'],
-			'roles' => $permissions['Roles'],
-		);
-		$results = $this->camelizeKeyRecursive($results);
+			$this->NetCommons->handleValidationError($this->QuestionnaireSetting->validationErrors);
+			$this->request->data['BlockRolePermission'] = Hash::merge(
+				$permissions['BlockRolePermissions'],
+				$this->request->data['BlockRolePermission']
+			);
 
-		$this->set($results);
+		} else {
+			$this->request->data['QuestionnaireSetting'] = $questionnaireSetting['QuestionnaireSetting'];
+			$this->request->data['Block'] = $questionnaireSetting['Block'];
+			$this->request->data['BlockRolePermission'] = $permissions['BlockRolePermissions'];
+			$this->request->data['Frame'] = Current::read('Frame');
+		}
 	}
 }

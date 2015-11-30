@@ -9,18 +9,14 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 ?>
-<?php echo $this->element('Questionnaires.scripts'); ?>
-
-<div class="modal-body">
-	<?php echo $this->element('NetCommons.setting_tabs', $settingTabs); ?>
+<div class="block-setting-body">
+	<?php echo $this->BlockTabs->main(BlockTabsComponent::BLOCK_TAB_PERMISSION); ?>
 
 	<div class="tab-content">
-
 		<?php echo $this->element('Blocks.edit_form', array(
-				'controller' => 'QuestionnaireBlockRolePermission',
-				'action' => 'edit' . '/' . $frameId . '/' . $blockId,
+				'model' => 'QuestionnaireBlockRolePermission',
 				'callback' => 'Questionnaires.QuestionnaireBlockRolePermissions/edit_form',
-				'cancelUrl' => '/questionnaires/questionnaire_blocks/index/' . $frameId,
+				'cancelUrl' => NetCommonsUrl::backToIndexUrl('default_setting_action'),
 			)); ?>
 	</div>
 </div>

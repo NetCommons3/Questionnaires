@@ -15,7 +15,7 @@ App::uses('QuestionnairesAppModel', 'Questionnaires.Model');
 /**
  * Summary for QuestionnaireBlocksSetting Model
  */
-class QuestionnaireBlocksSetting extends QuestionnairesAppModel {
+class QuestionnaireSetting extends QuestionnairesAppModel {
 
 /**
  * Validation rules
@@ -38,6 +38,38 @@ class QuestionnaireBlocksSetting extends QuestionnairesAppModel {
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
 /**
+ * getSetting
+ *
+ * @return mix QuestionnaireBlockSetting data
+ */
+	public function getSetting() {
+		$this->Block = ClassRegistry::init('Blocks.Block', true);
+		$blockSetting = $this->Block->find('all', array(
+			'recursive' => -1,
+			'fields' => array(
+				$this->Block->alias . '.*',
+				$this->alias . '.*',
+			),
+			'joins' => array(
+				array(
+					'table' => $this->table,
+					'alias' => $this->alias,
+					'type' => 'LEFT',
+					'conditions' => array(
+						$this->Block->alias . '.key' . ' = ' . $this->alias . ' .block_key',
+					),
+				),
+			),
+			'conditions' => array(
+				'Block.id' => Current::read('Block.id')
+			),
+		));
+		if (! $blockSetting) {
+			return $blockSetting;
+		}
+		return $blockSetting[0];
+	}
+/**
  * Save questionnaire settings
  *
  * @param array $data received post data
@@ -48,41 +80,7 @@ class QuestionnaireBlocksSetting extends QuestionnairesAppModel {
 		$this->loadModels([
 			'BlockRolePermission' => 'Blocks.BlockRolePermission',
 		]);
-
-		//トランザクションBegin
-		$this->setDataSource('master');
-		$dataSource = $this->getDataSource();
-		$dataSource->begin();
-
-		try {
-			if (! $this->validateQuestionnaireBlocksSetting($data)) {
-				return false;
-			}
-			foreach ($data[$this->BlockRolePermission->alias] as $value) {
-				if (! $this->BlockRolePermission->validateBlockRolePermissions($value)) {
-					$this->validationErrors = Hash::merge($this->validationErrors, $this->BlockRolePermission->validationErrors);
-					return false;
-				}
-			}
-
-			if (! $this->save(null, false)) {
-				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
-			}
-			foreach ($data[$this->BlockRolePermission->alias] as $value) {
-				if (! $this->BlockRolePermission->saveMany($value, ['validate' => false])) {
-					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
-				}
-			}
-
-			//トランザクションCommit
-			$dataSource->commit();
-		} catch (Exception $ex) {
-			//トランザクションRollback
-			$dataSource->rollback();
-			CakeLog::error($ex);
-			throw $ex;
-		}
-
+		// まだ実行部かいていません FUJI
 		return true;
 	}
 
