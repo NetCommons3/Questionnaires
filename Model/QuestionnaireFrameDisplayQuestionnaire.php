@@ -165,7 +165,7 @@ class QuestionnaireFrameDisplayQuestionnaire extends QuestionnairesAppModel {
 		if (!$this->saveDisplayQuestionnaire($saveData)) {
 			return false;
 		}
-		$action = "'questionnaires/questionnaire_answers/view/" . Current::read('Block.id') . '/' . $saveData['questionnaire_key'] . "'";
+		$action = "'" . 'questionnaire_answers/view/' . Current::read('Block.id') . '/' . $saveData['questionnaire_key'] . "'";
 		if (!$this->updateFrameDefaultAction($action)) {
 			return false;
 		}

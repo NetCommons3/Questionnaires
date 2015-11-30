@@ -89,7 +89,8 @@ NetCommonsApp.controller('QuestionnairesFrame',
         $scope.WinBuf = {allCheck: false};
         $scope.isDisplay = new Array();
         for (var i = 0; i < $scope.questionnaires.length; i++) {
-          if ($scope.questionnaires[i].questionnaireFrameDisplayQuestionnaire.id) {
+          if ($scope.questionnaires[i].
+              questionnaireFrameDisplayQuestionnaire.id) {
             $scope.isDisplay[i] = true;
           } else {
             $scope.isDisplay[i] = false;
