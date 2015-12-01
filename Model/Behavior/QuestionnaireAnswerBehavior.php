@@ -107,6 +107,7 @@ class QuestionnaireAnswerBehavior extends ModelBehavior {
 				}
 			}
 		}
+		return $results;
 	}
 
 /**

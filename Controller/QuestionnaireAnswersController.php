@@ -212,8 +212,8 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 			$summary = $this->QuestionnaireAnswerSummary->getProgressiveSummaryOfThisUser($questionnaireKey, $userId, $this->Session->id());
 			$setAnswers = $this->QuestionnaireAnswer->getProgressiveAnswerOfThisSummary($summary);
 			$this->set('answers', $setAnswers);
-			//$this->request->data['QuestionnaireAnswer'] = Hash::map($setAnswers, '{s}.{n}', array($this, 'aaa'));
 			$this->request->data['QuestionnaireAnswer'] = $setAnswers;
+
 			// 入力される回答データですがsetで設定するデータとして扱います
 			// 誠にCake流儀でなくて申し訳ないのですが、様々な種別のAnswerデータを
 			// 特殊な文字列加工して統一化した形状でDBに入れている都合上、このような仕儀になっています

@@ -462,7 +462,10 @@ class Questionnaire extends QuestionnairesAppModel {
 				return false;
 			}
 			// フレーム内表示対象アンケートに登録する
-			if (! $this->QuestionnaireFrameDisplayQuestionnaire->saveFrameDisplayQuestionnaire($saveQuestionnaire['Questionnaire']['key'])) {
+			if (! $this->QuestionnaireFrameDisplayQuestionnaire->saveDisplayQuestionnaire(array(
+				'questionnaire_key' => $saveQuestionnaire['Questionnaire']['key'],
+				'frame_key' => Current::read('Frame.key')
+			))) {
 				$this->rollback();
 				return false;
 			}

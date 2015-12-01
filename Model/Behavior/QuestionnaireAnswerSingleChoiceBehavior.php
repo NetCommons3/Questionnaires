@@ -24,7 +24,7 @@ class QuestionnaireAnswerSingleChoiceBehavior extends QuestionnaireAnswerSingleL
  *
  * @var int
  */
-	protected $_myType = QuestionnairesComponent::TYPE_MULTIPLE_SELECTION;
+	protected $_myType = QuestionnairesComponent::TYPE_SELECTION;
 
 /**
  * this answer type
