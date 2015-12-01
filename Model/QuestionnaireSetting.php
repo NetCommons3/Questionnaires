@@ -35,7 +35,14 @@ class QuestionnaireSetting extends QuestionnairesAppModel {
 		),
 	);
 
-	//The Associations below have been created with all possible keys, those that are not needed can be removed
+/**
+ * use behaviors
+ *
+ * @var array
+ */
+	public $actsAs = array(
+		'Blocks.BlockRolePermission',
+	);
 
 /**
  * getSetting
@@ -76,26 +83,30 @@ class QuestionnaireSetting extends QuestionnairesAppModel {
  * @return bool True on success, false on failure
  * @throws InternalErrorException
  */
-	public function saveQuestionnaireBlocksSetting($data) {
-		$this->loadModels([
-			'BlockRolePermission' => 'Blocks.BlockRolePermission',
-		]);
-		// まだ実行部かいていません FUJI
-		return true;
-	}
+	public function saveQuestionnaireSetting($data) {
+		//トランザクションBegin
+		$this->begin();
 
-/**
- * validate validateQuestionnaireSetting
- *
- * @param array $data received post data
- * @return bool True on success, false on validation errors
- */
-	public function validateQuestionnaireBlocksSetting($data) {
+		//バリデーション
 		$this->set($data);
-		$this->validates();
-		if ($this->validationErrors) {
+		if (! $this->validates()) {
+			$this->rollback();
 			return false;
+		}
+
+		try {
+			if (! $this->save(null, false)) {
+				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+			}
+
+			//トランザクションCommit
+			$this->commit();
+
+		} catch (Exception $ex) {
+			//トランザクションRollback
+			$this->rollback($ex);
 		}
 		return true;
 	}
+
 }

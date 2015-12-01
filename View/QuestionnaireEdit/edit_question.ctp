@@ -180,12 +180,7 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 	<div class="modal-footer">
 		<div class="text-center">
 			<?php echo $this->BackTo->pageLinkButton(__d('net_commons', 'Cancel'), array('icon' => 'remove')); ?>
-			<?php echo $this->NetCommonsForm->button(
-			__d('net_commons', 'NEXT') . ' <span class="glyphicon glyphicon-chevron-right"></span>',
-			array(
-			'class' => 'btn btn-primary',
-			'name' => 'next_' . '',
-			)) ?>
+			<?php echo $this->Button->save(__d('net_commons', 'NEXT'), array('icon' => 'chevron-right')) ?>
 		</div>
 	</div>
 	<?php echo $this->NetCommonsForm->end(); ?>

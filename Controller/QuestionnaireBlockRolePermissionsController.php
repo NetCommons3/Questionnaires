@@ -83,6 +83,9 @@ class QuestionnaireBlockRolePermissionsController extends QuestionnaireBlocksCon
 		$this->set('roles', $permissions['Roles']);
 		if ($this->request->isPost()) {
 			if ($this->QuestionnaireSetting->saveQuestionnaireSetting($this->request->data)) {
+				$this->NetCommons->setFlashNotification(__d('net_commons', 'Successfully saved.'), array(
+					'class' => 'success',
+				));
 				$this->redirect(NetCommonsUrl::backToIndexUrl('default_setting_action'));
 				return;
 			}
@@ -91,12 +94,11 @@ class QuestionnaireBlockRolePermissionsController extends QuestionnaireBlocksCon
 				$permissions['BlockRolePermissions'],
 				$this->request->data['BlockRolePermission']
 			);
-
-		} else {
-			$this->request->data['QuestionnaireSetting'] = $questionnaireSetting['QuestionnaireSetting'];
-			$this->request->data['Block'] = $questionnaireSetting['Block'];
-			$this->request->data['BlockRolePermission'] = $permissions['BlockRolePermissions'];
-			$this->request->data['Frame'] = Current::read('Frame');
+			return;
 		}
+		$this->request->data['QuestionnaireSetting'] = $questionnaireSetting['QuestionnaireSetting'];
+		$this->request->data['Block'] = $questionnaireSetting['Block'];
+		$this->request->data['BlockRolePermission'] = $permissions['BlockRolePermissions'];
+		$this->request->data['Frame'] = Current::read('Frame');
 	}
 }

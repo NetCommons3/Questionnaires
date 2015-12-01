@@ -81,6 +81,9 @@ class QuestionnaireFrameSettingsController extends QuestionnaireBlocksController
 		// Postデータ登録
 		if ($this->request->isPut() || $this->request->isPost()) {
 			if ($this->QuestionnaireFrameSetting->saveFrameSettings($this->request->data)) {
+				$this->NetCommons->setFlashNotification(__d('net_commons', 'Successfully saved.'), array(
+					'class' => 'success',
+				));
 				$this->redirect(NetCommonsUrl::backToPageUrl());
 				return;
 			}
