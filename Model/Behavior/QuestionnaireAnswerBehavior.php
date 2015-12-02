@@ -32,7 +32,7 @@ class QuestionnaireAnswerBehavior extends ModelBehavior {
  *
  * @var int
  */
-	protected $_typeAnsChgArr = null;
+	protected $_isTypeAnsChgArr = false;
 
 /**
  * this answer type
@@ -40,7 +40,7 @@ class QuestionnaireAnswerBehavior extends ModelBehavior {
  *
  * @var int
  */
-	protected $_typeAnsArrShiftUp = null;
+	protected $_isTypeAnsArrShiftUp = false;
 
 /**
  * setup
@@ -85,24 +85,23 @@ class QuestionnaireAnswerBehavior extends ModelBehavior {
 		// afterFind 選択肢系の回答の場合、answer_value に　[id:value|id:value....]の形で収まっているので
 		// それをデータ入力画面から渡されるデータ形式と同じにする
 		foreach ($results as &$val) {
-			$val['QuestionnaireAnswer']['answer_values'] = array();
+			if (isset($val['QuestionnaireAnswer']['answer_value']) && isset($val['QuestionnaireQuestion']['question_type'])) {
+				if ($val['QuestionnaireQuestion']['question_type'] != $this->_myType) {
+					continue;
+				}
+				if ($this->_isTypeAnsChgArr) {
+					$val['QuestionnaireAnswer']['answer_values'] = array();
+					$answers = explode(QuestionnairesComponent::ANSWER_DELIMITER, trim($val['QuestionnaireAnswer']['answer_value'], QuestionnairesComponent::ANSWER_DELIMITER));
+					$val['QuestionnaireAnswer']['answer_values'] = Hash::combine(
+						array_map('explode',
+							array_fill(0, count($answers), QuestionnairesComponent::ANSWER_VALUE_DELIMITER),
+							$answers),
+						'{n}.0', '{n}.1');
+					$val['QuestionnaireAnswer']['answer_value'] = array_map(array($this, 'setDelimiter'), $answers);
 
-			if (isset($val['QuestionnaireAnswer']['answer_value'])) {
-				if (isset($val['QuestionnaireQuestion'])) {
-					if ($val['QuestionnaireQuestion']['question_type'] == $this->_typeAnsChgArr) {
-						$answers = explode(QuestionnairesComponent::ANSWER_DELIMITER, trim($val['QuestionnaireAnswer']['answer_value'], QuestionnairesComponent::ANSWER_DELIMITER));
-						if (!empty($answers)) {
-							foreach ($answers as $ans) {
-								$idValue = explode(QuestionnairesComponent::ANSWER_VALUE_DELIMITER, $ans);
-								$val['QuestionnaireAnswer']['answer_values'][$idValue[0]] = isset($idValue[1]) ? $idValue[1] : null;
-							}
-						}
-						$val['QuestionnaireAnswer']['answer_value'] = array_map(array($this, 'setDelimiter'), $answers);
-
-						// array_mapで配列化するのでSingle選択のときはFlatに戻す必要がある
-						if ($val['QuestionnaireQuestion']['question_type'] == $this->_typeAnsArrShiftUp) {
-							$val['QuestionnaireAnswer']['answer_value'] = $val['QuestionnaireAnswer']['answer_value'][0];
-						}
+					// array_mapで配列化するのでSingle選択のときはFlatに戻す必要がある
+					if ($this->_isTypeAnsArrShiftUp) {
+						$val['QuestionnaireAnswer']['answer_value'] = $val['QuestionnaireAnswer']['answer_value'][0];
 					}
 				}
 			}

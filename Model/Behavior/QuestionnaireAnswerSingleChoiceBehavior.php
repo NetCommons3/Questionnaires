@@ -32,7 +32,7 @@ class QuestionnaireAnswerSingleChoiceBehavior extends QuestionnaireAnswerSingleL
  *
  * @var int
  */
-	protected $_typeAnsChgArr = QuestionnairesComponent::TYPE_SELECTION;
+	protected $_isTypeAnsChgArr = true;
 
 /**
  * this answer type
@@ -40,7 +40,7 @@ class QuestionnaireAnswerSingleChoiceBehavior extends QuestionnaireAnswerSingleL
  *
  * @var int
  */
-	protected $_typeAnsArrShiftUp = QuestionnairesComponent::TYPE_SELECTION;
+	protected $_isTypeAnsArrShiftUp = true;
 
 /**
  * beforeValidate is called before a model is validated, you can use this callback to
