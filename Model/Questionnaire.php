@@ -286,17 +286,27 @@ class Questionnaire extends QuestionnairesAppModel {
 				'language_id' => $frame['language_id'],
 				'plugin_key' => $frame['plugin_key'],
 			));
+			if (! $block) {
+				return false;
+			}
 			Current::$current['Block'] = $block['Block'];
 		}
 
-		if (empty($frame['block_id'])) {
-			$this->loadModels([
-				'Frame' => 'Frames.Frame',
-			]);
-			$data['Frame']['block_id'] = $block['Block']['id'];
-			$this->Frame->save($data);
-			Current::$current['Frame']['block_id'] = $block['Block']['id'];
+		$this->loadModels([
+			'Frame' => 'Frames.Frame',
+			'QuestionnaireSetting' => 'Questionnaires.QuestionnaireSetting',
+		]);
+		$data['Frame']['block_id'] = $block['Block']['id'];
+		if (! $this->Frame->save($data)) {
+			return false;
 		}
+		Current::$current['Frame']['block_id'] = $block['Block']['id'];
+
+		$blockSetting = $this->QuestionnaireSetting->create();
+		$this->log($block, 'debug');
+		$this->log($blockSetting, 'debug');
+		$blockSetting['QuestionnaireSetting']['block_key'] = $block['Block']['key'];
+		$this->QuestionnaireSetting->saveQuestionnaireSetting($blockSetting);
 		return $data;
 	}
 /**
