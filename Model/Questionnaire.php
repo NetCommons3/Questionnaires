@@ -247,6 +247,7 @@ class Questionnaire extends QuestionnairesAppModel {
 			$val['Questionnaire']['all_answer_count'] = $this->QuestionnaireAnswerSummary->find('count', array(
 				'conditions' => array(
 					'questionnaire_key' => $val['Questionnaire']['key'],
+					'answer_status' => QuestionnairesComponent::ACTION_ACT,
 					'test_status' => QuestionnairesComponent::TEST_ANSWER_STATUS_PEFORM
 				),
 				'recursive' => -1

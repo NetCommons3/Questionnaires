@@ -43,7 +43,6 @@ class QuestionnaireAddController extends QuestionnairesAppController {
 			),
 		),
 		'Questionnaires.Questionnaires',
-		'Questionnaires.QuestionnairesDownload',
 		'Questionnaires.QuestionnairesWysIsWyg',
 	);
 

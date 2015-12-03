@@ -10,8 +10,7 @@
  */
 
 App::uses('AppController', 'Controller');
-App::uses('Folder', 'Utility');
-App::uses('File', 'Utility');
+App::uses('TemporaryFile', 'Files.Utility');
 
 /**
  * BlocksController
@@ -20,6 +19,13 @@ App::uses('File', 'Utility');
  * @package NetCommons\Questionnaires\Controller
  */
 class QuestionnaireBlocksController extends QuestionnairesAppController {
+
+/**
+ * csv download item count handling unit
+ *
+ * @var int
+ */
+	const	QUESTIONNAIRE_CSV_UNIT_NUMBER = 1000;
 
 /**
  * layout
@@ -60,7 +66,6 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
 				'index,add,edit,delete' => 'block_editable',
 			),
 		),
-		'Questionnaires.QuestionnairesDownload',
 		'Questionnaires.QuestionnairesWysIsWyg',
 		'Paginator',
 	);
@@ -91,7 +96,6 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
  * index
  *
  * @return void
- * @throws Exception
  */
 	public function index() {
 		// 条件設定値取得
@@ -121,50 +125,70 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
 /**
  * download
  *
- * @param int $questionnaireKey questionnaire Key
  * @return void
+ * @throws InternalErrorException
  */
-	public function download($questionnaireKey) {
-		// viewを使用しない
-		$this->autoRender = false;
+	public function download() {
+		// NetCommonsお約束：コンテンツ操作のためのURLには対象のコンテンツキーが必ず含まれている
+		// まずは、そのキーを取り出す
+		// アンケートキー
+		if (isset($this->params['pass'][QuestionnairesComponent::QUESTIONNAIRE_KEY_PASS_INDEX])) {
+			$questionnaireKey = $this->params['pass'][QuestionnairesComponent::QUESTIONNAIRE_KEY_PASS_INDEX];
+		} else {
+			$this->setAction('throwBadRequest');
+			return;
+		}
+		// キー情報をもとにデータを取り出す
+		$questionnaire = $this->QuestionnaireAnswerSummaryCsv->getQuestionnaireForAnswerCsv($questionnaireKey);
+		if (! $questionnaire) {
+			$this->setAction('throwBadRequest');
+			return;
+		}
 
 		try {
-			$questionnaire = $this->_getQuestionnaireForAnswerCsv($questionnaireKey);
-
-			// テンポラリフォルダ作成とカレントディレクトリ変更
-			$folder = $this->QuestionnairesDownload->createTemporaryFolder($this);
-			// ダウンロードファイル作成とオープン
-			$fileName = date('Ymd_his') . '.csv';
-			$fp = $this->QuestionnairesDownload->createDownloadFile($folder, $fileName);
+			$tmpFile = new TemporaryFile();
+			if (! $tmpFile->open('w+')) {
+				throw new InternalErrorException;
+			}
+			$fp = $tmpFile->handle;
 
 			// 回答データを一気に全部取得するのは、データ爆発の可能性があるので
 			// QUESTIONNAIRE_CSV_UNIT_NUMBER分に制限して取得する
 			$offset = 0;
 			do {
-				$datas = $this->QuestionnaireAnswerSummaryCsv->getAnswerSummaryCsv($questionnaire, QuestionnairesComponent::QUESTIONNAIRE_CSV_UNIT_NUMBER, $offset);
+				$datas = $this->QuestionnaireAnswerSummaryCsv->getAnswerSummaryCsv($questionnaire, self::QUESTIONNAIRE_CSV_UNIT_NUMBER, $offset);
 				// テンポラリファイルにCSV形式で書きこみ
 				foreach ($datas as $data) {
 					fputcsv($fp, $data);
 				}
 				$dataCount = count($datas);	// データ数カウント
 				$offset += $dataCount;		// 次の取得開始位置をずらす
-			} while ($dataCount == QuestionnairesComponent::QUESTIONNAIRE_CSV_UNIT_NUMBER);
+			} while ($dataCount == self::QUESTIONNAIRE_CSV_UNIT_NUMBER);
 			// データ取得数が制限値分だけとれている間は繰り返す
 
 			// ファイルクローズ
-			fclose($fp);
+			$tmpFile->close();
 
-			// 暗号圧縮？現時点ではコマンドでしか実行できない
-			$filePath = $this->QuestionnairesDownload->compressFile($this->Auth->user('username'));
+			// ここでパスワード付き圧縮をする ファイルプラグインがサポート？ FUJI
+			// 圧縮が成功したかしてないかでダウンロードするファイルの拡張子決定する FUJI
 		} catch (Exception $e) {
-			$this->Session->setFlash(__d('questionnaires', 'download error'));
-			$this->redirect('/questionnaires/questionnaire_blocks/index/?frame_id=' . Current::read('Frame.id'));
-			return false;
+			$this->log($e->queryString, 'debug');
+			// NetCommonsお約束:エラーメッセージのFlash表示
+			$this->NetCommons->setFlashNotification(__d('questionnaires', 'download error'),
+				array('interval' => NetCommonsComponent::ALERT_VALIDATE_ERROR_INTERVAL));
+			$this->redirect(NetCommonsUrl::actionUrl(array(
+				'controller' => 'questionnaire_blocks',
+				'action' => 'index',
+				'frame_id' => Current::read('Frame.id'))));
+			return;
 		}
-		// ダウンロードファイル名
-		$downloadFileName = $questionnaire['Questionnaire']['title'] . '.' . $this->QuestionnairesDownload->getDownloadFileExtension();
+		// Downloadの時はviewを使用しない
+		$this->autoRender = false;
+		// ダウンロードファイル名決定 アンケート名称をつける
+		// 圧縮できたかできてないかで拡張子を変えること FUJI
+		$downloadFileName = $questionnaire['Questionnaire']['title'] . '.csv';
 		// 出力
-		$this->response->file($filePath, array('download' => true, 'name' => rawurlencode($downloadFileName)));
+		$this->response->file($tmpFile->path, array('download' => true, 'name' => rawurlencode($downloadFileName)));
 
 		return $this->response;
 	}
@@ -309,27 +333,6 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
 		return $questionnaire;
 	}
 /**
- * _getQuestionnaireForAnswerCsv
- *
- * @param int $questionnaireId questionnaire key
- * @throws NotFoundException
- * @return array questionnaire data
- */
-	protected function _getQuestionnaireForAnswerCsv($questionnaireId) {
-		// 指定のアンケートデータを取得
-		$questionnaire = $this->Questionnaire->find('first', array(
-			'conditions' => array(
-				'Questionnaire.key' => $questionnaireId,
-				'Questionnaire.is_active' => true,
-			),
-			'recursive' => -1
-		));
-		if (!$questionnaire) {
-			throw new NotFoundException();
-		}
-		return $questionnaire;
-	}
-/**
  * _createWysIsWygZIP
  *
  * @param Folder $folder フォルダオブジェクト
@@ -364,58 +367,5 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
 			}
 		}
 		$questionnaire = Hash::expand($flatQuestionnaire);
-	}
-/**
- * initTabs
- *
- * @param string $activeTab Block active tab
- * @return void
- */
-	public function initTabs($activeTab) {
-		$block = $this->Block->find('first', array(
-			'conditions' => array(
-				'Block.room_id' => $this->viewVars['roomId'],
-				'Block.plugin_key' => 'questionnaires'
-			)
-		));
-		if (isset($block['Block']['id'])) {
-			$blockId = (int)$block['Block']['id'];
-		} else {
-			$blockId = null;
-		}
-
-		//タブの設定
-		$settingTabs = array(
-			'tabs' => array(
-				'block_index' => array(
-					'url' => array(
-						'plugin' => $this->params['plugin'],
-						'controller' => 'questionnaire_blocks',
-						'action' => 'index',
-						$this->viewVars['frameId'],
-					)
-				),
-				'frame_settings' => array(
-					'url' => array(
-						'plugin' => $this->params['plugin'],
-						'controller' => 'questionnaire_frame_settings',
-						'action' => 'edit',
-						$this->viewVars['frameId'],
-						$blockId
-					)
-				),
-				'role_permissions' => array(
-					'url' => array(
-						'plugin' => $this->params['plugin'],
-						'controller' => 'questionnaire_block_role_permissions',
-						'action' => 'edit',
-						$this->viewVars['frameId'],
-						$blockId
-					)
-				),
-			),
-			'active' => $activeTab
-		);
-		$this->set('settingTabs', $settingTabs);
 	}
 }

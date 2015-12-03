@@ -9,6 +9,7 @@
  */
 
 App::uses('QuestionnairesAppModel', 'Questionnaires.Model');
+App::uses('TemporaryFolder', 'Folder.Utility');
 
 /**
  * Summary for ActionQuestionnaireAdd Model
@@ -265,7 +266,8 @@ class ActionQuestionnaireAdd extends QuestionnairesAppModel {
 		$file = $this->FileUpload->upload('Questionnaire', 'template_file');
 
 		// テンポラリフォルダ作成とカレントディレクトリ変更
-		$folder = $this->QuestionnairesDownload->createTemporaryFolder($this, 'template');
+		//$folder = $this->QuestionnairesDownload->createTemporaryFolder($this, 'template');
+		$folder = new TemporaryFolder();
 
 		// ファイルを移動
 		$importFilePath = $folder->pwd() . DS . QuestionnairesComponent::QUESTIONNAIRE_TEMPLATE_EXPORT_FILENAME;

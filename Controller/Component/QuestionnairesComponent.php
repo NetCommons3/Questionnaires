@@ -47,13 +47,6 @@ class QuestionnairesComponent extends Component {
 	const	QUESTIONNAIRE_DEFAULT_DISPLAY_NUM_PER_PAGE = 10;
 
 /**
- * csv download item count handling unit
- *
- * @var int
- */
-	const	QUESTIONNAIRE_CSV_UNIT_NUMBER = 1000;
-
-/**
  * questionnaire create options
  *
  * @var string
@@ -106,20 +99,6 @@ class QuestionnairesComponent extends Component {
  * @var string
  */
 	const PERMISSION_PERMIT = '1';
-
-/**
- * anonymity. not anonymouse
- *
- * @var string
- */
-	const ANONYMITY_NOT_ANONYMOUSE = '0';
-
-/**
- * anonymity. anonymouse
- *
- * @var string
- */
-	const ANONYMITY_ANONYMOUSE = '1';
 
 /**
  * uses. not use
@@ -538,7 +517,6 @@ class QuestionnairesComponent extends Component {
  */
 	public static function getDisplayNumberOptions() {
 		return array(
-			1 => 1 . __d('questionnaires', 'item'),
 			5 => 5 . __d('questionnaires', 'item'),
 			10 => 10 . __d('questionnaires', 'item'),
 			20 => 20 . __d('questionnaires', 'item'),
@@ -634,21 +612,5 @@ class QuestionnairesComponent extends Component {
 			return true;
 		}
 		return false;
-	}
-
-/**
- * getChoiceValueFromAnswerForSelection
- *
- * @param string $answerStr answer_value
- * @return array
- */
-	public static function getChoiceValueFromAnswerForSelection($answerStr) {
-		$answerStr = trim($answerStr, self::ANSWER_DELIMITER);
-		$answerArray = explode(self::ANSWER_DELIMITER, $answerStr);
-		$retArray = array();
-		foreach ($answerArray as $answer) {
-			$retArray[] = explode(self::ANSWER_VALUE_DELIMITER, $answer);
-		}
-		return $retArray;
 	}
 }
