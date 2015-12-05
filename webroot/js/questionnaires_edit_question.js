@@ -431,6 +431,7 @@ NetCommonsApp.controller('Questionnaires.edit.question',
               questionnaireQuestion.splice(afterIdx, 1, beforeQ);
         }
         $scope._resetQuestionnaireQuestionSequence(pageIndex);
+        $event.preventDefault();
         $event.stopPropagation();
       };
 
