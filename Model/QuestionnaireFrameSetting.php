@@ -130,7 +130,7 @@ class QuestionnaireFrameSetting extends QuestionnairesAppModel {
 			$dir = 'DESC';
 		} elseif ($setting['sort_type'] == QuestionnairesComponent::QUESTIONNAIRE_SORT_CREATED) {
 			$sort = 'created';
-			$dir = 'DESC';
+			$dir = 'ASC';
 		} elseif ($setting['sort_type'] == QuestionnairesComponent::QUESTIONNAIRE_SORT_TITLE) {
 			$sort = 'title';
 			$dir = 'ASC';
