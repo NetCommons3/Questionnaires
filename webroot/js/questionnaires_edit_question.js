@@ -193,6 +193,9 @@ NetCommonsApp.controller('Questionnaires.edit.question',
        * @return {String}
        */
       $scope.getDateStr = function(dateStr, format) {
+        if (! dateStr) {
+          return '';
+        }
         // もしも時刻表示の場合は本日の日付文字列を付加して日時文字列扱いにする
         var regTime = /^\d{2}:\d{2}:\d{2}$/;
         var regTime2 = /^\d{2}:\d{2}$/;
@@ -210,7 +213,7 @@ NetCommonsApp.controller('Questionnaires.edit.question',
         }
 
         if (format) {
-          var d = new moment(dateStr);
+          var d = moment(dateStr);
           dateStr = d.format(format);
         }
 
@@ -283,10 +286,12 @@ NetCommonsApp.controller('Questionnaires.edit.question',
 
         // 自分のMinまたはMaxを設定する
         var el = document.getElementById(elId);
-        if (typeMinMax == 'min') {
-          $(el).data('DateTimePicker').maxDate(limitDate);
-        } else {
-          $(el).data('DateTimePicker').minDate(limitDate);
+        if (limitDate != '') {
+          if (typeMinMax == 'min') {
+            $(el).data('DateTimePicker').maxDate(limitDate);
+          } else {
+            $(el).data('DateTimePicker').minDate(limitDate);
+          }
         }
       };
 
