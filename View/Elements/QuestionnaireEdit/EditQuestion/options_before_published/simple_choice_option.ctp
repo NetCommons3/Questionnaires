@@ -80,8 +80,8 @@
 					<?php echo $this->element('Questionnaires.QuestionnaireEdit/EditQuestion/options_before_published/choice'); ?>
 				</div>
 				<?php echo $this->element(
-				'Questionnaires.errors', array(
-				'errorArrayName' => 'choice.errorMessages.skipPageSequence',
+					'Questionnaires.QuestionnaireEdit/ng_errors', array(
+					'errorArrayName' => 'choice.errorMessages.skipPageSequence',
 				)); ?>
 			</li>
 		</ul>

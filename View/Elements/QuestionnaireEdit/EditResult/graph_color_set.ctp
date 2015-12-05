@@ -23,7 +23,7 @@
 				{{choice.choiceLabel}}
 
 				<?php echo $this->element(
-				'Questionnaires.errors', array(
+				'Questionnaires.QuestionnaireEdit/ng_errors', array(
 				'errorArrayName' => 'choice.errorMessages.graphColor',
 				)); ?>
 
@@ -50,7 +50,7 @@
 				{{choice.choiceLabel}}
 
 				<?php echo $this->element(
-				'Questionnaires.errors', array(
+				'Questionnaires.QuestionnaireEdit/ng_errors', array(
 				'errorArrayName' => 'choice.errorMessages.graphColor',
 				)); ?>
 

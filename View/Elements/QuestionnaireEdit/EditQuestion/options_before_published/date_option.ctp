@@ -58,6 +58,11 @@
 				?>
 				<?php echo __d('questionnaires', 'set range to answer date and time'); ?>
 			</label>
+			<?php
+				echo $this->element('Questionnaires.QuestionnaireEdit/ng_errors', array(
+					'errorArrayName' => 'question.errorMessages.isRange',
+				));
+			?>
 		</div>
 	</div>
 </div>

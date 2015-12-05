@@ -49,6 +49,6 @@
 	?>
 </div>
 <?php echo $this->element(
-'Questionnaires.errors', array(
-'errorArrayName' => 'question.errorMessages.resultDisplayType',
+	'Questionnaires.QuestionnaireEdit/ng_errors', array(
+	'errorArrayName' => 'question.errorMessages.resultDisplayType',
 ));

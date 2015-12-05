@@ -44,8 +44,8 @@
 				<?php echo __d('questionnaires', 'Please check if you want to set limit(or length) value.'); ?>
 			</label>
 			<?php echo $this->element(
-			'Questionnaires.errors', array(
-			'errorArrayName' => 'question.errorMessages.isRange',
+				'Questionnaires.QuestionnaireEdit/ng_errors', array(
+				'errorArrayName' => 'question.errorMessages.isRange',
 			)); ?>
 		</div>
 	</div>
@@ -61,8 +61,8 @@
 			?>
 		</div>
 		<?php echo $this->element(
-		'Questionnaires.errors', array(
-		'errorArrayName' => 'question.errorMessages.min',
+			'Questionnaires.QuestionnaireEdit/ng_errors', array(
+			'errorArrayName' => 'question.errorMessages.min',
 		)); ?>
 	</div>
 
@@ -76,8 +76,8 @@
 			?>
 		</div>
 		<?php echo $this->element(
-		'Questionnaires.errors', array(
-		'errorArrayName' => 'question.errorMessages.max',
+			'Questionnaires.QuestionnaireEdit/ng_errors', array(
+			'errorArrayName' => 'question.errorMessages.max',
 		)); ?>
 	</div>
 </div>

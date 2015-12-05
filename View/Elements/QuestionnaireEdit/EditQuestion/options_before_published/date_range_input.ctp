@@ -67,6 +67,6 @@
 </div>
 
 <?php echo $this->element(
-'Questionnaires.errors', array(
-'errorArrayName' => $error,
+	'Questionnaires.QuestionnaireEdit/ng_errors', array(
+	'errorArrayName' => $error,
 ));

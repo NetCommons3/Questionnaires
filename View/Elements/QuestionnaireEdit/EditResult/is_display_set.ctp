@@ -43,7 +43,7 @@
 		array('ng-value' => 'question.isResultDisplay'));
 	?>
 	<?php echo $this->element(
-	'Questionnaires.errors', array(
-	'errorArrayName' => 'question.errorMessages.isResultDisplay',
+		'Questionnaires.QuestionnaireEdit/ng_errors', array(
+		'errorArrayName' => 'question.errorMessages.isResultDisplay',
 	)); ?>
 </div>
