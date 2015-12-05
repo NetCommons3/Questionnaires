@@ -17,9 +17,8 @@ $jsPastQuestionnaires = NetCommonsAppController::camelizeKeyRecursive($pastQuest
 ?>
 
 <div ng-controller="Questionnaires.add"
-	 ng-init="initialize(<?php echo Current::read('Frame.id'); ?>,
-									<?php echo h(json_encode($jsPastQuestionnaires)); ?>,
-									'<?php echo $this->data['ActionQuestionnaireAdd']['create_option']; ?>')">
+	 ng-init="initialize(<?php echo h(json_encode($jsPastQuestionnaires)); ?>,
+						'<?php echo $this->data['ActionQuestionnaireAdd']['create_option']; ?>')">
 	<div class="modal-body">
 			<div class="row">
 
@@ -50,12 +49,7 @@ $jsPastQuestionnaires = NetCommonsAppController::camelizeKeyRecursive($pastQuest
 
 				<div class="text-center">
 					<?php echo $this->BackTo->pageLinkButton(__d('net_commons', 'Cancel'), array('icon' => 'remove')); ?>
-					<?php echo $this->NetCommonsForm->button(
-					__d('net_commons', 'NEXT') . ' <span class="glyphicon glyphicon-chevron-right"></span>',
-					array(
-					'class' => 'btn btn-primary',
-					'ng-disabled' => 'sending'
-					)) ?>
+					<?php echo $this->Button->save(__d('net_commons', 'NEXT'), array('icon' => 'chevron-right')) ?>
 				</div>
 
 				<?php echo $this->NetCommonsForm->end(); ?>

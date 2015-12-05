@@ -20,7 +20,6 @@
 	<?php echo $this->NetCommonsForm->input('title', array(
 	'label' => __d('questionnaires', 'Questionnaire title'),
 	'required' => true,
-	'ng-model' => 'newTitle',
 	'placeholder' => __d('questionnaires', 'Please input questionnaire title')
 	)); ?>
 </div>

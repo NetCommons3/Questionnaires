@@ -10,44 +10,15 @@
 NetCommonsApp.controller('Questionnaires.add',
     function($scope, NetCommonsBase) {
       /**
-       * variables
+       * Initialize
        *
-       * @type {Object.<string>}
+       * @return {void}
        */
-      var variables = {
-        /**
-         * Relative path to login form
-         *
-         * @const
-         */
-        QUESTIONNAIRE_CREATE_OPT_NEW: 'create',
-        QUESTIONNAIRE_CREATE_OPT_REUSE: 'reuse',
-        QUESTIONNAIRE_CREATE_OPT_TEMPLATE: 'template'
-      };
-
-      /**
-         * Initialize
-         *
-         * @return {void}
-         */
-      $scope.initialize = function(frameId, questionnaires, createOption) {
-        $scope.frameId = frameId;
+      $scope.initialize = function(questionnaires, createOption) {
         $scope.questionnaires = questionnaires;
         $scope.createOption = createOption;
-        $scope.newTitle = '';
         $scope.templateFile = '';
         $scope.pastQuestionnaireSelect = '';
-      };
-      /**
-         * Questionnaire EnterSubmit gard
-         *
-         * @return {void}
-         */
-      $scope.handleKeydown = function(e) {
-        if (e.which === 13) {
-          e.stopPropagation();
-          return false;
-        }
       };
       /**
        * Questionnaire be disable to goto next
@@ -64,10 +35,10 @@ NetCommonsApp.controller('Questionnaires.setting',
     function($scope, NetCommonsBase, NetCommonsWysiwyg) {
 
       /**
-         * Initialize
-         *
-         * @return {void}
-         */
+       * Initialize
+       *
+       * @return {void}
+       */
       $scope.initialize = function(frameId, questionnaires) {
         $scope.frameId = frameId;
         $scope.questionnaires = questionnaires;

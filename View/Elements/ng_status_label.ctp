@@ -13,4 +13,9 @@
     <span ng-switch-when="<?php echo WorkflowComponent::STATUS_IN_DRAFT ?>" class="label label-info"><?php echo __d('net_commons', 'Temporary'); ?></span>
     <span ng-switch-when="<?php echo WorkflowComponent::STATUS_APPROVED ?>" class="label label-warning"><?php echo __d('net_commons', 'Approving'); ?></span>
     <span ng-switch-when="<?php echo WorkflowComponent::STATUS_DISAPPROVED ?>" class="label label-danger"><?php echo __d('net_commons', 'Disapproving'); ?></span>
+    <span ng-switch-default>
+        <span ng-switch="<?php echo $periodRangeStat; ?>">
+            <span ng-switch-when="<?php echo QuestionnairesComponent::QUESTIONNAIRE_PERIOD_STAT_BEFORE ?>" class="label label-default"><?php echo __d('questionnaires', 'Before public'); ?></span>
+            <span ng-switch-when="<?php echo QuestionnairesComponent::QUESTIONNAIRE_PERIOD_STAT_END ?>" class="label label-default"><?php echo __d('questionnaires', 'End'); ?></span>
+    </span>
 </span>

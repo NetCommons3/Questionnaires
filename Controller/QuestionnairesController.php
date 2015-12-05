@@ -75,7 +75,6 @@ class QuestionnairesController extends QuestionnairesAppController {
 /**
  * index method
  *
- * @throws Exception
  * @return void
  */
 	public function index() {
@@ -87,25 +86,20 @@ class QuestionnairesController extends QuestionnairesAppController {
 		$conditions = $this->Questionnaire->getCondition();
 
 		// データ取得
-		try {
-			$subQuery = $this->Questionnaire->getQuestionnaireSubQuery();
-			$this->Paginator->settings = array_merge(
-				$this->Paginator->settings,
-				array(
-					'conditions' => $conditions,
-					'page' => 1,
-					'sort' => $sort,
-					'limit' => $displayNum,
-					'direction' => $dir,
-					'recursive' => 0,
-					'joins' => $subQuery,
-				)
-			);
-			$questionnaire = $this->paginate('Questionnaire', $this->_getPaginateFilter());
-		} catch (Exception $ex) {
-			CakeLog::error($ex);
-			throw $ex;
-		}
+		$subQuery = $this->Questionnaire->getQuestionnaireSubQuery();
+		$this->Paginator->settings = array_merge(
+			$this->Paginator->settings,
+			array(
+				'conditions' => $conditions,
+				'page' => 1,
+				'sort' => $sort,
+				'limit' => $displayNum,
+				'direction' => $dir,
+				'recursive' => 0,
+				'joins' => $subQuery,
+			)
+		);
+		$questionnaire = $this->paginate('Questionnaire', $this->_getPaginateFilter());
 		$this->set('questionnaires', $questionnaire);
 
 		if (count($questionnaire) == 0) {

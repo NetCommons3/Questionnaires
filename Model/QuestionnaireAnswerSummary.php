@@ -145,7 +145,6 @@ class QuestionnaireAnswerSummary extends QuestionnairesAppModel {
 		$summary = $this->getProgressiveSummaryOfThisUser($questionnaire['Questionnaire']['key'], $userId, $sessionId);
 		// なければ作成
 		if (!$summary) {
-			$this->setDataSource('master');
 			$this->create();
 			$this->save(array(
 				'answer_status' => QuestionnairesComponent::ACTION_NOT_ACT,

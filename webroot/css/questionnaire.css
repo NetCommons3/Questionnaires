@@ -1,29 +1,8 @@
-.tab-body {
-    margin-bottom: 20px;
-    padding: 6px 10px;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    border-top: none;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-    -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.05);
-    box-shadow: 0 1px 1px rgba(0,0,0,.05);
+/*--アンケート一覧画面セレクトボックス---*/
+.questionnaire-list-select {
+    margin: 1em!important;
 }
-
-
-/*--------------------------------------------------------------------------------------------*/
-
-.questionnaire-select-box {
-    height:150px;
-    overflow-y: scroll;
-    list-style:none;
-    padding:0px;
-}
-.questionnaire-select-box li {
-    padding:0px 0.5em
-}
-
+/*--アンケート一覧画面の編集者向け詳細情報枠---*/
 .questionnaire-editor-dl {
     margin:0px;
     clear: left;
@@ -36,34 +15,20 @@
     float:left;
     margin-right:4em;
 }
-
-.questionnaire-matrix-table td input[type="radio"],
-.questionnaire-matrix-table td input[type="checkbox"] {
-    display:block;
-    width:100%;
-    height:1em;
+/*--アンケート追加画面の過去のアンケートセレクトリスト用---*/
+.questionnaire-select-box {
+    height:150px;
+    overflow-y: scroll;
+    list-style:none;
+    padding:0px;
 }
-.questionnaire-matrix-table td input[type="checkbox"] {
-    margin-left: 0px;
+.questionnaire-select-box li {
+    padding:0px 0.5em
 }
-/*---------------------------------kiku---------------------------------*/
-
-.questionnaire-ttl { padding-bottom:1em;
-}
-.questionnaire-q { padding-top:1.7em ;padding-bottom:0.5em;
-}
+/*--アンケート編集画面のform-group枠への追加スタイル---*/
 .questionnaire-group { margin-top:0.5em ;margin-bottom:1.5em;margin-left: 2em;
 }
-td.q-btn .questionnaire-listbtn {
-	margin-top: 0.2em;
-	margin-bottom: 0.2em;
-}
-table.table.questionnaire-table-vcenter tbody td {
-   vertical-align: middle;
-}
-.questionnaire-list-select {
-    margin: 1em!important;
-}
+/*--アンケート編集画面のアンケートタイトルスタイル---*/
 .questionnaire-setting-ttl {
     padding: 10px 20px 0px;
 }
@@ -71,47 +36,13 @@ table.table.questionnaire-table-vcenter tbody td {
     padding-bottom:1em;
     padding-left: 2em;
 }
-#QuestionnaireQuestionEditForm .panel-group .panel {
-    overflow:visible;
-}
+/*--アンケート編集画面の質問アコーディオンスタイル---*/
 .questionnaire-accordion-header-title {
     line-height:2em;
     padding-left:0.5em;
 }
-/*480px以下のテーブルの見え方*/
-@media only screen and (max-width:480px){
-    table.table.table-bordered.questionnaire-borderless tbody td{
-         border: none;
-    }
-    table.table.table-bordered.questionnaire-borderless{
-        border-collapse: separate;
-    }
-    table.table.table-bordered.questionnaire-borderless thead th{
-            display: none;
-    }
-    table.table.table-bordered.questionnaire-borderless tbody{
-        display: block;
-    }
-    table.table.table-bordered.questionnaire-borderless tbody tr{
-        display: block;
-    }
-    table.table.table-bordered.questionnaire-borderless tbody td{
-        display: list-item;
-        list-style-type: none;
-    }
-    table.table.table-bordered.questionnaire-borderless tbody td.q-btn{
-        text-align: center;
-        border-bottom:solid 1px #E1E8ED;
-        padding-bottom: 1.5em;
-        margin:0!important;
-    }
-    table.table.table-bordered.questionnaire-borderless tbody td{
-        margin-left: 20px;
-    }
-}
-
 /*
- * ステップメニュー
+ * 編集画面ステップメニュー
  */
 .questionnaire-steps {
     height:auto;
@@ -127,22 +58,18 @@ table.table.questionnaire-table-vcenter tbody td {
     float:right;
 }
 
-/*
- * カラーパレット
- */
-.questionnaire-color-palette {float:left;width:1em;height:1em;margin:5px;boder:1px solid transparent;}
-.questionnaire-color-palette:hover {border-color:#cccccc;}
-
-/*
- * 縦スクロールバー付き
- */
-.questionnaire-list-wrapper {
-    height:200px;
-    overflow-y: scroll;
+/*--アンケートマトリクス回答画面---*/
+.questionnaire-matrix-table td input[type="radio"],
+.questionnaire-matrix-table td input[type="checkbox"] {
+    display:block;
+    width:100%;
+    height:1em;
 }
-
+.questionnaire-matrix-table td input[type="checkbox"] {
+    margin-left: 0px;
+}
 /*
- * グラフ
+ * 集計画面グラフ
  */
 .questionnaire-chart-wrapper {
     margin:1em;
@@ -150,4 +77,19 @@ table.table.questionnaire-table-vcenter tbody td {
 .questionnaire-chart {
     width: 480px;
     height: 240px;
+}
+/*------------------------------------------------------------------*/
+td.q-btn .questionnaire-listbtn {
+	margin-top: 0.2em;
+	margin-bottom: 0.2em;
+}
+table.table.questionnaire-table-vcenter tbody td {
+   vertical-align: middle;
+}
+/*
+ * 縦スクロールバー付き
+ */
+.questionnaire-list-wrapper {
+    height:200px;
+    overflow-y: scroll;
 }
