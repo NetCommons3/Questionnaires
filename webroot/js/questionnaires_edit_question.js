@@ -650,6 +650,8 @@ NetCommonsApp.controller('Questionnaires.edit.question',
       $scope.changeQuestionType = function($event, pIdx, qIdx) {
         var questionType = $scope.questionnaire.questionnairePage[pIdx].
             questionnaireQuestion[qIdx].questionType;
+        // スキップロジックが使えない種類の質問になっていたら
+        // スキップ設定をなくす
         if (questionType != variables.TYPE_SELECTION &&
             questionType != variables.TYPE_SINGLE_SELECT_BOX) {
           $scope.questionnaire.questionnairePage[pIdx].
@@ -657,6 +659,18 @@ NetCommonsApp.controller('Questionnaires.edit.question',
           $scope.questionnaire.questionnairePage[pIdx].
               questionnaireQuestion[qIdx].isChoiceRandom = 0;
         }
+        // 集計結果表示ができない種類の質問になっていたら
+        // 集計表示設定をなくす
+        if ($scope.isDisabledDisplayResult(questionType)) {
+          $scope.questionnaire.questionnairePage[pIdx].
+              questionnaireQuestion[qIdx].isResultDisplay = 0;
+        } else {
+          // それ以外の時はとりあえず集計表示をONにしておく
+          $scope.questionnaire.questionnairePage[pIdx].
+              questionnaireQuestion[qIdx].isResultDisplay = 1;
+        }
+        // テキストなどのタイプから選択肢などに変更されたとき
+        // 選択肢要素が一つもなくなっている場合があるので最低一つは存在するように
         if (!$scope.questionnaire.questionnairePage[pIdx].
             questionnaireQuestion[qIdx].questionnaireChoice ||
             $scope.questionnaire.questionnairePage[pIdx].
@@ -669,17 +683,6 @@ NetCommonsApp.controller('Questionnaires.edit.question',
               variables.OTHER_CHOICE_TYPE_NO_OTHER_FILED,
               variables.MATRIX_TYPE_ROW_OR_NO_MATRIX);
         }
-      };
-      /**
-         * Questionnaire Date Time Option Calendar open
-         *
-         * @return {void}
-         */
-      $scope.openCal = function($event, pIdx, qIdx, opt) {
-        $event.preventDefault();
-        $event.stopPropagation();
-        $scope.questionnaire.questionnairePage[pIdx].
-            questionnaireQuestion[qIdx].calendarOpened[opt] = true;
       };
       /**
        * Questionnaire Judgment sentence greater than
@@ -718,8 +721,8 @@ NetCommonsApp.controller('Questionnaires.edit.question',
        * @return {bool}
        */
       $scope.isDisabledDisplayResult = function(questionType) {
-        if (questionType == variables.TYPE_TEST ||
-            questionType == variables.TYPE_TEST_AREA ||
+        if (questionType == variables.TYPE_TEXT ||
+            questionType == variables.TYPE_TEXT_AREA ||
             questionType == variables.TYPE_DATE_AND_TIME) {
           return true;
         }
