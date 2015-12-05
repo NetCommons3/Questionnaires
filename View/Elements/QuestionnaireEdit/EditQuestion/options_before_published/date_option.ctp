@@ -52,16 +52,12 @@
 						array(
 							'value' => QuestionnairesComponent::USES_USE,
 							'ng-model' => 'question.isRange',
-							'ng-checked' => 'question.isRange == ' . QuestionnairesComponent::USES_USE
+							'ng-checked' => 'question.isRange == ' . QuestionnairesComponent::USES_USE,
+							'error' => 'question.errorMessages.isRange',
 					));
 				?>
 				<?php echo __d('questionnaires', 'set range to answer date and time'); ?>
 			</label>
-			<?php
-				echo $this->element('Questionnaires.errors', array(
-					'errorArrayName' => 'question.errorMessages.isRange',
-				));
-			?>
 		</div>
 	</div>
 </div>
