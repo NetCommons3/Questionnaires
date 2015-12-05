@@ -669,6 +669,12 @@ NetCommonsApp.controller('Questionnaires.edit.question',
           $scope.questionnaire.questionnairePage[pIdx].
               questionnaireQuestion[qIdx].isResultDisplay = 1;
         }
+        // 日付タイプにされていたらオプション設定は「日付」にしておく
+        if (questionType == variables.TYPE_DATE_AND_TIME) {
+          $scope.questionnaire.questionnairePage[pIdx].
+              questionnaireQuestion[qIdx].
+                  questionTypeOption = variables.TYPE_OPTION_DATE;
+        }
         // テキストなどのタイプから選択肢などに変更されたとき
         // 選択肢要素が一つもなくなっている場合があるので最低一つは存在するように
         if (!$scope.questionnaire.questionnairePage[pIdx].
