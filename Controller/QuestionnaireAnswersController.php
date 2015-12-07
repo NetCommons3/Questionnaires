@@ -208,7 +208,8 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 				$this->redirect($url);
 				return;
 			}
-		} else {
+		}
+		if (! ($this->request->isPost() && $nextPageSeq == $this->data['QuestionnairePage']['page_sequence'])) {
 			$summary = $this->QuestionnaireAnswerSummary->getProgressiveSummaryOfThisUser($questionnaireKey, $userId, $this->Session->id());
 			$setAnswers = $this->QuestionnaireAnswer->getProgressiveAnswerOfThisSummary($summary);
 			$this->set('answers', $setAnswers);
