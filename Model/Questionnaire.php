@@ -350,8 +350,8 @@ class Questionnaire extends QuestionnairesAppModel {
 		// ベースとなる権限のほかに現在フレームに表示設定されているアンケートか見ている
 		$conditions = $this->getBaseCondition($addConditions);
 
-		$questionnaireFrameDisplayQuestionnaires = ClassRegistry::init('Questionnaires.QuestionnaireFrameDisplayQuestionnaires');
-		$keys = $questionnaireFrameDisplayQuestionnaires->find(
+		$frameDisplay = ClassRegistry::init('Questionnaires.QuestionnaireFrameDisplayQuestionnaires');
+		$keys = $frameDisplay->find(
 			'list',
 			array(
 				'conditions' => array('QuestionnaireFrameDisplayQuestionnaires.frame_key' => Current::read('Frame.key')),

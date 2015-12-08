@@ -126,7 +126,7 @@ class QuestionnaireUtilHelper extends AppHelper {
 			// 未公開
 			$answerButtonLabel = __d('questionnaires', 'Unpublished');
 		}
-		if (in_array($key, $this->_View->viewVars['ownAnsweredKeys']) ) {
+		if (in_array($key, $this->_View->viewVars['ownAnsweredKeys'])) {
 			// 回答済み
 			$answerButtonLabel = __d('questionnaires', 'Finished');
 		}

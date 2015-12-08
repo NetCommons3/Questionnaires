@@ -100,7 +100,7 @@ class QuestionnairesController extends QuestionnairesAppController {
 			)
 		);
 		if (!isset($this->params['named']['answer_status'])) {
-			$this->request->params['named']['answer_status'] =  QuestionnairesComponent::QUESTIONNAIRE_ANSWER_VIEW_ALL;
+			$this->request->params['named']['answer_status'] = QuestionnairesComponent::QUESTIONNAIRE_ANSWER_VIEW_ALL;
 		}
 		$questionnaire = $this->paginate('Questionnaire', $this->_getPaginateFilter());
 		$this->set('questionnaires', $questionnaire);
@@ -128,8 +128,7 @@ class QuestionnairesController extends QuestionnairesAppController {
 			return $filter;
 		}
 
-		$ownAnsweredKeys = $this->Questionnaires->getOwnAnsweredKeys();
-		$filterCondition = array('Questionnaire.key' => $ownAnsweredKeys);
+		$filterCondition = array('Questionnaire.key' => $this->Questionnaires->getOwnAnsweredKeys());
 		if ($this->request->params['named']['answer_status'] == QuestionnairesComponent::QUESTIONNAIRE_ANSWER_UNANSWERED) {
 			$filter = array(
 				'NOT' => $filterCondition

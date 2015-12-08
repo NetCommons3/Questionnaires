@@ -635,26 +635,26 @@ class QuestionnairesComponent extends Component {
 			return $this->__ownAnsweredKeys;
 		}
 
-		$this->__ownAnsweredKeys  = array();
+		$this->__ownAnsweredKeys = array();
 
 		if (empty(Current::read('User.id'))) {
 			$cookie = $this->_Collection->load('Cookie');
 			$keys = $cookie->read('answeredQuestionnaireKeys');
 			if (isset($keys)) {
-				$this->__ownAnsweredKeys = explode(',', $answeredQuestionnaires);
+				$this->__ownAnsweredKeys = explode(',', $keys);
 			}
 
 			return $this->__ownAnsweredKeys;
 		}
 
-		$questionnaireAnswerSummary = ClassRegistry::init('Questionnaires.QuestionnaireAnswerSummary');
+		$answerSummary = ClassRegistry::init('Questionnaires.QuestionnaireAnswerSummary');
 		$conditions = array(
 			'user_id' => Current::read('User.id'),
 			'answer_status' => QuestionnairesComponent::ACTION_ACT,
 			'test_status' => QuestionnairesComponent::TEST_ANSWER_STATUS_PEFORM,
 			'answer_number' => 1
 		);
-		$keys = $questionnaireAnswerSummary->find(
+		$keys = $answerSummary->find(
 			'list',
 			array(
 				'conditions' => $conditions,
