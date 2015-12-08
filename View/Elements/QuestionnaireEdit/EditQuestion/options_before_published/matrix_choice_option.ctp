@@ -20,7 +20,7 @@
         <?php echo __d('questionnaires', 'Add line choices'); ?>
     </button>
     <ul class="list-group ">
-        <li class="list-group-item" ng-repeat="(cIndex, choice) in matrixRows = (question.questionnaireChoice | filter: {matrixType:<?php echo QuestionnairesComponent::MATRIX_TYPE_ROW_OR_NO_MATRIX; ?>})" >
+        <li class="list-group-item" ng-repeat="(cIndex, choice) in matrixRows = (question.questionnaireChoice | toArray | filter: {matrixType:<?php echo QuestionnairesComponent::MATRIX_TYPE_ROW_OR_NO_MATRIX; ?>})" >
             <button class="btn btn-default pull-right" type="button"
                     ng-disabled="matrixRows.length < 2"
                     ng-click="deleteChoice($event, pageIndex, qIndex, choice.choiceSequence)"
@@ -48,7 +48,7 @@
     </button>
 
     <ul class="list-group">
-        <li class="list-group-item" ng-repeat="(cIndex, choice) in matrixColumns = (question.questionnaireChoice | filter: {matrixType:<?php echo QuestionnairesComponent::MATRIX_TYPE_COLUMN; ?>})" >
+        <li class="list-group-item" ng-repeat="(cIndex, choice) in matrixColumns = (question.questionnaireChoice | toArray | filter: {matrixType:<?php echo QuestionnairesComponent::MATRIX_TYPE_COLUMN; ?>})" >
             <button class="btn btn-default pull-right" type="button"
                     ng-disabled="matrixColumns.length < 2"
                     ng-click="deleteChoice($event, pageIndex, qIndex, choice.choiceSequence, '<?php echo __d('questionnaires', 'Do you want to delete this choice ?'); ?>')">

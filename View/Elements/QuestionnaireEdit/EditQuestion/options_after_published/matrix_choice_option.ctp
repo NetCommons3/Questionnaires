@@ -15,7 +15,7 @@
 	<div class="col-sm-6">
 		<h5><?php echo __d('questionnaires', 'Line choices'); ?></h5>
 		<ul class="list-group ">
-			<li class="list-group-item" ng-repeat="(cIndex, choice) in matrixRows = (question.questionnaireChoice | filter: {matrixType:<?php echo QuestionnairesComponent::MATRIX_TYPE_ROW_OR_NO_MATRIX; ?>})" >
+			<li class="list-group-item" ng-repeat="(cIndex, choice) in matrixRows = (question.questionnaireChoice | toArray | filter: {matrixType:<?php echo QuestionnairesComponent::MATRIX_TYPE_ROW_OR_NO_MATRIX; ?>})" >
 				<div class="form-inline">
 					<?php echo $this->element('Questionnaires.QuestionnaireEdit/EditQuestion/options_after_published/choice'); ?>
 				</div>
@@ -26,7 +26,7 @@
 	<div class="col-sm-6">
 		<h5><?php echo __d('questionnaires', 'Column choices'); ?></h5>
 		<ul class="list-group">
-			<li class="list-group-item" ng-repeat="(cIndex, choice) in matrixColumns = (question.questionnaireChoice | filter: {matrixType:<?php echo QuestionnairesComponent::MATRIX_TYPE_COLUMN; ?>})" >
+			<li class="list-group-item" ng-repeat="(cIndex, choice) in matrixColumns = (question.questionnaireChoice | toArray | filter: {matrixType:<?php echo QuestionnairesComponent::MATRIX_TYPE_COLUMN; ?>})" >
 				<div class="form-inline">
 					<?php echo $this->element('Questionnaires.QuestionnaireEdit/EditQuestion/options_after_published/choice'); ?>
 				</div>
