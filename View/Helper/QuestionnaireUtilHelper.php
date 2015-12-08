@@ -115,7 +115,7 @@ class QuestionnaireUtilHelper extends AppHelper {
 		// 期間外だったら操作不可能
 		// 繰り返し回答不可で回答済なら操作不可能
 		if ($questionnaire['Questionnaire']['period_range_stat'] != QuestionnairesComponent::QUESTIONNAIRE_PERIOD_STAT_IN
-			|| (isset($questionnaire['Questionnaire']['answer_summary_count']) && $questionnaire['Questionnaire']['answer_summary_count'] > 0
+			|| (in_array($key, $this->_View->viewVars['ownAnsweredKeys'])
 				&& $questionnaire['Questionnaire']['is_repeat_allow'] == QuestionnairesComponent::PERMISSION_NOT_PERMIT)) {
 			$answerButtonClass = 'default';
 			$answerButtonDisabled = 'disabled';
@@ -126,7 +126,7 @@ class QuestionnaireUtilHelper extends AppHelper {
 			// 未公開
 			$answerButtonLabel = __d('questionnaires', 'Unpublished');
 		}
-		if (isset($questionnaire['Questionnaire']['answer_summary_count']) && $questionnaire['Questionnaire']['answer_summary_count'] > 0) {
+		if (in_array($key, $this->_View->viewVars['ownAnsweredKeys']) ) {
 			// 回答済み
 			$answerButtonLabel = __d('questionnaires', 'Finished');
 		}
@@ -171,7 +171,7 @@ class QuestionnaireUtilHelper extends AppHelper {
 			} else {
 				// 集計結果公開期間内である
 				// 一つでも回答している
-				if (empty($questionnaire['Questionnaire']['answer_summary_count']) && !$force) {
+				if (!in_array($key, $this->_View->viewVars['ownAnsweredKeys']) && !$force) {
 					// 未回答
 					$disabled = 'disabled';
 				}
