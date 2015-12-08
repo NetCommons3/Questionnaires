@@ -626,7 +626,7 @@ class QuestionnairesComponent extends Component {
 /**
  * 回答済みアンケートリストを取得する
  *
- * 回答済みデータをルーム毎に保持したほうが良いかも
+ * 回答済みデータをブロック毎に保持したほうが良いかも
  *
  * @return Answered Questionnaire keys list
  */
@@ -638,10 +638,10 @@ class QuestionnairesComponent extends Component {
 		$this->__ownAnsweredKeys = array();
 
 		if (empty(Current::read('User.id'))) {
-			$cookie = $this->_Collection->load('Cookie');
-			$keys = $cookie->read('answeredQuestionnaireKeys');
-			if (isset($keys)) {
-				$this->__ownAnsweredKeys = explode(',', $keys);
+			$session = $this->_Collection->load('Session');
+			$ownAnsweredKeys = $session->read('Questionnaires.ownAnsweredKeys');
+			if (isset($ownAnsweredKeys)) {
+				$this->__ownAnsweredKeys = explode(',', $ownAnsweredKeys);
 			}
 
 			return $this->__ownAnsweredKeys;
@@ -654,7 +654,7 @@ class QuestionnairesComponent extends Component {
 			'test_status' => QuestionnairesComponent::TEST_ANSWER_STATUS_PEFORM,
 			'answer_number' => 1
 		);
-		$keys = $answerSummary->find(
+		$ownAnsweredKeys = $answerSummary->find(
 			'list',
 			array(
 				'conditions' => $conditions,
@@ -662,7 +662,7 @@ class QuestionnairesComponent extends Component {
 				'recursive' => -1
 			)
 		);
-		$this->__ownAnsweredKeys = array_values($keys);	// idの使用を防ぐ（いらない？）
+		$this->__ownAnsweredKeys = array_values($ownAnsweredKeys);	// idの使用を防ぐ（いらない？）
 
 		return $this->__ownAnsweredKeys;
 	}
