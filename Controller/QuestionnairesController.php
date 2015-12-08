@@ -86,7 +86,7 @@ class QuestionnairesController extends QuestionnairesAppController {
 		$conditions = $this->Questionnaire->getCondition();
 
 		// データ取得
-		$subQuery = $this->Questionnaire->getQuestionnaireSubQuery();
+		//$subQuery = $this->Questionnaire->getQuestionnaireSubQuery();
 		$this->Paginator->settings = array_merge(
 			$this->Paginator->settings,
 			array(
@@ -96,11 +96,16 @@ class QuestionnairesController extends QuestionnairesAppController {
 				'limit' => $displayNum,
 				'direction' => $dir,
 				'recursive' => 0,
-				'joins' => $subQuery,
+				//'joins' => $subQuery,
 			)
 		);
+		if (!isset($this->params['named']['answer_status'])) {
+			$this->request->params['named']['answer_status'] = QuestionnairesComponent::QUESTIONNAIRE_ANSWER_VIEW_ALL;
+		}
 		$questionnaire = $this->paginate('Questionnaire', $this->_getPaginateFilter());
 		$this->set('questionnaires', $questionnaire);
+
+		$this->__setOwnAnsweredKeys();
 
 		if (count($questionnaire) == 0) {
 			$this->view = 'Questionnaires/noQuestionnaire';
@@ -113,25 +118,43 @@ class QuestionnairesController extends QuestionnairesAppController {
  * @return array
  */
 	protected function _getPaginateFilter() {
-		$answerStatus = isset($this->params['named']['answer_status']) ? $this->params['named']['answer_status'] : QuestionnairesComponent::QUESTIONNAIRE_ANSWER_VIEW_ALL;
-		if ($answerStatus == QuestionnairesComponent::QUESTIONNAIRE_ANSWER_UNANSWERED) {
-			$filter = array(
-				'OR' => array(
-					array('answer_summary_count' => null),
-					array('answer_summary_count' => 0)
-				)
-			);
-		} elseif ($answerStatus == QuestionnairesComponent::QUESTIONNAIRE_ANSWER_ANSWERED) {
-			$filter = array(
-				'answer_summary_count >' => 0
-			);
-		} elseif ($answerStatus == QuestionnairesComponent::QUESTIONNAIRE_ANSWER_TEST) {
+		$filter = array();
+
+		if ($this->request->params['named']['answer_status'] == QuestionnairesComponent::QUESTIONNAIRE_ANSWER_TEST) {
 			$filter = array(
 				'Questionnaire.status !=' => WorkflowComponent::STATUS_PUBLISHED
 			);
-		} else {
-			$filter = array();
+
+			return $filter;
 		}
+
+		$filterCondition = array('Questionnaire.key' => $this->Questionnaires->getOwnAnsweredKeys());
+		if ($this->request->params['named']['answer_status'] == QuestionnairesComponent::QUESTIONNAIRE_ANSWER_UNANSWERED) {
+			$filter = array(
+				'NOT' => $filterCondition
+			);
+		} elseif ($this->request->params['named']['answer_status'] == QuestionnairesComponent::QUESTIONNAIRE_ANSWER_ANSWERED) {
+			$filter = array(
+				$filterCondition
+			);
+		}
+
 		return $filter;
 	}
+
+/**
+ * Set view value of answered questionnaire keys
+ *
+ * @return void
+ */
+	private function __setOwnAnsweredKeys() {
+		if ($this->request->params['named']['answer_status'] == QuestionnairesComponent::QUESTIONNAIRE_ANSWER_UNANSWERED) {
+			$this->set('ownAnsweredKeys', array());
+
+			return;
+		}
+
+		$this->set('ownAnsweredKeys', $this->Questionnaires->getOwnAnsweredKeys());
+	}
+
 }

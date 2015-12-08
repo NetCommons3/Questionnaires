@@ -511,6 +511,15 @@ class QuestionnairesComponent extends Component {
 	const QUESTIONNAIRE_FINGER_PRINT_FILENAME = 'finger_print.txt';
 
 /**
+ * Answered questionnaire keys
+ *
+ * 回答済みアンケートキー配列
+ *
+ * @var array
+ */
+	private $__ownAnsweredKeys = null;
+
+/**
  * getDisplayNumberOptions
  *
  * @return array
@@ -612,5 +621,49 @@ class QuestionnairesComponent extends Component {
 			return true;
 		}
 		return false;
+	}
+
+/**
+ * 回答済みアンケートリストを取得する
+ *
+ * 回答済みデータをブロック毎に保持したほうが良いかも
+ *
+ * @return Answered Questionnaire keys list
+ */
+	public function getOwnAnsweredKeys() {
+		if (isset($this->__ownAnsweredKeys)) {
+			return $this->__ownAnsweredKeys;
+		}
+
+		$this->__ownAnsweredKeys = array();
+
+		if (empty(Current::read('User.id'))) {
+			$session = $this->_Collection->load('Session');
+			$ownAnsweredKeys = $session->read('Questionnaires.ownAnsweredKeys');
+			if (isset($ownAnsweredKeys)) {
+				$this->__ownAnsweredKeys = explode(',', $ownAnsweredKeys);
+			}
+
+			return $this->__ownAnsweredKeys;
+		}
+
+		$answerSummary = ClassRegistry::init('Questionnaires.QuestionnaireAnswerSummary');
+		$conditions = array(
+			'user_id' => Current::read('User.id'),
+			'answer_status' => QuestionnairesComponent::ACTION_ACT,
+			'test_status' => QuestionnairesComponent::TEST_ANSWER_STATUS_PEFORM,
+			'answer_number' => 1
+		);
+		$ownAnsweredKeys = $answerSummary->find(
+			'list',
+			array(
+				'conditions' => $conditions,
+				'fields' => array('QuestionnaireAnswerSummary.questionnaire_key'),
+				'recursive' => -1
+			)
+		);
+		$this->__ownAnsweredKeys = array_values($ownAnsweredKeys);	// idの使用を防ぐ（いらない？）
+
+		return $this->__ownAnsweredKeys;
 	}
 }

@@ -349,8 +349,17 @@ class Questionnaire extends QuestionnairesAppModel {
 	public function getCondition($addConditions = array()) {
 		// ベースとなる権限のほかに現在フレームに表示設定されているアンケートか見ている
 		$conditions = $this->getBaseCondition($addConditions);
-		$conditions['NOT'] = array('QuestionnaireFrameDisplayQuestionnaires.id' => null);
-		$conditions['QuestionnaireFrameDisplayQuestionnaires.frame_key'] = Current::read('Frame.key');
+
+		$frameDisplay = ClassRegistry::init('Questionnaires.QuestionnaireFrameDisplayQuestionnaires');
+		$keys = $frameDisplay->find(
+			'list',
+			array(
+				'conditions' => array('QuestionnaireFrameDisplayQuestionnaires.frame_key' => Current::read('Frame.key')),
+				'fields' => array('QuestionnaireFrameDisplayQuestionnaires.questionnaire_key'),
+				'recursive' => -1
+			)
+		);
+		$conditions['Questionnaire.key'] = $keys;
 
 		if ($addConditions) {
 			$conditions = array_merge($conditions, $addConditions);
