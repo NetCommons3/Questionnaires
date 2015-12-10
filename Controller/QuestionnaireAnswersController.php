@@ -38,6 +38,7 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 	public $components = array(
 		'NetCommons.Permission',
 		'Questionnaires.Questionnaires',
+		'Questionnaires.QuestionnairesOwnAnswer',
 		'AuthorizationKeys.AuthorizationKey' => array(
 			'operationType' => 'none',
 			'targetAction' => 'view',
@@ -169,8 +170,6 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
  * @return void
  */
 	public function view() {
-		$userId = Current::read('User.id');
-
 		$questionnaire = $this->__questionnaire;
 		$questionnaireKey = $this->_getQuestionnaireKey($this->__questionnaire);
 
@@ -184,15 +183,21 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 		if ($this->request->isPost()) {
 			// 回答データがある場合は回答をDBに書きこむ
 			if (isset($this->data['QuestionnaireAnswer'])) {
-				if (! $this->QuestionnaireAnswer->saveAnswer($this->data, $questionnaire, $userId, $this->Session->id())) {
+				$summary = $this->QuestionnairesOwnAnswer->forceGetProgressiveAnswerSummary($this->__questionnaire);
+				if (! $summary) {
 					// 保存エラーの場合は今のページを再表示
 					$nextPageSeq = $this->data['QuestionnairePage']['page_sequence'];
 				} else {
-					// 回答データがあり、無事保存できたら次ページを取得する
-					$nextPageSeq = $this->QuestionnairePage->getNextPage(
-						$questionnaire,
-						$this->data['QuestionnairePage']['page_sequence'],
-						$this->data['QuestionnaireAnswer']);
+					if (! $this->QuestionnaireAnswer->saveAnswer($this->data, $questionnaire, $summary)) {
+						// 保存エラーの場合は今のページを再表示
+						$nextPageSeq = $this->data['QuestionnairePage']['page_sequence'];
+					} else {
+						// 回答データがあり、無事保存できたら次ページを取得する
+						$nextPageSeq = $this->QuestionnairePage->getNextPage(
+							$questionnaire,
+							$this->data['QuestionnairePage']['page_sequence'],
+							$this->data['QuestionnaireAnswer']);
+					}
 				}
 			}
 			// 次ページはもう存在しない
@@ -210,7 +215,7 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 			}
 		}
 		if (! ($this->request->isPost() && $nextPageSeq == $this->data['QuestionnairePage']['page_sequence'])) {
-			$summary = $this->QuestionnaireAnswerSummary->getProgressiveSummaryOfThisUser($questionnaireKey, $userId, $this->Session->id());
+			$summary = $this->QuestionnairesOwnAnswer->getProgressiveSummaryOfThisUser($questionnaireKey);
 			$setAnswers = $this->QuestionnaireAnswer->getProgressiveAnswerOfThisSummary($summary);
 			$this->set('answers', $setAnswers);
 			$this->request->data['QuestionnaireAnswer'] = $setAnswers;
@@ -238,10 +243,8 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 		$this->__shuffleChoice($this->__questionnaire);
 
 		// 回答中サマリレコード取得
-		$summary = $this->QuestionnaireAnswerSummary->getProgressiveSummaryOfThisUser(
-			$this->_getQuestionnaireKey($this->__questionnaire),
-			$this->Auth->user('id'),
-			$this->Session->id());
+		$summary = $this->QuestionnairesOwnAnswer->getProgressiveSummaryOfThisUser(
+			$this->_getQuestionnaireKey($this->__questionnaire));
 		if (!$summary) {
 			$this->setAction('throwBadRequest');
 			return;
@@ -253,6 +256,7 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 			$summary['QuestionnaireAnswerSummary']['answer_status'] = QuestionnairesComponent::ACTION_ACT;
 			$summary['QuestionnaireAnswerSummary']['answer_time'] = $this->getNowTime();
 			$this->QuestionnaireAnswerSummary->save($summary['QuestionnaireAnswerSummary']);
+			$this->QuestionnairesOwnAnswer->saveOwnAnsweredKeys($this->_getQuestionnaireKey($this->__questionnaire));
 
 			// ありがとう画面へ行く
 			$url = NetCommonsUrl::actionUrl(array(
@@ -290,6 +294,7 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 		$this->request->data['Frame'] = Current::read('Frame');
 		$this->request->data['Block'] = Current::read('Block');
 		$this->set('questionnaire', $this->__questionnaire);
+		$this->set('ownAnsweredKeys', $this->QuestionnairesOwnAnswer->getOwnAnsweredKeys());
 	}
 /**
  * _shuffleChoice

@@ -18,6 +18,15 @@ App::uses('QuestionnairesAppModel', 'Questionnaires.Model');
 class QuestionnaireChoice extends QuestionnairesAppModel {
 
 /**
+ * default graph colors
+ * 基本的にはＪＳで新しい選択肢を作成するので、これと同じ色配列がＪＳファイルにも書いてあります
+ *
+ * @var string
+ */
+	static public $defaultGraphColors = array('#f38631', '#e0e4cd', '#69d2e7', '#68e2a7', '#f64649',
+		'#4d5361', '#47bfbd', '#7c4f6c', '#23313c', '#9c9b7f', '#be5945', '#cccccc');
+
+/**
  * use behaviors
  *
  * @var array
@@ -126,7 +135,7 @@ class QuestionnaireChoice extends QuestionnairesAppModel {
 			'matrix_type' => QuestionnairesComponent::MATRIX_TYPE_ROW_OR_NO_MATRIX,
 			'choice_label' => __d('questionnaires', 'new choice') . '1',
 			'other_choice_type' => QuestionnairesComponent::OTHER_CHOICE_TYPE_NO_OTHER_FILED,
-			'graph_color' => QuestionnairesComponent::$defaultGraphColors[0],
+			'graph_color' => self::$defaultGraphColors[0],
 			'skip_page_sequence' => QuestionnairesComponent::SKIP_GO_TO_END
 		);
 	}

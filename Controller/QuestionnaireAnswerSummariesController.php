@@ -96,10 +96,7 @@ class QuestionnaireAnswerSummariesController extends QuestionnairesAppController
 
 		//集計表示していいかどうかの判断
 
-		if (!$this->QuestionnaireAnswerSummary->isAbleToDisplayAggrigatedData(
-			$this->__questionnaire,
-			Current::read('User.id'),
-			$this->Session->id())) {
+		if (! $this->isAbleToDisplayAggregatedData($this->__questionnaire)) {
 			$this->setAction('throwBadRequest');
 			return;
 		}

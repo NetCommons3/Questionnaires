@@ -177,26 +177,14 @@ class QuestionnaireAnswer extends QuestionnairesAppModel {
  *
  * @param array $data Postされた回答データ
  * @param array $questionnaire questionnaire data
- * @param int $userId user id
- * @param string $sessionId session id
+ * @param array $summary answer summary data
  * @throws $ex
  * @return bool
  */
-	public function saveAnswer($data, $questionnaire, $userId, $sessionId) {
-		$this->loadModels([
-			'QuestionnaireAnswerSummary' => 'Questionnaires.QuestionnaireAnswerSummary',
-		]);
+	public function saveAnswer($data, $questionnaire, $summary) {
 		//トランザクションBegin
 		$this->begin();
 		try {
-			// サマリレコード取得（存在しない場合は強制的に作成）
-			// 初めは「ID」がPOSTに入っているかどうかで判断しようと思っていたが
-			// Cakeは簡単にブラウザの「戻る」で前画面を表示させたりするので、
-			// POSTのIDは再回答であるにもかかわらず空ってことがありうるので毎回DBチェックするしかない
-			$summary = $this->QuestionnaireAnswerSummary->forceGetProgressiveAnswerSummary(
-				$questionnaire,
-				$userId,
-				$sessionId);
 			$summaryId = $summary['QuestionnaireAnswerSummary']['id'];
 			// 繰り返しValidationを行うときは、こうやってエラーメッセージを蓄積するところ作らねばならない
 			// 仕方ないCakeでModelObjectを使う限りは

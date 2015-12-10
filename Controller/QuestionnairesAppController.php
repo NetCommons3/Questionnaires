@@ -37,6 +37,7 @@ class QuestionnairesAppController extends AppController {
 		'Security',
 		'Pages.PageLayout',
 		'Questionnaires.Questionnaires',
+		'Questionnaires.QuestionnairesOwnAnswer',
 	);
 
 /**
@@ -184,23 +185,48 @@ class QuestionnairesAppController extends AppController {
  * @return bool
  */
 	public function isAbleToAnswer($questionnaire) {
-		$answerSummary = ClassRegistry::init('QuestionnaireAnswerSummary');
-
 		if ($questionnaire['Questionnaire']['status'] != WorkflowComponent::STATUS_PUBLISHED) {
 			return true;
 		}
 		// 繰り返し回答を許していないのにすでに回答済みか
 		if ($questionnaire['Questionnaire']['is_repeat_allow'] == QuestionnairesComponent::PERMISSION_NOT_PERMIT) {
-			$summary = $answerSummary->getNowSummaryOfThisUser(
-				$questionnaire['Questionnaire']['key'],
-				Current::read('User.id'),
-				$this->Session->id());
-			if ($summary) {
+			if ($this->QuestionnairesOwnAnswer->checkOwnAnsweredKeys($questionnaire['Questionnaire']['key'])) {
 				return false;
 			}
 		}
 
 		return true;
+	}
+/**
+ * isAbleToDisplayAggregatedData 指定されたIDを集計表示していいいかどうか？
+ *
+ * @param int $questionnaire Questionnaire
+ * @return bool
+ */
+	public function isAbleToDisplayAggregatedData($questionnaire) {
+		// 集計表示許さているか
+		if ($questionnaire['Questionnaire']['is_total_show'] != QuestionnairesComponent::EXPRESSION_SHOW) {
+			return false;
+		}
+
+		// 集計表示に期間設定しているか
+		// 期間設定がある
+		if ($questionnaire['Questionnaire']['total_show_timing'] == QuestionnairesComponent::USES_USE) {
+			$nowDatetime = (new NetCommonsTime())->getNowDatetime();
+			// まだ公開期間ではない
+			if (strtotime($nowDatetime) < strtotime($questionnaire['Questionnaire']['total_show_start_period'])) {
+				return false;
+			}
+		}
+
+		// していない または 公開期間内
+		// 本人回答があるかどうがか表示有無の判断基準
+		if (! $this->QuestionnairesOwnAnswer->checkOwnAnsweredKeys($questionnaire['Questionnaire']['key'])) {
+			//本人による「回答」データなし
+			return false;	// 見てはいけない
+		}
+		//本人による「回答」データあり
+		return true;	// みてよし
 	}
 
 /**

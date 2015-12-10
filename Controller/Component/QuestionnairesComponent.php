@@ -440,14 +440,6 @@ class QuestionnairesComponent extends Component {
 	const FIRST_PAGE_SEQUENCE = 0;
 
 /**
- * default graph colors
- *
- * @var string
- */
-	static public $defaultGraphColors = array('#f38631', '#e0e4cd', '#69d2e7', '#68e2a7', '#f64649',
-		'#4d5361', '#47bfbd', '#7c4f6c', '#23313c', '#9c9b7f', '#be5945', '#cccccc');
-
-/**
  * test answer status, peform( means on air or HONBAN )
  *
  * @var string
@@ -509,15 +501,6 @@ class QuestionnairesComponent extends Component {
 	const QUESTIONNAIRE_TEMPLATE_FILENAME = 'Questionnaires.zip';
 	const QUESTIONNAIRE_JSON_FILENAME = 'Questionnaires.json';
 	const QUESTIONNAIRE_FINGER_PRINT_FILENAME = 'finger_print.txt';
-
-/**
- * Answered questionnaire keys
- *
- * 回答済みアンケートキー配列
- *
- * @var array
- */
-	private $__ownAnsweredKeys = null;
 
 /**
  * getDisplayNumberOptions
@@ -621,49 +604,5 @@ class QuestionnairesComponent extends Component {
 			return true;
 		}
 		return false;
-	}
-
-/**
- * 回答済みアンケートリストを取得する
- *
- * 回答済みデータをブロック毎に保持したほうが良いかも
- *
- * @return Answered Questionnaire keys list
- */
-	public function getOwnAnsweredKeys() {
-		if (isset($this->__ownAnsweredKeys)) {
-			return $this->__ownAnsweredKeys;
-		}
-
-		$this->__ownAnsweredKeys = array();
-
-		if (empty(Current::read('User.id'))) {
-			$session = $this->_Collection->load('Session');
-			$ownAnsweredKeys = $session->read('Questionnaires.ownAnsweredKeys');
-			if (isset($ownAnsweredKeys)) {
-				$this->__ownAnsweredKeys = explode(',', $ownAnsweredKeys);
-			}
-
-			return $this->__ownAnsweredKeys;
-		}
-
-		$answerSummary = ClassRegistry::init('Questionnaires.QuestionnaireAnswerSummary');
-		$conditions = array(
-			'user_id' => Current::read('User.id'),
-			'answer_status' => QuestionnairesComponent::ACTION_ACT,
-			'test_status' => QuestionnairesComponent::TEST_ANSWER_STATUS_PEFORM,
-			'answer_number' => 1
-		);
-		$ownAnsweredKeys = $answerSummary->find(
-			'list',
-			array(
-				'conditions' => $conditions,
-				'fields' => array('QuestionnaireAnswerSummary.questionnaire_key'),
-				'recursive' => -1
-			)
-		);
-		$this->__ownAnsweredKeys = array_values($ownAnsweredKeys);	// idの使用を防ぐ（いらない？）
-
-		return $this->__ownAnsweredKeys;
 	}
 }

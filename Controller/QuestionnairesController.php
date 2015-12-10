@@ -44,6 +44,7 @@ class QuestionnairesController extends QuestionnairesAppController {
 			),
 		),
 		'Questionnaires.Questionnaires',
+		'Questionnaires.QuestionnairesOwnAnswer',
 		'Paginator',
 	);
 
@@ -128,7 +129,7 @@ class QuestionnairesController extends QuestionnairesAppController {
 			return $filter;
 		}
 
-		$filterCondition = array('Questionnaire.key' => $this->Questionnaires->getOwnAnsweredKeys());
+		$filterCondition = array('Questionnaire.key' => $this->QuestionnairesOwnAnswer->getOwnAnsweredKeys());
 		if ($this->request->params['named']['answer_status'] == QuestionnairesComponent::QUESTIONNAIRE_ANSWER_UNANSWERED) {
 			$filter = array(
 				'NOT' => $filterCondition
@@ -154,7 +155,7 @@ class QuestionnairesController extends QuestionnairesAppController {
 			return;
 		}
 
-		$this->set('ownAnsweredKeys', $this->Questionnaires->getOwnAnsweredKeys());
+		$this->set('ownAnsweredKeys', $this->QuestionnairesOwnAnswer->getOwnAnsweredKeys());
 	}
 
 }
