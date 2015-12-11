@@ -209,6 +209,11 @@ class QuestionnairesAppController extends AppController {
 			return false;
 		}
 
+		// 編集権限がある場合は無条件に許可
+		if ($this->Questionnaire->canEditWorkflowContent($questionnaire)) {
+			return true;
+		}
+
 		// 集計表示に期間設定しているか
 		// 期間設定がある
 		if ($questionnaire['Questionnaire']['total_show_timing'] == QuestionnairesComponent::USES_USE) {

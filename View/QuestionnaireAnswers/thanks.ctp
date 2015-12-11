@@ -33,13 +33,10 @@
 				'icon' => 'remove',
 				'iconSize' => 'lg')); ?>
 			<?php
-				/* この画面へ来るときはAnswerCountは取得してないSQLで来ている */
-				/* 集計ボタン表示Helperは回答数が１つはないと表示されない */
-				/* 今回答したのだから必ず回答は１つはある */
-				/* 強制的に一つ増やしておく */
 				echo $this->QuestionnaireUtil->getAggregateButtons($questionnaire,
 					array('title' => __d('questionnaires', 'Aggregate'),
-							'class' => 'btn-primary btn-lg'), true);
+							'class' => 'primary',
+							'size' => 'lg'));
 			?>
 		</div>
 	<?php echo $this->NetCommonsForm->end(); ?>

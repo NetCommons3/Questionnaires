@@ -50,7 +50,7 @@ echo $this->element('Questionnaires.scripts');
 					<div class="col-md-4 col-xs-12" >
 						<div class="pull-right h3">
 							<?php echo $this->QuestionnaireUtil->getAnswerButtons($questionnaire); ?>
-							<?php echo $this->QuestionnaireUtil->getAggregateButtons($questionnaire); ?>
+							<?php echo $this->QuestionnaireUtil->getAggregateButtons($questionnaire, array('icon' => 'stats')); ?>
 							<div class="clearfix"></div>
 						</div>
 					</div>

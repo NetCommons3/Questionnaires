@@ -139,17 +139,15 @@ class QuestionnaireUtilHelper extends AppHelper {
  *
  * @param array $questionnaire 回答データ
  * @param array $options option
- * @param bool $force 回答状況を無視して操作可能ボタンを表示するか
  * @return string
- * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
  */
-	public function getAggregateButtons($questionnaire, $options = array(), $force = false) {
+	public function getAggregateButtons($questionnaire, $options = array()) {
 		//
 		// 集計ボタン
 		// 集計表示しない＝ボタン自体ださない
-		// 集計表示する＝回答すみ、または回答期間終了　集計ボタン
+		// 集計表示する＝回答すみ、または回答期間終了　  集計ボタン
 		// 　　　　　　　アンケート自体が公開状態にない(not editor)
-		//			  未回答＆回答期間内　　　　　　　集計ボタン（disabled）
+		//			     未回答＆回答期間内　　　　　　　集計ボタン（disabled）
 		$key = $questionnaire['Questionnaire']['key'];
 
 		if ($questionnaire['Questionnaire']['is_total_show'] == QuestionnairesComponent::EXPRESSION_NOT_SHOW) {
@@ -159,26 +157,26 @@ class QuestionnaireUtilHelper extends AppHelper {
 		$disabled = '';
 
 		// アンケート本体が始まってない
-		$nowTime = time();
 		if ($questionnaire['Questionnaire']['period_range_stat'] == QuestionnairesComponent::QUESTIONNAIRE_PERIOD_STAT_BEFORE) {
 			$disabled = 'disabled';
 		} else {
 			// 始まっている
 			// 集計結果公開期間外である
-			if (isset($questionnaire['Questionnaire']['total_show_start_period']) &&
-				$nowTime < strtotime($questionnaire['Questionnaire']['total_show_start_period'])) {
+			$nowTime = (new NetCommonsTime())->getNowDatetime();
+			if ($questionnaire['Questionnaire']['total_show_timing'] == QuestionnairesComponent::USES_USE &&
+				strtotime($nowTime) < strtotime($questionnaire['Questionnaire']['total_show_start_period'])) {
 				$disabled = 'disabled';
 			} else {
 				// 集計結果公開期間内である
 				// 一つでも回答している
-				if (!in_array($key, $this->_View->viewVars['ownAnsweredKeys']) && !$force) {
+				if (!in_array($key, $this->_View->viewVars['ownAnsweredKeys'])) {
 					// 未回答
 					$disabled = 'disabled';
 				}
 			}
 		}
 
-		$btnClass = isset($options['class']) ? $options['class'] : 'btn-default questionnaire-listbtn';
+		list($title, $icon, $btnClass) = $this->_getBtnAttributes($options);
 		$url = NetCommonsUrl::actionUrl(array(
 			'controller' => 'questionnaire_answer_summaries',
 			'action' => 'view',
@@ -187,17 +185,42 @@ class QuestionnaireUtilHelper extends AppHelper {
 			'frame_id' => Current::read('Frame.id'),
 		));
 
-		if (isset($options['title'])) {
-			$title = $options['title'];
-		} else {
-			$title = '<span class="glyphicon glyphicon-stats" aria-hidden="true"></span>';
+		// このアンケートの編集権限を持っているなら無条件で集計表示ボタン操作できる
+		if ($this->_View->Workflow->canEdit('Questionnaire', $questionnaire)) {
+			$disabled = '';
 		}
-		$html = $this->NetCommonsHtml->link($title, $url, array(
-			'class' => 'btn ' . $btnClass . ' ' . $disabled,
+
+		$html = $this->NetCommonsHtml->link($icon . $title,
+			$url, array(
+			'class' => $btnClass . ' ' . $disabled,
 			'escape' => false
 		));
 
 		return $html;
 	}
+/**
+ * _getBtnAttributes ボタン属性整理作成
+ *
+ * @param array $options option
+ * @return array
+ */
+	protected function _getBtnAttributes($options) {
+		$btnClass = 'btn btn-default questionnaire-listbtn';
+		if (isset($options['class'])) {
+			$btnClass = 'btn btn-' . $options['class'];
+		}
+		if (isset($options['size'])) {
+			$btnClass .= ' btn-' . $options['size'];
+		}
 
+		$title = '';
+		if (isset($options['title'])) {
+			$title = $options['title'];
+		}
+		$icon = '';
+		if (isset($options['icon'])) {
+			$icon = '<span class="glyphicon glyphicon-' . $options['icon'] . '" aria-hidden="true"></span>';
+		}
+		return array($title, $icon, $btnClass);
+	}
 }
