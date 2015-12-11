@@ -62,13 +62,6 @@ class QuestionnaireAnswerSummaryCsv extends QuestionnairesAppModel {
 	);
 
 /**
- * convert encoding
- *
- * @var string
- */
-	protected $_toCode = 'SJIS';
-
-/**
  * getQuestionnaireForAnswerCsv
  *
  * @param int $questionnaireKey questionnaire key
@@ -174,7 +167,7 @@ class QuestionnaireAnswerSummaryCsv extends QuestionnairesAppModel {
 				}
 			}
 		}
-		return array_map(array($this, 'convertCode'), $cols);
+		return $cols;
 	}
 
 /**
@@ -212,7 +205,7 @@ class QuestionnaireAnswerSummaryCsv extends QuestionnairesAppModel {
 				}
 			}
 		}
-		return array_map(array($this, 'convertCode'), $cols);
+		return $cols;
 	}
 
 /**
@@ -281,15 +274,5 @@ class QuestionnaireAnswerSummaryCsv extends QuestionnairesAppModel {
 			$retAns = implode(QuestionnairesComponent::ANSWER_DELIMITER, $ans['answer_values']);
 		}
 		return $retAns;
-	}
-
-/**
- * convertCode
- *
- * @param string $data data
- * @return string
- */
-	public function convertCode($data) {
-		return mb_convert_encoding($data, $this->_toCode);
 	}
 }

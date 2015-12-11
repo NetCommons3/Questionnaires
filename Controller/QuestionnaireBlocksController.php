@@ -10,7 +10,8 @@
  */
 
 App::uses('AppController', 'Controller');
-App::uses('TemporaryFile', 'Files.Utility');
+App::uses('TemporaryFolder', 'Files.Utility');
+App::uses('CsvFileWriter', 'Files.Utility');
 
 /**
  * BlocksController
@@ -146,33 +147,30 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
 		}
 
 		try {
-			$tmpFile = new TemporaryFile();
-			if (! $tmpFile->open('w+')) {
-				throw new InternalErrorException;
-			}
-			$fp = $tmpFile->handle;
-
+			$tmpFolder = new TemporaryFolder();
+			$csvFile = new CsvFileWriter(array(
+				'folder' => $tmpFolder->path
+			));
 			// 回答データを一気に全部取得するのは、データ爆発の可能性があるので
 			// QUESTIONNAIRE_CSV_UNIT_NUMBER分に制限して取得する
 			$offset = 0;
 			do {
 				$datas = $this->QuestionnaireAnswerSummaryCsv->getAnswerSummaryCsv($questionnaire, self::QUESTIONNAIRE_CSV_UNIT_NUMBER, $offset);
 				// テンポラリファイルにCSV形式で書きこみ
+
 				foreach ($datas as $data) {
-					fputcsv($fp, $data);
+					//fputcsv($fp, $data);
+					$csvFile->add($data);
 				}
+
 				$dataCount = count($datas);	// データ数カウント
 				$offset += $dataCount;		// 次の取得開始位置をずらす
 			} while ($dataCount == self::QUESTIONNAIRE_CSV_UNIT_NUMBER);
 			// データ取得数が制限値分だけとれている間は繰り返す
 
-			// ファイルクローズ
-			$tmpFile->close();
-
 			// ここでパスワード付き圧縮をする ファイルプラグインがサポート？ FUJI
 			// 圧縮が成功したかしてないかでダウンロードするファイルの拡張子決定する FUJI
 		} catch (Exception $e) {
-			$this->log($e->queryString, 'debug');
 			// NetCommonsお約束:エラーメッセージのFlash表示
 			$this->NetCommons->setFlashNotification(__d('questionnaires', 'download error'),
 				array('interval' => NetCommonsComponent::ALERT_VALIDATE_ERROR_INTERVAL));
@@ -188,9 +186,7 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
 		// 圧縮できたかできてないかで拡張子を変えること FUJI
 		$downloadFileName = $questionnaire['Questionnaire']['title'] . '.csv';
 		// 出力
-		$this->response->file($tmpFile->path, array('download' => true, 'name' => rawurlencode($downloadFileName)));
-
-		return $this->response;
+		return $csvFile->download(rawurlencode($downloadFileName));
 	}
 
 /**
