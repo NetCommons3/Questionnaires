@@ -224,6 +224,8 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 			// 入力される回答データですがsetで設定するデータとして扱います
 			// 誠にCake流儀でなくて申し訳ないのですが、様々な種別のAnswerデータを
 			// 特殊な文字列加工して統一化した形状でDBに入れている都合上、このような仕儀になっています
+		} else {
+			$this->set('answers', $this->request->data['QuestionnaireAnswer']);
 		}
 
 		// 質問情報をView変数にセット
