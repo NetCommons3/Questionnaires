@@ -69,7 +69,7 @@
 
 
 <div class="row">
-	<div ng-show="question.isRange">
+	<div ng-show="question.isRange == <?php echo QuestionnairesComponent::USES_USE; ?>">
 		<div class="col-sm-5">
 			<?php
 			echo $this->element(
