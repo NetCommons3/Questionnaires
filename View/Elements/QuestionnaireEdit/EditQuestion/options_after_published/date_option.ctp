@@ -42,7 +42,8 @@
 					array(
 						'value' => QuestionnairesComponent::USES_USE,
 						'ng-model' => 'question.isRange',
-						'ng-checked' => 'question.isRange == ' . QuestionnairesComponent::USES_USE
+						'ng-checked' => 'question.isRange == ' . QuestionnairesComponent::USES_USE,
+						'disabled' => 'disabled',
 					));
 				?>
 				<?php echo __d('questionnaires', 'set range to answer date and time'); ?>
@@ -52,7 +53,7 @@
 </div>
 
 <div class="row">
-	<div ng-show="question.isRange">
+	<div ng-show="question.isRange == <?php echo QuestionnairesComponent::USES_USE; ?>">
 		<div class="col-sm-12">
 
 			<span ng-if="question.questionTypeOption == <?php echo QuestionnairesComponent::TYPE_OPTION_DATE; ?>">
