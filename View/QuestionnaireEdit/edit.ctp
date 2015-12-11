@@ -144,7 +144,7 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 					echo $this->QuestionEdit->questionnaireAttributeCheckbox('is_open_mail_send',
 						__d('questionnaires', 'Deliver e-mail when questionnaire has opened'));
 				?>
-				<div ng-show="questionnaires.questionnaire.isOpenMailSend != 0">
+				<div ng-show="questionnaires.questionnaire.isOpenMailSend == <?php echo QuestionnairesComponent::USES_USE; ?>">
 					<?php
 						echo $this->NetCommonsForm->input('open_mail_subject', array(
 							'label' => __d('questionnaires', 'open mail subject'),
