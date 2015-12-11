@@ -67,6 +67,12 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 	private $__questionnaire = null;
 
 /**
+ * target isAbleToAnswer Action
+ *
+ */
+	private $__ableToAnswerAction = ['view', 'confirm'];
+
+/**
  * beforeFilter
  * NetCommonsお約束：できることならControllerのbeforeFilterで実行可/不可の判定して流れを変える
  *
@@ -74,7 +80,7 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
  */
 	public function beforeFilter() {
 		// ゲストアクセスOKのアクションを設定
-		$this->Auth->allow('view', 'confirm', 'thanks');
+		$this->Auth->allow('view', 'confirm', 'thanks', 'no_more_answer');
 
 		// 親クラスのbeforeFilterを済ませる
 		parent::beforeFilter();
@@ -82,12 +88,7 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 		// NetCommonsお約束：編集画面へのURLに編集対象のコンテンツキーが含まれている
 		// まずは、そのキーを取り出す
 		// アンケートキー
-		if (isset($this->params['pass'][QuestionnairesComponent::QUESTIONNAIRE_KEY_PASS_INDEX])) {
-			$questionnaireKey = $this->params['pass'][QuestionnairesComponent::QUESTIONNAIRE_KEY_PASS_INDEX];
-		} else {
-			$this->setAction('throwBadRequest');
-			return;
-		}
+		$questionnaireKey = $this->_getQuestionnaireKeyFromPass();
 
 		// キーで指定されたアンケートデータを取り出しておく
 		$conditions = $this->Questionnaire->getBaseCondition(
@@ -104,17 +105,17 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 		// 以下のisAbleto..の内部関数にてNetCommonsお約束である編集権限、参照権限チェックを済ませています
 		// 閲覧可能か
 		if (!$this->isAbleTo($this->__questionnaire)) {
-			//$this->setAction('throwBadRequest');
 			// 不可能な時は「回答できません」画面を出すだけ
-			$this->view = 'no_more_answer';
+			$this->setAction('no_more_answer');
 			return;
 		}
-		// 回答可能か
-		if (!$this->isAbleToAnswer($this->__questionnaire)) {
-			//$this->setAction('throwBadRequest');
-			// 回答が不可能な時は「回答できません」画面を出すだけ
-			$this->view = 'no_more_answer';
-			return;
+		if (in_array($this->action, $this->__ableToAnswerAction)) {
+			// 回答可能か
+			if (!$this->isAbleToAnswer($this->__questionnaire)) {
+				// 回答が不可能な時は「回答できません」画面を出すだけ
+				$this->setAction('no_more_answer');
+				return;
+			}
 		}
 		// 回答の初めのページであることが各種認証行う条件
 		if (!$this->request->isPost() || !isset($this->request->data['QuestionnairePage']['page_sequence'])) {
@@ -295,6 +296,14 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 		$this->request->data['Block'] = Current::read('Block');
 		$this->set('questionnaire', $this->__questionnaire);
 		$this->set('ownAnsweredKeys', $this->QuestionnairesOwnAnswer->getOwnAnsweredKeys());
+	}
+/**
+ * no_more_answer method
+ * 条件によって回答できないアンケートにアクセスしたときに表示
+ *
+ * @return void
+ */
+	public function no_more_answer() {
 	}
 /**
  * _shuffleChoice

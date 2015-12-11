@@ -133,12 +133,7 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
 		// NetCommonsお約束：コンテンツ操作のためのURLには対象のコンテンツキーが必ず含まれている
 		// まずは、そのキーを取り出す
 		// アンケートキー
-		if (isset($this->params['pass'][QuestionnairesComponent::QUESTIONNAIRE_KEY_PASS_INDEX])) {
-			$questionnaireKey = $this->params['pass'][QuestionnairesComponent::QUESTIONNAIRE_KEY_PASS_INDEX];
-		} else {
-			$this->setAction('throwBadRequest');
-			return;
-		}
+		$questionnaireKey = $this->_getQuestionnaireKeyFromPass();
 		// キー情報をもとにデータを取り出す
 		$questionnaire = $this->QuestionnaireAnswerSummaryCsv->getQuestionnaireForAnswerCsv($questionnaireKey);
 		if (! $questionnaire) {

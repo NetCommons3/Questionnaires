@@ -9,4 +9,7 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 ?>
-<?php echo __d('questionnaires', 'you will not be able to answer this questionnaire.');
+<?php echo __d('questionnaires', 'you will not be able to answer this questionnaire.'); ?>
+<div class="text-center">
+    <?php echo $this->BackTo->pageLinkButton(__d('questionnaires', 'Back to Top'), array('icon' => 'chevron-left')); ?>
+</div>

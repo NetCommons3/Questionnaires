@@ -235,6 +235,17 @@ class QuestionnairesAppController extends AppController {
 	}
 
 /**
+ * _getQuestionnaireKeyFromPass
+ *
+ * @return string
+ */
+	protected function _getQuestionnaireKeyFromPass() {
+		if (isset($this->params['pass'][QuestionnairesComponent::QUESTIONNAIRE_KEY_PASS_INDEX])) {
+			return $this->params['pass'][QuestionnairesComponent::QUESTIONNAIRE_KEY_PASS_INDEX];
+		}
+		return '';
+	}
+/**
  * _getQuestionnaireKey
  *
  * @param array $questionnaire Questionnaire data

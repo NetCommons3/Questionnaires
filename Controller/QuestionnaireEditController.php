@@ -67,10 +67,8 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 		// NetCommonsお約束：編集画面へのURLに編集対象のコンテンツキーが含まれている
 		// まずは、そのキーを取り出す
 		// アンケートキー
-		$questionnaireKey = null;
-		if (isset($this->params['pass'][QuestionnairesComponent::QUESTIONNAIRE_KEY_PASS_INDEX])) {
-			$questionnaireKey = $this->params['pass'][QuestionnairesComponent::QUESTIONNAIRE_KEY_PASS_INDEX];
-		}
+		$questionnaireKey = $this->_getQuestionnaireKeyFromPass();
+
 		if ($this->request->isPost() || $this->request->isPut()) {
 			// ウィザード画面なのでセッションに記録された前画面データが必要
 			$this->_questionnaire = $this->Session->read('Questionnaires.questionnaire');

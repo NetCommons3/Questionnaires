@@ -71,12 +71,8 @@ class QuestionnaireAnswerSummariesController extends QuestionnairesAppController
 		// NetCommonsお約束：編集画面へのURLに編集対象のコンテンツキーが含まれている
 		// まずは、そのキーを取り出す
 		// アンケートキー
-		if (isset($this->params['pass'][QuestionnairesComponent::QUESTIONNAIRE_KEY_PASS_INDEX])) {
-			$questionnaireKey = $this->params['pass'][QuestionnairesComponent::QUESTIONNAIRE_KEY_PASS_INDEX];
-		} else {
-			$this->setAction('throwBadRequest');
-			return;
-		}
+		$questionnaireKey = $this->_getQuestionnaireKeyFromPass();
+
 		// キーで指定されたアンケートデータを取り出しておく
 		$conditions = $this->Questionnaire->getBaseCondition(
 			array('Questionnaire.key' => $questionnaireKey)
