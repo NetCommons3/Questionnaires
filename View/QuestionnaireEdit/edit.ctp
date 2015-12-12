@@ -22,7 +22,7 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 
 <?php echo $this->element('Questionnaires.QuestionnaireEdit/edit_flow_chart', array('current' => '3')); ?>
 
-<div class="panel panel-default"
+<div
 	id="nc-questionnaires-setting-edit"
 	 ng-controller="Questionnaires.setting"
 	 ng-init="initialize(<?php echo Current::read('Frame.id'); ?>,
@@ -40,7 +40,7 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 		echo $this->NetCommonsForm->hidden('Questionnaire.import_key');
 		echo $this->NetCommonsForm->hidden('Questionnaire.export_key');
 	?>
-		<div class="panel-body">
+		<div class="modal-body">
 			<div class="form-group questionnaire-group">
 				<?php /* アンケートタイトル設定 */
 					echo $this->NetCommonsForm->input('title',
@@ -136,22 +136,24 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 					echo $this->QuestionEdit->questionnaireAttributeCheckbox('is_answer_mail_send',
 						__d('questionnaires', 'Deliver e-mail when submitted'));
 				?>
+			</div>
 
-				<label class="h3"><?php echo __d('questionnaires', 'Questionnaire open mail'); ?></label>
+			<label class="h3"><?php echo __d('questionnaires', 'Questionnaire open mail'); ?></label>
+			<div class="form-group questionnaire-group">
+				<?php
+					echo $this->QuestionEdit->questionnaireAttributeCheckbox('is_open_mail_send',
+						__d('questionnaires', 'Deliver e-mail when questionnaire has opened'));
+				?>
+				<div ng-show="questionnaires.questionnaire.isOpenMailSend == <?php echo QuestionnairesComponent::USES_USE; ?>">
 					<?php
-						echo $this->QuestionEdit->questionnaireAttributeCheckbox('is_open_mail_send',
-							__d('questionnaires', 'Deliver e-mail when questionnaire has opened'));
+						echo $this->NetCommonsForm->input('open_mail_subject', array(
+							'label' => __d('questionnaires', 'open mail subject'),
+							'ng-model' => 'questionnaires.questionnaire.openMailSubject'));
+						echo $this->NetCommonsForm->wysiwyg('open_mail_body', array(
+							'label' => __d('questionnaires', 'open mail text'),
+							'ng-model' => 'questionnaires.questionnaire.openMailBody'));
 					?>
-					<div ng-show="questionnaires.questionnaire.isOpenMailSend == <?php echo QuestionnairesComponent::USES_USE; ?>">
-						<?php
-							echo $this->NetCommonsForm->input('open_mail_subject', array(
-								'label' => __d('questionnaires', 'open mail subject'),
-								'ng-model' => 'questionnaires.questionnaire.openMailSubject'));
-							echo $this->NetCommonsForm->wysiwyg('open_mail_body', array(
-								'label' => __d('questionnaires', 'open mail text'),
-								'ng-model' => 'questionnaires.questionnaire.openMailBody'));
-						?>
-					</div>
+				</div>
 			</div>
 
 			<label class="h3"><?php echo __d('questionnaires', 'Thanks page message settings'); ?></label>
