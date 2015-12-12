@@ -12,9 +12,8 @@
 
 <?php echo $this->NetCommonsForm->create('Questionnaire', array(
 			'type' => 'delete',
-			'controller' => 'questionnaire_edit',
-			'action' => NetCommonsUrl::actionUrl(array(
-				'controller' => $this->params['controller'],
+			'url' => NetCommonsUrl::actionUrl(array(
+				'controller' => 'questionnaire_edit',
 				'action' => 'delete',
 				'block_id' => Current::read('Block.id'),
 				'frame_id' => Current::read('Frame.id'),

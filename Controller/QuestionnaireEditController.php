@@ -276,18 +276,24 @@ class QuestionnaireEditController extends QuestionnairesAppController {
  * @return void
  */
 	public function delete() {
-		if ($this->request->isPost()) {
-			// viewを使用しない
-			$this->autoRender = false;
-			// 削除処理
-			if (! $this->Questionnaire->deleteQuestionnaire($this->request->data)) {
-				return;
-			}
-			// メッセージ表示
-			$this->Session->setFlash(__d('questionnaires', 'This Questionnaire has been deleted.'));
-			// ページトップの画面へリダイレクト
-			$this->redirectByFrameId();
+		if (! $this->request->isDelete()) {
+			$this->throwBadRequest();
+			return;
 		}
+
+		//削除権限チェック
+		if (! $this->Questionnaire->canDeleteWorkflowContent($this->_questionnaire)) {
+			$this->throwBadRequest();
+			return;
+		}
+
+		// 削除処理
+		if (! $this->Questionnaire->deleteQuestionnaire($this->request->data)) {
+			$this->throwBadRequest();
+			return;
+		}
+
+		$this->redirect(NetCommonsUrl::backToPageUrl());
 	}
 
 /**

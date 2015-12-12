@@ -227,8 +227,12 @@ class Questionnaire extends QuestionnairesAppModel {
 		$this->QuestionnaireAnswerSummary = ClassRegistry::init('Questionnaires.QuestionnaireAnswerSummary', true);
 
 		foreach ($results as &$val) {
-			// これらの場合はcount か deleteか
+			// この場合はcount
 			if (! isset($val['Questionnaire']['id'])) {
+				continue;
+			}
+			// この場合はdelete
+			if (! isset($val['Questionnaire']['key'])) {
 				continue;
 			}
 
@@ -511,7 +515,6 @@ class Questionnaire extends QuestionnairesAppModel {
  */
 	public function deleteQuestionnaire($data) {
 		$this->loadModels([
-			'QuestionnaireFrameSetting' => 'Questionnaires.QuestionnaireFrameSetting',
 			'QuestionnaireFrameDisplayQuestionnaire' => 'Questionnaires.QuestionnaireFrameDisplayQuestionnaire',
 			'QuestionnaireAnswerSummary' => 'Questionnaires.QuestionnaireAnswerSummary',
 		]);
@@ -520,9 +523,7 @@ class Questionnaire extends QuestionnairesAppModel {
 			// アンケート質問データ削除
 			if (! $this->deleteAll(array(
 					'Questionnaire.key' => $data['Questionnaire']['key']), true, false)) {
-				// @codeCoverageIgnoreStart
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
-				// @codeCoverageIgnoreEnd
 			}
 
 			//コメントの削除
@@ -531,16 +532,12 @@ class Questionnaire extends QuestionnairesAppModel {
 			// アンケート表示設定削除
 			if (! $this->QuestionnaireFrameDisplayQuestionnaire->deleteAll(array(
 				'questionnaire_key' => $data['Questionnaire']['key']), true, false)) {
-				// @codeCoverageIgnoreStart
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
-				// @codeCoverageIgnoreEnd
 			}
 			// アンケート回答削除
 			if (! $this->QuestionnaireAnswerSummary->deleteAll(array(
 				'questionnaire_key' => $data['Questionnaire']['key']), true, false)) {
-				// @codeCoverageIgnoreStart
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
-				// @codeCoverageIgnoreEnd
 			}
 			$this->commit();
 		} catch (Exception $ex) {
