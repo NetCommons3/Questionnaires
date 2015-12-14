@@ -171,7 +171,7 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 
 	<?php echo $this->NetCommonsForm->end(); ?>
 
-	<?php if ($this->request->params['action'] === 'edit' && $this->Workflow->canDelete('Questionnaire', $this->data)) : ?>
+	<?php if ($this->request->params['action'] === 'edit' && !empty($this->data['Questionnaire']['key']) && $this->Workflow->canDelete('Questionnaire', $this->data)) : ?>
 		<div class="panel-footer text-right">
 			<?php echo $this->element('Questionnaires.QuestionnaireEdit/Edit/delete_form'); ?>
 		</div>
