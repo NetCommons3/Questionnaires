@@ -127,6 +127,9 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 			// 未発行の場合はPostデータを上書き設定して
 			if ($this->Questionnaire->hasPublished($questionnaire) == 0) {
 				$questionnaire['QuestionnairePage'] = $postQuestionnaire['QuestionnairePage'];
+			} else {
+				// booleanの値がPOST時と同じようになるように調整
+				$questionnaire['QuestionnairePage'] = QuestionnairesAppController::changeBooleansToNumbers($questionnaire['QuestionnairePage']);
 			}
 
 			// バリデート

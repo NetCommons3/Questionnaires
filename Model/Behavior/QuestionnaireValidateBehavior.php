@@ -107,24 +107,6 @@ class QuestionnaireValidateBehavior extends ModelBehavior {
 	}
 
 /**
- * checkRelationshipQuestionType
- * can not set result display ON when type of question is in text type or text-area type or date type
- *
- * @param object &$model use model
- * @param bool $check post data
- * @return bool
- */
-	public function checkRelationshipQuestionType(&$model, $check) {
-		// $check には array('is_result_display' => '入力値') が入る
-		if (QuestionnairesComponent::isOnlyInputType($this->data['QuestionnaireQuestion']['question_type'])) {
-			if ($check['is_result_display'] == QuestionnairesComponent::EXPRESSION_SHOW) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-/**
  * checkMinMax
  * min and max is require both value
  *

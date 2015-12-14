@@ -128,10 +128,6 @@ class QuestionnaireQuestion extends QuestionnairesAppModel {
 				),
 			),
 			'is_result_display' => array(
-				'boolean' => array(
-					'rule' => array('boolean'),
-					'message' => __d('net_commons', 'Invalid request.'),
-				),
 				'inList' => array(
 					'rule' => array('inList', $this->_getResultDisplayList($this->data['QuestionnaireQuestion']['question_type'])),
 					'message' => __d('net_commons', 'Invalid request.'),
