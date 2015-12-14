@@ -41,16 +41,6 @@ class QuestionnairesAppController extends AppController {
 	);
 
 /**
- * getNowTime method
- * 現在時刻を取得する
- *
- * @return string 現在時刻
- */
-	public function getNowTime() {
-		return date('Y-m-d H:i:s');
-	}
-
-/**
  * _sorted method
  * to sort a given array by key
  *

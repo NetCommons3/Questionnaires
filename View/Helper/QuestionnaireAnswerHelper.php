@@ -317,8 +317,9 @@ class QuestionnaireAnswerHelper extends AppHelper {
 			$icon = 'glyphicon-time';
 			$options['format'] = 'HH:mm';
 			if ($question['is_range'] == QuestionnairesComponent::USES_USE) {
-				$options['minDate'] = date('Y-m-d ', time()) . $question['min'];
-				$options['maxDate'] = date('Y-m-d ', time()) . $question['max'];
+				$tm = new NetCommonsTime();
+				$options['minDate'] = date('Y-m-d ', strtotime($tm->getNowDatetime())) . $question['min'];
+				$options['maxDate'] = date('Y-m-d ', strtotime($tm->getNowDatetime())) . $question['max'];
 				$rangeMessage .= sprintf(__d('questionnaires', 'Please enter at %s to %s'), date('H:i', strtotime($question['min'])), date('H:i', strtotime($question['max'])));
 			}
 		} elseif ($question['question_type_option'] == QuestionnairesComponent::TYPE_OPTION_DATE_TIME) {

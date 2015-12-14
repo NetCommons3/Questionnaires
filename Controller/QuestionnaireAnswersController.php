@@ -257,7 +257,7 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 		if ($this->request->isPost()) {
 			// サマリの状態を完了にして確定する
 			$summary['QuestionnaireAnswerSummary']['answer_status'] = QuestionnairesComponent::ACTION_ACT;
-			$summary['QuestionnaireAnswerSummary']['answer_time'] = $this->getNowTime();
+			$summary['QuestionnaireAnswerSummary']['answer_time'] = (new NetCommonsTime())->getNowDatetime();
 			$this->QuestionnaireAnswerSummary->save($summary['QuestionnaireAnswerSummary']);
 			$this->QuestionnairesOwnAnswer->saveOwnAnsweredKeys($this->_getQuestionnaireKey($this->__questionnaire));
 
