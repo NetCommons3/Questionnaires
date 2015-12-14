@@ -45,7 +45,7 @@
 <div class="row">
 	<div class="col-sm-12">
 
-		<ul class="list-group ">
+		<ul class="list-group questionnaire-edit-choice-list-group">
 			<li class="list-group-item" ng-repeat="(cIndex, choice) in question.questionnaireChoice" >
 				<div class="form-inline pull-right">
 					<select name="data[QuestionnairePage][{{pageIndex}}][QuestionnaireQuestion][{{qIndex}}][QuestionnaireChoice][{{cIndex}}][skip_page_sequence]"
@@ -85,7 +85,9 @@
 				)); ?>
 			</li>
 		</ul>
-
+		<p class="text-info small pull-right">
+			<?php echo __d('questionnaires', 'You can not use the character of |, : for choice text '); ?>
+		</p>
 	</div>
 </div>
 <div class="row" ng-if="question.questionType != <?php echo QuestionnairesComponent::TYPE_SINGLE_SELECT_BOX; ?>">

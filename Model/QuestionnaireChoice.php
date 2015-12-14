@@ -79,6 +79,10 @@ class QuestionnaireChoice extends QuestionnairesAppModel {
 					'rule' => array('notBlank'),
 					'message' => __d('questionnaires', 'Please input choice text.'),
 				),
+				'choiceLabel' => array(
+					'rule' => array('custom', '/^(?!.*[\|\:]).*$/'),
+					'message' => __d('questionnaires', 'You can not use the character of |, : for choice text '),
+				),
 			),
 			'other_choice_type' => array(
 				'numeric' => array(

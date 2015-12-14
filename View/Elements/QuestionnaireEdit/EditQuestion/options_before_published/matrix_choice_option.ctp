@@ -19,7 +19,7 @@
         <span class="glyphicon glyphicon-plus"></span>
         <?php echo __d('questionnaires', 'Add line choices'); ?>
     </button>
-    <ul class="list-group ">
+    <ul class="list-group questionnaire-edit-choice-list-group">
         <li class="list-group-item" ng-repeat="(cIndex, choice) in matrixRows = (question.questionnaireChoice | toArray | filter: {matrixType:<?php echo QuestionnairesComponent::MATRIX_TYPE_ROW_OR_NO_MATRIX; ?>})" >
             <button class="btn btn-default pull-right" type="button"
                     ng-disabled="matrixRows.length < 2"
@@ -47,7 +47,7 @@
         <?php echo __d('questionnaires', 'Add column choices'); ?>
     </button>
 
-    <ul class="list-group">
+    <ul class="list-group questionnaire-edit-choice-list-group">
         <li class="list-group-item" ng-repeat="(cIndex, choice) in matrixColumns = (question.questionnaireChoice | toArray | filter: {matrixType:<?php echo QuestionnairesComponent::MATRIX_TYPE_COLUMN; ?>})" >
             <button class="btn btn-default pull-right" type="button"
                     ng-disabled="matrixColumns.length < 2"
@@ -59,6 +59,9 @@
             </div>
         </li>
     </ul>
+    <p class="text-info small pull-right">
+        <?php echo __d('questionnaires', 'You can not use the character of |, : for choice text '); ?>
+    </p>
 
     <button type="button" class="btn btn-default"
             ng-show="matrixColumns.length > 2"

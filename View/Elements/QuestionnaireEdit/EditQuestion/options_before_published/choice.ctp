@@ -17,6 +17,7 @@
 <span ng-if="choice.otherChoiceType != <?php echo QuestionnairesComponent::OTHER_CHOICE_TYPE_NO_OTHER_FILED; ?>">
 	<?php echo __d('questionnaires', '(This is [other] choice. Area to enter the text is automatically granted at the time of implementation.)'); ?>
 </span>
+
 <?php echo $this->element(
 	'Questionnaires.QuestionnaireEdit/ng_errors', array(
 	'errorArrayName' => 'choice.errorMessages.choiceLabel',

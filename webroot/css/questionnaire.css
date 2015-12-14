@@ -41,6 +41,10 @@
     line-height:2em;
     padding-left:0.5em;
 }
+/*--アンケート編集画面の選択肢リスト---*/
+.questionnaire-edit-choice-list-group {
+    margin-bottom: 5px;
+}
 /*
  * 編集画面ステップメニュー
  */
