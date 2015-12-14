@@ -27,7 +27,7 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 	 						<?php echo (int)$isPublished; ?>,
 							<?php echo h(json_encode($jsQuestionnaire)); ?>)">
 
-	<?php echo $this->NetCommonsForm->create('QuestionnaireQuestion'); ?>
+	<?php echo $this->NetCommonsForm->create('QuestionnaireQuestion', $postUrl); ?>
 
 		<?php $this->NetCommonsForm->unlockField('QuestionnairePage'); ?>
 
@@ -102,7 +102,7 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 		</div>
 		<div class="modal-footer">
 			<div class="text-center">
-				<?php echo $this->BackTo->pageLinkButton(__d('net_commons', 'Cancel'), array('icon' => 'remove')); ?>
+				<?php echo $this->Button->cancel(__d('net_commons', 'Cancel'), $cancelUrl, array('icon' => 'remove')); ?>
 				<?php echo $this->Backto->linkButton(__d('net_commons', 'BACK'), $backUrl, array('icon' => 'chevron-left')); ?>
 				<?php echo $this->Button->save(__d('net_commons', 'NEXT'), array('icon' => 'chevron-right')) ?>
 			</div>

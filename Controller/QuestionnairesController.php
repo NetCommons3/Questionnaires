@@ -69,8 +69,6 @@ class QuestionnairesController extends QuestionnairesAppController {
  */
 	public function beforeFilter() {
 		parent::beforeFilter();
-		// 編集用セッションデータ削除
-		$this->Session->delete('Questionnaires.questionnaire');
 	}
 
 /**

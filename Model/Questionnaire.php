@@ -308,8 +308,6 @@ class Questionnaire extends QuestionnairesAppModel {
 		Current::$current['Frame']['block_id'] = $block['Block']['id'];
 
 		$blockSetting = $this->QuestionnaireSetting->create();
-		$this->log($block, 'debug');
-		$this->log($blockSetting, 'debug');
 		$blockSetting['QuestionnaireSetting']['block_key'] = $block['Block']['key'];
 		$this->QuestionnaireSetting->saveQuestionnaireSetting($blockSetting);
 		return $data;

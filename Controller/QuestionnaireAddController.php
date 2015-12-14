@@ -74,15 +74,17 @@ class QuestionnaireAddController extends QuestionnairesAppController {
 			// Postデータをもとにした新アンケートデータの取得をModelに依頼する
 			$actionModel = ClassRegistry::init('Questionnaires.ActionQuestionnaireAdd', 'true');
 			if ($questionnaire = $actionModel->createQuestionnaire($this->request->data)) {
+				$tm = $this->_getQuestionnaireEditSessionIndex();
 				// 作成中アンケートデータをセッションキャッシュに書く
-				$this->Session->write('Questionnaires.questionnaire', $questionnaire);
+				$this->Session->write('Questionnaires.questionnaireEdit.' . $tm, $questionnaire);
 
 				// 次の画面へリダイレクト
 				$this->redirect(NetCommonsUrl::actionUrl(array(
 					'controller' => 'questionnaire_edit',
 					'action' => 'edit_question',
 					Current::read('Block.id'),
-					'frame_id' => Current::read('Frame.id')
+					'frame_id' => Current::read('Frame.id'),
+					's_id' => $tm,
 				)));
 				return;
 			} else {

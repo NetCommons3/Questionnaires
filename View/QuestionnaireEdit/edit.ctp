@@ -28,8 +28,7 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 	 ng-init="initialize(<?php echo Current::read('Frame.id'); ?>,
 									<?php echo h(json_encode($jsQuestionnaire)); ?>)">
 
-	<?php echo $this->NetCommonsForm->create('Questionnaire', array(
-		'id' => 'questionnairePublishedForm-' . Current::read('Frame.id')));
+	<?php echo $this->NetCommonsForm->create('Questionnaire', $postUrl);
 
 		/* NetCommonsお約束:プラグインがデータを登録するところではFrame.id,Block.id,Block.keyの３要素が必ず必要 */
 		echo $this->NetCommonsForm->hidden('Frame.id');
@@ -168,7 +167,7 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 			</div>
 			<?php echo $this->Workflow->inputComment('Questionnaire.status'); ?>
 		</div>
-		<?php echo $this->Workflow->buttons('Questionnaire.status', null, true, $backUrl); ?>
+		<?php echo $this->Workflow->buttons('Questionnaire.status', $cancelUrl, true, $backUrl); ?>
 
 	<?php echo $this->NetCommonsForm->end(); ?>
 

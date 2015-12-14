@@ -241,10 +241,32 @@ class QuestionnairesAppController extends AppController {
  */
 	protected function _getQuestionnaireKeyFromPass() {
 		if (isset($this->params['pass'][QuestionnairesComponent::QUESTIONNAIRE_KEY_PASS_INDEX])) {
+			if (strpos($this->params['pass'][QuestionnairesComponent::QUESTIONNAIRE_KEY_PASS_INDEX], 's_id:') === 0) {
+				return '';
+			}
 			return $this->params['pass'][QuestionnairesComponent::QUESTIONNAIRE_KEY_PASS_INDEX];
 		}
 		return '';
 	}
+
+/**
+ * _getQuestionnaireEditSessionIndex
+ *
+ * @return string
+ */
+	protected function _getQuestionnaireEditSessionIndex() {
+		if (isset($this->_sessionIndex) && $this->_sessionIndex !== null) {
+			return $this->_sessionIndex;
+		}
+		if (isset($this->params['named']['s_id'])) {
+			$tm = $this->params['named']['s_id'];
+		} else {
+			$tm = Security::hash(microtime(true), 'md5');
+		}
+		$this->_sessionIndex = $tm;
+		return $tm;
+	}
+
 /**
  * _getQuestionnaireKey
  *

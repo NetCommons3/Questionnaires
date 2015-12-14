@@ -20,6 +20,13 @@ App::uses('AppController', 'Controller');
 class QuestionnaireEditController extends QuestionnairesAppController {
 
 /**
+ * edit questionnaire session key
+ *
+ * @var int
+ */
+	const	QUESTIONNAIRE_EDIT_SESSION_INDEX = 'Questionnaires.questionnaireEdit.';
+
+/**
  * use model
  *
  * @var array
@@ -58,6 +65,12 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 	protected $_questionnaire = null;
 
 /**
+ * session index
+ *
+ */
+	protected $_sessionIndex = null;
+
+/**
  * beforeFilter
  *
  * @return void
@@ -69,9 +82,12 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 		// アンケートキー
 		$questionnaireKey = $this->_getQuestionnaireKeyFromPass();
 
+		// セッションインデックスパラメータ
+		$sessionName = self::QUESTIONNAIRE_EDIT_SESSION_INDEX . $this->_getQuestionnaireEditSessionIndex();
+
 		if ($this->request->isPost() || $this->request->isPut()) {
 			// ウィザード画面なのでセッションに記録された前画面データが必要
-			$this->_questionnaire = $this->Session->read('Questionnaires.questionnaire');
+			$this->_questionnaire = $this->Session->read($sessionName);
 			if (! $this->_questionnaire) {
 				// セッションタイムアウトの場合
 				return;
@@ -79,9 +95,9 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 		} else {
 			// redirectで来るか、もしくは本当に直接のURL指定で来るかのどちらか
 			// セッションに記録された値がある場合はそちらを優先
-			if ($this->Session->check('Questionnaires.questionnaire')) {
-				$this->_questionnaire = $this->Session->read('Questionnaires.questionnaire');
-			} elseif (!empty($questionnaireKey)) {
+			if ($this->Session->check($sessionName)) {
+				$this->_questionnaire = $this->Session->read($sessionName);
+			} elseif (! empty($questionnaireKey)) {
 				// アンケートキーの指定がある場合は過去データ編集と判断
 				// 指定されたアンケートデータを取得
 				// NetCommonsお約束：履歴を持つタイプのコンテンツデータはgetWorkflowContentsで取り出す
@@ -140,20 +156,15 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 			}
 
 			// バリデートがOKであればPOSTで出来上がったデータをセッションキャッシュに書く
-			$this->Session->write('Questionnaires.questionnaire', $questionnaire);
+			$this->Session->write(self::QUESTIONNAIRE_EDIT_SESSION_INDEX . $this->_sessionIndex, $questionnaire);
 
 			// 次の画面へリダイレクト
-			$this->redirect(NetCommonsUrl::actionUrl(array(
-				'controller' => 'questionnaire_edit',
-				'action' => 'edit_result',
-				Current::read('Block.id'),
-				$this->_getQuestionnaireKey($questionnaire),
-				'frame_id' => Current::read('Frame.id')
-			)));
-
+			$this->redirect($this->_getActionUrl('edit_result'));
 		} else {
 			// アンケートデータが取り出せている場合、それをキャッシュに書く
-			$this->Session->write('Questionnaires.questionnaire', $this->_sorted($this->_questionnaire));
+			$this->Session->write(
+				self::QUESTIONNAIRE_EDIT_SESSION_INDEX . $this->_getQuestionnaireEditSessionIndex(),
+				$this->_sorted($this->_questionnaire));
 			$this->__setupViewParameters($this->_questionnaire, '');
 		}
 	}
@@ -180,38 +191,18 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 			// バリデート
 			$this->Questionnaire->set($questionnaire);
 			if (! $this->Questionnaire->validates(array('validate' => 'duringSetup'))) {
-				$this->__setupViewParameters($questionnaire,
-					NetCommonsUrl::actionUrl(array(
-						'controller' => 'questionnaire_edit',
-						'action' => 'edit_question',
-						Current::read('Block.id'),
-						$this->_getQuestionnaireKey($questionnaire),
-						'frame_id' => Current::read('Frame.id')
-					)));
+				$this->__setupViewParameters($questionnaire, $this->_getActionUrl('edit_question'));
 				return;
 			}
 			// それをキャッシュに書く
-			$this->Session->write('Questionnaires.questionnaire', $questionnaire);
+			$this->Session->write(self::QUESTIONNAIRE_EDIT_SESSION_INDEX . $this->_getQuestionnaireEditSessionIndex(), $questionnaire);
 
 			// 次の画面へリダイレクト
-			$this->redirect(NetCommonsUrl::actionUrl(array(
-				'controller' => 'questionnaire_edit',
-				'action' => 'edit',
-				Current::read('Block.id'),
-				$this->_getQuestionnaireKey($questionnaire),
-				'frame_id' => Current::read('Frame.id')
-			)));
+			$this->redirect($this->_getActionUrl('edit'));
 
 		} else {
-			$this->Session->write('Questionnaires.questionnaire', $this->_questionnaire);
-			$this->__setupViewParameters($this->_questionnaire,
-				NetCommonsUrl::actionUrl(array(
-					'controller' => 'questionnaire_edit',
-					'action' => 'edit_question',
-					Current::read('Block.id'),
-					$this->_getQuestionnaireKey($this->_questionnaire),
-					'frame_id' => Current::read('Frame.id')
-				)));
+			$this->Session->write(self::QUESTIONNAIRE_EDIT_SESSION_INDEX . $this->_getQuestionnaireEditSessionIndex(), $this->_questionnaire);
+			$this->__setupViewParameters($this->_questionnaire, $this->_getActionUrl('edit_question'));
 		}
 	}
 
@@ -241,35 +232,21 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 
 			// それをDBに書く
 			$saveQuestionnaire = $this->Questionnaire->saveQuestionnaire($questionnaire);
+			// エラー
 			if ($saveQuestionnaire == false) {
 				$questionnaire['Questionnaire']['status'] = $beforeStatus;
-				$this->__setupViewParameters($questionnaire,
-					NetCommonsUrl::actionUrl(array(
-						'controller' => 'questionnaire_edit',
-						'action' => 'edit_result',
-						Current::read('Block.id'),
-						$this->_getQuestionnaireKey($questionnaire),
-						'frame_id' => Current::read('Frame.id')
-					)));
+				$this->__setupViewParameters($questionnaire, $this->_getActionUrl('edit_result'));
 				return;
 			}
-
-			/////// セッションはまだ消しちゃいけない。表画面で消すこと　$this->Session->delete('Questionnaires');
-
+			// 成功時 セッションに書き溜めた編集情報を削除
+			$this->Session->delete(self::QUESTIONNAIRE_EDIT_SESSION_INDEX . $this->_getQuestionnaireEditSessionIndex());
 			// ページトップへリダイレクト
 			$this->redirect(NetCommonsUrl::backToPageUrl());
 
 		} else {
 			// 指定されて取り出したアンケートデータをセッションキャッシュに書く
-			$this->Session->write('Questionnaires.questionnaire', $this->_questionnaire);
-			$this->__setupViewParameters($this->_questionnaire,
-				NetCommonsUrl::actionUrl(array(
-					'controller' => 'questionnaire_edit',
-					'action' => 'edit_result',
-					Current::read('Block.id'),
-					$this->_getQuestionnaireKey($this->_questionnaire),
-					'frame_id' => Current::read('Frame.id')
-				)));
+			$this->Session->write($this->_getQuestionnaireEditSessionIndex(), $this->_questionnaire);
+			$this->__setupViewParameters($this->_questionnaire, $this->_getActionUrl('edit_result'));
 		}
 	}
 
@@ -296,9 +273,36 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 			return;
 		}
 
+		$this->Session->delete(self::QUESTIONNAIRE_EDIT_SESSION_INDEX . $this->_sessionIndex);
+
 		$this->redirect(NetCommonsUrl::backToPageUrl());
 	}
 
+/**
+ * cancel method
+ *
+ * @return void
+ */
+	public function cancel() {
+		$this->Session->delete(self::QUESTIONNAIRE_EDIT_SESSION_INDEX . $this->_sessionIndex);
+		$this->redirect(NetCommonsUrl::backToPageUrl());
+	}
+/**
+ * _getActionUrl method
+ *
+ * @param string $method 遷移先アクション名
+ * @return void
+ */
+	protected function _getActionUrl($method) {
+		return NetCommonsUrl::actionUrl(array(
+			'controller' => Inflector::underscore($this->name),
+			'action' => $method,
+			Current::read('Block.id'),
+			$this->_getQuestionnaireKey($this->_questionnaire),
+			'frame_id' => Current::read('Frame.id'),
+			's_id' => $this->_getQuestionnaireEditSessionIndex()
+		));
+	}
 /**
  * __setupViewParameters method
  *
@@ -321,6 +325,8 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 		$questionnaire = Hash::merge($questionnaire, Hash::expand($newFlatError));
 
 		$this->set('backUrl', $backUrl);
+		$this->set('postUrl', array('url' => $this->_getActionUrl($this->action)));
+		$this->set('cancelUrl', $this->_getActionUrl('cancel'));
 		$this->set('questionTypeOptions', $this->Questionnaires->getQuestionTypeOptionsWithLabel());
 		$this->set('newPageLabel', __d('questionnaires', 'page'));
 		$this->set('newQuestionLabel', __d('questionnaires', 'New Question'));
