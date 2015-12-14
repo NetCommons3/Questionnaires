@@ -19,7 +19,7 @@
 		<button type="button" class="btn btn-default pull-right" ng-click="addChoice($event, pageIndex, qIndex, question.questionnaireChoice.length, '<?php echo QuestionnairesComponent::OTHER_CHOICE_TYPE_NO_OTHER_FILED ?>', '<?php echo QuestionnairesComponent::MATRIX_TYPE_ROW_OR_NO_MATRIX; ?>');">
 			<span class="glyphicon glyphicon-plus"></span><?php echo __d('questionnaires', 'add choices'); ?>
 		</button>
-		<label class="checkbox-inline" ng-if="question.questionType != <?php echo QuestionnairesComponent::TYPE_SINGLE_SELECT_BOX; ?>">
+		<label class="checkbox-inline" ng-show="question.questionType != <?php echo QuestionnairesComponent::TYPE_SINGLE_SELECT_BOX; ?>">
 			<?php echo $this->NetCommonsForm->checkbox('QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.is_choice_random',
 			array(
 			'value' => QuestionnairesComponent::USES_USE,
@@ -29,7 +29,7 @@
 			?>
 			<?php echo __d('questionnaires', 'randomaize choices'); ?>
 		</label>
-		<label class="checkbox-inline" ng-if="question.questionType != <?php echo QuestionnairesComponent::TYPE_MULTIPLE_SELECTION; ?>">
+		<label class="checkbox-inline" ng-show="question.questionType != <?php echo QuestionnairesComponent::TYPE_MULTIPLE_SELECTION; ?>">
 			<?php echo $this->NetCommonsForm->checkbox('QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.is_skip',
 			array(
 			'value' => QuestionnairesComponent::SKIP_FLAGS_SKIP,
