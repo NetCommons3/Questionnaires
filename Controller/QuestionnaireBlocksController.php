@@ -141,9 +141,16 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
 			return;
 		}
 		// 圧縮用パスワードキーを求める
-		$zipPassword = null;
 		if (! empty($this->request->data['AuthorizationKey']['authorization_key'])) {
 			$zipPassword = $this->request->data['AuthorizationKey']['authorization_key'];
+		} else {
+			$this->NetCommons->setFlashNotification(__d('questionnaires', 'Setting of password is required always to download answers.'),
+				array('interval' => NetCommonsComponent::ALERT_VALIDATE_ERROR_INTERVAL));
+			$this->redirect(NetCommonsUrl::actionUrl(array(
+				'controller' => 'questionnaire_blocks',
+				'action' => 'index',
+				'frame_id' => Current::read('Frame.id'))));
+			return;
 		}
 
 		try {
