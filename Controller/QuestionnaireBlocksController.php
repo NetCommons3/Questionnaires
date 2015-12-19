@@ -140,6 +140,11 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
 			$this->setAction('throwBadRequest');
 			return;
 		}
+		// 圧縮用パスワードキーを求める
+		$zipPassword = null;
+		if (! empty($this->request->data['AuthorizationKey']['authorization_key'])) {
+			$zipPassword = $this->request->data['AuthorizationKey']['authorization_key'];
+		}
 
 		try {
 			$tmpFolder = new TemporaryFolder();
@@ -154,7 +159,6 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
 				// テンポラリファイルにCSV形式で書きこみ
 
 				foreach ($datas as $data) {
-					//fputcsv($fp, $data);
 					$csvFile->add($data);
 				}
 
@@ -163,8 +167,6 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
 			} while ($dataCount == self::QUESTIONNAIRE_CSV_UNIT_NUMBER);
 			// データ取得数が制限値分だけとれている間は繰り返す
 
-			// ここでパスワード付き圧縮をする ファイルプラグインがサポート？ FUJI
-			// 圧縮が成功したかしてないかでダウンロードするファイルの拡張子決定する FUJI
 		} catch (Exception $e) {
 			// NetCommonsお約束:エラーメッセージのFlash表示
 			$this->NetCommons->setFlashNotification(__d('questionnaires', 'download error'),
@@ -178,10 +180,10 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
 		// Downloadの時はviewを使用しない
 		$this->autoRender = false;
 		// ダウンロードファイル名決定 アンケート名称をつける
-		// 圧縮できたかできてないかで拡張子を変えること FUJI
+		$zipFileName = $questionnaire['Questionnaire']['title'] . '.zip';
 		$downloadFileName = $questionnaire['Questionnaire']['title'] . '.csv';
 		// 出力
-		return $csvFile->download(rawurlencode($downloadFileName));
+		return $csvFile->zipDownload(rawurlencode($zipFileName), $downloadFileName, $zipPassword);
 	}
 
 /**

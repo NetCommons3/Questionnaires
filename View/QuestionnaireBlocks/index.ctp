@@ -8,6 +8,9 @@
  * @license http://www.netcommons.org/license.txt NetCommons License
  * @copyright Copyright 2014, NetCommons Project
  */
+echo $this->NetCommonsHtml->script(array(
+	'/authorization_keys/js/authorization_keys.js',
+));
 ?>
 <article class="block-setting-body">
 	<?php echo $this->BlockTabs->main(BlockTabsComponent::MAIN_TAB_BLOCK_INDEX); ?>
@@ -65,8 +68,9 @@
 						</td>
 						<td>
 							<?php if ($questionnaire['Questionnaire']['all_answer_count'] > 0): ?>
-							<a class="btn btn-success"
-								href="<?php echo NetCommonsUrl::actionUrl(array(
+							<a  authorization-keys-popup-link frame-id="<?php echo Current::read('Frame.id'); ?>"
+								class="btn btn-success"
+								url="<?php echo NetCommonsUrl::actionUrl(array(
 										'plugin' => 'questionnaires',
 										'controller' => 'questionnaire_blocks',
 										'action' => 'download',
