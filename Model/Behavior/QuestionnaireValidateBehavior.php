@@ -26,35 +26,39 @@ class QuestionnaireValidateBehavior extends ModelBehavior {
  * @param array $check check data array
  * @param mix $requireValue when check data value equal this value, then require other field
  * @param array $others require data field names
- * @param string $ope require condition AND or OR
+ * @param string $ope require condition AND or OR or XOR
  * @return bool
  */
 	public function requireOtherFields(&$model, $check, $requireValue, $others, $ope) {
+		$checkPatterns = array(
+			'AND' => array('midstream' => array('chk' => true, 'ret' => false), 'end' => array('ret' => true)),
+			'OR' => array('midstream' => array('chk' => false, 'ret' => true), 'end' => array('ret' => false)),
+			'XOR' => array('midstream' => array('chk' => false, 'ret' => false), 'end' => array('ret' => true)),
+		);
+		$ope = strtoupper($ope);
+		$checkPattern = $checkPatterns[$ope];
 		$value = array_values($check);
 		$value = $value[0];
-		$ope = strtoupper($ope);
 		if ($value != $requireValue) {
 			return true;
 		}
 		foreach ($others as $other) {
 			$checkData = Hash::get($model->data, $other);
-			$ret = Validation::blank($checkData);
-			if ($ope == 'AND') {
-				if ($ret == true) {
-					return false;
-				}
-			} elseif ($ope == 'OR') {
-				if ($ret == false) {
-					return true;
-				}
+			$otherFieldsName = explode('.', $other);
+			// is_系のフィールドの場合、チェックボックスで実装され、OFFでも０という数値が入ってくる
+			// そうすると「Blank」判定してほしいのに「ある」と判定されてしまう
+			// なのでis_で始まるフィールドのデータの設定を確認するときだけは == falseで判定する
+			if (strncmp('is_', $otherFieldsName[count($otherFieldsName) - 1], 3) === 0) {
+				$ret = ($checkData == false);
+			} else {
+				$ret = Validation::blank($checkData);
+			}
+			if ($ret == $checkPattern['midstream']['chk']) {
+				return $checkPattern['midstream']['ret'];
 			}
 		}
-		if ($ope == 'AND') {
-			return true;
-		}
-		return false;
+		return $checkPattern['end']['ret'];
 	}
-
 /**
  * Checks datetime null or datetime
  *

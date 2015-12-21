@@ -159,9 +159,13 @@ class Questionnaire extends QuestionnairesAppModel {
 					'rule' => array('boolean'),
 					'message' => __d('net_commons', 'Invalid request.'),
 				),
-				'requireOtherFields' => array(
+				'requireOtherFieldsKey' => array(
 					'rule' => array('requireOtherFields', QuestionnairesComponent::USES_USE, array('AuthorizationKey.authorization_key'), 'AND'),
 					'message' => __d('questionnaires', 'if you set the use key phrase period, please set key phrase text.')
+				),
+				'authentication' => array(
+					'rule' => array('requireOtherFields', QuestionnairesComponent::USES_USE, array('Questionnaire.is_image_authentication'), 'XOR'),
+					'message' => __d('questionnaires', 'Authentication key setting , image authentication , either only one can not be selected.')
 				)
 			),
 			'is_repeat_allow' => array(
@@ -175,6 +179,10 @@ class Questionnaire extends QuestionnairesAppModel {
 					'rule' => array('boolean'),
 					'message' => __d('net_commons', 'Invalid request.'),
 				),
+				'authentication' => array(
+					'rule' => array('requireOtherFields', QuestionnairesComponent::USES_USE, array('Questionnaire.is_key_pass_use'), 'XOR'),
+					'message' => __d('questionnaires', 'Authentication key setting , image authentication , either only one can not be selected.')
+				)
 			),
 			'is_answer_mail_send' => array(
 				'boolean' => array(

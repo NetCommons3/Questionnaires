@@ -117,7 +117,9 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 						__d('questionnaires', 'accept the non-members answer'));
 
 					echo $this->QuestionEdit->questionnaireAttributeCheckbox('is_key_pass_use',
-						__d('questionnaires', 'use key phrase'));
+						__d('questionnaires', 'use key phrase'),
+						array(
+							'ng-disabled' => 'questionnaires.questionnaire.isImageAuthentication == ' . QuestionnairesComponent::USES_USE));
 					echo $this->element('AuthorizationKeys.edit_form', [
 						'options' => array(
 						'ng-show' => 'questionnaires.questionnaire.isKeyPassUse != 0',
@@ -130,7 +132,9 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 						__d('questionnaires', 'forgive the repetition of the answer'));
 
 					echo $this->QuestionEdit->questionnaireAttributeCheckbox('is_image_authentication',
-						__d('questionnaires', 'do image authentication'));
+						__d('questionnaires', 'do image authentication'),
+							array(
+								'ng-disabled' => 'questionnaires.questionnaire.isKeyPassUse == ' . QuestionnairesComponent::USES_USE));
 
 					echo $this->QuestionEdit->questionnaireAttributeCheckbox('is_answer_mail_send',
 						__d('questionnaires', 'Deliver e-mail when submitted'));

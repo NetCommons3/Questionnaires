@@ -87,6 +87,7 @@ class QuestionEditHelper extends AppHelper {
 			'div' => false,
 			'label' => false,
 			'class' => '',
+			'error' => false,
 			'ng-model' => $ngModel,
 			'ng-checked' => $ngModel . '==' . QuestionnairesComponent::USES_USE),
 			$options
@@ -97,7 +98,9 @@ class QuestionEditHelper extends AppHelper {
 		if (!empty($help)) {
 			$ret .= '<span class="help-block">' . $help . '</span>';
 		}
-		$ret .= '</label></div>';
+		$ret .= '</label>';
+		$ret .= '<div class="has-error">' . $this->NetCommonsForm->error($fieldName, null, array('class' => 'help-block')) . '</div>';
+		$ret .= '</div>';
 		return $ret;
 	}
 /**
