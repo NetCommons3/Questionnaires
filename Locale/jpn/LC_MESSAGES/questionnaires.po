@@ -1,151 +1,160 @@
 # LANGUAGE translation of CakePHP Application
 # Copyright YEAR NAME <EMAIL@ADDRESS>
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2015-05-22 00:24+0000\n"
-"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"PO-Revision-Date: 2015-12-22 17:20+0900\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"POT-Creation-Date: \n"
+"Language: ja\n"
+"X-Generator: Poedit 1.8.6\n"
 
-#: /Controller/QuestionnaireAnswerSummariesController.php:80
-#: /Controller/QuestionnairesController.php:145
-#: /Controller/Component/QuestionnairesPreAnswerComponent.php:37
-msgid "Invalid questionnaire"
-msgstr "指定されたアンケートはありません"
+#: /Controller/QuestionnaireBlocksController.php:148
+msgid "Setting of password is required always to download answers."
+msgstr "回答データをダウンロードする場合は必ず圧縮パスワードの設定が必要です。"
 
-#: /Controller/QuestionnaireAnswerSummariesController.php:107
-msgid "annonymous person"
-msgstr "匿名者"
-
-#: /Controller/QuestionnaireAnswersController.php:83
-msgid "Invalid key phrase"
-msgstr "キーフレーズが間違っています"
-
-#: /Controller/QuestionnaireAnswersController.php:86
-msgid "Invalid key Image Auth"
-msgstr "画像認証の入力値が不正です"
-
-#: /Controller/QuestionnaireAnswersController.php:229
-msgid "Invalid answers"
-msgstr "不正な回答です。"
-
-#: /Controller/QuestionnaireBlocksController.php:141
+#: /Controller/QuestionnaireBlocksController.php:178
 msgid "download error"
 msgstr "ダウンロードエラー"
+
+#: /Controller/QuestionnaireBlocksController.php:228
 msgid "export error"
 msgstr "エクスポートエラー"
 
-#: /Controller/QuestionnaireQuestionsController.php:253
+#: /Controller/QuestionnaireEditController.php:331
 msgid "page"
-msgstr ""
+msgstr "ページ"
 
-#: /Controller/QuestionnaireQuestionsController.php:254
-#: /Model/QuestionnaireQuestion.php:181
+#: /Controller/QuestionnaireEditController.php:332
+#: /Model/QuestionnaireQuestion.php:220
 msgid "New Question"
 msgstr "新規質問"
 
-#: /Controller/QuestionnaireQuestionsController.php:255
-#: /Model/QuestionnaireChoice.php:141
+#: /Controller/QuestionnaireEditController.php:333
+#: /Model/QuestionnaireChoice.php:140
 msgid "new choice"
 msgstr "新規選択肢"
 
-#: /Controller/QuestionnaireQuestionsController.php:256
+#: /Controller/QuestionnaireEditController.php:334
 msgid "new column choice"
 msgstr "新規選択肢（列）"
 
-#: /Controller/QuestionnaireQuestionsController.php:257
+#: /Controller/QuestionnaireEditController.php:335
 msgid "other choice"
 msgstr "その他"
 
-#: /Controller/QuestionnairesController.php:195
-msgid "Please select past questionnaire."
-msgstr "過去のアンケートを選んでください。"
-
-#: /Controller/QuestionnairesController.php:203
-msgid "Please choose create option."
-msgstr "作成方法を選択してください。"
-
-#: /Controller/QuestionnairesController.php:321
-msgid "This Questionnaire has been deleted."
-msgstr "このアンケートは削除されました。"
-
-#: /Controller/Component/QuestionnairesComponent.php:470;471;472;473;474;475
+#: /Controller/Component/QuestionnairesComponent.php:512;513;514;515;516
 msgid "item"
 msgstr "件"
 
-#: /Controller/Component/QuestionnairesComponent.php:486
+#: /Controller/Component/QuestionnairesComponent.php:527
 msgid "New Modified"
 msgstr "新着順"
 
-#: /Controller/Component/QuestionnairesComponent.php:487
+#: /Controller/Component/QuestionnairesComponent.php:528
 msgid "Registration order"
 msgstr "登録順"
 
-#: /Controller/Component/QuestionnairesComponent.php:488
-#: /Model/Questionnaire.php:141
-#: /View/Blocks/index.ctp:27
-#: /View/Elements/FrameSettings/edit_display_questionnaire.ctp:30
+#: /Controller/Component/QuestionnairesComponent.php:529
+#: /Model/ActionQuestionnaireAdd.php:60 /Model/Questionnaire.php:98
+#: /View/Elements/FrameSettings/edit_display_questionnaire.ctp:34
+#: /View/QuestionnaireBlocks/index.ctp:37 /View/QuestionnaireEdit/edit.ctp:46
 msgid "Title"
 msgstr "タイトル"
 
-#: /Controller/Component/QuestionnairesComponent.php:489
+#: /Controller/Component/QuestionnairesComponent.php:530
 msgid "End period"
 msgstr "期限順"
 
-#: /Controller/Component/QuestionnairesComponent.php:500
+#: /Controller/Component/QuestionnairesComponent.php:541
 msgid "Single choice"
-msgstr "択一選択肢"
+msgstr "択一選択"
 
-#: /Controller/Component/QuestionnairesComponent.php:501
+#: /Controller/Component/QuestionnairesComponent.php:542
 msgid "Multiple choice"
-msgstr "複数選択肢"
+msgstr "複数選択"
 
-#: /Controller/Component/QuestionnairesComponent.php:502
+#: /Controller/Component/QuestionnairesComponent.php:543
 msgid "Single text"
-msgstr "単一テキスト"
+msgstr "１行テキスト"
 
-#: /Controller/Component/QuestionnairesComponent.php:503
+#: /Controller/Component/QuestionnairesComponent.php:544
 msgid "Multiple text"
-msgstr "複数テキスト"
+msgstr "複数行テキスト"
 
-#: /Controller/Component/QuestionnairesComponent.php:504
+#: /Controller/Component/QuestionnairesComponent.php:545
 msgid "Single choice matrix"
-msgstr "単一選択マトリクス"
+msgstr "択一選択マトリクス"
 
-#: /Controller/Component/QuestionnairesComponent.php:505
+#: /Controller/Component/QuestionnairesComponent.php:546
 msgid "Multiple choice matrix"
 msgstr "複数選択マトリクス"
 
-#: /Controller/Component/QuestionnairesComponent.php:506
+#: /Controller/Component/QuestionnairesComponent.php:547
 msgid "Date and time"
 msgstr "日付と時間"
 
-#: /Controller/Component/QuestionnairesComponent.php:507
+#: /Controller/Component/QuestionnairesComponent.php:548
 msgid "List select"
-msgstr "リストから選択"
+msgstr "リスト選択"
 
-#: /Model/Questionnaire.php:152
+#: /Model/ActionQuestionnaireAdd.php:54
+msgid "Please choose create option."
+msgstr "作成方法を選択してください。"
+
+#: /Model/ActionQuestionnaireAdd.php:66;70
+msgid "Please select past questionnaire."
+msgstr "過去のアンケートを選んでください。"
+
+#: /Model/ActionQuestionnaireAdd.php:254
+msgid "file upload error."
+msgstr "ファイルアップロードエラー"
+
+#: /Model/ActionQuestionnaireAdd.php:263;270;277
+msgid "illegal import file."
+msgstr "不正なインポートファイルです。"
+
+#: /Model/ActionQuestionnaireAdd.php:290
+msgid "version is different."
+msgstr "エクスポートしたアンケートと現在お使いのアンケートではバージョンが異なります。"
+
+#: /Model/Questionnaire.php:110;136
 msgid "if you set the period, please set time."
 msgstr "期間を設定する場合は、日時を設定してください。"
 
-#: /Model/Questionnaire.php:158;164;174
+#: /Model/Questionnaire.php:116;122;142
 msgid "Invalid datetime format."
 msgstr "入力された期間が不正です。正しい日付を入力してください。"
 
-#: /Model/Questionnaire.php:168
+#: /Model/Questionnaire.php:126
 msgid "start period must be smaller than end period"
 msgstr "開始日時は終了日時より前の日時を指定する必要があります。"
 
-#: /Model/Questionnaire.php:196
+#: /Model/Questionnaire.php:164
 msgid "if you set the use key phrase period, please set key phrase text."
-msgstr "キーフレーズを使う場合、キーフレーズを設定してください。"
+msgstr "認証キーを使う場合、キーフレーズを設定してください"
+
+#: /Model/Questionnaire.php:168;184
+msgid "Authentication key setting , image authentication , either only one can not be selected."
+msgstr "認証キーと画像認証を同時に使うことはできません。どちらか一つにしてください。"
+
+#: /Model/Questionnaire.php:199
+msgid "please set at least one page."
+msgstr "少なくとも１ページは作成してください。"
+
+#: /Model/QuestionnaireAnswer.php:118
+msgid "Input required"
+msgstr "必須項目です。"
+
+#: /Model/QuestionnaireAnswer.php:122
+msgid "the answer is too long. Please enter under %d letters."
+msgstr "回答が長すぎます。%d文字以下にしてください。"
 
 #: /Model/QuestionnaireAnswerSummaryCsv.php:152
 msgid "Respondent"
@@ -163,188 +172,174 @@ msgstr "回答回数"
 msgid "Anonymity"
 msgstr "匿名"
 
-#: /Model/QuestionnaireAnswerValidation.php:47
-msgid "Input required"
-msgstr "必須項目です"
-
-#: /Model/QuestionnaireAnswerValidation.php:66
-msgid "Number required"
-msgstr "数字を入力してください"
-
-#: /Model/QuestionnaireAnswerValidation.php:83
-msgid "Please enter a valid date in YY-MM-DD format."
-msgstr "日付を正しいフォーマット YY-MM-DD で入力してください。"
-
-#: /Model/QuestionnaireAnswerValidation.php:87
-msgid "Please enter the time."
-msgstr "時間を入力してください。"
-
-#: /Model/QuestionnaireAnswerValidation.php:91
-msgid "Please enter a valid date and time."
-msgstr "正しい日付と時間を設定してください。"
-
-#: /Model/QuestionnaireAnswerValidation.php:109;128
-msgid "Please enter the answer between %s and %s."
-msgstr "回答は%sから%sの範囲で入力してください。"
-msgid "Please enter the answer between %s letters and %s letters."
-msgstr "回答は%s文字から%s文字の範囲で入力してください。"
-msgid "the answer is too long. Please enter under %s letters."
-msgstr "回答が長すぎます。%d文字以下で答えてください。"
-
-
-#: /Model/QuestionnaireAnswerValidation.php:146;163;168
-msgid "Invalid choice"
-msgstr "選択が不正です"
-
-#: /Model/QuestionnaireAnswerValidation.php:189
-msgid "Please enter something, if you chose the other item"
-msgstr "その他を選択する場合は、内容を入力してください。"
-
-#: /Model/QuestionnaireAnswerValidation.php:212
-msgid "Please enter something in other item"
-msgstr "その他の内容を入力してください。"
-
-#: /Model/QuestionnaireAnswerValidation.php:237
-msgid "Please answer about all rows."
-msgstr "回答するときは全ての行に対して回答をしてください。"
-
-#: /Model/QuestionnaireChoice.php:76
+#: /Model/QuestionnaireChoice.php:80
 msgid "Please input choice text."
 msgstr "選択肢内容を入力してください。"
 
-#: /Model/QuestionnaireChoice.php:111
+#: /Model/QuestionnaireChoice.php:84
+#: /View/Elements/QuestionnaireEdit/EditQuestion/options_before_published/matrix_choice_option.ctp:71
+#: /View/Elements/QuestionnaireEdit/EditQuestion/options_before_published/simple_choice_option.ctp:89
+msgid "You can not use the character of |, : for choice text "
+msgstr "選択肢に「|」、「:」を使ってはいけません"
+
+#: /Model/QuestionnaireChoice.php:103
+msgid "choice sequence is illegal."
+msgstr "選択肢の順番が不正です。最初からやり直してください。"
+
+#: /Model/QuestionnaireChoice.php:108
 msgid "First character is \"#\". And input the hexadecimal numbers by six digits."
 msgstr "最初の１文字目は\"#\"です。続けて16進数6桁で指定してください。"
 
-#: /Model/QuestionnairePage.php:155
-msgid "First Page"
-msgstr ""
+#: /Model/QuestionnaireChoice.php:196
+msgid "Invalid skip page. Please set forward page."
+msgstr "スキップページの指定が不正です。質問があるページよりも先のページを設定してください。"
 
-#: /Model/QuestionnaireQuestion.php:116
+#: /Model/QuestionnaireChoice.php:200
+msgid "Invalid skip page. page does not exist."
+msgstr "スキップページが不正です。指定されたページが存在しません。"
+
+#: /Model/QuestionnairePage.php:85
+msgid "First Page"
+msgstr "１ページ"
+
+#: /Model/QuestionnairePage.php:198
+msgid "page sequence is illegal."
+msgstr "ページの順番が不正です。最初からやり直してください。"
+
+#: /Model/QuestionnairePage.php:230
+msgid "please set at least one question."
+msgstr "１ページ中に少なくとも１つは質問を作成してください。"
+
+#: /Model/QuestionnaireQuestion.php:97
+msgid "question sequence is illegal."
+msgstr "質問の順番が不正です。最初からやり直してください。"
+
+#: /Model/QuestionnaireQuestion.php:109
 msgid "Please input question text."
 msgstr "質問文を入力してください。"
 
-#: /Model/QuestionnaireQuestion.php:156;162
+#: /Model/QuestionnaireQuestion.php:155;165
 msgid "Please enter both the maximum and minimum values."
 msgstr "上限値と下限値の両方を入力してください。"
 
-#: /Model/QuestionnaireValidation.php:45
-msgid "please set at least one page."
-msgstr "少なくとも1ページ以上必要です。"
+#: /Model/QuestionnaireQuestion.php:159
+msgid "Please enter smaller value than max."
+msgstr "最大値よりも小さな値を入力してください。"
 
-#: /Model/QuestionnaireValidation.php:64
-msgid "Invalid page sequence set. Please try again from the beginning."
-msgstr "ページの連番が不正です。最初からやり直してください。"
+#: /Model/QuestionnaireQuestion.php:169
+msgid "Please enter bigger value than min."
+msgstr "最小値よりも大きな値を入力してください。"
 
-#: /Model/QuestionnaireValidation.php:95
-msgid "please set at least one question."
-msgstr "少なくとも１つ以上の質問が必要です。"
-
-#: /Model/QuestionnaireValidation.php:122
-msgid "Invalid question sequence set. Please try again from the beginning."
-msgstr "質問の連番が不正です。最初からやり直してください。"
-
-#: /Model/QuestionnaireValidation.php:185
-msgid "Invalid choice sequence set. Please try again from the beginning."
-msgstr "選択肢の連番が不正です。最初からやり直してください。"
-
-#: /Model/QuestionnaireValidation.php:215
-msgid "Invalid skip page. Please set forward page."
-msgstr "スキップページが不正です。先のページを設定してください。"
-
-#: /Model/QuestionnaireValidation.php:220
-msgid "Invalid skip page. page does not exist."
-msgstr "スキップページが不正です。ページが存在しません。"
-
-#: /Model/QuestionnaireValidation.php:237
+#: /Model/QuestionnaireQuestion.php:318
 msgid "please set at least one choice."
-msgstr "少なくとも１つの選択肢を設定してください。"
+msgstr "少なくとも１つは選択肢を作成してください。"
 
-#: /Model/QuestionnaireValidation.php:251
+#: /Model/QuestionnaireQuestion.php:329
 msgid "please set at least one choice at row and column."
 msgstr "行と列には、それぞれ１つ以上の選択肢が必要です。"
 
-#: /View/Elements/edit_flow_chart.ctp:14
-msgid "Set questions"
-msgstr "質問の作成"
+#: /Model/Behavior/QuestionnaireAnswerDatetimeBehavior.php:75
+msgid "Please enter a valid date in YY-MM-DD format."
+msgstr "日付を正しいフォーマット YY-MM-DD で入力してください。"
 
-#: /View/Elements/edit_flow_chart.ctp:15
-msgid "Set result display"
-msgstr "集計の設定"
+#: /Model/Behavior/QuestionnaireAnswerDatetimeBehavior.php:80
+msgid "Please enter the time."
+msgstr "時間を入力してください。"
 
-#: /View/Elements/edit_flow_chart.ctp:16
-msgid "Set questionnaire"
-msgstr "アンケートの設定"
+#: /Model/Behavior/QuestionnaireAnswerDatetimeBehavior.php:85
+msgid "Please enter a valid date and time."
+msgstr "正しい日付と時間を設定してください。"
 
-#: /View/Elements/edit_status_selector.ctp:13
-msgid "Edit status"
-msgstr "ステータス"
+#: /Model/Behavior/QuestionnaireAnswerDatetimeBehavior.php:104
+#: /Model/Behavior/QuestionnaireAnswerTextBehavior.php:69
+msgid "Please enter the answer between %s and %s."
+msgstr "回答は%sから%sの範囲で入力してください。"
 
-#: /View/Elements/questionnaire_status_label.ctp:15
-#: /View/Helper/QuestionnaireStatusLabelHelper.php:31
-msgid "Undefined"
-msgstr "未設定"
+#: /Model/Behavior/QuestionnaireAnswerMatrixSingleChoiceBehavior.php:113;119
+#: /Model/Behavior/QuestionnaireAnswerSingleListBehavior.php:90
+msgid "Invalid choice"
+msgstr "不正な選択です"
 
-#: /View/Elements/questionnaire_status_label.ctp:31
+#: /Model/Behavior/QuestionnaireAnswerMatrixSingleChoiceBehavior.php:143
+msgid "Please enter something in other item"
+msgstr "その他の内容を入力してください。"
+
+#: /Model/Behavior/QuestionnaireAnswerMatrixSingleChoiceBehavior.php:181
+msgid "Please answer about all rows."
+msgstr "回答するときは全ての行に対して回答をしてください。"
+
+#: /Model/Behavior/QuestionnaireAnswerSingleListBehavior.php:98
+msgid "Please enter something, if you chose the other item"
+msgstr "その他を選択する場合は、内容を入力してください。"
+
+#: /Model/Behavior/QuestionnaireAnswerTextBehavior.php:64
+msgid "Number required"
+msgstr "数字を入力してください。"
+
+#: /Model/Behavior/QuestionnaireAnswerTextBehavior.php:76
+msgid "Please enter the answer between %s letters and %s letters."
+msgstr "回答は%s文字から%s文字の範囲で入力してください。"
+
+#: /View/Elements/ng_status_label.ctp:18
 #: /View/Helper/QuestionnaireStatusLabelHelper.php:49
 msgid "Before public"
 msgstr "公開前"
 
-#: /View/Elements/questionnaire_status_label.ctp:35
+#: /View/Elements/ng_status_label.ctp:19
 #: /View/Helper/QuestionnaireStatusLabelHelper.php:53
 msgid "End"
 msgstr "終了"
 
-#: /View/Elements/AnswerSummaries/aggrigate_common_footer.ctp:15
+#: /View/Elements/AnswerSummaries/aggregate_common_footer.ctp:15
 msgid "Note: Which may not be 100% because of rounding of numeric total."
 msgstr "注: 四捨五入しているため、合計は必ずしも100%にはなりません。"
 
-#: /View/Elements/AnswerSummaries/aggrigate_common_footer.ctp:21
+#: /View/Elements/AnswerSummaries/aggregate_common_footer.ctp:20
 msgid "Note: Matrix if the number in parentheses is a percentage of the total number of responses."
 msgstr "注: 表中の割合は、全回答数に占める割合です。"
 
-#: /View/Elements/AnswerSummaries/aggrigate_common_footer.ctp:27
+#: /View/Elements/AnswerSummaries/aggregate_common_footer.ctp:26
 msgid "Note: If multiple selection is possible, total more than 100% to be."
-msgstr "注: 複数選択式の場合、合計が100%を超える場合があります。"
+msgstr ": 複数選択式の場合、合計が100%を超える場合があります。"
 
-#: /View/Elements/AnswerSummaries/aggrigate_common_header.ctp:21
+#: /View/Elements/AnswerSummaries/aggregate_common_header.ctp:21
 msgid "The total number of answers: "
 msgstr "全回答数:"
 
-#: /View/Elements/AnswerSummaries/aggrigate_common_header.ctp:29
+#: /View/Elements/AnswerSummaries/aggregate_common_header.ctp:29
 msgid "Select one"
-msgstr "単一回答"
+msgstr "択一選択"
 
-#: /View/Elements/AnswerSummaries/aggrigate_common_header.ctp:32
+#: /View/Elements/AnswerSummaries/aggregate_common_header.ctp:32
 msgid "Select more than one"
-msgstr "複数回答"
+msgstr "複数選択"
 
-#: /View/Elements/AnswerSummaries/aggrigate_common_header.ctp:35
+#: /View/Elements/AnswerSummaries/aggregate_common_header.ctp:35
 msgid "Matrix (selection list)"
-msgstr "マトリクス（単一選択）"
+msgstr "マトリクス（択一選択）"
 
-#: /View/Elements/AnswerSummaries/aggrigate_common_header.ctp:38
+#: /View/Elements/AnswerSummaries/aggregate_common_header.ctp:38
 msgid "Matrix (multiple)"
-msgstr "マトリクス (複数回答)"
+msgstr "マトリクス（複数選択）"
 
-#: /View/Elements/AnswerSummaries/aggrigate_common_header.ctp:41
+#: /View/Elements/AnswerSummaries/aggregate_common_header.ctp:41
 msgid "List selection"
-msgstr "リストから選択"
+msgstr "リスト選択"
 
-#: /View/Elements/AnswerSummaries/aggrigate_common_header.ctp:44
+#: /View/Elements/AnswerSummaries/aggregate_common_header.ctp:44
 msgid "Not selection"
 msgstr "未選択"
 
-#: /View/Elements/AnswerSummaries/aggrigate_matrix_table.ctp:31
-#: /View/Elements/AnswerSummaries/aggrigate_table.ctp:30
+#: /View/Elements/AnswerSummaries/aggregate_matrix_table.ctp:18
+#: /View/Elements/AnswerSummaries/aggregate_table.ctp:17
 msgid "Item name"
 msgstr "アイテム名"
 
-#: /View/Elements/AnswerSummaries/aggrigate_table.ctp:31
-msgid "Aggrigate value"
+#: /View/Elements/AnswerSummaries/aggregate_table.ctp:18
+msgid "Aggregate value"
 msgstr "回答数"
 
-#: /View/Elements/AnswerSummaries/aggrigate_table.ctp:32
+#: /View/Elements/AnswerSummaries/aggregate_table.ctp:19
 msgid "The percentage"
 msgstr "割合"
 
@@ -354,27 +349,7 @@ msgstr "一時保存（テストモード）"
 
 #: /View/Elements/Answers/answer_test_mode_header.ctp:34
 msgid "This questionnaire is being temporarily stored . You can questionnaire test before performed in this page . If you want to modify or change the questionnaire , you will be able to edit by pressing the [ Edit question ] button in the upper-right corner ."
-msgstr "このアンケートは一時保存中です。このページで実施前のアンケートテストをすることができます。<br />アンケートを修正・変更したい場合は、上部にある質問作成ボタンを押すと編集することができます。"
-
-#: /View/Elements/Answers/question_range_description.ctp:14
-msgid "Please enter a number between %s and %s"
-msgstr "%s から %s の間の数値を入力してください"
-
-#: /View/Elements/Answers/question_range_description.ctp:16
-msgid "Please enter between %s letters and %s letters"
-msgstr "%s文字から%s文字の入力をしてください"
-
-#: /View/Elements/Answers/question_range_description.ctp:18
-msgid "Please enter at %s to %s"
-msgstr "%s から %sまでの間で入力してください"
-
-#: /View/Elements/Answers/question_single_select_box.ctp:29
-msgid "Please choose one"
-msgstr "一つ選択してください"
-
-#: /View/Elements/Blocks/delete_form.ctp:14;28
-msgid "QUESTIONNAIRES"
-msgstr "アンケート"
+msgstr "このアンケートは一時保存中です。このページで実施前のアンケートテストをすることができます。<br />アンケートを修正・変更したい場合は、上部にある編集ボタンを押すと編集することができます。"
 
 #: /View/Elements/FrameSettings/edit_display_questionnaire.ctp:12
 msgid "select display questionnaires."
@@ -384,19 +359,25 @@ msgstr "表示したいアンケート"
 msgid "Display"
 msgstr "表示"
 
-#: /View/Elements/FrameSettings/edit_display_questionnaire.ctp:33
+#: /View/Elements/FrameSettings/edit_display_questionnaire.ctp:31
+#: /View/QuestionnaireBlocks/index.ctp:34
+msgid "Status"
+msgstr "状態"
+
+#: /View/Elements/FrameSettings/edit_display_questionnaire.ctp:37
 msgid "Implementation date"
 msgstr "実施期間"
 
-#: /View/Elements/FrameSettings/edit_display_questionnaire.ctp:36
+#: /View/Elements/FrameSettings/edit_display_questionnaire.ctp:40
 msgid "Aggregates"
 msgstr "集計結果"
 
 #: /View/Elements/FrameSettings/edit_display_questionnaire.ctp:84
-#: /View/Elements/Questions/edit/question_setting_date.ctp:72
-#: /View/Questionnaires/add.ctp:112
-#: /View/Questionnaires/edit.ctp:106
-#: /View/Questionnaires/index.ctp:36
+#: /View/Elements/QuestionnaireAdd/create_reuse.ctp:50
+#: /View/Elements/QuestionnaireEdit/EditQuestion/options_after_published/date_option.ctp:69
+#: /View/Elements/QuestionnaireEdit/EditQuestion/options_before_published/date_option.ctp:88
+#: /View/QuestionnaireAnswers/test_mode.ctp:28;41
+#: /View/QuestionnaireEdit/edit.ctp:81 /View/Questionnaires/index.ctp:36
 msgid " - "
 msgstr "～"
 
@@ -408,485 +389,547 @@ msgstr "表示"
 msgid "Questionnaire display setting"
 msgstr "アンケート表示設定"
 
-#: /View/Elements/FrameSettings/edit_display_type.ctp:16
+#: /View/Elements/FrameSettings/edit_display_type.ctp:17
 msgid "Show only one questionnaire"
 msgstr "アンケートを単独で表示"
 
-#: /View/Elements/FrameSettings/edit_display_type.ctp:17
+#: /View/Elements/FrameSettings/edit_display_type.ctp:18
 msgid "Show questionnaires list"
-msgstr "アンケートをリストで表示"
+msgstr "アンケートを一覧表示"
 
-#: /View/Elements/FrameSettings/edit_list_display_option.ctp:14
+#: /View/Elements/FrameSettings/edit_list_display_option.ctp:15
 msgid "Visible questionnaire row"
-msgstr "1ページの表示件数"
+msgstr "1ページあたりの表示件数"
 
-#: /View/Elements/FrameSettings/edit_list_display_option.ctp:28
+#: /View/Elements/FrameSettings/edit_list_display_option.ctp:26
 msgid "Visible row order"
-msgstr "アンケートの表示順"
+msgstr "表示順"
 
-#: /View/Elements/Questionnaires/answer_status.ctp:14
-msgid "Answer status"
-msgstr "ステータス"
+#: /View/Elements/QuestionnaireAdd/create_new.ctp:14
+msgid "Create new questionnaire"
+msgstr "新規にアンケート作成"
 
-#: /View/Elements/Questionnaires/answer_status.ctp:17
-msgid "View All"
-msgstr "全て表示"
+#: /View/Elements/QuestionnaireAdd/create_new.ctp:21
+msgid "Questionnaire title"
+msgstr "アンケートタイトル"
 
-#: /View/Elements/Questionnaires/answer_status.ctp:18
-msgid "Unanswered"
-msgstr "未回答"
+#: /View/Elements/QuestionnaireAdd/create_new.ctp:23
+msgid "Please input questionnaire title"
+msgstr "アンケートタイトルを入力して下さい"
 
-#: /View/Elements/Questionnaires/answer_status.ctp:19
-msgid "Answered"
-msgstr "回答済"
+#: /View/Elements/QuestionnaireAdd/create_reuse.ctp:14
+msgid "Re-use past questionnaire"
+msgstr "過去のアンケートを流用して作成"
 
-#: /View/Elements/Questionnaires/answer_status.ctp:22
-#: /View/Helper/QuestionnaireUtilHelper.php:119
-msgid "Test"
-msgstr "テスト"
+#: /View/Elements/QuestionnaireAdd/create_reuse.ctp:25
+msgid "Past questionnaire"
+msgstr "過去のアンケート"
 
-#: /View/Elements/Questions/edit/question_setting_alternative.ctp:20;88
-msgid "add choices"
-msgstr "選択肢の追加"
+#: /View/Elements/QuestionnaireAdd/create_reuse.ctp:34
+msgid "Refine by entering the part of the questionnaire name"
+msgstr "ここにアンケート名の一部を入力すると、下のリストの内容を絞り込むことができます"
 
-#: /View/Elements/Questions/edit/question_setting_alternative.ctp:30
-msgid "randomaize choices"
-msgstr "選択肢をランダムに表示する"
+#: /View/Elements/QuestionnaireAdd/create_reuse.ctp:52
+msgid "Implementation"
+msgstr "実施"
 
-#: /View/Elements/Questions/edit/question_setting_alternative.ctp:40
-msgid "set page skip"
-msgstr "スキップロジックを設定する"
+#: /View/Elements/QuestionnaireAdd/create_template.ctp:13
+msgid "Create from Template"
+msgstr "テンプレートを読み込んで作成"
 
-#: /View/Elements/Questions/edit/question_setting_alternative.ctp:63
-msgid "goto end"
-msgstr "終了へ"
+#: /View/Elements/QuestionnaireAdd/create_template.ctp:23
+msgid "Questionnaire template file"
+msgstr "アンケートテンプレートファイル"
 
-#: /View/Elements/Questions/edit/question_setting_alternative.ctp:64
-msgid "(new page will be created)"
-msgstr "(新しいページはすでに作成されています)"
+#: /View/Elements/QuestionnaireEdit/edit_flow_chart.ctp:14
+msgid "Set questions"
+msgstr "質問の作成"
 
-#: /View/Elements/Questions/edit/question_setting_alternative.ctp:65
-msgid "create new page for this skip"
-msgstr "このスキップのためのページを作成する"
+#: /View/Elements/QuestionnaireEdit/edit_flow_chart.ctp:15
+msgid "Set result display"
+msgstr "集計結果表示の設定"
 
-#: /View/Elements/Questions/edit/question_setting_alternative.ctp:93
-#: /View/Elements/Questions/edit/question_setting_matrix_alternative.ctp:81
-msgid "add another choice"
-msgstr "その他の選択肢を追加する"
+#: /View/Elements/QuestionnaireEdit/edit_flow_chart.ctp:16
+msgid "Set questionnaire"
+msgstr "アンケートの設定"
 
-#: /View/Elements/Questions/edit/question_setting_choice_element.ctp:18
+#: /View/Elements/QuestionnaireEdit/questionnaire_title.ctp:14
+msgid "If you want to change the questionnaire title, please edit in \"Set questionnaire\" step."
+msgstr "タイトルを変更したい場合は、「アンケートの設定」にて再編集できます。"
+
+#: /View/Elements/QuestionnaireEdit/Edit/delete_form.ctp:31
+msgid "Questionnaire"
+msgstr "アンケート"
+
+#: /View/Elements/QuestionnaireEdit/EditQuestion/accordion_heading.ctp:16
+msgid "copy to another page"
+msgstr "質問をコピー"
+
+#: /View/Elements/QuestionnaireEdit/EditQuestion/accordion_heading.ctp:20
+msgid "destination page number"
+msgstr "コピー先ページ番号"
+
+#: /View/Elements/QuestionnaireEdit/EditQuestion/accordion_heading.ctp:28
+msgid "Do you want to delete this question ?"
+msgstr "この質問を削除してもよろしいですか？"
+
+#: /View/Elements/QuestionnaireEdit/EditQuestion/accordion_heading.ctp:58
+msgid "Skip"
+msgstr "スキップ"
+
+#: /View/Elements/QuestionnaireEdit/EditQuestion/add_question_button.ctp:18
+msgid "Add Question"
+msgstr "質問の追加"
+
+#: /View/Elements/QuestionnaireEdit/EditQuestion/options_after_published/choice.ctp:14
+#: /View/Elements/QuestionnaireEdit/EditQuestion/options_before_published/choice.ctp:18
 msgid "(This is [other] choice. Area to enter the text is automatically granted at the time of implementation.)"
 msgstr "(「その他」の選択肢です。)"
 
-#: /View/Elements/Questions/edit/question_setting_date.ctp:21
+#: /View/Elements/QuestionnaireEdit/EditQuestion/options_after_published/date_option.ctp:21
+#: /View/Elements/QuestionnaireEdit/EditQuestion/options_before_published/date_option.ctp:30
 msgid "Date"
 msgstr "日付"
 
-#: /View/Elements/Questions/edit/question_setting_date.ctp:22
+#: /View/Elements/QuestionnaireEdit/EditQuestion/options_after_published/date_option.ctp:22
+#: /View/Elements/QuestionnaireEdit/EditQuestion/options_before_published/date_option.ctp:31
 msgid "Time"
 msgstr "時間"
 
-#: /View/Elements/Questions/edit/question_setting_date.ctp:23
+#: /View/Elements/QuestionnaireEdit/EditQuestion/options_after_published/date_option.ctp:23
+#: /View/Elements/QuestionnaireEdit/EditQuestion/options_before_published/date_option.ctp:32
 msgid "Date and Time"
 msgstr "日付と時間"
 
-#: /View/Elements/Questions/edit/question_setting_date.ctp:40
+#: /View/Elements/QuestionnaireEdit/EditQuestion/options_after_published/date_option.ctp:49
+#: /View/Elements/QuestionnaireEdit/EditQuestion/options_before_published/date_option.ctp:59
 msgid "set range to answer date and time"
 msgstr "期間を設定する"
 
-#: /View/Elements/Questions/edit/question_setting_matrix_alternative.ctp:16
+#: /View/Elements/QuestionnaireEdit/EditQuestion/options_after_published/matrix_choice_option.ctp:16
+#: /View/Elements/QuestionnaireEdit/EditQuestion/options_before_published/matrix_choice_option.ctp:24
 msgid "Line choices"
 msgstr "行の選択肢"
 
-#: /View/Elements/Questions/edit/question_setting_matrix_alternative.ctp:20;39
-msgid "Add line choices"
-msgstr "行の選択肢を追加する"
-
-#: /View/Elements/Questions/edit/question_setting_matrix_alternative.ctp:44
+#: /View/Elements/QuestionnaireEdit/EditQuestion/options_after_published/matrix_choice_option.ctp:27
+#: /View/Elements/QuestionnaireEdit/EditQuestion/options_before_published/matrix_choice_option.ctp:52
 msgid "Column choices"
 msgstr "列の選択肢"
 
-#: /View/Elements/Questions/edit/question_setting_matrix_alternative.ctp:47;68
-msgid "Add column choices"
-msgstr "列の選択肢を追加する"
+#: /View/Elements/QuestionnaireEdit/EditQuestion/options_after_published/simple_choice_option.ctp:26
+#: /View/Elements/QuestionnaireEdit/EditQuestion/options_before_published/simple_choice_option.ctp:30
+msgid "randomaize choices"
+msgstr "選択肢をランダムに表示する"
 
-#: /View/Elements/Questions/edit/question_setting_matrix_alternative.ctp:54
-msgid "Do you want to delete this choice ?"
-msgstr "この選択肢を削除してもよろしいですか？"
+#: /View/Elements/QuestionnaireEdit/EditQuestion/options_after_published/simple_choice_option.ctp:37
+#: /View/Elements/QuestionnaireEdit/EditQuestion/options_before_published/simple_choice_option.ctp:41
+msgid "set page skip"
+msgstr "スキップロジックを設定する"
 
-#: /View/Elements/Questions/edit/question_setting_text.ctp:23
+#: /View/Elements/QuestionnaireEdit/EditQuestion/options_after_published/text_option.ctp:24
+#: /View/Elements/QuestionnaireEdit/EditQuestion/options_before_published/text_option.ctp:32
 msgid "Numeric"
 msgstr "回答を数値で求める"
+
+#: /View/Elements/QuestionnaireEdit/EditQuestion/options_after_published/text_option.ctp:37
+#: /View/Elements/QuestionnaireEdit/EditQuestion/options_before_published/text_option.ctp:44
 msgid "Please check if you want to set limit(or length) value."
 msgstr "範囲(文字数)を指定する"
 
-#: /View/Elements/Questions/edit/question_setting_text.ctp:32
+#: /View/Elements/QuestionnaireEdit/EditQuestion/options_after_published/text_option.ctp:42
+#: /View/Elements/QuestionnaireEdit/EditQuestion/options_before_published/text_option.ctp:57
 msgid "Minimum"
-msgstr "下限値"
+msgstr "最小値"
 
-#: /View/Elements/Questions/edit/question_setting_text.ctp:49
+#: /View/Elements/QuestionnaireEdit/EditQuestion/options_after_published/text_option.ctp:50
+#: /View/Elements/QuestionnaireEdit/EditQuestion/options_before_published/text_option.ctp:73
 msgid "Maximum"
-msgstr "上限値"
+msgstr "最大値"
 
-#: /View/Helper/QuestionnaireUtilHelper.php:126
+#: /View/Elements/QuestionnaireEdit/EditQuestion/options_before_published/matrix_choice_option.ctp:28;47
+msgid "Add line choices"
+msgstr "行の選択肢を追加する"
+
+#: /View/Elements/QuestionnaireEdit/EditQuestion/options_before_published/matrix_choice_option.ctp:55;78
+msgid "Add column choices"
+msgstr "列の選択肢"
+
+#: /View/Elements/QuestionnaireEdit/EditQuestion/options_before_published/matrix_choice_option.ctp:62
+msgid "Do you want to delete this choice ?"
+msgstr "この選択肢を削除してもよろしいですか？"
+
+#: /View/Elements/QuestionnaireEdit/EditQuestion/options_before_published/matrix_choice_option.ctp:91
+#: /View/Elements/QuestionnaireEdit/EditQuestion/options_before_published/simple_choice_option.ctp:103
+msgid "add another choice"
+msgstr "その他の選択肢を追加する"
+
+#: /View/Elements/QuestionnaireEdit/EditQuestion/options_before_published/simple_choice_option.ctp:20;98
+msgid "add choices"
+msgstr "選択肢の追加"
+
+#: /View/Elements/QuestionnaireEdit/EditQuestion/options_before_published/simple_choice_option.ctp:64
+msgid "goto end"
+msgstr "終了へ"
+
+#: /View/Elements/QuestionnaireEdit/EditQuestion/options_before_published/simple_choice_option.ctp:68
+msgid "(new page will be created)"
+msgstr "(新しいページはすでに作成されています)"
+
+#: /View/Elements/QuestionnaireEdit/EditQuestion/options_before_published/simple_choice_option.ctp:69
+msgid "create new page for this skip"
+msgstr "このスキップのためのページを作成する"
+
+#: /View/Elements/QuestionnaireEdit/EditResult/accordion_heading.ctp:23
+msgid "There is an error"
+msgstr "エラーがあります"
+
+#: /View/Elements/QuestionnaireEdit/EditResult/display_type_set.ctp:13
+msgid "display type"
+msgstr "表示形式"
+
+#: /View/Elements/QuestionnaireEdit/EditResult/display_type_set.ctp:28
+msgid "Bar Chart"
+msgstr "棒グラフ"
+
+#: /View/Elements/QuestionnaireEdit/EditResult/display_type_set.ctp:36
+msgid "Pie Chart"
+msgstr "円グラフ"
+
+#: /View/Elements/QuestionnaireEdit/EditResult/display_type_set.ctp:44
+msgid "Table"
+msgstr "表"
+
+#: /View/Elements/QuestionnaireEdit/EditResult/graph_color_set.ctp:13
+msgid "graph color"
+msgstr "グラフ色設定"
+
+#: /View/Elements/QuestionnaireEdit/EditResult/is_display_set.ctp:14
+msgid "aggregate display"
+msgstr "集計結果の表示"
+
+#: /View/Elements/QuestionnaireEdit/EditResult/is_display_set.ctp:29
+msgid "The results of this question will not be displayed"
+msgstr "集計結果を表示しない"
+
+#: /View/Elements/QuestionnaireEdit/EditResult/is_display_set.ctp:38
+msgid "The results of this question will be displayed"
+msgstr "集計結果を表示する"
+
+#: /View/Elements/Questionnaires/add_button.ctp:23
+msgid "Create article"
+msgstr "新規にアンケートを作成する"
+
+#: /View/Elements/Questionnaires/answer_status.ctp:13
+msgid "View All"
+msgstr "全て表示"
+
+#: /View/Elements/Questionnaires/answer_status.ctp:14
+msgid "Unanswered"
+msgstr "未回答"
+
+#: /View/Elements/Questionnaires/answer_status.ctp:15
+msgid "Answered"
+msgstr "回答済み"
+
+#: /View/Elements/Questionnaires/answer_status.ctp:18
+#: /View/Helper/QuestionnaireUtilHelper.php:90
+msgid "Test"
+msgstr "テスト"
+
+#: /View/Elements/Questionnaires/answer_status.ctp:30
+msgid "Answer status"
+msgstr "回答状態"
+
+#: /View/Elements/Questionnaires/detail_for_editor.ctp:24
+msgid "Author"
+msgstr "作成者"
+
+#: /View/Elements/Questionnaires/detail_for_editor.ctp:26
+msgid "Modified by"
+msgstr "修正者"
+
+#: /View/Elements/Questionnaires/detail_for_editor.ctp:32
+msgid "Pages"
+msgstr "ページ数"
+
+#: /View/Elements/Questionnaires/detail_for_editor.ctp:34
+msgid "Questions"
+msgstr "質問数"
+
+#: /View/Elements/Questionnaires/detail_for_editor.ctp:36
+msgid "Answers"
+msgstr "回答数"
+
+#: /View/Helper/QuestionnaireAnswerHelper.php:181
+msgid "Please enter a number between %s and %s"
+msgstr "%s から %s の間の数値を入力してください"
+
+#: /View/Helper/QuestionnaireAnswerHelper.php:183
+msgid "Please enter between %s letters and %s letters"
+msgstr "%s文字から%s文字の入力をしてください"
+
+#: /View/Helper/QuestionnaireAnswerHelper.php:235
+msgid "Please choose one"
+msgstr "一つ選択してください"
+
+#: /View/Helper/QuestionnaireAnswerHelper.php:314;323;331
+msgid "Please enter at %s to %s"
+msgstr "%s から %sまでの間で入力してください"
+
+#: /View/Helper/QuestionnaireStatusLabelHelper.php:31
+msgid "Undefined"
+msgstr "未設定"
+
+#: /View/Helper/QuestionnaireUtilHelper.php:110
 msgid "Answer"
 msgstr "回答"
 
-#: /View/Helper/QuestionnaireUtilHelper.php:141
+#: /View/Helper/QuestionnaireUtilHelper.php:127
 msgid "Unpublished"
 msgstr "未公開"
 
-#: /View/Helper/QuestionnaireUtilHelper.php:145
+#: /View/Helper/QuestionnaireUtilHelper.php:131
 msgid "Finished"
 msgstr "回答済"
 
-#: /View/QuestionnaireAnswerSummaries/result.ctp:80
+#: /View/QuestionnaireAdd/add.ctp:27
+msgid "You can create a new questionnaire. Please choose how to create."
+msgstr "新しいアンケートを作成します。作成方法を選んでください。"
+
+#: /View/QuestionnaireAnswerSummaries/view.ctp:86
+#: /View/QuestionnaireAnswers/no_more_answer.ctp:14
 msgid "Back to Top"
 msgstr "Topに戻る"
 
-#: /View/QuestionnaireAnswers/answer.ctp:44
-msgid "Error occurred. Please check your answer."
-msgstr "誤りがあります。回答内容を確認してください。"
-
-#: /View/QuestionnaireAnswers/confirm.ctp:29
+#: /View/QuestionnaireAnswers/confirm.ctp:22
 msgid "Please confirm your answers."
 msgstr "回答内容を確認してください。"
 
-#: /View/QuestionnaireAnswers/confirm.ctp:95
+#: /View/QuestionnaireAnswers/confirm.ctp:64
 msgid "Start over"
 msgstr "最初からやり直す"
 
-#: /View/QuestionnaireAnswers/noMoreAnswer.ctp:12
+#: /View/QuestionnaireAnswers/no_more_answer.ctp:12
 msgid "you will not be able to answer this questionnaire."
 msgstr "このアンケートには回答することはできません。"
 
-#: /View/QuestionnaireAnswers/pre_answer.ctp:40
-msgid "This questionnaire has been guarded by the key phrase. Please enter the first key phrase To answer ."
-msgstr "このアンケートはキーフレーズが使われています。回答のためのキーフレーズを入力してください。"
+#: /View/QuestionnaireAnswers/test_mode.ctp:25
+#: /View/QuestionnaireEdit/edit.ctp:58
+msgid "Questionnaire answer period"
+msgstr "アンケート回答期間"
 
-#: /View/QuestionnaireAnswers/pre_answer.ctp:58
-msgid "Please input Key-Phrase"
-msgstr "キーフレーズを入力してください。"
+#: /View/QuestionnaireAnswers/test_mode.ctp:31
+msgid "do not set the answer period"
+msgstr "回答期間を制限しない"
+
+#: /View/QuestionnaireAnswers/test_mode.ctp:38
+#: /View/QuestionnaireEdit/edit.ctp:92
+msgid "Counting result display start date"
+msgstr "集計結果公開期間"
+
+#: /View/QuestionnaireAnswers/test_mode.ctp:43
+msgid "do not set the aggregate display period"
+msgstr "公開期間を制限しない"
+
+#: /View/QuestionnaireAnswers/test_mode.ctp:50
+#: /View/QuestionnaireEdit/edit.ctp:113
+msgid "Questionnaire method"
+msgstr "アンケート方式"
+
+#: /View/QuestionnaireAnswers/test_mode.ctp:54
+#: /View/QuestionnaireEdit/edit.ctp:117
+msgid "accept the non-members answer"
+msgstr "非会員の回答を受け付ける"
+
+#: /View/QuestionnaireAnswers/test_mode.ctp:56
+msgid "do not accept the non-members answer"
+msgstr "非会員の回答を受け付けない"
+
+#: /View/QuestionnaireAnswers/test_mode.ctp:62
+#: /View/QuestionnaireEdit/edit.ctp:120
+msgid "use key phrase"
+msgstr "認証キーを使う"
+
+#: /View/QuestionnaireAnswers/test_mode.ctp:64
+msgid "key phrase"
+msgstr "認証キー"
+
+#: /View/QuestionnaireAnswers/test_mode.ctp:68
+msgid "do not use key phrase"
+msgstr "認証キーは使わない"
+
+#: /View/QuestionnaireAnswers/test_mode.ctp:74
+#: /View/QuestionnaireEdit/edit.ctp:129
+msgid "anonymous answer"
+msgstr "匿名の回答とする"
+
+#: /View/QuestionnaireAnswers/test_mode.ctp:76
+msgid "register answer"
+msgstr "記名式回答とする"
+
+#: /View/QuestionnaireAnswers/test_mode.ctp:82
+#: /View/QuestionnaireEdit/edit.ctp:132
+msgid "forgive the repetition of the answer"
+msgstr "繰り返しの回答をさせる"
+
+#: /View/QuestionnaireAnswers/test_mode.ctp:84
+msgid "do not forgive the repetition of the answer"
+msgstr "繰り返し回答は許さない"
+
+#: /View/QuestionnaireAnswers/test_mode.ctp:90
+#: /View/QuestionnaireEdit/edit.ctp:135
+msgid "do image authentication"
+msgstr "画像認証を行う"
+
+#: /View/QuestionnaireAnswers/test_mode.ctp:92
+msgid "do not image authentication"
+msgstr "画像認証は行わない"
+
+#: /View/QuestionnaireAnswers/test_mode.ctp:98
+#: /View/QuestionnaireEdit/edit.ctp:140
+msgid "Deliver e-mail when submitted"
+msgstr "提出されたらメールで通知する"
+
+#: /View/QuestionnaireAnswers/test_mode.ctp:100
+msgid "do not deliver e-mail when submitted"
+msgstr "回答時のメール通知は行わない"
+
+#: /View/QuestionnaireAnswers/test_mode.ctp:106
+msgid "Deliver e-mail when started"
+msgstr "アンケートが開始されたらメールで通知する"
+
+#: /View/QuestionnaireAnswers/test_mode.ctp:108
+msgid "do not deliver e-mail when started"
+msgstr "アンケートの開始時のメール通知は行わない"
+
+#: /View/QuestionnaireAnswers/test_mode.ctp:117
+msgid "Start the test answers of this questionnaire"
+msgstr "このアンケートのテスト回答を始める"
+
+#: /View/QuestionnaireAnswers/thanks.ctp:32
+msgid "Back to page"
+msgstr "アンケート一覧に戻る"
+
+#: /View/QuestionnaireAnswers/thanks.ctp:37
+msgid "Aggregate"
+msgstr "集計結果を表示する"
 
 #: /View/QuestionnaireBlockRolePermissions/noQuestionnaireBlock.ctp:19
 msgid "There is no questionnaire. First, please create a  questionnaire."
 msgstr "アンケートがまだありません。初めにアンケートを作成してください。"
 
-#: /View/QuestionnaireBlocksSettings/edit.ctp:10
-msgid "Plugin name"
-msgstr "プラグイン名"
+#: /View/QuestionnaireBlocks/index.ctp:43
+msgid "Answer CSV"
+msgstr "回答CSV"
 
-#: /View/QuestionnaireBlocksSettings/edit.ctp:16
-msgid "Authority setting"
-msgstr "権限設定"
+#: /View/QuestionnaireBlocks/index.ctp:46
+msgid "Templates"
+msgstr "テンプレート"
 
-#: /View/QuestionnaireBlocksSettings/edit.ctp:22
-msgid "Display change"
-msgstr "表示方法変更"
-
-#: /View/QuestionnairePage/setting.ctp:16
-#: /View/QuestionnaireQuestions/edit.ctp:29
-#: /View/QuestionnaireQuestions/edit_result.ctp:23
-#: /View/Questionnaires/add.ctp:22
-#: /View/Questionnaires/edit.ctp:23
-msgid "plugin_name"
-msgstr "アンケートプラグイン"
-
-#: /View/QuestionnaireQuestions/edit.ctp:64
-#: /View/Questionnaires/add.ctp:71
-msgid "Questionnaire title"
-msgstr "アンケートタイトル"
-
-#: /View/QuestionnaireQuestions/edit.ctp:67
-#: /View/Questionnaires/add.ctp:79
-msgid "Please input questionnaire title"
-msgstr "アンケートタイトルを入力してください"
-
-msgid "Skip"
-msgstr "スキップ"
-
-#: /View/QuestionnaireQuestions/edit.ctp:94;296
-msgid "Add Question"
-msgstr "質問の追加"
-
-#: /View/QuestionnaireQuestions/edit.ctp:135
-msgid "copy to another page"
-msgstr "質問をコピー"
-
-msgid "destination page number"
-msgstr "コピー先ページ番号"
-
-#: /View/QuestionnaireQuestions/edit.ctp:144
-msgid "Do you want to delete this question ?"
-msgstr "この質問を削除してもよろしいですか？"
-
-#: /View/QuestionnaireQuestions/edit.ctp:159
-#: /View/QuestionnaireQuestions/edit_result.ctp:103
-msgid "There is an error"
-msgstr "エラーがあります"
-
-#: /View/QuestionnaireQuestions/edit.ctp:168
-msgid "question title"
-msgstr "質問タイトル"
-msgid "question sentence"
-msgstr "質問文"
-
-#: /View/QuestionnaireQuestions/edit.ctp:206
-msgid "Required"
-msgstr "必須"
-msgid "set answer to this question is required"
-msgstr "この質問の回答を必須とする"
-
-#: /View/QuestionnaireQuestions/edit.ctp:244
-msgid "Question type"
-msgstr "質問の形式"
-
-#: /View/QuestionnaireQuestions/edit.ctp:303
-msgid "Do you want to delete this page?"
-msgstr "このページを削除してよろしいですか？"
-
-#: /View/QuestionnaireQuestions/edit.ctp:304
-msgid "Delete this page"
-msgstr "このページを削除"
-
-#: /View/QuestionnaireQuestions/edit.ctp:313
-msgid "Add Page"
-msgstr "ページの追加"
-msgid "next display page"
-msgstr "次に表示するページ"
-
-#: /View/QuestionnaireQuestions/edit_result.ctp:54
-msgid "Results setting"
-msgstr "設定内容"
-
-#: /View/QuestionnaireQuestions/edit_result.ctp:59
-msgid "If you want to change the questionnaire title, please edit in \"Set questionnaire\" step."
-msgstr "タイトルを変更したい場合は、「アンケートの設定」にて再編集できます。"
-
-#: /View/QuestionnaireQuestions/edit_result.ctp:63
-msgid "Published aggregate results"
-msgstr "集計結果の公開"
-
-#: /View/QuestionnaireQuestions/edit_result.ctp:66
-msgid "not disclose the total result"
-msgstr "集計結果を公開しない"
-
-#: /View/QuestionnaireQuestions/edit_result.ctp:66
-msgid "publish aggregate result"
-msgstr "集計結果を公開する"
-
-#: /View/QuestionnaireQuestions/edit_result.ctp:79
-msgid "Text to be displayed in the aggregate results page"
-msgstr "解説文の設定"
-
-#: /View/QuestionnaireQuestions/edit_result.ctp:92
-msgid "Question you want to display the aggregate results"
-msgstr "集計結果を表示する質問"
-
-#: /View/QuestionnaireQuestions/edit_result.ctp:108
-msgid "aggregate display"
-msgstr "集計結果の表示"
-
-#: /View/QuestionnaireQuestions/edit_result.ctp:111
-msgid "The results of this question will not be displayed"
-msgstr "集計結果を表示しない"
-
-#: /View/QuestionnaireQuestions/edit_result.ctp:112
-msgid "The results of this question will be displayed"
-msgstr "集計結果を表示する"
-
-#: /View/QuestionnaireQuestions/edit_result.ctp:129
-msgid "display type"
-msgstr "表示形式"
-
-#: /View/QuestionnaireQuestions/edit_result.ctp:132
-msgid "Bar Chart"
-msgstr "棒グラフ"
-
-#: /View/QuestionnaireQuestions/edit_result.ctp:133
-msgid "Pie Chart"
-msgstr "円グラフ"
-
-#: /View/QuestionnaireQuestions/edit_result.ctp:134
-msgid "Table"
-msgstr "表"
-
-#: /View/QuestionnaireQuestions/edit_result.ctp:149
-msgid "graph color"
-msgstr "グラフ色設定"
-
-#: /View/Questionnaires/add.ctp:39
-msgid "You can create a new questionnaire. Please choose how to create."
-msgstr "新しいアンケートを作成します。作成方法を選んでください。"
-
-#: /View/Questionnaires/add.ctp:66
-msgid "Create new questionnaire"
-msgstr "新規にアンケート作成"
-
-
-msgid "Create from Template"
-msgstr "テンプレートを読み込んで作成"
-msgid "Questionnaire template file"
-msgstr "アンケートテンプレートファイル"
-
-#: /View/Questionnaires/add.ctp:93
-msgid "Re-use past questionnaire"
-msgstr "過去のアンケートを流用して作成"
-
-#: /View/Questionnaires/add.ctp:98
-msgid "Past questionnaire"
-msgstr "過去のアンケート"
-
-#: /View/Questionnaires/add.ctp:101
-msgid "Refine by entering the part of the questionnaire name"
-msgstr "ここにアンケート名の一部を入力すると、下のリストの内容を絞り込むことができます"
-
-#: /View/Questionnaires/add.ctp:114
-msgid "Implementation"
-msgstr "実施"
-
-#: /View/Questionnaires/edit.ctp:55
-msgid "Questionnaire setting"
-msgstr "アンケートの設定"
-
-#: /View/Questionnaires/edit.ctp:63
+#: /View/QuestionnaireEdit/edit.ctp:51
 msgid "Sub Title"
 msgstr "サブタイトル"
 
-#: /View/Questionnaires/edit.ctp:65
+#: /View/QuestionnaireEdit/edit.ctp:53
 msgid "Please enter if there is a sub title"
 msgstr "サブタイトルを入力してください"
 
-#: /View/Questionnaires/edit.ctp:71
-msgid "Questionnaire answer period"
-msgstr "アンケート回答期間"
-
-#: /View/Questionnaires/edit.ctp:84
+#: /View/QuestionnaireEdit/edit.ctp:63
 msgid "set the answer period"
 msgstr "回答期間を設定する"
-msgid "do not set the answer period"
-msgstr "回答期間を制限しない"
 
-#: /View/Questionnaires/edit.ctp:85
+#: /View/QuestionnaireEdit/edit.ctp:71
 msgid "After approval will be immediately published . Stop of the questionnaire to select the stop from the questionnaire data list ."
 msgstr "承認後即時公開されます。アンケートの停止はアンケートデータ一覧から停止を選びます。"
 
-#: /View/Questionnaires/edit.ctp:120
-msgid "Counting result display start date"
-msgstr "集計結果公開期間"
-
-#: /View/Questionnaires/edit.ctp:135
+#: /View/QuestionnaireEdit/edit.ctp:97
 msgid "set the aggregate display period"
 msgstr "公開期間を設定する"
-msgid "do not set the aggregate display period"
-msgstr "公開期間を制限しない"
 
-#: /View/Questionnaires/edit.ctp:136
+#: /View/QuestionnaireEdit/edit.ctp:99
 msgid "If not set , it will be displayed after the respondent answers."
 msgstr "設定しない場合、回答者が回答した後すぐに表示されます。"
 
-#: /View/Questionnaires/edit.ctp:158
+#: /View/QuestionnaireEdit/edit.ctp:108
 msgid "Result will display at this time."
 msgstr "から集計結果を表示する"
 
-#: /View/Questionnaires/edit.ctp:163
-msgid "Questionnaire method"
-msgstr "アンケート方式"
+#: /View/QuestionnaireEdit/edit.ctp:144
+msgid "Questionnaire open mail"
+msgstr "アンケート開始メール"
 
-#: /View/Questionnaires/edit.ctp:170
-msgid "accept the non-members answer"
-msgstr "非会員の回答を受け付ける"
-msgid "do not accept the non-members answer"
-msgstr "非会員の回答を受け付けない"
+#: /View/QuestionnaireEdit/edit.ctp:148
+msgid "Deliver e-mail when questionnaire has opened"
+msgstr "アンケートが開始されたらメールで通知する"
 
-#: /View/Questionnaires/edit.ctp:188
-msgid "use key phrase"
-msgstr "キーフレーズを使う"
-msgid "do not use key phrase"
-msgstr "キーフレーズは使わない"
-msgid "key phrase"
-msgstr "キーフレーズ"
+#: /View/QuestionnaireEdit/edit.ctp:153
+msgid "open mail subject"
+msgstr "開始メールタイトル"
 
-#: /View/Questionnaires/edit.ctp:216
-msgid "anonymous answer"
-msgstr "匿名の回答とする"
-msgid "register answer"
-msgstr "記名式回答とする"
+#: /View/QuestionnaireEdit/edit.ctp:156
+msgid "open mail text"
+msgstr "開始メール本文"
 
-#: /View/Questionnaires/edit.ctp:234
-msgid "forgive the repetition of the answer"
-msgstr "繰り返しの回答をさせる"
-msgid "do not forgive the repetition of the answer"
-msgstr "繰り返し回答は許さない"
-
-#: /View/Questionnaires/edit.ctp:252
-msgid "do image authentication"
-msgstr "画像認証を行う"
-msgid "do not image authentication"
-msgstr "画像認証は行わない"
-
-#: /View/Questionnaires/edit.ctp:270
-msgid "Deliver e-mail when submitted"
-msgstr "提出されたらメールで通知する"
-msgid "do not deliver e-mail when submitted"
-msgstr "回答時のメール通知は行わない"
-
-#: /View/Questionnaires/edit.ctp:284
+#: /View/QuestionnaireEdit/edit.ctp:162
 msgid "Thanks page message settings"
 msgstr "サンクスページメッセージ設定"
 
-#: /View/Questionnaires/edit.ctp:348
-msgid "Do you want to delete this questionnaire ?"
-msgstr "このアンケートを削除してもよろしいですか？"
+#: /View/QuestionnaireEdit/edit_question.ctp:88
+msgid "Required"
+msgstr "必須"
 
-#: /View/Questionnaires/index.ctp:78
-msgid "Author"
-msgstr "作成者"
+#: /View/QuestionnaireEdit/edit_question.ctp:95
+msgid "set answer to this question is required"
+msgstr "この質問の回答を必須とする"
 
-#: /View/Questionnaires/index.ctp:80
-msgid "Modified by"
-msgstr "修正者"
+#: /View/QuestionnaireEdit/edit_question.ctp:98
+msgid "question title"
+msgstr "質問タイトル"
 
-#: /View/Questionnaires/index.ctp:86
-msgid "Pages"
-msgstr "ページ数"
+#: /View/QuestionnaireEdit/edit_question.ctp:106
+msgid "question sentence"
+msgstr "質問文"
 
-#: /View/Questionnaires/index.ctp:88
-msgid "Questions"
-msgstr "質問数"
+#: /View/QuestionnaireEdit/edit_question.ctp:116
+msgid "Question type"
+msgstr "質問の形式"
 
-#: /View/Questionnaires/index.ctp:90
-msgid "Answers"
-msgstr "回答数"
+#: /View/QuestionnaireEdit/edit_question.ctp:165
+msgid "Do you want to delete this page?"
+msgstr "このページを削除してよろしいですか？"
 
-#: /View/Questionnaires/index.ctp:119
-#: /View/Questionnaires/noQuestionnaire.ctp:39
-#: /View/Questionnaires/thanks.ctp:41
-msgid "Back to page"
-msgstr "アンケート一覧に戻る"
+#: /View/QuestionnaireEdit/edit_question.ctp:166
+msgid "Delete this page"
+msgstr "このページを削除"
 
-#: /View/Questionnaires/noQuestionnaire.ctp:29
+#: /View/QuestionnaireEdit/edit_question.ctp:174
+msgid "Add Page"
+msgstr "ページの追加"
+
+#: /View/QuestionnaireEdit/edit_result.ctp:48
+msgid "Published aggregate results"
+msgstr "集計結果の公開"
+
+#: /View/QuestionnaireEdit/edit_result.ctp:51
+msgid "not disclose the total result"
+msgstr "集計結果を公開しない"
+
+#: /View/QuestionnaireEdit/edit_result.ctp:51
+msgid "publish aggregate result"
+msgstr "集計結果を公開する"
+
+#: /View/QuestionnaireEdit/edit_result.ctp:65
+msgid "Text to be displayed in the aggregate results page"
+msgstr "解説文の設定"
+
+#: /View/QuestionnaireEdit/edit_result.ctp:78
+msgid "Question you want to display the aggregate results"
+msgstr "集計結果を表示する質問"
+
+#: /View/Questionnaires/noQuestionnaire.ctp:28
 msgid "no questionnaire"
-msgstr "アンケートデータがありません。"
+msgstr "アンケートがありません。"
 
 #: /View/Questionnaires/noQuestionnaire.ctp:33
 msgid "Please create new questionnaire by pressing the \"+\" button."
 msgstr "+ボタンをクリックしてアンケートを作成してください。"
-
-#: /View/Questionnaires/thanks.ctp:49
-msgid "Aggregate"
-msgstr "集計結果を表示する"
-
-#: /View/Questionnaires/edit.ctp
-msgid "Sub Title"
-msgstr "サブタイトル"
-
-#: /View/QuestionnaireAnswers/noMoreAnswer.ctp 12
-msgid "you will not be able to answer this questionnaire."
-msgstr "このアンケートは回答できません。"
-
-msgid "You are starting the questionnaire.\\n Once you start, you cannnot edit it. \\n Is it OK?"
-msgstr "このアンケートを実施します。\n実施しますと修正はできません。\nよろしいですか？"
-
-msgid "Start the test answers of this questionnaire"
-msgstr "このアンケートのテスト回答を始める"
