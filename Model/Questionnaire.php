@@ -600,4 +600,22 @@ class Questionnaire extends QuestionnairesAppModel {
 		return $isPublished;
 	}
 
+/**
+ * clearQuestionnaireId アンケートデータからＩＤのみをクリアする
+ *
+ * @param array &$questionnaire アンケートデータ
+ * @return void
+ */
+	public function clearQuestionnaireId(&$questionnaire) {
+		foreach ($questionnaire as $qKey => $q) {
+			if (is_array($q)) {
+				$this->clearQuestionnaireId($questionnaire[$qKey]);
+			} elseif (preg_match('/^id$/', $qKey) ||
+				preg_match('/^key$/', $qKey) ||
+				preg_match('/^created(.*?)/', $qKey) ||
+				preg_match('/^modified(.*?)/', $qKey)) {
+				unset($questionnaire[$qKey]);
+			}
+		}
+	}
 }

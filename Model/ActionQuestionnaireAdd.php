@@ -9,7 +9,9 @@
  */
 
 App::uses('QuestionnairesAppModel', 'Questionnaires.Model');
-App::uses('TemporaryFolder', 'Folder.Utility');
+App::uses('TemporaryUploadFile', 'Files.Utility');
+App::uses('UnZip', 'Files.Utility');
+App::uses('WysIsWygDownloader', 'Questionnaires.Utility');
 
 /**
  * Summary for ActionQuestionnaireAdd Model
@@ -142,6 +144,7 @@ class ActionQuestionnaireAdd extends QuestionnairesAppModel {
 	public function getNewQuestionnaire() {
 		$this->Questionnaire = ClassRegistry::init('Questionnaires.Questionnaire', true);
 		$this->QuestionnairePage = ClassRegistry::init('Questionnaires.QuestionnairePage', true);
+		$this->QuestionnaireQuestion = ClassRegistry::init('Questionnaires.QuestionnaireQuestion', true);
 		$createOption = $this->data['ActionQuestionnaireAdd']['create_option'];
 
 		// 指定された作成のオプションによって処理分岐
@@ -229,27 +232,9 @@ class ActionQuestionnaireAdd extends QuestionnairesAppModel {
 			return $this->getDefaultQuestionnaire(array('title' => ''));
 		}
 		// ID値のみクリア
-		$this->clearQuestionnaireId($questionnaire);
+		$this->Questionnaire->clearQuestionnaireId($questionnaire);
 
 		return $questionnaire;
-	}
-/**
- * clearQuestionnaireId アンケートデータからＩＤのみをクリアする
- *
- * @param array &$questionnaire アンケートデータ
- * @return void
- */
-	public function clearQuestionnaireId(&$questionnaire) {
-		foreach ($questionnaire as $qKey => $q) {
-			if (is_array($q)) {
-				$this->clearQuestionnaireId($questionnaire[$qKey]);
-			} elseif (preg_match('/(.*?)id$/', $qKey) ||
-				preg_match('/^key$/', $qKey) ||
-				preg_match('/^created(.*?)/', $qKey) ||
-				preg_match('/^modified(.*?)/', $qKey)) {
-				unset($questionnaire[$qKey]);
-			}
-		}
 	}
 /**
  * _createFromTemplate
@@ -263,40 +248,40 @@ class ActionQuestionnaireAdd extends QuestionnairesAppModel {
 		// そのデータから今回作成するアンケートデータ基本構成を作成し返す
 
 		// アップロードファイルを受け取り、
-		$file = $this->FileUpload->upload('Questionnaire', 'template_file');
+		$uploadFile = new TemporaryUploadFile(Hash::get($this->data, 'ActionQuestionnaireAdd.template_file'));
+		// エラーチェック
+		if (! $uploadFile) {
+			$this->validationErrors['Questionnaire']['template_file'] = __d('questionnaires', 'file upload error.');
+			return null;
+		}
 
-		// テンポラリフォルダ作成とカレントディレクトリ変更
-		//$folder = $this->QuestionnairesDownload->createTemporaryFolder($this, 'template');
-		$folder = new TemporaryFolder();
-
-		// ファイルを移動
-		$importFilePath = $folder->pwd() . DS . QuestionnairesComponent::QUESTIONNAIRE_TEMPLATE_EXPORT_FILENAME;
-		move_uploaded_file($file['tmp_name'], $importFilePath);
-
-		// 解凍
-		if ($this->QuestionnaireDownload->extractZip($importFilePath, $folder->pwd()) === false) {
+		// アップロードファイル解凍
+		$unZip = new UnZip($uploadFile->path);
+		$temporaryFolder = $unZip->extract();
+		// エラーチェック
+		if (! $temporaryFolder) {
 			$this->validationErrors['Questionnaire']['template_file'] = __d('questionnaires', 'illegal import file.');
 			return null;
 		}
 
 		// フィンガープリント確認
-		$fingerPrint = $this->__checkFingerPrint($folder->pwd());
+		$fingerPrint = $this->__checkFingerPrint($temporaryFolder->path);
 		if ($fingerPrint === false) {
 			$this->validationErrors['Questionnaire']['template_file'] = __d('questionnaires', 'illegal import file.');
 			return null;
 		}
 
 		// アンケートテンプレートファイル本体をテンポラリフォルダに展開する。
-		$questionnaireZipFile = $folder->pwd() . DS . QuestionnairesComponent::QUESTIONNAIRE_TEMPLATE_FILENAME;
-		if ($this->QuestionnaireDownload->extractZip($questionnaireZipFile, $folder->pwd()) === false) {
+		$questionnaireZip = new UnZip($temporaryFolder->path . DS . QuestionnairesComponent::QUESTIONNAIRE_TEMPLATE_FILENAME);
+		if (! $questionnaireZip->extract()) {
 			$this->validationErrors['Questionnaire']['template_file'] = __d('questionnaires', 'illegal import file.');
 			return null;
 		}
 
 		// jsonファイルを読み取り、PHPオブジェクトに変換
-		$jsonFilePath = $folder->pwd() . DS . QuestionnairesComponent::QUESTIONNAIRE_JSON_FILENAME;
-		$jsonFileFp = fopen($jsonFilePath, 'rb');
-		$jsonData = fread($jsonFileFp, filesize($jsonFilePath));
+		$jsonFilePath = $questionnaireZip->path . DS . QuestionnairesComponent::QUESTIONNAIRE_JSON_FILENAME;
+		$jsonFile = new File($jsonFilePath);
+		$jsonData = $jsonFile->read();
 		$jsonQuestionnaire = json_decode($jsonData, true);
 
 		// 初めにファイルに記載されているアンケートプラグインのバージョンと
@@ -308,14 +293,11 @@ class ActionQuestionnaireAdd extends QuestionnairesAppModel {
 
 		// バージョンが一致した場合、アンケートデータをメモリ上に構築
 		$questionnaires = $this->_getQuestionnaires(
-			$folder->pwd(),
+			$questionnaireZip->path,
 			$jsonQuestionnaire['Questionnaires'],
 			$fingerPrint);
 
-		// インポートデータ「オリジナルデータ」をセッションに書きこんでおく
-		$this->Session->write('Questionnaires.importQuestionnaire', $questionnaires);
-
-		// 代表データを返す
+		// 現在の言語環境にマッチしたデータを返す
 		return $questionnaires[0];
 	}
 
@@ -328,10 +310,9 @@ class ActionQuestionnaireAdd extends QuestionnairesAppModel {
  * @return array QuestionnaireData
  */
 	protected function _getQuestionnaires($folderPath, $questionnaires, $importKey) {
-		foreach ($questionnaires as &$q) {
-			// id, keyはクリアする
-			$this->Questionnaire->clearQuestionnaireId($q);
+		$wysiswyg = new WysIsWygDownloader();
 
+		foreach ($questionnaires as &$q) {
 			// WysIsWygのデータを入れなおす
 			$flatQuestionnaire = Hash::flatten($q);
 			foreach ($flatQuestionnaire as $key => &$value) {
@@ -347,11 +328,12 @@ class ActionQuestionnaireAdd extends QuestionnairesAppModel {
 					continue;
 				}
 				$columnName = substr($key, strrpos($key, '.') + 1);
+
 				if ($model->hasField($columnName)) {
 					if ($model->getColumnType($columnName) == 'text') {
 						// keyと同じ名前のフォルダの下にあるkeyの名前のZIPファイルを渡して
 						// その返ってきた値をこのカラムに設定
-						$value = $this->QuestionnairesWysIsWyg->getFromWysIsWygZIP($folderPath . DS . $key . DS . $key . '.zip', $key);
+						$value = $wysiswyg->getFromWysIsWygZIP($folderPath . DS . $value, $model->alias . '.' . $columnName);
 					}
 				}
 			}
@@ -368,11 +350,8 @@ class ActionQuestionnaireAdd extends QuestionnairesAppModel {
  */
 	private function __checkFingerPrint($folderPath) {
 		// フィンガープリントファイルを取得
-		$fingerPrintFp = fopen($folderPath . DS . QuestionnairesComponent::QUESTIONNAIRE_FINGER_PRINT_FILENAME, 'rb');
-		if ($fingerPrintFp === false) {
-			return false;
-		}
-		$fingerPrint = fread($fingerPrintFp, 1024);
+		$file = new File($folderPath . DS . QuestionnairesComponent::QUESTIONNAIRE_FINGER_PRINT_FILENAME, false);
+		$fingerPrint = $file->read();
 
 		// ファイル内容から算出されるハッシュ値と指定されたフットプリント値を比較し
 		// 同一であれば正当性が保証されたと判断する（フォーマットチェックなどは行わない）
@@ -380,7 +359,7 @@ class ActionQuestionnaireAdd extends QuestionnairesAppModel {
 		if (sha1_file($questionnaireZipFile, false) != $fingerPrint) {
 			return false;
 		}
-		fclose($fingerPrintFp);
+		$file->close();
 		return $fingerPrint;
 	}
 /**
@@ -390,7 +369,9 @@ class ActionQuestionnaireAdd extends QuestionnairesAppModel {
  * @return bool
  */
 	private function __checkVersion($jsonData) {
-		$composer = $this->Plugin->getComposer('netcommons/questionnaires');
+		// バージョン情報を取得するためComposer情報を得る
+		$Plugin = ClassRegistry::init('Plugins.Plugin');
+		$composer = $Plugin->getComposer('netcommons/questionnaires');
 		if (!$composer) {
 			return false;
 		}

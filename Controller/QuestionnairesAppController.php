@@ -264,7 +264,11 @@ class QuestionnairesAppController extends AppController {
  * @return string
  */
 	protected function _getQuestionnaireKey($questionnaire) {
-		return $questionnaire['Questionnaire']['key'];
+		if (isset($questionnaire['Questionnaire']['key'])) {
+			return $questionnaire['Questionnaire']['key'];
+		} else {
+			return '';
+		}
 	}
 
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Questionnaires WysIsWyg Component
+ * Questionnaires WysIsWyg Downloader
  *
  * @author Noriko Arai <arai@nii.ac.jp>
  * @author Allcreator <info@allcreator.net>
@@ -9,15 +9,17 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 
-App::uses('Component', 'Controller');
+
+App::uses('ZipDownloader', 'Files.Utility');
+App::uses('UnZip', 'Files.Utility');
 
 /**
- * QuestionnairesWysIsWygComponent
+ * QuestionnairesWysIsWygUtility
  *
  * @author Allcreator <info@allcreator.net>
  * @package NetCommons\Questionnaires\Controller
  */
-class QuestionnairesWysIsWygComponent extends Component {
+class WysIsWygDownloader {
 
 /**
  * getFromWysIsWygZIP
@@ -28,55 +30,39 @@ class QuestionnairesWysIsWygComponent extends Component {
  * @return string wysiswyg editor data
  */
 	public function getFromWysIsWygZIP($zipFilePath, $file) {
-		$zip = new ZipArchive;
-		if ($zip->open($zipFilePath) !== true) {
+		$unZip = new UnZip($zipFilePath);
+		if ($unZip->extract() === false) {
 			return false;
 		}
-		if ($zip->extractTo(pathinfo($zipFilePath, PATHINFO_DIRNAME)) === false) {
-			return false;
-		}
-		$zip->close();
 
-		//
+		// FUJI
 		// 本当はこの辺で添付ファイルをUPLOADSに設定する処理が入る
 		//
 
-		$filePath = pathinfo($zipFilePath, PATHINFO_DIRNAME) . DS . $file;
-		$fileSize = filesize($filePath);
-		if ($fileSize == 0) {
-			return '';
-		}
-		$fp = fopen($filePath, 'rb');
-		$data = fread($fp, $fileSize);
-		fclose($fp);
+		$filePath = $unZip->path . DS . $file;
+		$file = new File($filePath);
+		$data = $file->read();
 		return $data;
 	}
 /**
  * createWysIsWygZIP
  * このメソッドはいずれはWYSISWYGエディタダウンロードコンポーネントへ移動します
  *
- * @param Folder $folder 保存先フォルダオブジェクト
- * @param string $zipFileName Zipファイルへのパス
+ * @param string $zipFileName Zipファイル名
  * @param string $data wysiswyg editor content
  * @return string path to zip file about "data"
  */
-	public function createWysIsWygZIP($folder, $zipFileName, $data) {
-		$fileName = $zipFileName . '.zip';
-		$zip = new ZipArchive();
-		$filePath = $folder->pwd() . DS . $fileName;
-		$zipFp = $zip->open($filePath, ZipArchive::CREATE);
-		if ($zipFp === true) {
-			$zip->addFromString($zipFileName, $data);
-		} else {
-			return null;
-		}
+	public function createWysIsWygZIP($zipFileName, $data) {
+		$zip = new ZipDownloader();
+		$zip->addFromString($zipFileName, $data);
 
 		//
+		// FUJI
 		// 本当はここにWysISWygエディタの中に添付されている画像ファイルなどを
 		// zipに突っ込む処理が入る
 		//
 
 		$zip->close();
-		return $filePath;
+		return $zip->path;
 	}
 }
