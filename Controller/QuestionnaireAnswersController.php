@@ -54,7 +54,6 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
  *
  */
 	public $helpers = [
-		'NetCommons.BackToPage',
 		'NetCommons.Date',
 		'Workflow.Workflow',
 		'Questionnaires.QuestionnaireAnswer'
