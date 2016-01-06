@@ -87,11 +87,9 @@ class QuestionnaireChoice extends QuestionnairesAppModel {
 			'other_choice_type' => array(
 				'numeric' => array(
 					'rule' => array('numeric'),
-					//'message' => 'Your custom message here',
+					'message' => __d('net_commons', 'Invalid request.'),
 					//'allowEmpty' => false,
 					//'required' => false,
-					//'last' => false, // Stop validation after this rule
-					//'on' => 'create', // Limit validation to 'create' or 'update' operations
 				),
 			),
 			'choice_sequence' => array(
@@ -104,12 +102,10 @@ class QuestionnaireChoice extends QuestionnairesAppModel {
 				),
 			),
 			'graph_color' => array(
-					'rule' => '/^#[a-f0-9]{6}$/i',
-					'message' => __d('questionnaires', 'First character is "#". And input the hexadecimal numbers by six digits.'),
-					//'allowEmpty' => false,
-					//'required' => false,
-					//'last' => false, // Stop validation after this rule
-					//'on' => 'create', // Limit validation to 'create' or 'update' operations
+				'rule' => '/^#[a-f0-9]{6}$/i',
+				'message' => __d('questionnaires', 'First character is "#". And input the hexadecimal numbers by six digits.'),
+				//'allowEmpty' => false,
+				//'required' => false,
 			),
 		);
 		// ウィザード画面でのセットアップ中の場合はまだ親ページIDの正当性についてのチェックは行わない
@@ -148,12 +144,11 @@ class QuestionnaireChoice extends QuestionnairesAppModel {
  * saveQuestionnaireChoice
  * save QuestionnaireChoice data
  *
- * @param int $questionId questionnaire question id
  * @param array &$choices questionnaire choices
  * @throws InternalErrorException
  * @return bool
  */
-	public function saveQuestionnaireChoice($questionId, &$choices) {
+	public function saveQuestionnaireChoice(&$choices) {
 		// QuestionnaireChoiceが単独でSaveされることはない
 		// 必ず上位のQuestionnaireのSaveの折に呼び出される
 		// なので、$this->setDataSource('master');といった
@@ -163,10 +158,9 @@ class QuestionnaireChoice extends QuestionnairesAppModel {
 			// アンケートは履歴を取っていくタイプのコンテンツデータなのでSave前にはID項目はカット
 			// （そうしないと既存レコードのUPDATEになってしまうから）
 			$choice = Hash::remove($choice, 'QuestionnaireChoice.id');
-			$choice['questionnaire_question_id'] = $questionId;
 			$this->create();
 			if (!$this->save($choice, false)) {
-				return false;
+				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}
 		}
 		return true;
@@ -186,18 +180,18 @@ class QuestionnaireChoice extends QuestionnairesAppModel {
 		}
 		// 質問がスキップ質問である場合
 		// 未設定時はデフォルトの次ページ移動となります
-		if (empty($this->data['QuestionnaireChoice']['skip_page_sequence'])) {
-			$this->data['QuestionnaireChoice'] = $pageIndex + 1;
+		if (! isset($this->data['QuestionnaireChoice']['skip_page_sequence'])) {
+			$this->data['QuestionnaireChoice']['skip_page_sequence'] = $pageIndex + 1;
 		}
 		// 最後ページへの指定ではない場合
 		if ($this->data['QuestionnaireChoice']['skip_page_sequence'] != QuestionnairesComponent::SKIP_GO_TO_END) {
 			// そのジャンプ先は現在ページから戻っていないか
-			if ($this->data['QuestionnaireChoice']['skip_page_sequence'] < $pageIndex) {
-				$this->validationErrors['skip_page_sequence'] = __d('questionnaires', 'Invalid skip page. Please set forward page.');
+			if ($this->data['QuestionnaireChoice']['skip_page_sequence'] <= $pageIndex) {
+				$this->validationErrors['skip_page_sequence'][] = __d('questionnaires', 'Invalid skip page. Please set forward page.');
 			}
 			// そのジャンプ先は存在するページシーケンスか
 			if ($this->data['QuestionnaireChoice']['skip_page_sequence'] > $maxPageIndex) {
-				$this->validationErrors['skip_page_sequence'] = __d('questionnaires', 'Invalid skip page. page does not exist.');
+				$this->validationErrors['skip_page_sequence'][] = __d('questionnaires', 'Invalid skip page. page does not exist.');
 			}
 		}
 	}

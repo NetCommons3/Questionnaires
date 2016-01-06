@@ -173,7 +173,7 @@ class QuestionnaireQuestion extends QuestionnairesAppModel {
 
 		}
 		// ウィザード画面でのセットアップ中の場合はまだ親ページIDの正当性についてのチェックは行わない
-		if (! (isset($options['validate']) && $options['validate'] == QuestionnairesComponent::QUESTIONNAIRE_VALIDATE_TYPE)) {
+		if (!(isset($options['validate']) && $options['validate'] == QuestionnairesComponent::QUESTIONNAIRE_VALIDATE_TYPE)) {
 			$this->validate = Hash::merge($this->validate, array(
 				'questionnaire_page_id' => array(
 					'numeric' => array(
@@ -198,7 +198,7 @@ class QuestionnaireQuestion extends QuestionnairesAppModel {
 				$this->QuestionnaireChoice->set($choice);
 				$options['choiceIndex'] = $cIndex;
 				$options['isSkip'] = $isSkip;
-				if (! $this->QuestionnaireChoice->validates($options)) {
+				if (!$this->QuestionnaireChoice->validates($options)) {
 					$validationErrors['QuestionnaireChoice'][$cIndex] = $this->QuestionnaireChoice->validationErrors;
 				}
 			}
@@ -207,6 +207,7 @@ class QuestionnaireQuestion extends QuestionnairesAppModel {
 
 		return true;
 	}
+
 /**
  * getDefaultQuestion
  * get default data of questionnaire question
@@ -293,13 +294,15 @@ class QuestionnaireQuestion extends QuestionnairesAppModel {
 			$questionId = $this->id;
 
 			if (isset($question['QuestionnaireChoice'])) {
-				if (! $this->QuestionnaireChoice->saveQuestionnaireChoice($questionId, $question['QuestionnaireChoice'])) {
+				$question = Hash::insert($question, 'QuestionnaireChoice.{n}.questionnaire_question_id', $questionId);
+				if (!$this->QuestionnaireChoice->saveQuestionnaireChoice($question['QuestionnaireChoice'])) {
 					return false;
 				}
 			}
 		}
 		return true;
 	}
+
 /**
  * _checkChoiceExists
  *
@@ -332,6 +335,7 @@ class QuestionnaireQuestion extends QuestionnairesAppModel {
 		}
 		return true;
 	}
+
 /**
  * _getResultDisplayList
  * 質問種別に応じて許されるisResultDisplayの設定値
