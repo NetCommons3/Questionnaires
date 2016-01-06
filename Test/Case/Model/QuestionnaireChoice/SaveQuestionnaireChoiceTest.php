@@ -28,7 +28,7 @@ class QuestionnaireSaveQuestionnaireChoiceTest extends QuestionnairesSaveTest {
  *
  * @var array
  */
-	public $plugin = 'questionnaire_choices';
+	public $plugin = 'questionnaires';
 
 /**
  * Fixtures

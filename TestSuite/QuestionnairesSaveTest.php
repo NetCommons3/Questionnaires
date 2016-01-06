@@ -53,7 +53,7 @@ class QuestionnairesSaveTest extends NetCommonsModelTestCase {
 		}
 
 		//テスト実行
-		$result = $this->$model->$method($data, false);
+		$result = $this->$model->$method($data);
 		$this->assertNotEmpty($result);
 
 		//idのチェック
@@ -78,7 +78,7 @@ class QuestionnairesSaveTest extends NetCommonsModelTestCase {
 			$actual[$this->$model->alias] = Hash::remove($actual[$this->$model->alias], 'modified');
 			$actual[$this->$model->alias] = Hash::remove($actual[$this->$model->alias], 'modified_user');
 
-			if ($this->$model->hasField('key')) {
+			if ($this->$model->hasField('key') && !isset($data[$this->$model->alias]['key'])) {
 				$data[$this->$model->alias]['key'] = OriginalKeyBehavior::generateKey($this->$model->name, $this->$model->useDbConfig);
 			}
 			$before[$this->$model->alias] = array();

@@ -275,7 +275,8 @@ class QuestionnairePage extends QuestionnairesAppModel {
 
 			$pageId = $this->id;
 
-			if (! $this->QuestionnaireQuestion->saveQuestionnaireQuestion($pageId, $page['QuestionnaireQuestion'])) {
+			$page = Hash::insert($page, 'QuestionnaireQuestion.{n}.questionnaire_page_id', $pageId);
+			if (! $this->QuestionnaireQuestion->saveQuestionnaireQuestion($page['QuestionnaireQuestion'])) {
 				return false;
 			}
 		}

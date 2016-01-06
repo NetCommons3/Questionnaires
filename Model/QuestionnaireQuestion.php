@@ -265,12 +265,11 @@ class QuestionnaireQuestion extends QuestionnairesAppModel {
  * saveQuestionnaireQuestion
  * save QuestionnaireQuestion data
  *
- * @param int $pageId questionnaire page id
  * @param array &$questions questionnaire questions
  * @throws InternalErrorException
  * @return bool
  */
-	public function saveQuestionnaireQuestion($pageId, &$questions) {
+	public function saveQuestionnaireQuestion(&$questions) {
 		$this->loadModels([
 			'QuestionnaireChoice' => 'Questionnaires.QuestionnaireChoice',
 		]);
@@ -284,19 +283,18 @@ class QuestionnaireQuestion extends QuestionnairesAppModel {
 			// アンケートは履歴を取っていくタイプのコンテンツデータなのでSave前にはID項目はカット
 			// （そうしないと既存レコードのUPDATEになってしまうから）
 			$question = Hash::remove($question, 'QuestionnaireQuestion.id');
-			$question['questionnaire_page_id'] = $pageId;
 
 			$this->create();
-			if (!$this->save($question, false)) {
-				return false;
-			};
+			if (! $this->save($question, false)) {
+				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+			}
 
 			$questionId = $this->id;
 
 			if (isset($question['QuestionnaireChoice'])) {
 				$question = Hash::insert($question, 'QuestionnaireChoice.{n}.questionnaire_question_id', $questionId);
-				if (!$this->QuestionnaireChoice->saveQuestionnaireChoice($question['QuestionnaireChoice'])) {
-					return false;
+				if (! $this->QuestionnaireChoice->saveQuestionnaireChoice($question['QuestionnaireChoice'])) {
+					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 				}
 			}
 		}
@@ -317,8 +315,8 @@ class QuestionnaireQuestion extends QuestionnairesAppModel {
 		}
 
 		// 上記以外の場合は最低１つは必要
-		if (empty($this->data['QuestionnaireChoice'][0])) {
-			$this->validationErrors['question_type'] = __d('questionnaires', 'please set at least one choice.');
+		if (! Hash::check($this->data, 'QuestionnaireChoice.{n}')) {
+			$this->validationErrors['question_type'][] = __d('questionnaires', 'please set at least one choice.');
 			return false;
 		}
 
@@ -329,7 +327,7 @@ class QuestionnaireQuestion extends QuestionnairesAppModel {
 			$cols = Hash::extract($this->data['QuestionnaireChoice'], '{n}[matrix_type=' . QuestionnairesComponent::MATRIX_TYPE_COLUMN . ']');
 
 			if (empty($rows) || empty($cols)) {
-				$this->validationErrors['question_type'] = __d('questionnaires', 'please set at least one choice at row and column.');
+				$this->validationErrors['question_type'][] = __d('questionnaires', 'please set at least one choice at row and column.');
 				return false;
 			}
 		}
