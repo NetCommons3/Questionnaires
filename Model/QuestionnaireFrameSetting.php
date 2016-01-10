@@ -117,9 +117,11 @@ class QuestionnaireFrameSetting extends QuestionnairesAppModel {
 			),
 			'recursive' => -1
 		));
-
-		if (!$frameSetting) {
-			$frameSetting = $this->prepareFrameSetting($frameKey);
+		// 指定されたフレーム設定が存在しない場合
+		if (! $frameSetting) {
+			// とりあえずデフォルトの表示設定を返す
+			// しかし、表示対象アンケートが設定されていないわけなので、空っぽの一覧表示となる
+			$frameSetting = $this->getDefaultFrameSetting();
 		}
 
 		$setting = $frameSetting['QuestionnaireFrameSetting'];
@@ -150,33 +152,13 @@ class QuestionnaireFrameSetting extends QuestionnairesAppModel {
 	public function getDefaultFrameSetting() {
 		$frame = array(
 			'QuestionnaireFrameSetting' => array(
-				'id' => '',
+				//'id' => '',
 				'display_type' => QuestionnairesComponent::DISPLAY_TYPE_LIST,
 				'display_num_per_page' => QuestionnairesComponent::QUESTIONNAIRE_DEFAULT_DISPLAY_NUM_PER_PAGE,
 				'sort_type' => QuestionnairesComponent::DISPLAY_SORT_TYPE_NEW_ARRIVALS,
 			)
 		);
 		return $frame;
-	}
-
-/**
- * prepareFrameSetting
- *
- * @param string $frameKey frame key
- * @return mix
- * @throws Exception
- * @throws InternalErrorException
- */
-	public function prepareFrameSetting($frameKey) {
-		$frameSetting = $this->getDefaultFrameSetting();
-		$this->saveFrameSettings($frameSetting);
-		$ret = $this->find('first', array(
-			'conditions' => array(
-				'frame_key' => $frameKey
-			),
-			'recursive' => -1
-		));
-		return $ret;
 	}
 
 /**

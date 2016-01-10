@@ -193,7 +193,6 @@ class Questionnaire extends QuestionnairesAppModel {
 		));
 
 		parent::beforeValidate($options);
-
 		// 最低でも１ページは存在しないとエラー
 		if (! isset($this->data['QuestionnairePage'][0])) {
 			$this->validationErrors['pickup_error'] = __d('questionnaires', 'please set at least one page.');
@@ -487,7 +486,8 @@ class Questionnaire extends QuestionnairesAppModel {
 			$questionnaireId = $this->id;
 
 			// ページ以降のデータを登録
-			if (! $this->QuestionnairePage->saveQuestionnairePage($questionnaireId, $questionnaire['QuestionnairePage'])) {
+			$questionnaire = Hash::insert($questionnaire, 'QuestionnairePage.{n}.questionnaire_id', $questionnaireId);
+			if (! $this->QuestionnairePage->saveQuestionnairePage($questionnaire['QuestionnairePage'])) {
 				$this->rollback();
 				return false;
 			}

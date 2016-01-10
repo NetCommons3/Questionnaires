@@ -357,14 +357,14 @@ class QuestionnaireFixture extends CakeTestFixture {
 		for ($i = 1; $i <= 50; $i = $i + 2) {
 			$this->records[] = array(
 				'id' => $i,
-				'key' => 'questionnaire_' . $i + 1,
+				'key' => 'questionnaire_' . strval($i + 1),
 				'language_id' => 1,
 				'is_active' => 1,
 				'is_latest' => 1,
 				'block_id' => 1,
 				'status' => 1, //  1:公開中、2:公開申請中、3:下書き中、4:差し戻し
-				'title' => 'questionnaire_' . $i + 1,
-				'sub_title' => 'questionnaier_' . $i + 1 . '_sub',
+				'title' => 'questionnaire_' . strval($i + 1),
+				'sub_title' => 'questionnaier_' . strval($i + 1) . '_sub',
 				'public_type' => 1,
 				'publish_start' => null,
 				'publish_end' => null,
@@ -391,14 +391,14 @@ class QuestionnaireFixture extends CakeTestFixture {
 			);
 			$this->records[] = array(
 				'id' => $i + 1,
-				'key' => 'questionnaire_' . $i + 1,
+				'key' => 'questionnaire_' . strval($i + 1),
 				'language_id' => 2,
 				'is_active' => 1,
 				'is_latest' => 1,
 				'block_id' => 2,
 				'status' => 1, //  1:公開中、2:公開申請中、3:下書き中、4:差し戻し
-				'title' => 'questionnaire_' . $i + 1,
-				'sub_title' => 'questionnaier_' . $i + 1 . '_sub',
+				'title' => 'questionnaire_' . strval($i + 1),
+				'sub_title' => 'questionnaier_' . strval($i + 1) . '_sub',
 				'public_type' => 1,
 				'publish_start' => null,
 				'publish_end' => null,

@@ -45,20 +45,20 @@ class QuestionnairesSaveTest extends NetCommonsModelTestCase {
 		$method = $this->_methodName;
 
 		//チェック用データ取得
-		if (isset($data[$this->$model->alias]['id'])) {
+		if (isset($data[$model][0]['id'])) {
 			$before = $this->$model->find('first', array(
 				'recursive' => -1,
-				'conditions' => array('id' => $data[$this->$model->alias]['id']),
+				'conditions' => array('id' => $data[$this->$model->alias][0]['id']),
 			));
 		}
 
 		//テスト実行
-		$result = $this->$model->$method($data);
+		$result = $this->$model->$method($data[$model]);
 		$this->assertNotEmpty($result);
 
 		//idのチェック
-		if (isset($data[$this->$model->alias]['id'])) {
-			$id = $data[$this->$model->alias]['id'];
+		if (isset($data[$this->$model->alias][0]['id'])) {
+			$id = $data[$this->$model->alias][0]['id'];
 		} else {
 			$id = $this->$model->getLastInsertID();
 		}
@@ -69,7 +69,7 @@ class QuestionnairesSaveTest extends NetCommonsModelTestCase {
 			'conditions' => array('id' => $id),
 		));
 
-		if (isset($data[$this->$model->alias]['id'])) {
+		if (isset($data[$this->$model->alias][0]['id'])) {
 			$actual[$this->$model->alias] = Hash::remove($actual[$this->$model->alias], 'modified');
 			$actual[$this->$model->alias] = Hash::remove($actual[$this->$model->alias], 'modified_user');
 		} else {
@@ -78,22 +78,25 @@ class QuestionnairesSaveTest extends NetCommonsModelTestCase {
 			$actual[$this->$model->alias] = Hash::remove($actual[$this->$model->alias], 'modified');
 			$actual[$this->$model->alias] = Hash::remove($actual[$this->$model->alias], 'modified_user');
 
-			if ($this->$model->hasField('key') && !isset($data[$this->$model->alias]['key'])) {
-				$data[$this->$model->alias]['key'] = OriginalKeyBehavior::generateKey($this->$model->name, $this->$model->useDbConfig);
+			if ($this->$model->hasField('key') && !isset($data[$this->$model->alias][0]['key'])) {
+				$data[$this->$model->alias][0]['key'] = OriginalKeyBehavior::generateKey($this->$model->name, $this->$model->useDbConfig);
 			}
 			$before[$this->$model->alias] = array();
 		}
+
 		$expected[$this->$model->alias] = Hash::merge(
 			$before[$this->$model->alias],
-			$data[$this->$model->alias],
+			$data[$this->$model->alias][0],
 			array(
 				'id' => $id,
 			)
 		);
 		$expected[$this->$model->alias] = Hash::remove($expected[$this->$model->alias], 'modified');
 		$expected[$this->$model->alias] = Hash::remove($expected[$this->$model->alias], 'modified_user');
+		$expected = Hash::remove($expected, $this->$model->alias . '.QuestionnaireQuestion');
+		$expected = Hash::remove($expected, $this->$model->alias . '.QuestionnaireChoice');
 
-		$this->assertEquals($expected, $actual);
+		$this->assertEquals($expected[$this->$model->alias], $actual[$this->$model->alias]);
 	}
 
 /**
@@ -138,7 +141,7 @@ class QuestionnairesSaveTest extends NetCommonsModelTestCase {
 /**
  * Validatesのテスト
  *
- * @param array $data 登録データ
+ * @param array $datas 登録データ
  * @param array $options validateメソッドに渡すオプション配列
  * @param string $field フィールド名
  * @param string $value セットする値
@@ -147,22 +150,26 @@ class QuestionnairesSaveTest extends NetCommonsModelTestCase {
  * @dataProvider dataProviderValidationError
  * @return void
  */
-	public function testValidationError($data, $options, $field, $value, $message, $overwrite = array()) {
+	public function testValidationError($datas, $options, $field, $value, $message, $overwrite = array()) {
 		$model = $this->_modelName;
 
-		if (is_null($value)) {
-			unset($data[$model][$field]);
-		} else {
-			$data[$model][$field] = $value;
+		// 試験データは１つ分しか来ないけど
+		foreach ($datas[$model] as $dataEntity) {
+			$data = $dataEntity;
+			if (is_null($value)) {
+				unset($data[$field]);
+			} else {
+				$data[$field] = $value;
+			}
+			$data = Hash::merge($data, $overwrite);
+			//validate処理実行
+			$this->$model->set($data);
+
+			$result = $this->$model->validates($options);
+			$this->assertFalse($result);
+
+			$this->assertEquals($this->$model->validationErrors[$field][0], $message);
 		}
-		$data = Hash::merge($data, $overwrite);
-
-		//validate処理実行
-		$this->$model->set($data);
-		$result = $this->$model->validates($options);
-		$this->assertFalse($result);
-
-		$this->assertEquals($this->$model->validationErrors[$field][0], $message);
 	}
 
 }

@@ -64,7 +64,7 @@ class QuestionnaireSaveQuestionnaireChoiceTest extends QuestionnairesSaveTest {
  */
 	private function __getData() {
 		$data = array(
-			'QuestionnaireChoice' => array(
+			'QuestionnaireChoice' => array(array(
 				'language_id' => '2',
 				'matrix_type' => '0',
 				'other_choice_type' => '0',
@@ -75,7 +75,7 @@ class QuestionnaireSaveQuestionnaireChoiceTest extends QuestionnairesSaveTest {
 				'jump_route_number' => null,
 				'graph_color' => '#ff0000',
 				'questionnaire_question_id' => '2',
-			)
+			))
 		);
 		return $data;
 	}
@@ -151,22 +151,23 @@ class QuestionnaireSaveQuestionnaireChoiceTest extends QuestionnairesSaveTest {
 			'pageIndex' => 0,
 			'maxPageIndex' => 0,
 		);
+		$data = $this->__getData();
 		return array(
-			array($this->__getData(), $options, 'choice_label', '',
+			array($data, $options, 'choice_label', '',
 				__d('questionnaires', 'Please input choice text.')),
-			array($this->__getData(), $options, 'choice_label', 'has|data:abc',
+			array($data, $options, 'choice_label', 'has|data:abc',
 				__d('questionnaires', 'You can not use the character of |, : for choice text ')),
-			array($this->__getData(), $options, 'other_choice_type', 'abc',
+			array($data, $options, 'other_choice_type', 'abc',
 				__d('net_commons', 'Invalid request.')),
-			array($this->__getData(), $options, 'choice_sequence', '1',
+			array($data, $options, 'choice_sequence', '1',
 				__d('questionnaires', 'choice sequence is illegal.')),
-			array($this->__getData(), $options, 'graph_color', 'avvv1',
+			array($data, $options, 'graph_color', 'avvv1',
 				__d('questionnaires', 'First character is "#". And input the hexadecimal numbers by six digits.')),
-			array($this->__getData(), $skipOptions, 'skip_page_sequence', '9',
+			array($data, $skipOptions, 'skip_page_sequence', '9',
 				__d('questionnaires', 'Invalid skip page. page does not exist.')),
-			array($this->__getData(), $skipOptions, 'skip_page_sequence', '0',
+			array($data, $skipOptions, 'skip_page_sequence', '0',
 				__d('questionnaires', 'Invalid skip page. Please set forward page.')),
-			array($this->__getData(), $skipOptions, 'skip_page_sequence', null,
+			array($data, $skipOptions, 'skip_page_sequence', null,
 				__d('questionnaires', 'Invalid skip page. page does not exist.')),
 		);
 	}

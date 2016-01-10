@@ -21,7 +21,11 @@ $urlParams = Hash::merge(array(
 	'controller' => 'questionnaires',
 	'action' => 'index'),
 	$this->params['named']);
-$currentStatus = isset($this->params['named']['answer_status']) ? $this->params['named']['answer_status'] : QuestionnairesComponent::QUESTIONNAIRE_ANSWER_VIEW_ALL;
+if (isset($this->params['named']['answer_status']) && in_array($this->params['named']['answer_status'], $list)) {
+	$currentStatus = $this->params['named']['answer_status'];
+} else {
+	$currentStatus = QuestionnairesComponent::QUESTIONNAIRE_ANSWER_VIEW_ALL;
+}
 
 ?>
 

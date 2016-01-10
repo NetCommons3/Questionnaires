@@ -85,7 +85,6 @@ class QuestionnairesController extends QuestionnairesAppController {
 		$conditions = $this->Questionnaire->getCondition();
 
 		// データ取得
-		//$subQuery = $this->Questionnaire->getQuestionnaireSubQuery();
 		$this->Paginator->settings = array_merge(
 			$this->Paginator->settings,
 			array(
@@ -95,7 +94,6 @@ class QuestionnairesController extends QuestionnairesAppController {
 				'limit' => $displayNum,
 				'direction' => $dir,
 				'recursive' => 0,
-				//'joins' => $subQuery,
 			)
 		);
 		if (!isset($this->params['named']['answer_status'])) {
@@ -123,7 +121,6 @@ class QuestionnairesController extends QuestionnairesAppController {
 			$filter = array(
 				'Questionnaire.status !=' => WorkflowComponent::STATUS_PUBLISHED
 			);
-
 			return $filter;
 		}
 

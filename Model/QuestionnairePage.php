@@ -221,38 +221,36 @@ class QuestionnairePage extends QuestionnairesAppModel {
 			));
 		}
 
-		if (! parent::beforeValidate($options)) {
-			return false;
-		}
+		parent::beforeValidate($options);
 
 		// 付属の質問以下のvalidate
 		if (! isset($this->data['QuestionnaireQuestion'][0])) {
-			$this->validationErrors['pickup_error'] = __d('questionnaires', 'please set at least one question.');
-		}
-		$validationErrors = array();
-		$this->QuestionnaireQuestion = ClassRegistry::init('Questionnaires.QuestionnaireQuestion', true);
-		foreach ($this->data['QuestionnaireQuestion'] as $qIndex => $question) {
-			// 質問データバリデータ
-			$this->QuestionnaireQuestion->create();
-			$this->QuestionnaireQuestion->set($question);
-			$options['questionIndex'] = $qIndex;
-			if (! $this->QuestionnaireQuestion->validates($options)) {
-				$validationErrors['QuestionnaireQuestion'][$qIndex] = $this->QuestionnaireQuestion->validationErrors;
+			$this->validationErrors['page_sequence'][] = __d('questionnaires', 'please set at least one question.');
+		} else {
+			$validationErrors = array();
+			$this->QuestionnaireQuestion = ClassRegistry::init('Questionnaires.QuestionnaireQuestion', true);
+			foreach ($this->data['QuestionnaireQuestion'] as $qIndex => $question) {
+				// 質問データバリデータ
+				$this->QuestionnaireQuestion->create();
+				$this->QuestionnaireQuestion->set($question);
+				$options['questionIndex'] = $qIndex;
+				if (! $this->QuestionnaireQuestion->validates($options)) {
+					$validationErrors['QuestionnaireQuestion'][$qIndex] = $this->QuestionnaireQuestion->validationErrors;
+				}
 			}
+			$this->validationErrors += $validationErrors;
 		}
-		$this->validationErrors += $validationErrors;
 		return true;
 	}
 /**
  * saveQuestionnairePage
  * save QuestionnairePage data
  *
- * @param int $questionnaireId questionnaire id
  * @param array &$questionnairePages questionnaire pages
  * @throws InternalErrorException
  * @return bool
  */
-	public function saveQuestionnairePage($questionnaireId, &$questionnairePages) {
+	public function saveQuestionnairePage(&$questionnairePages) {
 		$this->loadModels([
 			'QuestionnaireQuestion' => 'Questionnaires.QuestionnaireQuestion',
 		]);
@@ -267,18 +265,17 @@ class QuestionnairePage extends QuestionnairesAppModel {
 			// アンケートは履歴を取っていくタイプのコンテンツデータなのでSave前にはID項目はカット
 			// （そうしないと既存レコードのUPDATEになってしまうから）
 			$page = Hash::remove($page, 'QuestionnairePage.id');
-			$page['questionnaire_id'] = $questionnaireId;
 			$this->create();
 			if (! $this->save($page, false)) {	// validateは上位のquestionnaireで済んでいるはず
-				return false;
+				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}
 
 			$pageId = $this->id;
 
 			$page = Hash::insert($page, 'QuestionnaireQuestion.{n}.questionnaire_page_id', $pageId);
-			if (! $this->QuestionnaireQuestion->saveQuestionnaireQuestion($page['QuestionnaireQuestion'])) {
-				return false;
-			}
+			// もしもQuestionやChoiceのsaveがエラーになった場合は、
+			// QuestionやChoiceのほうでInternalExceptionErrorが発行されるのでここでは何も行わない
+			$this->QuestionnaireQuestion->saveQuestionnaireQuestion($page['QuestionnaireQuestion']);
 		}
 		return true;
 	}

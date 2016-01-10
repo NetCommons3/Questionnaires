@@ -293,9 +293,9 @@ class QuestionnaireQuestion extends QuestionnairesAppModel {
 
 			if (isset($question['QuestionnaireChoice'])) {
 				$question = Hash::insert($question, 'QuestionnaireChoice.{n}.questionnaire_question_id', $questionId);
-				if (! $this->QuestionnaireChoice->saveQuestionnaireChoice($question['QuestionnaireChoice'])) {
-					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
-				}
+				// もしもChoiceのsaveがエラーになった場合は、
+				// ChoiceのほうでInternalExceptionErrorが発行されるのでここでは何も行わない
+				$this->QuestionnaireChoice->saveQuestionnaireChoice($question['QuestionnaireChoice']);
 			}
 		}
 		return true;
