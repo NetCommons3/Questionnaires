@@ -39,7 +39,7 @@ class QuestionnairesOwnAnswerComponent extends Component {
 		$summary = false;
 		$answerSummary = ClassRegistry::init('Questionnaires.QuestionnaireAnswerSummary');
 		// 未ログインの人の場合はセッションにある回答中データを参照する
-		if (empty(Current::read('User.id'))) {
+		if (! Current::read('User.id')) {
 			$session = $this->_Collection->load('Session');
 			$summaryId = $session->read('Questionnaires.progressiveSummary.' . $questionnaireKey);
 			if ($summaryId) {
@@ -113,7 +113,7 @@ class QuestionnairesOwnAnswerComponent extends Component {
 
 		$this->__ownAnsweredKeys = array();
 
-		if (empty(Current::read('User.id'))) {
+		if (! Current::read('User.id')) {
 			$session = $this->_Collection->load('Session');
 			$blockId = Current::read('Block.id');
 			$ownAnsweredKeys = $session->read('Questionnaires.ownAnsweredKeys.' . $blockId);
@@ -173,7 +173,7 @@ class QuestionnairesOwnAnswerComponent extends Component {
 		// 回答済みアンケート配列に追加
 		$this->__ownAnsweredKeys[] = $questionnaireKey;
 		// ログイン状態の人の場合はこれ以上の処理は不要
-		if (! empty(Current::read('User.id'))) {
+		if (Current::read('User.id')) {
 			return;
 		}
 		// 未ログインの人の場合はセッションに書いておく
