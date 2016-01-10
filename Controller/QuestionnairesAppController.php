@@ -154,7 +154,7 @@ class QuestionnairesAppController extends AppController {
 
 		// 会員以外には許していないのに未ログイン
 		if ($questionnaire['Questionnaire']['is_no_member_allow'] == QuestionnairesComponent::PERMISSION_NOT_PERMIT) {
-			if (empty(Current::read('User.id'))) {
+			if (! Current::read('User.id')) {
 				return false;
 			}
 		}
