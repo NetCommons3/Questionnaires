@@ -105,7 +105,6 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
 		$conditions = $this->Questionnaire->getBaseCondition();
 
 		// データ取得
-		$subQuery = $this->Questionnaire->getQuestionnaireSubQuery();
 		$this->paginate = array(
 			'conditions' => $conditions,
 			'page' => 1,
@@ -113,7 +112,6 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
 			'limit' => QuestionnairesComponent::QUESTIONNAIRE_DEFAULT_DISPLAY_NUM_PER_PAGE,
 			'direction' => 'desc',
 			'recursive' => 0,
-			'joins' => $subQuery,
 		);
 		$questionnaire = $this->paginate('Questionnaire');
 		if (! $questionnaire) {

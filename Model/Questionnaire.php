@@ -333,16 +333,12 @@ class Questionnaire extends QuestionnairesAppModel {
 		$baseConditions = $this->getBaseCondition();
 		$conditions = Hash::merge($baseConditions, $conditions);
 
-		// 回答数取得のためのSubQuery
-		$subQuery = $this->getQuestionnaireSubQuery();
-
 		// 取得オプション
 		$this->QuestionnaireFrameSetting = ClassRegistry::init('Questionnaires.QuestionnaireFrameSetting', true);
 		$defaultOptions = $this->QuestionnaireFrameSetting->getQuestionnaireFrameSettingConditions(Current::read('Frame.key'));
 		$options = Hash::merge($defaultOptions, $options);
 		$list = $this->find('all', array(
 			'recursive' => 0,
-			'joins' => $subQuery,
 			'conditions' => $conditions,
 			$options
 		));
@@ -397,58 +393,6 @@ class Questionnaire extends QuestionnairesAppModel {
 		return $conditions;
 	}
 
-/**
- * getQuestionnaireSubQuery アンケートに対する指定ユーザーの回答が存在するか
- *
- * @return array
- */
-	public function getQuestionnaireSubQuery() {
-		$sessionId = CakeSession::id();
-		$dbo = $this->getDataSource();
-		$this->QuestionnaireAnswerSummary = ClassRegistry::init('Questionnaires.QuestionnaireAnswerSummary', true);
-		if (Current::read('User.id')) {
-			$conditions = array(
-				'user_id' => Current::read('User.id'),
-				'answer_status' => QuestionnairesComponent::ACTION_ACT,
-				'test_status' => QuestionnairesComponent::TEST_ANSWER_STATUS_PEFORM,
-			);
-		} else {
-			$conditions = array(
-				'session_value' => $sessionId,
-				'answer_status' => QuestionnairesComponent::ACTION_ACT,
-				'test_status' => QuestionnairesComponent::TEST_ANSWER_STATUS_PEFORM,
-			);
-		}
-		$answeredSummaryQuery = $dbo->buildStatement(
-			array(
-				'fields' => array('questionnaire_key', 'count(id) AS answer_summary_count'),
-				'table' => $dbo->fullTableName($this->QuestionnaireAnswerSummary),
-				'alias' => 'CountAnswerSummary',
-				'limit' => null,
-				'offset' => null,
-				'conditions' => $conditions,
-				'joins' => array(),
-				'group' => array('questionnaire_key')
-			),
-			$this->QuestionnaireAnswerSummary
-		);
-		$subQueryArray = array(
-			array('type' => 'left',
-				'table' => '(' . $answeredSummaryQuery . ') AS CountAnswerSummary',
-				'conditions' => 'Questionnaire.key = CountAnswerSummary.questionnaire_key'
-			),
-			array(
-				'table' => 'questionnaire_frame_display_questionnaires',
-				'alias' => 'QuestionnaireFrameDisplayQuestionnaires',
-				'type' => 'left',
-				'conditions' => array(
-					'Questionnaire.key = QuestionnaireFrameDisplayQuestionnaires.questionnaire_key'
-				)
-			),
-		);
-		$this->virtualFields = ['answer_summary_count' => 'CountAnswerSummary.answer_summary_count'];
-		return $subQueryArray;
-	}
 /**
  * saveQuestionnaire
  * save Questionnaire data

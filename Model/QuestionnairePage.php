@@ -164,11 +164,11 @@ class QuestionnairePage extends QuestionnairesAppModel {
 			$questionnaire['QuestionnairePage'] = Hash::combine($pages, '{n}.QuestionnairePage.page_sequence', '{n}.QuestionnairePage');
 		}
 		$questionnaire['Questionnaire']['page_count'] = 0;
-		foreach ($questionnaire['QuestionnairePage'] as &$page) {
-			if (isset($page['id'])) {
+		if (isset($questionnaire['QuestionnairePage'])) {
+			foreach ($questionnaire['QuestionnairePage'] as &$page) {
 				$this->QuestionnaireQuestion->setQuestionToPage($questionnaire, $page);
+				$questionnaire['Questionnaire']['page_count']++;
 			}
-			$questionnaire['Questionnaire']['page_count']++;
 		}
 	}
 /**

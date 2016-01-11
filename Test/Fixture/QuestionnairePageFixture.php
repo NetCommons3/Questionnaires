@@ -63,7 +63,7 @@ class QuestionnairePageFixture extends CakeTestFixture {
 			}
 			for ($ii = 0; $ii < $repeat; $ii++) {
 				$this->records[] = $this->getPage($id, $id, $i, 1, $ii);
-				$this->records[] = $this->getPage($id + 1, $id, $i, 2, $ii);
+				$this->records[] = $this->getPage($id + 1, $id, $i + 1, 2, $ii);
 				$id = $id + 2;
 			}
 		}
@@ -82,7 +82,7 @@ class QuestionnairePageFixture extends CakeTestFixture {
 	public function getPage($id, $key, $qId, $langId, $pageSeq = 0) {
 		return array(
 			'id' => $id,
-			'key' => 'page_' . $key,
+			'key' => 'page_' . strval($key),
 			'language_id' => $langId,
 			'questionnaire_id' => $qId,
 			'page_title' => 'Page Title',
