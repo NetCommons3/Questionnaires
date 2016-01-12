@@ -23,6 +23,13 @@ App::uses('QuestionnairesComponent', 'Questionnaires.Controller/Component');
 class QuestionnaireGetDefaultQuestionTest extends NetCommonsGetTest {
 
 /**
+ * Plugin name
+ *
+ * @var array
+ */
+	public $plugin = 'questionnaires';
+
+/**
  * Fixtures
  *
  * @var array
