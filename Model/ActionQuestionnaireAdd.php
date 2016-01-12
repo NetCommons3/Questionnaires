@@ -111,7 +111,7 @@ class ActionQuestionnaireAdd extends QuestionnairesAppModel {
 		}
 		// 指定の状態であれば、チェック対象データがちゃんと入っているか確認する
 		// Validation::notBlank($check);
-		if (empty(array_shift($check))) {
+		if (! array_shift($check)) {
 			// 指定のデータが指定の値になっている場合は、このデータ空っぽの場合はエラー
 			return false;
 		}
