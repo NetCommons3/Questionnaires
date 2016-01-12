@@ -35,6 +35,8 @@ $jsPastQuestionnaires = NetCommonsAppController::camelizeKeyRecursive($pastQuest
 				<?php echo $this->NetCommonsForm->hidden('Frame.id'); ?>
 				<?php echo $this->NetCommonsForm->hidden('Block.id'); ?>
 
+				<?php echo $this->NetCommonsForm->error('create_option', null, array('class' => 'help-block')); ?>
+
 				<div class="form-group col-lg-12">
 					<?php echo $this->element('Questionnaires.QuestionnaireAdd/create_new'); ?>
 				</div>

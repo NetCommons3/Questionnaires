@@ -61,12 +61,9 @@ class QuestionnaireAddController extends QuestionnairesAppController {
  * @return void
  */
 	public function add() {
-		// NetCommonsお約束：
-		//投稿権限チェック
-		if (! $this->Questionnaire->canCreateWorkflowContent()) {
-			$this->throwBadRequest();
-			return false;
-		}
+		// NetCommonsお約束：投稿権限のある人物しかこのアクションにアクセスできない
+		// それは$componentsの組み込みでallow => add => content_creatableで担保される
+		// アクション処理内でチェックする必要はない
 
 		// POSTされたデータを読み取り
 		if ($this->request->isPost()) {
@@ -90,16 +87,20 @@ class QuestionnaireAddController extends QuestionnairesAppController {
 				// データに不備があった場合
 				$this->NetCommons->handleValidationError($actionModel->validationErrors);
 			}
-		} else {
-			// 初期表示の場合は、create_optionは初期値として「ＮＥＷ」を設定する
-			$this->request->data['ActionQuestionnaireAdd']['create_option'] = QuestionnairesComponent::QUESTIONNAIRE_CREATE_OPT_NEW;
 		}
 
 		// 過去データ 取り出し
-		$pastQuestionnaires = $this->Questionnaire->getQuestionnairesList(array(), array('limit' => 1000));
+		$pastQuestionnaires = $this->Questionnaire->getQuestionnairesList(array(), array('limit' => 1000), array('recursive' => -1));
 		$this->set('pastQuestionnaires', $pastQuestionnaires);
+
+		//
 		// NetCommonsお約束：投稿のデータはrequest dataに設定する
+		//
 		$this->request->data['Frame'] = Current::read('Frame');
 		$this->request->data['Block'] = Current::read('Block');
+		// create_optionが未設定のときは初期値として「ＮＥＷ」を設定する
+		if (! $this->request->data('ActionQuestionnaireAdd.create_option')) {
+			$this->request->data('ActionQuestionnaireAdd.create_option', QuestionnairesComponent::QUESTIONNAIRE_CREATE_OPT_NEW);
+		}
 	}
 }
