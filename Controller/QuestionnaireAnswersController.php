@@ -93,6 +93,7 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 		$conditions = $this->Questionnaire->getBaseCondition(
 			array('Questionnaire.key' => $questionnaireKey)
 		);
+
 		$this->__questionnaire = $this->Questionnaire->find('first', array(
 			'conditions' => $conditions,
 		));

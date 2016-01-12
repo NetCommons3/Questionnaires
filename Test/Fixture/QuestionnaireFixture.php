@@ -425,8 +425,11 @@ class QuestionnaireFixture extends CakeTestFixture {
 			);
 		}
 		foreach ($this->records as &$record) {
-			$opt = Hash::get($this->recordsOptions, '[id=' . $record['id'] . ']');
-			$record = Hash::merge($record, $opt);
+			$path = '{n}[id=' . $record['id'] . ']';
+			$opt = Hash::extract($this->recordsOptions, $path);
+			if (! empty($opt)) {
+				$record = Hash::merge($record, $opt[0]);
+			}
 		}
 		parent::init();
 	}

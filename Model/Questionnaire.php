@@ -383,7 +383,7 @@ class Questionnaire extends QuestionnairesAppModel {
 			'block_id' => Current::read('Block.id'),
 		));
 
-		if (! Current::read('User')) {
+		if (! Current::read('User.id')) {
 			$conditions['is_no_member_allow'] = QuestionnairesComponent::PERMISSION_PERMIT;
 		}
 

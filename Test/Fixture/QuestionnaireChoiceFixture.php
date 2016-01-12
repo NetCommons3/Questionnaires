@@ -51,5 +51,18 @@ class QuestionnaireChoiceFixture extends CakeTestFixture {
  * @var array
  */
 	public $records = array(
+		array(
+			'id' => '2',
+			'key' => 'choice_2',
+			'language_id' => '2',
+			'matrix_type' => '0',
+			'other_choice_type' => '0',
+			'choice_sequence' => 0,
+			'choice_label' => 'choice label1',
+			'choice_value' => 'choice label1',
+			'skip_page_sequence' => null,
+			'graph_color' => '#ff0000',
+			'questionnaire_question_id' => '2',
+		),
 	);
 }
