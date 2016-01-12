@@ -223,7 +223,7 @@ class QuestionnairesControllerIndexTest extends WorkflowControllerIndexTest {
 		$data = array(
 			array(1, true, false),
 			array(3, false, false),
-			array(25, false, true),
+			array(23, false, true),
 		);
 		return $data;
 	}

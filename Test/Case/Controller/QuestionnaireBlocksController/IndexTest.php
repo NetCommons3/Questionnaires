@@ -104,7 +104,7 @@ class QuestionnaireBlocksControllerIndexTest extends BlocksControllerTest {
 		$editLink['controller'] = 'questionnaire_edit';
 		$editLink['action'] = 'edit_question';
 		$editLink['block_id'] = $blockId;
-		$editLink['key'] = 'questionnaire_2';
+		$editLink['key'] = 'questionnaire_4';
 		$this->assertRegExp(
 			'/<a href=".*?' . preg_quote(NetCommonsUrl::actionUrl($editLink), '/') . '.*?".*?>/', $result
 		);
