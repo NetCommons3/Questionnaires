@@ -40,19 +40,6 @@ class QuestionnaireUtilHelper extends AppHelper {
 	}
 
 /**
- * getSubTitle サブタイトル表示
- *
- * @param string $subTitle サブタイトル
- * @return string
- */
-	public function getSubTitle($subTitle) {
-		if (!empty($subTitle)) {
-			return '<small>' . h($subTitle) . '</small>';
-		}
-		return '';
-	}
-
-/**
  * getAnswerButtons 回答済み 回答する テストのボタン表示
  *
  * @param array $questionnaire 回答データ
@@ -82,6 +69,7 @@ class QuestionnaireUtilHelper extends AppHelper {
 		//}
 
 		$buttonStr = '<a class="btn btn-%s questionnaire-listbtn %s" %s href="%s">%s</a>';
+		$disabledButtonStr = '<span class="btn btn-%s questionnaire-listbtn %s" %s href="%s">%s</span>';
 
 		// ボタンの色
 		// ボタンのラベル
@@ -119,6 +107,7 @@ class QuestionnaireUtilHelper extends AppHelper {
 				&& $questionnaire['Questionnaire']['is_repeat_allow'] == QuestionnairesComponent::PERMISSION_NOT_PERMIT)) {
 			$answerButtonClass = 'default';
 			$answerButtonDisabled = 'disabled';
+			$buttonStr = $disabledButtonStr;
 		}
 
 		// ラベル名の決定

@@ -104,24 +104,49 @@ class QuestionnairesControllerIndexTest extends WorkflowControllerIndexTest {
 			'urlOptions' => array('frame_id' => $data['Frame']['id']),
 			'assert' => array('method' => 'assertNotEmpty'),
 		);
-		//
+		// ログイン無しでテストモードは０になる　　画面には"no questionnaire"のテキストが現れていること
 		$results[1] = array(
 			'urlOptions' => array('frame_id' => $data['Frame']['id'], 'answer_status' => 'test'),
-			'assert' => array('method' => 'assertNotEmpty'),
+			'assert' => array('method' => 'assertContains', 'expected' => __d('questionnaires', 'no questionnaire')),
 		);
+		// ログイン無しで未回答は全て出てくる　画面には何らかの表示が現れていること
 		$results[2] = array(
 			'urlOptions' => array('frame_id' => $data['Frame']['id'], 'answer_status' => 'unanswered'),
 			'assert' => array('method' => 'assertNotEmpty'),
 		);
+		// ログイン無しで回答済は０になる　画面には"no questionnaire"のテキストが現れていること
 		$results[3] = array(
 			'urlOptions' => array('frame_id' => $data['Frame']['id'], 'answer_status' => 'answered'),
-			'assert' => array('method' => 'assertNotEmpty'),
+			'assert' => array('method' => 'assertContains', 'expected' => __d('questionnaires', 'no questionnaire')),
 		);
+		// 表示件数を増やすことでFixtureデータをすべて表示させる
+		// そのうえで試験を行う
+		// 未ログインでも公開中なら見える
+		$results[4] = array(
+			'urlOptions' => array('frame_id' => $data['Frame']['id'], 'block_id' => $data['Block']['id'], 'action' => 'index', 'limit' => 50),
+			'assert' => array('method' => 'assertActionLink', 'action' => 'view', 'linkExist' => true, 'url' => array('controller' => 'questionnaire_answers', 'key' => 'questionnaire_2', 'limit' => null)),
+		);
+		// 未ログインの場合は一時保存が見えない
+		$results[5] = array(
+			'urlOptions' => array('frame_id' => $data['Frame']['id'], 'block_id' => $data['Block']['id'], 'action' => 'index', 'limit' => 50),
+			'assert' => array('method' => 'assertActionLink', 'action' => 'view', 'linkExist' => false, 'url' => array('controller' => 'questionnaire_answers', 'key' => 'questionnaire_42', 'limit' => null)),
+		);
+		// 未ログインの場合は未来公開が見えない
+		$results[6] = array(
+			'urlOptions' => array('frame_id' => $data['Frame']['id'], 'block_id' => $data['Block']['id'], 'action' => 'index', 'limit' => 50),
+			'assert' => array('method' => 'assertActionLink', 'action' => 'view', 'linkExist' => false, 'url' => array('controller' => 'questionnaire_answers', 'key' => 'questionnaire_18', 'limit' => null)),
+		);
+		// 未ログインの場合は過去公開は見えない。。。Workflowの共通処理に任せることになるので編集権限なければ出ない
+		$results[7] = array(
+			'urlOptions' => array('frame_id' => $data['Frame']['id'], 'block_id' => $data['Block']['id'], 'action' => 'index', 'limit' => 50),
+			'assert' => array('method' => 'assertActionLink', 'action' => 'view', 'linkExist' => false, 'url' => array('controller' => 'questionnaire_answers', 'key' => 'questionnaire_24', 'limit' => null)),
+		);
+
 		//チェック
 		//--追加ボタンチェック(なし)
-		$results[4] = array(
+		$results[8] = array(
 			'urlOptions' => array('frame_id' => $data['Frame']['id'], 'block_id' => $data['Block']['id']),
-			'assert' => array('method' => 'assertActionLink', 'action' => 'add', 'linkExist' => false, 'url' => array()),
+			'assert' => array('method' => 'assertActionLink', 'action' => 'add', 'linkExist' => false, 'url' => array('controller' => 'questionnaire_add')),
 		);
 
 		return $results;
@@ -152,7 +177,7 @@ class QuestionnairesControllerIndexTest extends WorkflowControllerIndexTest {
 		//--追加ボタンチェック
 		array_push($results, Hash::merge($results[$base], array(
 			'urlOptions' => array('controller' => 'questionnaire_add'),
-			'assert' => array('method' => 'assertActionLink', 'action' => 'add', 'linkExist' => true, 'url' => array()),
+			'assert' => array('method' => 'assertActionLink', 'action' => 'add', 'linkExist' => true, 'url' => array('controller' => 'questionnaire_add')),
 		)));
 		//フレームあり(コンテンツなし)テスト
 		array_push($results, Hash::merge($results[$base], array(
@@ -167,6 +192,26 @@ class QuestionnairesControllerIndexTest extends WorkflowControllerIndexTest {
 		//フレームID指定なしテスト
 		array_push($results, Hash::merge($results[$base], array(
 			'urlOptions' => array('frame_id' => null, 'block_id' => $data['Block']['id']),
+		)));
+		// 公開中なら見える
+		array_push($results, Hash::merge($results[$base], array(
+			'urlOptions' => array('action' => 'index', 'limit' => 50),
+			'assert' => array('method' => 'assertActionLink', 'action' => 'view', 'linkExist' => true, 'url' => array('controller' => 'questionnaire_answers', 'key' => 'questionnaire_4', 'limit' => null))
+		)));
+		// 一時保存も見える
+		array_push($results, Hash::merge($results[$base], array(
+			'urlOptions' => array('action' => 'index', 'limit' => 50),
+			'assert' => array('method' => 'assertActionLink', 'action' => 'test_mode', 'linkExist' => true, 'url' => array('controller' => 'questionnaire_answers', 'key' => 'questionnaire_42', 'limit' => null))
+		)));
+		// 未来も見える
+		array_push($results, Hash::merge($results[$base], array(
+			'urlOptions' => array('action' => 'index', 'limit' => 50),
+			'assert' => array('method' => 'assertActionLink', 'action' => 'view', 'linkExist' => true, 'url' => array('controller' => 'questionnaire_answers', 'key' => 'questionnaire_18', 'limit' => null))
+		)));
+		// 過去も見える
+		array_push($results, Hash::merge($results[$base], array(
+			'urlOptions' => array('action' => 'index', 'limit' => 50),
+			'assert' => array('method' => 'assertActionLink', 'action' => 'view', 'linkExist' => true, 'url' => array('controller' => 'questionnaire_answers', 'key' => 'questionnaire_24', 'limit' => null))
 		)));
 
 		return $results;
@@ -203,6 +248,62 @@ class QuestionnairesControllerIndexTest extends WorkflowControllerIndexTest {
 		array_push($results, Hash::merge($results[$base], array(
 			'urlOptions' => array('frame_id' => null, 'block_id' => $data['Block']['id']),
 			'assert' => array('method' => 'assertNotEmpty'),
+		)));
+		// 公開中なら見える
+		array_push($results, Hash::merge($results[$base], array(
+			'urlOptions' => array('action' => 'index', 'limit' => 50),
+			'assert' => array('method' => 'assertActionLink', 'action' => 'view', 'linkExist' => true, 'url' => array('controller' => 'questionnaire_answers', 'key' => 'questionnaire_4', 'limit' => null))
+		)));
+		// 自分のなら承認待ちも見える
+		array_push($results, Hash::merge($results[$base], array(
+			'urlOptions' => array('action' => 'index', 'limit' => 50),
+			'assert' => array('method' => 'assertActionLink', 'action' => 'test_mode', 'linkExist' => true, 'url' => array('controller' => 'questionnaire_answers', 'key' => 'questionnaire_28', 'limit' => null))
+		)));
+		// 自分のなら差し戻しも見える
+		array_push($results, Hash::merge($results[$base], array(
+			'urlOptions' => array('action' => 'index', 'limit' => 50),
+			'assert' => array('method' => 'assertActionLink', 'action' => 'test_mode', 'linkExist' => true, 'url' => array('controller' => 'questionnaire_answers', 'key' => 'questionnaire_10', 'limit' => null))
+		)));
+		// 自分のなら一時保存も見える
+		array_push($results, Hash::merge($results[$base], array(
+			'urlOptions' => array('action' => 'index', 'limit' => 50),
+			'assert' => array('method' => 'assertActionLink', 'action' => 'test_mode', 'linkExist' => true, 'url' => array('controller' => 'questionnaire_answers', 'key' => 'questionnaire_38', 'limit' => null))
+		)));
+		// 自分のなら未来も見える
+		array_push($results, Hash::merge($results[$base], array(
+			'urlOptions' => array('action' => 'index', 'limit' => 50),
+			'assert' => array('method' => 'assertActionLink', 'action' => 'view', 'linkExist' => true, 'url' => array('controller' => 'questionnaire_answers', 'key' => 'questionnaire_18', 'limit' => null))
+		)));
+		// 自分のなら過去も見える
+		array_push($results, Hash::merge($results[$base], array(
+			'urlOptions' => array('action' => 'index', 'limit' => 50),
+			'assert' => array('method' => 'assertActionLink', 'action' => 'view', 'linkExist' => true, 'url' => array('controller' => 'questionnaire_answers', 'key' => 'questionnaire_24', 'limit' => null))
+		)));
+
+		// 他人の承認待ちも見えない
+		array_push($results, Hash::merge($results[$base], array(
+			'urlOptions' => array('action' => 'index', 'limit' => 50),
+			'assert' => array('method' => 'assertActionLink', 'action' => 'test_mode', 'linkExist' => false, 'url' => array('controller' => 'questionnaire_answers', 'key' => 'questionnaire_26', 'limit' => null))
+		)));
+		// 他人の差し戻しも見えない
+		array_push($results, Hash::merge($results[$base], array(
+			'urlOptions' => array('action' => 'index', 'limit' => 50),
+			'assert' => array('method' => 'assertActionLink', 'action' => 'test_mode', 'linkExist' => false, 'url' => array('controller' => 'questionnaire_answers', 'key' => 'questionnaire_30', 'limit' => null))
+		)));
+		// 他人の一時保存も見えない
+		array_push($results, Hash::merge($results[$base], array(
+			'urlOptions' => array('action' => 'index', 'limit' => 50),
+			'assert' => array('method' => 'assertActionLink', 'action' => 'test_mode', 'linkExist' => false, 'url' => array('controller' => 'questionnaire_answers', 'key' => 'questionnaire_36', 'limit' => null))
+		)));
+		// 他人の未来も見えない
+		array_push($results, Hash::merge($results[$base], array(
+			'urlOptions' => array('action' => 'index', 'limit' => 50),
+			'assert' => array('method' => 'assertActionLink', 'action' => 'view', 'linkExist' => false, 'url' => array('controller' => 'questionnaire_answers', 'key' => 'questionnaire_16', 'limit' => null))
+		)));
+		// 他人の過去も見えない
+		array_push($results, Hash::merge($results[$base], array(
+			'urlOptions' => array('action' => 'index', 'limit' => 50),
+			'assert' => array('method' => 'assertActionLink', 'action' => 'view', 'linkExist' => false, 'url' => array('controller' => 'questionnaire_answers', 'key' => 'questionnaire_22', 'limit' => null))
 		)));
 
 		return $results;

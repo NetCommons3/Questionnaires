@@ -88,18 +88,24 @@ class QuestionnaireFixture extends CakeTestFixture {
 		array(
 			'id' => 5,
 			'is_key_pass_use' => 1,
+			'is_total_show' => 0,
 		),
 		array(
 			'id' => 6,
 			'is_key_pass_use' => 1,
+			'is_total_show' => 0,
 		),
 		array(
 			'id' => 7,
 			'is_image_authentication' => 1,
+			'total_show_timing' => 1,
+			'total_show_start_period' => '2033-01-01 00:00:00',
 		),
 		array(
 			'id' => 8,
 			'is_image_authentication' => 1,
+			'total_show_timing' => 1,
+			'total_show_start_period' => '2033-01-01 00:00:00',
 		),
 		array(
 			'id' => 9,
@@ -193,26 +199,32 @@ class QuestionnaireFixture extends CakeTestFixture {
 		),
 		array(
 			'id' => 25,
+			'is_active' => 0,
 			'status' => 2, //  1:公開中、2:公開申請中、3:下書き中、4:差し戻し
 		),
 		array(
 			'id' => 26,
+			'is_active' => 0,
 			'status' => 2, //  1:公開中、2:公開申請中、3:下書き中、4:差し戻し
 		),
 		array(
 			'id' => 27,
+			'is_active' => 0,
 			'status' => 2, //  1:公開中、2:公開申請中、3:下書き中、4:差し戻し
 		),
 		array(
 			'id' => 28,
+			'is_active' => 0,
 			'status' => 2, //  1:公開中、2:公開申請中、3:下書き中、4:差し戻し
 		),
 		array(
 			'id' => 29,
+			'is_active' => 0,
 			'status' => 4, //  1:公開中、2:公開申請中、3:下書き中、4:差し戻し
 		),
 		array(
 			'id' => 30,
+			'is_active' => 0,
 			'status' => 4, //  1:公開中、2:公開申請中、3:下書き中、4:差し戻し
 		),
 		array(
@@ -245,22 +257,27 @@ class QuestionnaireFixture extends CakeTestFixture {
 		),
 		array(
 			'id' => 35,
+			'is_active' => 0,
 			'status' => 3, //  1:公開中、2:公開申請中、3:下書き中、4:差し戻し
 		),
 		array(
 			'id' => 36,
+			'is_active' => 0,
 			'status' => 3, //  1:公開中、2:公開申請中、3:下書き中、4:差し戻し
 		),
 		array(
 			'id' => 37,
+			'is_active' => 0,
 			'status' => 3, //  1:公開中、2:公開申請中、3:下書き中、4:差し戻し
 		),
 		array(
 			'id' => 38,
+			'is_active' => 0,
 			'status' => 3, //  1:公開中、2:公開申請中、3:下書き中、4:差し戻し
 		),
 		array(
 			'id' => 39,
+			'is_active' => 0,
 			'status' => 3, //  1:公開中、2:公開申請中、3:下書き中、4:差し戻し
 			'public_type' => 2,
 			'publish_start' => '2032-01-01 00:00:00',
@@ -268,6 +285,7 @@ class QuestionnaireFixture extends CakeTestFixture {
 		),
 		array(
 			'id' => 40,
+			'is_active' => 0,
 			'status' => 3, //  1:公開中、2:公開申請中、3:下書き中、4:差し戻し
 			'title' => 'questionnaire_40',
 			'sub_title' => 'questionnaier_40_sub',
@@ -277,6 +295,7 @@ class QuestionnaireFixture extends CakeTestFixture {
 		),
 		array(
 			'id' => 41,
+			'is_active' => 0,
 			'status' => 3, //  1:公開中、2:公開申請中、3:下書き中、4:差し戻し
 			'public_type' => 2,
 			'publish_start' => '2032-01-01 00:00:00',
@@ -284,6 +303,7 @@ class QuestionnaireFixture extends CakeTestFixture {
 		),
 		array(
 			'id' => 42,
+			'is_active' => 0,
 			'status' => 3, //  1:公開中、2:公開申請中、3:下書き中、4:差し戻し
 			'public_type' => 2,
 			'publish_start' => '2032-01-01 00:00:00',
@@ -291,6 +311,7 @@ class QuestionnaireFixture extends CakeTestFixture {
 		),
 		array(
 			'id' => 43,
+			'is_active' => 0,
 			'status' => 3, //  1:公開中、2:公開申請中、3:下書き中、4:差し戻し
 			'public_type' => 2,
 			'publish_start' => '2032-01-01 00:00:00',
@@ -298,6 +319,7 @@ class QuestionnaireFixture extends CakeTestFixture {
 		),
 		array(
 			'id' => 44,
+			'is_active' => 0,
 			'status' => 3, //  1:公開中、2:公開申請中、3:下書き中、4:差し戻し
 			'public_type' => 2,
 			'publish_start' => '2032-01-01 00:00:00',
@@ -306,6 +328,7 @@ class QuestionnaireFixture extends CakeTestFixture {
 
 		array(
 			'id' => 45,
+			'is_active' => 0,
 			'status' => 3, //  1:公開中、2:公開申請中、3:下書き中、4:差し戻し
 			'public_type' => 2,
 			'publish_start' => '1999-01-01 00:00:00',
@@ -313,6 +336,7 @@ class QuestionnaireFixture extends CakeTestFixture {
 		),
 		array(
 			'id' => 46,
+			'is_active' => 0,
 			'status' => 3, //  1:公開中、2:公開申請中、3:下書き中、4:差し戻し
 			'public_type' => 2,
 			'publish_start' => '1999-01-01 00:00:00',
@@ -320,6 +344,7 @@ class QuestionnaireFixture extends CakeTestFixture {
 		),
 		array(
 			'id' => 47,
+			'is_active' => 0,
 			'status' => 3, //  1:公開中、2:公開申請中、3:下書き中、4:差し戻し
 			'public_type' => 2,
 			'publish_start' => '2000-01-01 00:00:00',
@@ -327,6 +352,7 @@ class QuestionnaireFixture extends CakeTestFixture {
 		),
 		array(
 			'id' => 48,
+			'is_active' => 0,
 			'status' => 3, //  1:公開中、2:公開申請中、3:下書き中、4:差し戻し
 			'public_type' => 2,
 			'publish_start' => '2000-01-01 00:00:00',
@@ -334,6 +360,7 @@ class QuestionnaireFixture extends CakeTestFixture {
 		),
 		array(
 			'id' => 49,
+			'is_active' => 0,
 			'status' => 3, //  1:公開中、2:公開申請中、3:下書き中、4:差し戻し
 			'public_type' => 2,
 			'publish_start' => '2000-01-01 00:00:00',
@@ -341,6 +368,7 @@ class QuestionnaireFixture extends CakeTestFixture {
 		),
 		array(
 			'id' => 50,
+			'is_active' => 0,
 			'status' => 3, //  1:公開中、2:公開申請中、3:下書き中、4:差し戻し
 			'public_type' => 2,
 			'publish_start' => '2000-01-01 00:00:00',

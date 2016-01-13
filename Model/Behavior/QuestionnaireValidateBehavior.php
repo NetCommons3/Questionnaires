@@ -156,6 +156,7 @@ class QuestionnaireValidateBehavior extends ModelBehavior {
 
 		if ($check == WorkflowBehavior::PUBLIC_TYPE_LIMITED) {
 			$nowTime = (new NetCommonsTime())->getNowDatetime();
+			$nowTime = strtotime($nowTime);
 			if ($nowTime < strtotime($startTime)) {
 				$ret = QuestionnairesComponent::QUESTIONNAIRE_PERIOD_STAT_BEFORE;
 			}
