@@ -111,6 +111,8 @@ msgstr ""
 #: /Model/ActionQuestionnaireAdd.php:66;70
 msgid "Please select past questionnaire."
 msgstr ""
+msgid "Please input template file."
+msgstr ""
 
 #: /Model/ActionQuestionnaireAdd.php:254
 msgid "file upload error."

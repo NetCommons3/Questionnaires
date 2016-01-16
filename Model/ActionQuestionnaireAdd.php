@@ -129,7 +129,7 @@ class ActionQuestionnaireAdd extends QuestionnairesAppModel {
 			return true;
 		}
 		$this->Questionnaire = ClassRegistry::init('Questionnaires.Questionnaire', true);
-		$cnt = $this->Questionnaire->find('count', array('id' => $check));
+		$cnt = $this->Questionnaire->find('count', array('conditions' => array('Questionnaire.id' => $check['past_questionnaire_id'])));
 		if ($cnt == 0) {
 			return false;
 		}
@@ -228,8 +228,8 @@ class ActionQuestionnaireAdd extends QuestionnairesAppModel {
 			'conditions' => array('Questionnaire.id' => $questionnaireId),
 		));
 
-		if (!$questionnaire) {
-			return $this->getDefaultQuestionnaire(array('title' => ''));
+		if (! $questionnaire) {
+			return $this->_getDefaultQuestionnaire(array('title' => ''));
 		}
 		// ID値のみクリア
 		$this->Questionnaire->clearQuestionnaireId($questionnaire);
@@ -247,11 +247,15 @@ class ActionQuestionnaireAdd extends QuestionnairesAppModel {
 		// アップされたファイルをもとに、アンケートデータを解凍、取得し、
 		// そのデータから今回作成するアンケートデータ基本構成を作成し返す
 
+		if (! Validation::notBlank($this->data['ActionQuestionnaireAdd']['template_file'])) {
+			$this->validationErrors['template_file'][] = __d('questionnaires', 'Please input template file.');
+			return null;
+		}
 		// アップロードファイルを受け取り、
 		$uploadFile = new TemporaryUploadFile(Hash::get($this->data, 'ActionQuestionnaireAdd.template_file'));
 		// エラーチェック
 		if (! $uploadFile) {
-			$this->validationErrors['Questionnaire']['template_file'] = __d('questionnaires', 'file upload error.');
+			$this->validationErrors['template_file'][] = __d('questionnaires', 'file upload error.');
 			return null;
 		}
 
@@ -260,21 +264,21 @@ class ActionQuestionnaireAdd extends QuestionnairesAppModel {
 		$temporaryFolder = $unZip->extract();
 		// エラーチェック
 		if (! $temporaryFolder) {
-			$this->validationErrors['Questionnaire']['template_file'] = __d('questionnaires', 'illegal import file.');
+			$this->validationErrors['template_file'][] = __d('questionnaires', 'illegal import file.');
 			return null;
 		}
 
 		// フィンガープリント確認
 		$fingerPrint = $this->__checkFingerPrint($temporaryFolder->path);
 		if ($fingerPrint === false) {
-			$this->validationErrors['Questionnaire']['template_file'] = __d('questionnaires', 'illegal import file.');
+			$this->validationErrors['template_file'][] = __d('questionnaires', 'illegal import file.');
 			return null;
 		}
 
 		// アンケートテンプレートファイル本体をテンポラリフォルダに展開する。
 		$questionnaireZip = new UnZip($temporaryFolder->path . DS . QuestionnairesComponent::QUESTIONNAIRE_TEMPLATE_FILENAME);
 		if (! $questionnaireZip->extract()) {
-			$this->validationErrors['Questionnaire']['template_file'] = __d('questionnaires', 'illegal import file.');
+			$this->validationErrors['template_file'][] = __d('questionnaires', 'illegal import file.');
 			return null;
 		}
 
@@ -287,14 +291,14 @@ class ActionQuestionnaireAdd extends QuestionnairesAppModel {
 		// 初めにファイルに記載されているアンケートプラグインのバージョンと
 		// 現サイトのアンケートプラグインのバージョンを突合し、差分がある場合はインポート処理を中断する。
 		if ($this->__checkVersion($jsonQuestionnaire) === false) {
-			$this->validationErrors['Questionnaire']['template_file'] = __d('questionnaires', 'version is different.');
+			$this->validationErrors['template_file'][] = __d('questionnaires', 'version is different.');
 			return null;
 		}
 
 		// バージョンが一致した場合、アンケートデータをメモリ上に構築
 		$questionnaires = $this->_getQuestionnaires(
 			$questionnaireZip->path,
-			$jsonQuestionnaire['Questionnaires'],
+			$jsonQuestionnaire['ActionQuestionnaireAdd'],
 			$fingerPrint);
 
 		// 現在の言語環境にマッチしたデータを返す

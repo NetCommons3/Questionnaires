@@ -111,6 +111,8 @@ msgstr "作成方法を選択してください。"
 #: /Model/ActionQuestionnaireAdd.php:66;70
 msgid "Please select past questionnaire."
 msgstr "過去のアンケートを選んでください。"
+msgid "Please input template file."
+msgstr "テンプレートファイルを選んでください。"
 
 #: /Model/ActionQuestionnaireAdd.php:254
 msgid "file upload error."
