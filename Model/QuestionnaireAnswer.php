@@ -148,7 +148,7 @@ class QuestionnaireAnswer extends QuestionnairesAppModel {
 			'conditions' => array(
 				'questionnaire_answer_summary_id' => $summary['QuestionnaireAnswerSummary']['id']
 			),
-			'recursive' => -1
+			'recursive' => 0
 		));
 		if (!empty($answer)) {
 			foreach ($answer as $ans) {

@@ -168,7 +168,11 @@ class QuestionnaireAnswerBehavior extends ModelBehavior {
 		if ($question['is_require'] != QuestionnairesComponent::REQUIRES_REQUIRE) {
 			return true;
 		}
-		return Validation::notBlank($data['answer_value']);
+		if (isset($model->data['QuestionnaireAnswer']['multi_answer_values'])) {
+			return Validation::notBlank($model->data['QuestionnaireAnswer']['multi_answer_values']);
+		} else {
+			return Validation::notBlank($data['answer_value']);
+		}
 	}
 
 /**
