@@ -89,7 +89,10 @@ class QuestionEditHelper extends AppHelper {
 			'class' => '',
 			'error' => false,
 			'ng-model' => $ngModel,
-			'ng-checked' => $ngModel . '==' . QuestionnairesComponent::USES_USE),
+			//'ng-checked' => $ngModel . '==' . RegistrationsComponent::USES_USE,
+			'ng-false-value' => '"0"', // この記述でないと チェックON,OFFが正常に動作しない。
+			'ng-true-value' => '"1"'
+		),
 			$options
 		);
 
