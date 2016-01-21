@@ -63,9 +63,9 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 						__d('questionnaires', 'set the answer period'),
 						array(
 						'value' => WorkflowBehavior::PUBLIC_TYPE_LIMITED,
-						'ng-checked' => 'questionnaires.questionnaire.publicType==' . "'" . WorkflowBehavior::PUBLIC_TYPE_LIMITED . "'",
-						'ng-true-value' => WorkflowBehavior::PUBLIC_TYPE_LIMITED,
-						'ng-false-value' => WorkflowBehavior::PUBLIC_TYPE_PUBLIC,
+						//'ng-checked' => 'questionnaires.questionnaire.publicType==' . "'" . WorkflowBehavior::PUBLIC_TYPE_LIMITED . "'",
+						'ng-true-value' => '"' . WorkflowBehavior::PUBLIC_TYPE_LIMITED . '"',
+						'ng-false-value' => '"' . WorkflowBehavior::PUBLIC_TYPE_PUBLIC .'"' ,
 						'hiddenField' => WorkflowBehavior::PUBLIC_TYPE_PUBLIC
 						),
 						__d('questionnaires', 'After approval will be immediately published . Stop of the questionnaire to select the stop from the questionnaire data list .'));
