@@ -67,7 +67,17 @@ class QuestionEditHelper extends AppHelper {
 		if ($type == 'wysiswyg') {
 			$ret .= '</div>';
 		}
-		$ret .= '</div></div>';
+
+		if (isset($options['ng-model'])) {
+			$ngModel = $options['ng-model'];
+			$modelNames = explode('.', $ngModel);
+			$errorMsgModelName = $modelNames[0] . '.errorMessages.' . $modelNames[1];
+			$ret .= '<div class="has-error" ng-if="' . $errorMsgModelName . '">';
+			$ret .= '<div class="help-block" ng-repeat="errorMessage in ' . $errorMsgModelName . '">';
+				$ret .= '{{errorMessage}}</div></div>';
+			$ret .= '</div></div>';
+		}
+
 		return $ret;
 	}
 /**

@@ -86,6 +86,16 @@ class QuestionnaireFixture extends CakeTestFixture {
 			'is_no_member_allow' => 1,
 		),
 		array(
+			'id' => 3,
+			'is_active' => 0,
+			'status' => 3, //  1:公開中、2:公開申請中、3:下書き中、4:差し戻し
+		),
+		array(
+			'id' => 4,
+			'is_active' => 0,
+			'status' => 3, //  1:公開中、2:公開申請中、3:下書き中、4:差し戻し
+		),
+		array(
 			'id' => 5,
 			'is_key_pass_use' => 1,
 			'is_total_show' => 0,

@@ -59,6 +59,40 @@ class QuestionnaireQuestionFixture extends CakeTestFixture {
 	public $records = array();
 
 /**
+ * Records
+ *
+ * @var array
+ */
+	public $overwrite = array(
+		4 => array('is_skip' => 1),
+		6 => array(
+			'question_type' => '2',
+		),
+		8 => array(
+			'question_type' => '3',
+			'is_range' => 1,
+			'min' => '5',
+			'max' => '15'
+		),
+		10 => array(
+			'question_type' => '5',
+		),
+		12 => array(
+			'question_type' => '6',
+		),
+		14 => array(
+			'question_type' => '7',
+			'question_type_option' => '2',
+			'is_range' => 1,
+			'min' => '2016-01-01 00:00:00',
+			'max' => '2016-12-31 00:00:00'
+		),
+		16 => array(
+			'question_type' => '7',
+		),
+	);
+
+/**
  * insert question id
  *
  * @var array
@@ -123,6 +157,10 @@ class QuestionnaireQuestionFixture extends CakeTestFixture {
 			'modified_user' => $this->getCreatedUser($questionnaireId),
 			'modified' => '2016-01-05 09:00:00',
 		);
+
+		if (isset($this->overwrite[$this->questionId])) {
+			$ret = Hash::merge($ret, $this->overwrite[$this->questionId]);
+		}
 
 		$this->questionId++;
 

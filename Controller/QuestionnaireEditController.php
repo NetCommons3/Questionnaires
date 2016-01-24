@@ -130,10 +130,8 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 		}
 
 		// Postの場合
-		if ($this->request->isPost()) {
-
+		if ($this->request->is('post') || $this->request->is('put')) {
 			$postQuestionnaire = $this->request->data;
-
 			// アンケートデータに作成されたPost質問データをかぶせる
 			// （質問作成画面では質問データ属性全てをPOSTしているのですり替えでOK）
 			$questionnaire = $this->_questionnaire;
@@ -147,7 +145,6 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 				// booleanの値がPOST時と同じようになるように調整
 				$questionnaire['QuestionnairePage'] = QuestionnairesAppController::changeBooleansToNumbers($questionnaire['QuestionnairePage']);
 			}
-
 			// バリデート
 			$this->Questionnaire->set($questionnaire);
 			if (! $this->Questionnaire->validates(array('validate' => 'duringSetup'))) {
@@ -182,7 +179,7 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 			return;
 		}
 
-		if ($this->request->isPost()) {
+		if ($this->request->is('post') || $this->request->is('put')) {
 
 			$postQuestionnaire = $this->request->data;
 
@@ -219,7 +216,7 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 			return;
 		}
 
-		if ($this->request->isPost() || $this->request->isPut()) {
+		if ($this->request->is('post') || $this->request->is('put')) {
 			$postQuestionnaire = $this->request->data;
 
 			$beforeStatus = $this->_questionnaire['Questionnaire']['status'];

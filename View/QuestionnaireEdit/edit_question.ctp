@@ -63,7 +63,7 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 					</tab-heading>
 
 					<div class="tab-body">
-						<?php echo $this->element('Questionnaires.QuestionnaireEdit/EditQuestion/add_question_button'); ?>
+						<?php echo $this->element('Questionnaires.QuestionnaireEdit/EditQuestion/add_question_button', array('isPublished' => $isPublished)); ?>
 						<div class="clearfix"></div>
 
 						<?php echo $this->element('Questionnaires.QuestionnaireEdit/EditQuestion/hidden_page_info_set'); ?>
@@ -76,7 +76,7 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 
 							<accordion-heading>
 								<?php /* 質問ヘッダーセット（移動ボタン、削除ボタンなどの集合体 */
-									echo $this->element('Questionnaires.QuestionnaireEdit/EditQuestion/accordion_heading'); ?>
+									echo $this->element('Questionnaires.QuestionnaireEdit/EditQuestion/accordion_heading', array('isPublished' => $isPublished)); ?>
 								<div class="clearfix"></div>
 							</accordion-heading>
 
@@ -159,21 +159,25 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 
 					<?php echo $this->element('Questionnaires.QuestionnaireEdit/EditQuestion/add_question_button'); ?>
 
-					<div class="text-center" ng-if="isPublished == 0">
-						<button class="btn btn-danger" type="button"
-								ng-disabled="questionnaire.questionnairePage.length < 2"
-								ng-click="deletePage($index, '<?php echo __d('questionnaires', 'Do you want to delete this page?'); ?>')">
-							<span class="glyphicon glyphicon-remove"></span><?php echo __d('questionnaires', 'Delete this page'); ?>
-						</button>
-					</div>
+					<?php if (! $isPublished): ?>
+						<div class="text-center">
+							<button class="btn btn-danger" type="button"
+									ng-disabled="questionnaire.questionnairePage.length < 2"
+									ng-click="deletePage($index, '<?php echo __d('questionnaires', 'Do you want to delete this page?'); ?>')">
+								<span class="glyphicon glyphicon-remove"></span><?php echo __d('questionnaires', 'Delete this page'); ?>
+							</button>
+						</div>
+					<?php endif; ?>
 				</div>
 			</tab>
-			<tab class="questionnaire-add-page-tab" ng-click="addPage($event)" ng-if="isPublished == 0">
-				<tab-heading>
-					<span class="glyphicon glyphicon-plus"></span>
-					<span class=""><?php echo __d('questionnaires', 'Add Page'); ?></span>
-				</tab-heading>
-			</tab>
+			<?php if (! $isPublished): ?>
+				<tab class="questionnaire-add-page-tab" ng-click="addPage($event)">
+					<tab-heading>
+						<span class="glyphicon glyphicon-plus"></span>
+						<span class=""><?php echo __d('questionnaires', 'Add Page'); ?></span>
+					</tab-heading>
+				</tab>
+			<?php endif; ?>
 		</tabset>
 
 	</div>

@@ -28,6 +28,10 @@
 			));
 			?>
 			<?php echo __d('questionnaires', 'randomaize choices'); ?>
+			<?php echo $this->element(
+			'Questionnaires.QuestionnaireEdit/ng_errors', array(
+			'errorArrayName' => 'question.errorMessages.isChoiceRandom',
+			)); ?>
 		</label>
 		<label class="checkbox-inline" ng-show="question.questionType != <?php echo QuestionnairesComponent::TYPE_MULTIPLE_SELECTION; ?>">
 			<?php echo $this->NetCommonsForm->checkbox('QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.is_skip',
@@ -38,6 +42,10 @@
 			'ng-disabled' => 'isDisabledSetSkip(page, question)'
 			));
 			?>
+			<?php echo $this->element(
+			'Questionnaires.QuestionnaireEdit/ng_errors', array(
+			'errorArrayName' => 'question.errorMessages.isSkip',
+			)); ?>
 			<?php echo __d('questionnaires', 'set page skip'); ?>
 		</label>
 	</div>

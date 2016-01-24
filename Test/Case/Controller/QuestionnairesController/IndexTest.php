@@ -193,10 +193,15 @@ class QuestionnairesControllerIndexTest extends WorkflowControllerIndexTest {
 		array_push($results, Hash::merge($results[$base], array(
 			'urlOptions' => array('frame_id' => null, 'block_id' => $data['Block']['id']),
 		)));
+		// 公開後に一時保存変更してる見える
+		array_push($results, Hash::merge($results[$base], array(
+			'urlOptions' => array('action' => 'index', 'limit' => 50),
+			'assert' => array('method' => 'assertActionLink', 'action' => 'test_mode', 'linkExist' => true, 'url' => array('controller' => 'questionnaire_answers', 'key' => 'questionnaire_2', 'limit' => null))
+		)));
 		// 公開中なら見える
 		array_push($results, Hash::merge($results[$base], array(
 			'urlOptions' => array('action' => 'index', 'limit' => 50),
-			'assert' => array('method' => 'assertActionLink', 'action' => 'view', 'linkExist' => true, 'url' => array('controller' => 'questionnaire_answers', 'key' => 'questionnaire_4', 'limit' => null))
+			'assert' => array('method' => 'assertActionLink', 'action' => 'view', 'linkExist' => true, 'url' => array('controller' => 'questionnaire_answers', 'key' => 'questionnaire_6', 'limit' => null))
 		)));
 		// 一時保存も見える
 		array_push($results, Hash::merge($results[$base], array(
@@ -252,7 +257,7 @@ class QuestionnairesControllerIndexTest extends WorkflowControllerIndexTest {
 		// 公開中なら見える
 		array_push($results, Hash::merge($results[$base], array(
 			'urlOptions' => array('action' => 'index', 'limit' => 50),
-			'assert' => array('method' => 'assertActionLink', 'action' => 'view', 'linkExist' => true, 'url' => array('controller' => 'questionnaire_answers', 'key' => 'questionnaire_4', 'limit' => null))
+			'assert' => array('method' => 'assertActionLink', 'action' => 'view', 'linkExist' => true, 'url' => array('controller' => 'questionnaire_answers', 'key' => 'questionnaire_2', 'limit' => null))
 		)));
 		// 自分のなら承認待ちも見える
 		array_push($results, Hash::merge($results[$base], array(
