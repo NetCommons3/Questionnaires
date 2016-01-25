@@ -176,7 +176,7 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 		// 処理対象のアンケートデータが見つかっていない場合、エラー
 		if (empty($this->_questionnaire)) {
 			$this->throwBadRequest();
-			return;
+			return false;
 		}
 
 		if ($this->request->is('post') || $this->request->is('put')) {

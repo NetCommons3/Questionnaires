@@ -126,6 +126,12 @@ class Questionnaire extends QuestionnairesAppModel {
 					'message' => __d('questionnaires', 'start period must be smaller than end period')
 				)
 			),
+			'is_total_show' => array(
+				'boolean' => array(
+					'rule' => array('boolean'),
+					'message' => __d('net_commons', 'Invalid request.'),
+				),
+			),
 			'total_show_timing' => array(
 				'inList' => array(
 					'rule' => array('inList', array(QuestionnairesComponent::USES_USE, QuestionnairesComponent::USES_NOT_USE)),
