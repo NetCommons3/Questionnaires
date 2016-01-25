@@ -24,6 +24,7 @@ class QuestionEditHelper extends AppHelper {
  */
 	public $helpers = array(
 		'NetCommonsForm',
+		'NetCommonsHtml',
 		'Form'
 	);
 
@@ -156,6 +157,63 @@ class QuestionEditHelper extends AppHelper {
 			$ret .= '<span class="help-block">' . $help . '</span>';
 		}
 		$ret .= '<div class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></div></div></div>';
+		return $ret;
+	}
+
+/**
+ * アンケート編集フローバー
+ *
+ * @param int $current current edit step
+ * @return string
+ */
+	public function getEditFlowChart($current) {
+		$steps = array(
+			1 => array('label' => __d('questionnaires', 'Set questions'), 'action' => 'edit_question'),
+			2 => array('label' => __d('questionnaires', 'Set result display'), 'action' => 'edit_result'),
+			3 => array('label' => __d('questionnaires', 'Set questionnaire'), 'action' => 'edit')
+		);
+		$stepCount = count($steps);
+		$stepWidth = 'style="width: ' . 100 / $stepCount . '%;"';
+		$check = $steps;
+
+		$ret = '<div class="progress questionnaire-steps">';
+
+		foreach ($steps as $index => $stepContent) {
+			$badge = '<span class="badge">' . $index . '</span>';
+			if ($index == $current) {
+				$currentClass = 'progress-bar';
+				$badge = '<span class="btn-primary">' . $badge . '</span>';
+			} else {
+				$currentClass = '';
+			}
+
+			$ret .= '<div class="' . $currentClass . ' questionnaire-step-item"' . $stepWidth . '>';
+
+			$ret .= '<span class="questionnaire-step-item-title">' . $badge;
+			if ($index < $current) {
+				$urlParam = array();
+				$urlParam['plugin'] = $this->request->params['plugin'];
+				$urlParam['controller'] = $this->request->params['controller'];
+				$urlParam['action'] = $stepContent['action'];
+				$urlParam = Hash::merge($urlParam, $this->request->params['named']);
+				foreach ($this->request->params['pass'] as $passParam) {
+					$urlParam[$passParam] = null;
+				}
+				$url = $this->NetCommonsHtml->url($urlParam);
+				$ret .= '<a href="' . $url . '">' . $stepContent['label'] . '</a>';
+			} else {
+				$ret .= $stepContent['label'];
+			}
+			$ret .= '</span>';
+			if (next($check)) {
+				$ret .= '<span class="glyphicon glyphicon-chevron-right"></span>';
+			}
+
+			$ret .= '</div>';
+		}
+
+		$ret .= '</div>';
+
 		return $ret;
 	}
 }

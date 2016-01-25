@@ -52,7 +52,7 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 
 		<div class="modal-body">
 
-			<?php echo $this->element('Questionnaires.QuestionnaireEdit/edit_flow_chart', array('current' => '1')); ?>
+			<?php echo $this->QuestionEdit->getEditFlowChart(1); ?>
 
 			<?php echo $this->element('Questionnaires.QuestionnaireEdit/questionnaire_title'); ?>
 

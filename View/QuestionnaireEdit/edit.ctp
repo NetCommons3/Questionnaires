@@ -20,7 +20,7 @@ echo $this->NetCommonsHtml->script(array(
 $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesAppController::changeBooleansToNumbers($this->data));
 ?>
 
-<?php echo $this->element('Questionnaires.QuestionnaireEdit/edit_flow_chart', array('current' => '3')); ?>
+<?php echo $this->QuestionEdit->getEditFlowChart(3); ?>
 
 <div
 	id="nc-questionnaires-setting-edit"
