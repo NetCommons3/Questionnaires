@@ -111,53 +111,13 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 			</div>
 
 			<label class="h3"><?php echo __d('questionnaires', 'Questionnaire method'); ?></label>
-			<div class="form-group questionnaire-group">
-				<?php
-					echo $this->QuestionEdit->questionnaireAttributeCheckbox('is_no_member_allow',
-						__d('questionnaires', 'accept the non-members answer'));
+			<?php if (Current::read('Room.space_id') == Space::PUBLIC_SPACE_ID): ?>
+				<?php echo $this->element('Questionnaires.QuestionnaireEdit/Edit/method_in_public'); ?>
+			<?php else: ?>
+				<?php echo $this->element('Questionnaires.QuestionnaireEdit/Edit/method_in_group'); ?>
+			<?php endif; ?>
 
-					echo $this->QuestionEdit->questionnaireAttributeCheckbox('is_key_pass_use',
-						__d('questionnaires', 'use key phrase'),
-						array(
-							'ng-disabled' => 'questionnaires.questionnaire.isImageAuthentication == ' . QuestionnairesComponent::USES_USE));
-					echo $this->element('AuthorizationKeys.edit_form', [
-						'options' => array(
-						'ng-show' => 'questionnaires.questionnaire.isKeyPassUse != 0',
-					)]);
-
-					echo $this->QuestionEdit->questionnaireAttributeCheckbox('is_anonymity',
-						__d('questionnaires', 'anonymous answer'));
-
-					echo $this->QuestionEdit->questionnaireAttributeCheckbox('is_repeat_allow',
-						__d('questionnaires', 'forgive the repetition of the answer'));
-
-					echo $this->QuestionEdit->questionnaireAttributeCheckbox('is_image_authentication',
-						__d('questionnaires', 'do image authentication'),
-							array(
-								'ng-disabled' => 'questionnaires.questionnaire.isKeyPassUse == ' . QuestionnairesComponent::USES_USE));
-
-					echo $this->QuestionEdit->questionnaireAttributeCheckbox('is_answer_mail_send',
-						__d('questionnaires', 'Deliver e-mail when submitted'));
-				?>
-			</div>
-
-			<label class="h3"><?php echo __d('questionnaires', 'Questionnaire open mail'); ?></label>
-			<div class="form-group questionnaire-group">
-				<?php
-					echo $this->QuestionEdit->questionnaireAttributeCheckbox('is_open_mail_send',
-						__d('questionnaires', 'Deliver e-mail when questionnaire has opened'));
-				?>
-				<div ng-show="questionnaires.questionnaire.isOpenMailSend == <?php echo QuestionnairesComponent::USES_USE; ?>">
-					<?php
-						echo $this->NetCommonsForm->input('open_mail_subject', array(
-							'label' => __d('questionnaires', 'open mail subject'),
-							'ng-model' => 'questionnaires.questionnaire.openMailSubject'));
-						echo $this->NetCommonsForm->wysiwyg('open_mail_body', array(
-							'label' => __d('questionnaires', 'open mail text'),
-							'ng-model' => 'questionnaires.questionnaire.openMailBody'));
-					?>
-				</div>
-			</div>
+			<?php echo $this->element('Questionnaires.QuestionnaireEdit/Edit/open_mail'); ?>
 
 			<label class="h3"><?php echo __d('questionnaires', 'Thanks page message settings'); ?></label>
 			<div class="form-group questionnaire-group">
