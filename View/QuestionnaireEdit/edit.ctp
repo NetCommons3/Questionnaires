@@ -101,7 +101,7 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 				<div class="row" ng-show="questionnaires.questionnaire.totalShowTiming != 0">
 					<div class="col-sm-5">
 						<?php
-							echo $this->QuestionEdit->questionnaireAttributeDatetime('publish_start', false);
+							echo $this->QuestionEdit->questionnaireAttributeDatetime('total_show_start_period', false);
 						?>
 					</div>
 					<div class="col-sm-6">

@@ -18,7 +18,7 @@ App::uses('QuestionnairesComponent', 'Questionnaires.Controller/Component');
  * @author Allcreator <info@allcreator.net>
  * @package NetCommons\Bbses\Test\Case\Controller\QuestionnaireEditController
  */
-class QuestionnaireEditControllerEditResultTest extends WorkflowControllerEditTest {
+class QuestionnaireEditControllerEditTest extends WorkflowControllerEditTest {
 
 /**
  * Fixtures
@@ -36,6 +36,7 @@ class QuestionnaireEditControllerEditResultTest extends WorkflowControllerEditTe
 		'plugin.questionnaires.questionnaire_answer_summary',
 		'plugin.questionnaires.questionnaire_answer',
 		'plugin.authorization_keys.authorization_keys',
+		'plugin.workflow.workflow_comment',
 	);
 
 /**
@@ -57,7 +58,7 @@ class QuestionnaireEditControllerEditResultTest extends WorkflowControllerEditTe
  *
  * @var string
  */
-	protected $_myAction = 'edit_result';
+	protected $_myAction = 'edit';
 
 /**
  * setUp method
@@ -140,9 +141,9 @@ class QuestionnaireEditControllerEditResultTest extends WorkflowControllerEditTe
 					)
 				)
 			),
-			//'WorkflowComment' => array(
-			//	'comment' => 'WorkflowComment save test'
-			//),
+			'WorkflowComment' => array(
+				'comment' => 'WorkflowComment save test'
+			),
 		);
 		return $data;
 	}
@@ -214,6 +215,11 @@ class QuestionnaireEditControllerEditResultTest extends WorkflowControllerEditTe
 			'urlOptions' => array('frame_id' => $data['Frame']['id'], 'block_id' => $data['Block']['id'], 'action' => $this->_myAction, 'key' => 'questionnaire_10'),
 			'assert' => array('method' => 'assertNotEmpty'),
 		);
+		//--自分の記事の編集(一度も公開していない)
+		$results[1] = array(
+			'urlOptions' => array('frame_id' => $data['Frame']['id'], 'block_id' => $data['Block']['id'], 'action' => $this->_myAction, 'key' => 'questionnaire_44'),
+			'assert' => array('method' => 'assertInput', 'type' => 'input', 'name' => '_method', 'value' => 'DELETE'),
+		);
 		return $results;
 	}
 
@@ -246,20 +252,37 @@ class QuestionnaireEditControllerEditResultTest extends WorkflowControllerEditTe
 
 		// ページタブ,ページ追加リンク,質問追加ボタン,質問LI、質問種別選択,質問削除ボタン, 選択肢追加ボタン, 選択肢削除ボタン、キャンセルボタン、次へボタンの存在の確認
 		array_push($results, Hash::merge($results[$base], array(
-			'assert' => array('method' => 'assertInput', 'type' => 'input', 'name' => 'data[Questionnaire][is_total_show]', 'value' => null),
+			'assert' => array('method' => 'assertInput', 'type' => 'input', 'name' => 'data[Questionnaire][title]', 'value' => null),
 		)));
 		array_push($results, Hash::merge($results[$base], array(
-			'assert' => array('method' => 'assertInput', 'type' => 'textarea', 'name' => 'data[Questionnaire][total_comment]', 'value' => null),
-		)));
-
-		array_push($results, Hash::merge($results[$base], array(
-			'assert' => array('method' => 'assertInput', 'type' => 'input', 'name' => 'data[QuestionnairePage][{{pageIndex}}][QuestionnaireQuestion][{{qIndex}}][is_result_display]', 'value' => null),
+			'assert' => array('method' => 'assertInput', 'type' => 'input', 'name' => 'data[Questionnaire][public_type]', 'value' => null),
 		)));
 		array_push($results, Hash::merge($results[$base], array(
-			'assert' => array('method' => 'assertInput', 'type' => 'input', 'name' => 'data[QuestionnairePage][{{pageIndex}}][QuestionnaireQuestion][{{qIndex}}][result_display_type]', 'value' => null),
+			'assert' => array('method' => 'assertInput', 'type' => 'input', 'name' => 'data[Questionnaire][total_show_timing]', 'value' => null),
 		)));
 		array_push($results, Hash::merge($results[$base], array(
-			'assert' => array('method' => 'assertInput', 'type' => 'input', 'name' => 'data[QuestionnairePage][{{pageIndex}}][QuestionnaireQuestion][{{qIndex}}][QuestionnaireChoice][{{choice.choiceSequence}}][graph_color]', 'value' => null),
+			'assert' => array('method' => 'assertInput', 'type' => 'input', 'name' => 'data[Questionnaire][is_no_member_allow]', 'value' => null),
+		)));
+		array_push($results, Hash::merge($results[$base], array(
+			'assert' => array('method' => 'assertInput', 'type' => 'input', 'name' => 'data[Questionnaire][is_key_pass_use]', 'value' => null),
+		)));
+		array_push($results, Hash::merge($results[$base], array(
+			'assert' => array('method' => 'assertInput', 'type' => 'input', 'name' => 'data[Questionnaire][is_image_authentication]', 'value' => null),
+		)));
+		array_push($results, Hash::merge($results[$base], array(
+			'assert' => array('method' => 'assertInput', 'type' => 'input', 'name' => 'data[Questionnaire][is_repeat_allow]', 'value' => null),
+		)));
+		array_push($results, Hash::merge($results[$base], array(
+			'assert' => array('method' => 'assertInput', 'type' => 'input', 'name' => 'data[Questionnaire][is_anonymity]', 'value' => null),
+		)));
+		array_push($results, Hash::merge($results[$base], array(
+			'assert' => array('method' => 'assertInput', 'type' => 'textarea', 'name' => 'data[Questionnaire][thanks_content]', 'value' => null),
+		)));
+		array_push($results, Hash::merge($results[$base], array(
+			'assert' => array('method' => 'assertInput', 'type' => 'button', 'name' => 'save_' . WorkflowComponent::STATUS_IN_DRAFT, 'value' => null),
+		)));
+		array_push($results, Hash::merge($results[$base], array(
+			'assert' => array('method' => 'assertInput', 'type' => 'button', 'name' => 'save_' . WorkflowComponent::STATUS_APPROVED, 'value' => null),
 		)));
 
 		//--コンテンツなし...編集対象データを指定せずに編集画面へ行くと不正リクエストエラー
@@ -296,6 +319,11 @@ class QuestionnaireEditControllerEditResultTest extends WorkflowControllerEditTe
 		array_push($results, Hash::merge($results[0], array(
 			'urlOptions' => array('frame_id' => null, 'block_id' => $data['Block']['id'], 'action' => $this->_myAction, 'key' => 'questionnaire_2'),
 			'assert' => array('method' => 'assertInput', 'type' => 'input', 'name' => 'data[Frame][id]', 'value' => null),
+		)));
+		// いったん公開して、その後の一時保存データに対して編集している
+		array_push($results, Hash::merge($results[0], array(
+			'urlOptions' => array('frame_id' => null, 'block_id' => $data['Block']['id'], 'action' => $this->_myAction, 'key' => 'questionnaire_2'),
+			'assert' => array('method' => 'assertInput', 'type' => 'input', 'name' => '_method', 'value' => 'DELETE'),
 		)));
 
 		return $results;
@@ -384,30 +412,80 @@ class QuestionnaireEditControllerEditResultTest extends WorkflowControllerEditTe
 		return array(
 			Hash::merge($result, array(
 				'validationError' => array(
-					'field' => 'Questionnaire.is_total_show',
+					'field' => 'Questionnaire.title',
+					'value' => '',
+					'message' => sprintf(__d('net_commons', 'Please input %s.'), __d('questionnaires', 'Title')),
+				)
+			)),
+			Hash::merge($result, array(
+				'validationError' => array(
+					'field' => 'Questionnaire.public_type',
 					'value' => 'aa',
 					'message' => __d('net_commons', 'Invalid request.'),
 				)
 			)),
 			Hash::merge($result, array(
 				'validationError' => array(
-					'field' => 'QuestionnairePage.0.QuestionnaireQuestion.0.is_result_display',
+					'field' => 'Questionnaire.publish_start',
 					'value' => 'aa',
-					'message' => 'question.errorMessages.isResultDisplay',
+					'message' => __d('questionnaires', 'Invalid datetime format.'),
 				)
 			)),
 			Hash::merge($result, array(
 				'validationError' => array(
-					'field' => 'QuestionnairePage.0.QuestionnaireQuestion.0.result_display_type',
+					'field' => 'Questionnaire.publish_end',
 					'value' => 'aa',
-					'message' => 'question.errorMessages.resultDisplayType',
+					'message' => __d('questionnaires', 'Invalid datetime format.'),
 				)
 			)),
 			Hash::merge($result, array(
 				'validationError' => array(
-					'field' => 'QuestionnairePage.0.QuestionnaireQuestion.0.QuestionnaireChoice.0.graph_color',
+					'field' => 'Questionnaire.total_show_timing',
 					'value' => 'aa',
-					'message' => 'choice.errorMessages.graphColor',
+					'message' => __d('net_commons', 'Invalid request.'),
+				)
+			)),
+			//5
+			Hash::merge($result, array(
+				'validationError' => array(
+					'field' => 'Questionnaire.total_show_start_period',
+					'value' => 'aa',
+					'message' => __d('questionnaires', 'Invalid datetime format.'),
+				)
+			)),
+			Hash::merge($result, array(
+				'validationError' => array(
+					'field' => 'Questionnaire.is_no_member_allow',
+					'value' => 'aa',
+					'message' => __d('net_commons', 'Invalid request.'),
+				)
+			)),
+			Hash::merge($result, array(
+				'validationError' => array(
+					'field' => 'Questionnaire.is_anonymity',
+					'value' => 'aa',
+					'message' => __d('net_commons', 'Invalid request.'),
+				)
+			)),
+			Hash::merge($result, array(
+				'validationError' => array(
+					'field' => 'Questionnaire.is_key_pass_use',
+					'value' => 'aa',
+					'message' => __d('net_commons', 'Invalid request.'),
+				)
+			)),
+			Hash::merge($result, array(
+				'validationError' => array(
+					'field' => 'Questionnaire.is_repeat_allow',
+					'value' => 'aa',
+					'message' => __d('net_commons', 'Invalid request.'),
+				)
+			)),
+			Hash::merge($result, array(
+				'validationError' => array(
+					'field' => 'Questionnaire.is_image_authentication',
+					'value' => 'aa',
+					'message' => __d('net_commons', 'Invalid request.'),
 				)
 			)),
 		);

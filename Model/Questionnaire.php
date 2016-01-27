@@ -483,7 +483,7 @@ class Questionnaire extends QuestionnairesAppModel {
 			}
 
 			//コメントの削除
-			$this->deleteCommentsByContentKey($this->data['Questionnaire']['key']);
+			$this->deleteCommentsByContentKey($data['Questionnaire']['key']);
 
 			// アンケート表示設定削除
 			if (! $this->QuestionnaireFrameDisplayQuestionnaire->deleteAll(array(
