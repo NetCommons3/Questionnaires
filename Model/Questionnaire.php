@@ -289,40 +289,53 @@ class Questionnaire extends QuestionnairesAppModel {
 			return $data;
 		}
 		$frame = $data['Frame'];
-		// ルームに存在するブロックを探す
-		$block = $this->Block->find('first', array(
-			'conditions' => array(
-				'Block.room_id' => $frame['room_id'],
-				'Block.plugin_key' => $frame['plugin_key'],
-			)
-		));
-		// まだない場合
-		if (empty($block)) {
-			// 作成する
-			$block = $this->Block->save(array(
-				'room_id' => $frame['room_id'],
-				'language_id' => $frame['language_id'],
-				'plugin_key' => $frame['plugin_key'],
+
+		$this->begin();
+
+		try {
+			// ルームに存在するブロックを探す
+			$block = $this->Block->find('first', array(
+				'conditions' => array(
+					'Block.room_id' => $frame['room_id'],
+					'Block.plugin_key' => $frame['plugin_key'],
+				)
 			));
-			if (! $block) {
-				return false;
+			// まだない場合
+			if (empty($block)) {
+				// 作成する
+				$block = $this->Block->save(array(
+					'room_id' => $frame['room_id'],
+					'language_id' => $frame['language_id'],
+					'plugin_key' => $frame['plugin_key'],
+				));
+				if (! $block) {
+					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+				}
+				Current::$current['Block'] = $block['Block'];
 			}
-			Current::$current['Block'] = $block['Block'];
-		}
 
-		$this->loadModels([
-			'Frame' => 'Frames.Frame',
-			'QuestionnaireSetting' => 'Questionnaires.QuestionnaireSetting',
-		]);
-		$data['Frame']['block_id'] = $block['Block']['id'];
-		if (! $this->Frame->save($data)) {
-			return false;
-		}
-		Current::$current['Frame']['block_id'] = $block['Block']['id'];
+			$this->loadModels([
+				'Frame' => 'Frames.Frame',
+				'QuestionnaireSetting' => 'Questionnaires.QuestionnaireSetting',
+			]);
+			$data['Frame']['block_id'] = $block['Block']['id'];
+			if (! $this->Frame->save($data)) {
+				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+			}
+			Current::$current['Frame']['block_id'] = $block['Block']['id'];
 
-		$blockSetting = $this->QuestionnaireSetting->create();
-		$blockSetting['QuestionnaireSetting']['block_key'] = $block['Block']['key'];
-		$this->QuestionnaireSetting->saveQuestionnaireSetting($blockSetting);
+			$blockSetting = $this->QuestionnaireSetting->create();
+			$blockSetting['QuestionnaireSetting']['block_key'] = $block['Block']['key'];
+			$this->QuestionnaireSetting->saveQuestionnaireSetting($blockSetting);
+
+			$this->commit();
+		} catch (Exception $ex) {
+			//トランザクションRollback
+			$this->rollback();
+			//エラー出力
+			CakeLog::error($ex);
+			throw $ex;
+		}
 		return $data;
 	}
 /**
@@ -427,27 +440,27 @@ class Questionnaire extends QuestionnairesAppModel {
 			$questionnaire = Hash::remove($questionnaire, 'Questionnaire.id');
 
 			$this->set($questionnaire);
-
-			$saveQuestionnaire = $this->save($questionnaire);
-			if (! $saveQuestionnaire) {
-				$this->rollback();
+			if (!$this->validates()) {
 				return false;
+			}
+
+			$saveQuestionnaire = $this->save($questionnaire, false);
+			if (! $saveQuestionnaire) {
+				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}
 			$questionnaireId = $this->id;
 
 			// ページ以降のデータを登録
 			$questionnaire = Hash::insert($questionnaire, 'QuestionnairePage.{n}.questionnaire_id', $questionnaireId);
 			if (! $this->QuestionnairePage->saveQuestionnairePage($questionnaire['QuestionnairePage'])) {
-				$this->rollback();
-				return false;
+				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}
 			// フレーム内表示対象アンケートに登録する
 			if (! $this->QuestionnaireFrameDisplayQuestionnaire->saveDisplayQuestionnaire(array(
 				'questionnaire_key' => $saveQuestionnaire['Questionnaire']['key'],
 				'frame_key' => Current::read('Frame.key')
 			))) {
-				$this->rollback();
-				return false;
+				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}
 			// これまでのテスト回答データを消す
 			$this->QuestionnaireAnswerSummary->deleteTestAnswerSummary($saveQuestionnaire['Questionnaire']['key'], $status);
@@ -520,6 +533,7 @@ class Questionnaire extends QuestionnairesAppModel {
 		try {
 			$this->id = $questionnaireId;
 			$this->saveField('export_key', $exportKey);
+			$this->commit();
 		} catch (Exception $ex) {
 			//トランザクションRollback
 			$this->rollback();

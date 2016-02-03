@@ -172,17 +172,8 @@ class QuestionnaireQuestion extends QuestionnairesAppModel {
 			));
 
 		}
-		// ウィザード画面でのセットアップ中の場合はまだ親ページIDの正当性についてのチェックは行わない
-		if (!(isset($options['validate']) && $options['validate'] == QuestionnairesComponent::QUESTIONNAIRE_VALIDATE_TYPE)) {
-			$this->validate = Hash::merge($this->validate, array(
-				'questionnaire_page_id' => array(
-					'numeric' => array(
-						'rule' => array('numeric'),
-						'message' => __d('net_commons', 'Invalid request.'),
-					),
-				),
-			));
-		}
+		// validates時にはまだquestionnaire_page_idの設定ができないのでチェックしないことにする
+		// questionnaire_page_idの設定は上位のQuestionnairePageクラスで責任を持って行われるものとする
 
 		parent::beforeValidate($options);
 

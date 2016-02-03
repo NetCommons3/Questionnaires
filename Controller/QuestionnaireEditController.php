@@ -239,7 +239,7 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 			$this->Session->delete(self::QUESTIONNAIRE_EDIT_SESSION_INDEX . $this->_getQuestionnaireEditSessionIndex());
 			// ページトップへリダイレクト
 			$this->redirect(NetCommonsUrl::backToPageUrl());
-
+			return;
 		} else {
 			// 指定されて取り出したアンケートデータをセッションキャッシュに書く
 			$this->Session->write($this->_getQuestionnaireEditSessionIndex(), $this->_questionnaire);

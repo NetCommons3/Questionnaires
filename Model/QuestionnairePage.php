@@ -207,19 +207,8 @@ class QuestionnairePage extends QuestionnairesAppModel {
 				),
 			),
 		);
-		// ウィザード画面でのセットアップ中の場合はまだ親アンケートIDの正当性についてのチェックは行わない
-		if (! (isset($options['validate']) && $options['validate'] == QuestionnairesComponent::QUESTIONNAIRE_VALIDATE_TYPE)) {
-			$this->validate = Hash::merge($this->validate, array(
-				'questionnaire_id' => array(
-					'numeric' => array(
-						'rule' => array('numeric'),
-						//'message' => 'Your custom message here',
-						'allowEmpty' => false,
-						'required' => true,
-					),
-				),
-			));
-		}
+		// validates時にはまだquestionnaire_idの設定ができないのでチェックしないことにする
+		// questionnaire_idの設定は上位のQuestionnaireクラスで責任を持って行われるものとする
 
 		parent::beforeValidate($options);
 

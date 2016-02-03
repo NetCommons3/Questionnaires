@@ -42,12 +42,12 @@ class QuestionnaireSettingFixture extends CakeTestFixture {
 	public $records = array(
 		array(
 			'id' => 1,
-			'block_key' => 'questionnaire_1',
+			'block_key' => 'block_1',
 			'use_workflow' => '1',
 		),
 		array(
 			'id' => 2,
-			'block_key' => 'questionnaire_1',
+			'block_key' => 'block_1',
 			'use_workflow' => '1',
 		),
 	);

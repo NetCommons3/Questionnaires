@@ -110,6 +110,7 @@ class QuestionnaireEditControllerEditTest extends WorkflowControllerEditTest {
 				'public_type' => '1',
 				'is_key_pass_use' => 0,
 				'total_show_timing' => 0,
+				'total_show_start_period' => '',
 			),
 			'QuestionnairePage' => array(
 				array(
