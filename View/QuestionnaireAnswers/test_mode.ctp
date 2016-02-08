@@ -23,10 +23,10 @@
 		<div class="row">
 			<div class="col-sm-12">
 				<h3><?php echo __d('questionnaires', 'Questionnaire answer period'); ?></h3>
-				<?php if ($questionnaire['Questionnaire']['public_type'] == WorkflowBehavior::PUBLIC_TYPE_LIMITED): ?>
-					<?php echo date('Y/m/d H:i', strtotime($questionnaire['Questionnaire']['publish_start'])); ?>
+				<?php if ($questionnaire['Questionnaire']['answer_timing'] == QuestionnairesComponent::USES_USE): ?>
+					<?php echo date('Y/m/d H:i', strtotime($questionnaire['Questionnaire']['answer_start_period'])); ?>
 					<?php echo __d('questionnaires', ' - '); ?>
-					<?php echo date('Y/m/d H:i', strtotime($questionnaire['Questionnaire']['publish_end'])); ?>
+					<?php echo date('Y/m/d H:i', strtotime($questionnaire['Questionnaire']['answer_end_period'])); ?>
 				<?php else: ?>
 					<?php echo __d('questionnaires', 'do not set the answer period'); ?>
 				<?php endif; ?>

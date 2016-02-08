@@ -154,7 +154,7 @@ class QuestionnaireValidateBehavior extends ModelBehavior {
 	public function getPeriodStatus(&$model, $check, $startTime, $endTime) {
 		$ret = QuestionnairesComponent::QUESTIONNAIRE_PERIOD_STAT_IN;
 
-		if ($check == WorkflowBehavior::PUBLIC_TYPE_LIMITED) {
+		if ($check == QuestionnairesComponent::USES_USE) {
 			$nowTime = (new NetCommonsTime())->getNowDatetime();
 			$nowTime = strtotime($nowTime);
 			if ($nowTime < strtotime($startTime)) {

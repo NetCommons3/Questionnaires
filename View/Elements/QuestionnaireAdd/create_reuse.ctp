@@ -44,11 +44,11 @@
 				<?php echo $this->element('Questionnaires.ng_status_label',
 				array('status' => 'item.questionnaire.status', 'periodRangeStat' => 'item.questionnaire.periodRangeStat')); ?>
 
-				<span ng-if="item.questionnaire.publicType == <?php echo WorkflowBehavior::PUBLIC_TYPE_LIMITED; ?>">
+				<span ng-if="item.questionnaire.answerTiming == <?php echo QuestionnairesComponent::USES_USE; ?>">
 				(
-					{{item.questionnaire.publishStart | ncDatetime}}
+					{{item.questionnaire.answerStartPeriod | ncDatetime}}
 					<?php echo __d('questionnaires', ' - '); ?>
-					{{item.questionnaire.publishEnd | ncDatetime}}
+					{{item.questionnaire.answerEndPeriod | ncDatetime}}
 					<?php echo __d('questionnaires', 'Implementation'); ?>
 				)
 				</span>

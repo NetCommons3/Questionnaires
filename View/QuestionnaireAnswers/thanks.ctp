@@ -17,21 +17,17 @@
 
 	<?php echo $this->element('Questionnaires.Answers/answer_header'); ?>
 
-	<?php echo $this->NetCommonsForm->create('QuestionnaireAnswer', array(
-	)); ?>
-		<?php echo $this->NetCommonsForm->hidden('Frame.id'); ?>
-		<?php echo $this->NetCommonsForm->hidden('Block.id'); ?>
-		<?php echo $this->NetCommonsForm->hidden('Questionnaire.id', array('value' => $questionnaire['Questionnaire']['id'])); ?>
-
 		<p>
 			<?php echo $questionnaire['Questionnaire']['thanks_content']; ?>
 		</p>
 		<hr>
 
 		<div class="text-center">
-			<?php echo $this->BackTo->pageLinkButton(__d('questionnaires', 'Back to page'), array(
-				'icon' => 'remove',
-				'iconSize' => 'lg')); ?>
+			<?php if ($displayType == QuestionnairesComponent::DISPLAY_TYPE_LIST): ?>
+				<?php echo $this->BackTo->pageLinkButton(__d('questionnaires', 'Back to page'), array(
+					'icon' => 'remove',
+					'iconSize' => 'lg')); ?>
+			<?php endif; ?>
 			<?php
 				echo $this->QuestionnaireUtil->getAggregateButtons($questionnaire,
 					array('title' => __d('questionnaires', 'Aggregate'),
@@ -39,5 +35,4 @@
 							'size' => 'lg'));
 			?>
 		</div>
-	<?php echo $this->NetCommonsForm->end(); ?>
 </article>

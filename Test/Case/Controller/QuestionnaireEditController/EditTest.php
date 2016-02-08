@@ -107,7 +107,7 @@ class QuestionnaireEditControllerEditTest extends WorkflowControllerEditTest {
 				'title' => 'EditTestTitle',
 				'sub_title' => 'EditTestSubTitle',
 				'is_total_show' => 0,
-				'public_type' => '1',
+				'answer_timing' => '0',
 				'is_key_pass_use' => 0,
 				'total_show_timing' => 0,
 				'total_show_start_period' => '',
@@ -256,7 +256,7 @@ class QuestionnaireEditControllerEditTest extends WorkflowControllerEditTest {
 			'assert' => array('method' => 'assertInput', 'type' => 'input', 'name' => 'data[Questionnaire][title]', 'value' => null),
 		)));
 		array_push($results, Hash::merge($results[$base], array(
-			'assert' => array('method' => 'assertInput', 'type' => 'input', 'name' => 'data[Questionnaire][public_type]', 'value' => null),
+			'assert' => array('method' => 'assertInput', 'type' => 'input', 'name' => 'data[Questionnaire][answer_timing]', 'value' => null),
 		)));
 		array_push($results, Hash::merge($results[$base], array(
 			'assert' => array('method' => 'assertInput', 'type' => 'input', 'name' => 'data[Questionnaire][total_show_timing]', 'value' => null),
@@ -420,21 +420,21 @@ class QuestionnaireEditControllerEditTest extends WorkflowControllerEditTest {
 			)),
 			Hash::merge($result, array(
 				'validationError' => array(
-					'field' => 'Questionnaire.public_type',
+					'field' => 'Questionnaire.answer_timing',
 					'value' => 'aa',
 					'message' => __d('net_commons', 'Invalid request.'),
 				)
 			)),
 			Hash::merge($result, array(
 				'validationError' => array(
-					'field' => 'Questionnaire.publish_start',
+					'field' => 'Questionnaire.answer_start_period',
 					'value' => 'aa',
 					'message' => __d('questionnaires', 'Invalid datetime format.'),
 				)
 			)),
 			Hash::merge($result, array(
 				'validationError' => array(
-					'field' => 'Questionnaire.publish_end',
+					'field' => 'Questionnaire.answer_end_period',
 					'value' => 'aa',
 					'message' => __d('questionnaires', 'Invalid datetime format.'),
 				)

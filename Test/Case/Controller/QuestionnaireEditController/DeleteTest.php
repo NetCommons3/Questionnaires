@@ -100,7 +100,7 @@ class QuestionnaireEditControllerDeleteTest extends WorkflowControllerDeleteTest
 				'title' => 'EditTestTitle',
 				'sub_title' => 'EditTestSubTitle',
 				'is_total_show' => 0,
-				'public_type' => '1',
+				'answer_timing' => '0',
 				'is_key_pass_use' => 0,
 				'total_show_timing' => 0,
 			),

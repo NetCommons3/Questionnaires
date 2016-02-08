@@ -44,5 +44,23 @@ class QuestionnaireAnswerSummaryFixture extends CakeTestFixture {
  * @var array
  */
 	public $records = array(
+		array(
+			'id' => 1,
+			'answer_status' => '2',
+			'test_status' => '0',
+			'answer_number' => 1,
+			'answer_time' => '2016-02-06 00:00:00',
+			'questionnaire_key' => 'questionnaire_12',
+			'user_id' => 3,
+		),
+		array(
+			'id' => 2,
+			'answer_status' => '1',	// 確認前
+			'test_status' => '0',
+			'answer_number' => 1,
+			'answer_time' => '2016-02-06 00:00:00',
+			'questionnaire_key' => 'questionnaire_12',
+			'user_id' => 1,
+		)
 	);
 }

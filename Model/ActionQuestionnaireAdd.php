@@ -208,7 +208,7 @@ class ActionQuestionnaireAdd extends QuestionnairesAppModel {
 				'key' => '',
 				'status' => WorkflowComponent::STATUS_IN_DRAFT,
 				'is_total_show' => QuestionnairesComponent::EXPRESSION_SHOW,
-				'public_type' => WorkflowBehavior::PUBLIC_TYPE_PUBLIC,
+				'answer_timing' => QuestionnairesComponent::USES_NOT_USE,
 				'is_key_pass_use' => QuestionnairesComponent::USES_NOT_USE,
 				'total_show_timing' => QuestionnairesComponent::USES_NOT_USE,
 			),

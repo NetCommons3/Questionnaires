@@ -31,6 +31,7 @@ class QuestionnaireAnswerSummariesController extends QuestionnairesAppController
 		'Questionnaires.QuestionnaireChoice',
 		'Questionnaires.QuestionnaireAnswerSummary',
 		'Questionnaires.QuestionnaireAnswer',
+		'Questionnaires.QuestionnaireFrameSetting',
 	);
 
 /**
@@ -66,7 +67,7 @@ class QuestionnaireAnswerSummariesController extends QuestionnairesAppController
 		parent::beforeFilter();
 
 		// ゲストアクセスOKのアクションを設定
-		$this->Auth->allow('view');
+		$this->Auth->allow('view', 'no_summaries');
 
 		// NetCommonsお約束：編集画面へのURLに編集対象のコンテンツキーが含まれている
 		// まずは、そのキーを取り出す
@@ -74,13 +75,9 @@ class QuestionnaireAnswerSummariesController extends QuestionnairesAppController
 		$questionnaireKey = $this->_getQuestionnaireKeyFromPass();
 
 		// キーで指定されたアンケートデータを取り出しておく
-		$conditions = $this->Questionnaire->getBaseCondition(
+		$conditions = $this->Questionnaire->getWorkflowConditionsOmitPublishPeriod(
 			array('Questionnaire.key' => $questionnaireKey)
 		);
-		// 集計結果の表示はアンケート公開時期とは異なるので
-		$conditions = Hash::remove($conditions, 'public_type');
-		$conditions = Hash::remove($conditions, 'publish_start');
-		$conditions = Hash::remove($conditions, 'publish_end');
 
 		$this->__questionnaire = $this->Questionnaire->find('first', array(
 			'conditions' => $conditions,
@@ -90,10 +87,13 @@ class QuestionnaireAnswerSummariesController extends QuestionnairesAppController
 			return;
 		}
 
+		// 現在の表示形態を調べておく
+		list($this->__displayType) = $this->QuestionnaireFrameSetting->getQuestionnaireFrameSetting(Current::read('Frame.key'));
+
 		//集計表示していいかどうかの判断
 
 		if (! $this->isAbleToDisplayAggregatedData($this->__questionnaire)) {
-			$this->setAction('throwBadRequest');
+			$this->setAction('no_summaries');
 			return;
 		}
 	}
@@ -112,6 +112,16 @@ class QuestionnaireAnswerSummariesController extends QuestionnairesAppController
 		//画面用データをセットする。
 		$this->set('questionnaire', $questionnaire);
 		$this->set('questions', $questions);
+	}
+
+/**
+ * no_summaries method
+ * 条件によって集計結果が見れないアンケートにアクセスしたときに表示
+ *
+ * @return void
+ */
+	public function no_summaries() {
+		$this->set('displayType', $this->__displayType);
 	}
 
 }

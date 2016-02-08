@@ -59,22 +59,16 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 			<div class="form-group questionnaire-group">
 
 				<?php /* アンケート期間設定 */
-					echo $this->QuestionEdit->questionnaireAttributeCheckbox('public_type',
+					echo $this->QuestionEdit->questionnaireAttributeCheckbox('answer_timing',
 						__d('questionnaires', 'set the answer period'),
-						array(
-						'value' => WorkflowBehavior::PUBLIC_TYPE_LIMITED,
-						//'ng-checked' => 'questionnaires.questionnaire.publicType==' . "'" . WorkflowBehavior::PUBLIC_TYPE_LIMITED . "'",
-						'ng-true-value' => '"' . WorkflowBehavior::PUBLIC_TYPE_LIMITED . '"',
-						'ng-false-value' => '"' . WorkflowBehavior::PUBLIC_TYPE_PUBLIC . '"',
-						'hiddenField' => WorkflowBehavior::PUBLIC_TYPE_PUBLIC
-						),
+						array(),
 						__d('questionnaires', 'After approval will be immediately published . Stop of the questionnaire to select the stop from the questionnaire data list .'));
 				?>
-				<div class="row" ng-show="questionnaires.questionnaire.publicType == '<?php echo WorkflowBehavior::PUBLIC_TYPE_LIMITED; ?>'">
+				<div class="row" ng-show="questionnaires.questionnaire.answerTiming == '<?php echo QuestionnairesComponent::USES_USE; ?>'">
 					<div class="col-sm-5">
 						<?php
-							echo $this->QuestionEdit->questionnaireAttributeDatetime('publish_start', false,
-								array('min' => '', 'max' => 'publish_end'));
+							echo $this->QuestionEdit->questionnaireAttributeDatetime('answer_start_period', false,
+								array('min' => '', 'max' => 'answer_end_period'));
 						?>
 					</div>
 					<div class="col-sm-1">
@@ -82,13 +76,14 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 					</div>
 					<div class="col-sm-5">
 						<?php
-							echo $this->QuestionEdit->questionnaireAttributeDatetime('publish_end', false,
-								array('min' => 'publish_start', 'max' => ''));
+							echo $this->QuestionEdit->questionnaireAttributeDatetime('answer_end_period', false,
+								array('min' => 'answer_start_period', 'max' => ''));
 						?>
 					</div>
 				</div>
 			</div>
 
+			<div ng-show="questionnaires.questionnaire.isTotalShow == 1">
 			<label class="h3"><?php echo __d('questionnaires', 'Counting result display start date'); ?></label>
 			<div class="row form-group questionnaire-group">
 
@@ -108,6 +103,7 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 						<?php echo __d('questionnaires', 'Result will display at this time.'); ?>
 					</div>
 				</div>
+			</div>
 			</div>
 
 			<label class="h3"><?php echo __d('questionnaires', 'Questionnaire method'); ?></label>

@@ -715,6 +715,8 @@ msgstr ""
 #: /View/QuestionnaireAnswers/no_more_answer.ctp:12
 msgid "you will not be able to answer this questionnaire."
 msgstr ""
+msgid "you will not be able to see this result."
+msgstr ""
 
 #: /View/QuestionnaireAnswers/test_mode.ctp:25
 #: /View/QuestionnaireEdit/edit.ctp:58

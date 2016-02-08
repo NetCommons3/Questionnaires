@@ -32,7 +32,7 @@ class QuestionnairesOwnAnswerComponent extends Component {
  * 指定されたアンケートに該当する回答中アンケートのサマリを取得する
  *
  * @param string $questionnaireKey 回答済に追加するアンケートキー
- * @return progressive Answer Summary id list
+ * @return array progressive Answer Summary
  */
 	public function getProgressiveSummaryOfThisUser($questionnaireKey) {
 		// 戻り値初期化
@@ -49,7 +49,7 @@ class QuestionnairesOwnAnswerComponent extends Component {
 		}
 		// ログインユーザーはDBから探す
 		$conditions = array(
-			'answer_status' => QuestionnairesComponent::ACTION_NOT_ACT,
+			'answer_status !=' => QuestionnairesComponent::ACTION_ACT,
 			'questionnaire_key' => $questionnaireKey,
 			'user_id' => Current::read('User.id'),
 		);
@@ -59,6 +59,43 @@ class QuestionnairesOwnAnswerComponent extends Component {
 		));
 		return $summary;
 	}
+
+/**
+ * 指定されたアンケートに該当する確認待ちアンケートのサマリを取得する
+ *
+ * @param string $questionnaireKey 回答済に追加するアンケートキー
+ * @return array before confirm Answer Summary
+ */
+	public function getConfirmSummaryOfThisUser($questionnaireKey) {
+		// 戻り値初期化
+		$summary = false;
+		$answerSummary = ClassRegistry::init('Questionnaires.QuestionnaireAnswerSummary');
+		// 未ログインの人の場合はセッションにある回答中データを参照する
+		if (! Current::read('User.id')) {
+			$session = $this->_Collection->load('Session');
+			$summaryId = $session->read('Questionnaires.progressiveSummary.' . $questionnaireKey);
+			if (! $summaryId) {
+				return false;
+			}
+			$conditions = array(
+				'id' => $summaryId,
+				'answer_status' => QuestionnairesComponent::ACTION_BEFORE_ACT,
+			);
+		} else {
+			$conditions = array(
+				'answer_status' => QuestionnairesComponent::ACTION_BEFORE_ACT,
+				'questionnaire_key' => $questionnaireKey,
+				'user_id' => Current::read('User.id'),
+			);
+		}
+		$summary = $answerSummary->find('first', array(
+			'conditions' => $conditions,
+			'recursive' => -1,
+			'order' => 'QuestionnaireAnswerSummary.created DESC'	// 最も新しいものを一つ選ぶ
+		));
+		return $summary;
+	}
+
 /**
  * 指定されたアンケートに対応する回答中サマリを作成
  *

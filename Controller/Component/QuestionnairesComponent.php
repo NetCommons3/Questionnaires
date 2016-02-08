@@ -134,13 +134,8 @@ class QuestionnairesComponent extends Component {
  * @var string
  */
 	const ACTION_NOT_ACT = '0';
-
-/**
- * action. act
- *
- * @var string
- */
-	const ACTION_ACT = '1';
+	const ACTION_BEFORE_ACT = '1';
+	const ACTION_ACT = '2';
 
 /**
  * type. selection

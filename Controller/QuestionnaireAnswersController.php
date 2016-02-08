@@ -28,6 +28,7 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 		'Questionnaires.QuestionnairePage',
 		'Questionnaires.QuestionnaireAnswerSummary',
 		'Questionnaires.QuestionnaireAnswer',
+		'Questionnaires.QuestionnaireFrameSetting',
 	);
 
 /**
@@ -40,12 +41,12 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 		'Questionnaires.Questionnaires',
 		'Questionnaires.QuestionnairesOwnAnswer',
 		'AuthorizationKeys.AuthorizationKey' => array(
-			'operationType' => 'none',
+			'operationType' => 'embed',
 			'targetAction' => 'view',
 			'model' => 'Questionnaire',
 			'contentId' => 0),
 		'VisualCaptcha.VisualCaptcha' => array(
-			'operationType' => 'none',
+			'operationType' => 'embed',
 			'targetAction' => 'view'),
 	);
 
@@ -72,6 +73,11 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 	private $__ableToAnswerAction = ['view', 'confirm'];
 
 /**
+ * frame setting display type
+ */
+	private $__displayType = null;
+
+/**
  * beforeFilter
  * NetCommonsお約束：できることならControllerのbeforeFilterで実行可/不可の判定して流れを変える
  *
@@ -79,7 +85,7 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
  */
 	public function beforeFilter() {
 		// ゲストアクセスOKのアクションを設定
-		$this->Auth->allow('view', 'confirm', 'thanks', 'no_more_answer');
+		$this->Auth->allow('view', 'confirm', 'thanks', 'no_more_answer', 'key_auth', 'img_auth');
 
 		// 親クラスのbeforeFilterを済ませる
 		parent::beforeFilter();
@@ -90,7 +96,7 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 		$questionnaireKey = $this->_getQuestionnaireKeyFromPass();
 
 		// キーで指定されたアンケートデータを取り出しておく
-		$conditions = $this->Questionnaire->getBaseCondition(
+		$conditions = $this->Questionnaire->getWorkflowConditionsOmitPublishPeriod(
 			array('Questionnaire.key' => $questionnaireKey)
 		);
 
@@ -98,9 +104,11 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 			'conditions' => $conditions,
 		));
 		if (! $this->__questionnaire) {
-			$this->setAction('throwBadRequest');
-			return;
+			$this->setAction('throwBadRequest');	// returnをつけるとテストコードが通らない
 		}
+
+		// 現在の表示形態を調べておく
+		list($this->__displayType) = $this->QuestionnaireFrameSetting->getQuestionnaireFrameSetting(Current::read('Frame.key'));
 
 		// 以下のisAbleto..の内部関数にてNetCommonsお約束である編集権限、参照権限チェックを済ませています
 		// 閲覧可能か
@@ -117,21 +125,8 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 				return;
 			}
 		}
-		// 回答の初めのページであることが各種認証行う条件
-		if (!$this->request->isPost() || !isset($this->request->data['QuestionnairePage']['page_sequence'])) {
-			// 認証キーコンポーネントお約束：
-			// 取り出したアンケートが認証キー確認を求めているなら、operationTypeをすり替える
-			if ($this->__questionnaire['Questionnaire']['is_key_pass_use'] == QuestionnairesComponent::USES_USE) {
-				$this->AuthorizationKey->operationType = 'redirect';
-				$this->AuthorizationKey->contentId = $this->__questionnaire['Questionnaire']['id'];
-			}
-			// 画像認証コンポーネントお約束：
-			// 取り出したアンケートが画像認証ありならば、operationTypeをすり替える
-			if ($this->__questionnaire['Questionnaire']['is_image_authentication'] == QuestionnairesComponent::USES_USE) {
-				$this->VisualCaptcha->operationType = 'redirect';
-			}
-		}
 	}
+
 /**
  * test_mode
  *
@@ -149,7 +144,7 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 		$status = $this->__questionnaire['Questionnaire']['status'];
 		// テストモード確認画面からのPOSTや、現在のアンケートデータのステータスが公開状態の時
 		// 次へリダイレクト
-		if ($this->request->isPost() || $status == WorkflowComponent::STATUS_PUBLISHED) {
+		if ($this->request->is('post') || $status == WorkflowComponent::STATUS_PUBLISHED) {
 			$this->redirect(NetCommonsUrl::actionUrl(array(
 				'controller' => 'questionnaire_answers',
 				'action' => 'view',
@@ -165,6 +160,111 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 	}
 
 /**
+ * _viewGuard
+ *
+ * アンケートが認証キーや画像認証でガードされているかどうかを調べ、
+ * ガードがある場合は適宜、相当のアクションへ転送する
+ *
+ * @return void
+ */
+	protected function _viewGuard() {
+		$questionnaireKey = $this->_getQuestionnaireKey($this->__questionnaire);
+
+		if (!$this->Session->check('Questionnaire.auth_ok.' . $questionnaireKey)) {
+			if ($this->request->is('get') || !isset($this->request->data['QuestionnairePage']['page_sequence'])) {
+				// 認証キーコンポーネントお約束：
+				if ($this->__questionnaire['Questionnaire']['is_key_pass_use'] == QuestionnairesComponent::USES_USE) {
+					$this->AuthorizationKey->contentId = $this->__questionnaire['Questionnaire']['id'];
+					$this->AuthorizationKey->guard(AuthorizationKeyComponent::OPERATION_EMBEDDING, 'Questionnaire', $this->__questionnaire);
+					$this->setAction('key_auth');
+					return;
+				}
+				if ($this->__questionnaire['Questionnaire']['is_image_authentication'] == QuestionnairesComponent::USES_USE) {
+					// 画像認証コンポーネントお約束：
+					$this->setAction('img_auth');
+					return;
+				}
+			}
+		} else {
+			$this->Session->delete('Questionnaire.auth_ok.' . $questionnaireKey);
+		}
+	}
+
+/**
+ * key_auth
+ *
+ * 認証キーガード
+ *
+ * @return void
+ */
+	public function key_auth() {
+		$qKey = $this->_getQuestionnaireKey($this->__questionnaire);
+		if ($this->request->is('post')) {
+			if ($this->AuthorizationKey->check()) {
+				$this->Session->write('Questionnaire.auth_ok.' . $qKey, 'OK');
+				// 画面へ行く
+				$url = NetCommonsUrl::actionUrl(array(
+					'controller' => 'questionnaire_answers',
+					'action' => 'view',
+					Current::read('Block.id'),
+					$qKey,
+					'frame_id' => Current::read('Frame.id'),
+				));
+				$this->redirect($url);
+				return;
+			}
+		}
+		$url = NetCommonsUrl::actionUrl(array(
+			'controller' => 'questionnaire_answers',
+			'action' => 'key_auth',
+			Current::read('Block.id'),
+			$qKey,
+			'frame_id' => Current::read('Frame.id'),
+		));
+		$this->set('displayType', $this->__displayType);
+		$this->set('postUrl', $url);
+		$this->request->data['Frame'] = Current::read('Frame');
+		$this->request->data['Block'] = Current::read('Block');
+	}
+
+/**
+ * img_auth
+ *
+ * 画像認証ガード
+ *
+ * @return void
+ */
+	public function img_auth() {
+		$qKey = $this->_getQuestionnaireKey($this->__questionnaire);
+		if ($this->request->is('post')) {
+			if ($this->VisualCaptcha->check()) {
+				$this->Session->write('Questionnaire.auth_ok.' . $qKey, 'OK');
+				// 画面へ行く
+				$url = NetCommonsUrl::actionUrl(array(
+					'controller' => 'questionnaire_answers',
+					'action' => 'view',
+					Current::read('Block.id'),
+					$qKey,
+					'frame_id' => Current::read('Frame.id'),
+				));
+				$this->redirect($url);
+				return;
+			}
+		}
+		$url = NetCommonsUrl::actionUrl(array(
+			'controller' => 'questionnaire_answers',
+			'action' => 'img_auth',
+			Current::read('Block.id'),
+			$qKey,
+			'frame_id' => Current::read('Frame.id'),
+		));
+		$this->set('displayType', $this->__displayType);
+		$this->set('postUrl', $url);
+		$this->request->data['Frame'] = Current::read('Frame');
+		$this->request->data['Block'] = Current::read('Block');
+	}
+
+/**
  * view method
  * Display the question of the questionnaire , to accept the answer input
  *
@@ -174,6 +274,9 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 		$questionnaire = $this->__questionnaire;
 		$questionnaireKey = $this->_getQuestionnaireKey($this->__questionnaire);
 
+		//
+		$this->_viewGuard();
+
 		// 選択肢ランダム表示対応
 		$this->__shuffleChoice($questionnaire);
 
@@ -181,28 +284,28 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 		$nextPageSeq = QuestionnairesComponent::FIRST_PAGE_SEQUENCE;	// default
 
 		// POSTチェック
-		if ($this->request->isPost()) {
+		if ($this->request->is('post')) {
+			// サマリ情報準備
+			$summary = $this->QuestionnairesOwnAnswer->forceGetProgressiveAnswerSummary($this->__questionnaire);
+			$nextPageSeq = $this->data['QuestionnairePage']['page_sequence'];
+
 			// 回答データがある場合は回答をDBに書きこむ
 			if (isset($this->data['QuestionnaireAnswer'])) {
-				$summary = $this->QuestionnairesOwnAnswer->forceGetProgressiveAnswerSummary($this->__questionnaire);
-				if (! $summary) {
+				if (! $this->QuestionnaireAnswer->saveAnswer($this->data, $questionnaire, $summary)) {
 					// 保存エラーの場合は今のページを再表示
 					$nextPageSeq = $this->data['QuestionnairePage']['page_sequence'];
 				} else {
-					if (! $this->QuestionnaireAnswer->saveAnswer($this->data, $questionnaire, $summary)) {
-						// 保存エラーの場合は今のページを再表示
-						$nextPageSeq = $this->data['QuestionnairePage']['page_sequence'];
-					} else {
-						// 回答データがあり、無事保存できたら次ページを取得する
-						$nextPageSeq = $this->QuestionnairePage->getNextPage(
-							$questionnaire,
-							$this->data['QuestionnairePage']['page_sequence'],
-							$this->data['QuestionnaireAnswer']);
-					}
+					// 回答データがあり、無事保存できたら次ページを取得する
+					$nextPageSeq = $this->QuestionnairePage->getNextPage(
+						$questionnaire,
+						$this->data['QuestionnairePage']['page_sequence'],
+						$this->data['QuestionnaireAnswer']);
 				}
 			}
 			// 次ページはもう存在しない
 			if ($nextPageSeq === false) {
+				// 確認画面へいってもよい状態ですと書きこむ
+				$this->QuestionnaireAnswerSummary->saveAnswerStatus($summary, QuestionnairesComponent::ACTION_BEFORE_ACT);
 				// 確認画面へ
 				$url = NetCommonsUrl::actionUrl(array(
 					'controller' => 'questionnaire_answers',
@@ -215,7 +318,7 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 				return;
 			}
 		}
-		if (! ($this->request->isPost() && $nextPageSeq == $this->data['QuestionnairePage']['page_sequence'])) {
+		if (! ($this->request->is('post') && $nextPageSeq == $this->data['QuestionnairePage']['page_sequence'])) {
 			$summary = $this->QuestionnairesOwnAnswer->getProgressiveSummaryOfThisUser($questionnaireKey);
 			$setAnswers = $this->QuestionnaireAnswer->getProgressiveAnswerOfThisSummary($summary);
 			$this->set('answers', $setAnswers);
@@ -234,6 +337,7 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 		$this->request->data['QuestionnairePage'] = $questionnaire['QuestionnairePage'][$nextPageSeq];
 		$this->set('questionnaire', $questionnaire);
 		$this->set('questionPage', $questionnaire['QuestionnairePage'][$nextPageSeq]);
+		$this->set('displayType', $this->__displayType);
 		$this->NetCommons->handleValidationError($this->QuestionnaireAnswer->validationErrors);
 	}
 /**
@@ -242,23 +346,21 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
  * @return void
  */
 	public function confirm() {
-		// 解答入力画面で表示していたときのシャッフルを取り出す
-		$this->__shuffleChoice($this->__questionnaire);
-
-		// 回答中サマリレコード取得
-		$summary = $this->QuestionnairesOwnAnswer->getProgressiveSummaryOfThisUser(
+		// 確認してもいいサマリレコード取得
+		$summary = $this->QuestionnairesOwnAnswer->getConfirmSummaryOfThisUser(
 			$this->_getQuestionnaireKey($this->__questionnaire));
 		if (!$summary) {
 			$this->setAction('throwBadRequest');
 			return;
 		}
 
+		// 解答入力画面で表示していたときのシャッフルを取り出す
+		$this->__shuffleChoice($this->__questionnaire);
+
 		// POSTチェック
-		if ($this->request->isPost()) {
+		if ($this->request->is('post')) {
 			// サマリの状態を完了にして確定する
-			$summary['QuestionnaireAnswerSummary']['answer_status'] = QuestionnairesComponent::ACTION_ACT;
-			$summary['QuestionnaireAnswerSummary']['answer_time'] = (new NetCommonsTime())->getNowDatetime();
-			$this->QuestionnaireAnswerSummary->save($summary['QuestionnaireAnswerSummary']);
+			$this->QuestionnaireAnswerSummary->saveAnswerStatus($summary, QuestionnairesComponent::ACTION_ACT);
 			$this->QuestionnairesOwnAnswer->saveOwnAnsweredKeys($this->_getQuestionnaireKey($this->__questionnaire));
 
 			// ありがとう画面へ行く
@@ -282,23 +384,33 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 		$this->set('questionnaire', $this->__questionnaire);
 		$this->request->data['QuestionnaireAnswer'] = $setAnswers;
 		$this->set('answers', $setAnswers);
+		$this->set('displayType', $this->__displayType);
 	}
+
 /**
  * thanks method
  *
  * @return void
  */
 	public function thanks() {
+		$qKey = $this->__questionnaire['Questionnaire']['key'];
+		// 回答済みか確認
+		if (! $this->QuestionnairesOwnAnswer->checkOwnAnsweredKeys($qKey)) {
+			$this->setAction('throwBadRequest');
+			return;
+		}
 		// 後始末
 		// 回答中にたまっていたセッションキャッシュをクリア
-		$this->Session->delete('Questionnaires.' . $this->__questionnaire['Questionnaire']['key']);
+		$this->Session->delete('Questionnaires.' . $qKey);
 
 		// View変数にセット
 		$this->request->data['Frame'] = Current::read('Frame');
 		$this->request->data['Block'] = Current::read('Block');
 		$this->set('questionnaire', $this->__questionnaire);
 		$this->set('ownAnsweredKeys', $this->QuestionnairesOwnAnswer->getOwnAnsweredKeys());
+		$this->set('displayType', $this->__displayType);
 	}
+
 /**
  * no_more_answer method
  * 条件によって回答できないアンケートにアクセスしたときに表示
@@ -306,7 +418,9 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
  * @return void
  */
 	public function no_more_answer() {
+		$this->set('displayType', $this->__displayType);
 	}
+
 /**
  * _shuffleChoice
  * shuffled choices and write into session

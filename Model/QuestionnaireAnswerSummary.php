@@ -3,7 +3,6 @@
  * QuestionnaireAnswerSummary Model
  *
  * @property Questionnaire $Questionnaire
- * @property User $User
  * @property QuestionnaireAnswer $QuestionnaireAnswer
  *
  * @author Noriko Arai <arai@nii.ac.jp>
@@ -83,35 +82,39 @@ class QuestionnaireAnswerSummary extends QuestionnairesAppModel {
 	);
 
 /**
- * getNowSummaryOfThisUser 指定されたアンケートIDと指定ユーザーに合致するアンケート回答を取得する
+ * saveAnswerStatus
+ * 回答状態を書き換える
  *
- * @param int $questionnaireKey アンケートKey
- * @param int $userId ユーザID （指定しない場合は null)
- * @param string $sessionId セッションID
- * @return array
+ * @param array $summary summary data
+ * @param int $status status
+ * @throws InternalErrorException
+ * @return bool
  */
-	public function getNowSummaryOfThisUser($questionnaireKey, $userId, $sessionId) {
-		if ($userId) {
-			$conditions = array(
-				'answer_status' => QuestionnairesComponent::ACTION_ACT,
-				'questionnaire_key' => $questionnaireKey,
-				'user_id' => $userId
-			);
-		} else {
-			$conditions = array(
-				'answer_status' => QuestionnairesComponent::ACTION_ACT,
-				'questionnaire_key' => $questionnaireKey,
-				'session_value' => $sessionId
-			);
+	public function saveAnswerStatus($summary, $status) {
+		$summary['QuestionnaireAnswerSummary']['answer_status'] = $status;
+		$summary['QuestionnaireAnswerSummary']['answer_time'] = 1;
+
+		if ($status == QuestionnairesComponent::ACTION_ACT) {
+			// サマリの状態を完了にして確定する
+			$summary['QuestionnaireAnswerSummary']['answer_time'] = (new NetCommonsTime())->getNowDatetime();
 		}
-
-		$summary = $this->find('all', array(
-			'conditions' => $conditions
-		));
-
-		return $summary;
+		$this->set($summary);
+		if (! $this->validates()) {
+			return false;
+		}
+		$this->begin();
+		try {
+			if (! $this->save($summary, false)) {
+				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+			}
+			$this->commit();
+		} catch (Exception $ex) {
+			$this->rollback();
+			CakeLog::error($ex);
+			throw $ex;
+		}
+		return true;
 	}
-
 /**
  * forceGetProgressiveAnswerSummary
  * get answer summary record if there is no summary , then create
@@ -125,11 +128,24 @@ class QuestionnaireAnswerSummary extends QuestionnairesAppModel {
 	public function forceGetProgressiveAnswerSummary($questionnaire, $userId, $sessionId) {
 		$this->begin();
 		try {
+			$answerTime = 1;
+			if ($userId) {
+				$maxTime = $this->find('first', array(
+					'fields' => array('MAX(answer_time) AS max_answer_time'),
+					'conditions' => array(
+						'questionnaire_key' => $questionnaire['Questionnaire']['key'],
+						'user_id' => $userId
+					)
+				));
+				if ($maxTime) {
+					$answerTime = $maxTime[0]['max_answer_time'] + 1;
+				}
+			}
 			$this->create();
 			if (! $this->save(array(
 				'answer_status' => QuestionnairesComponent::ACTION_NOT_ACT,
 				'test_status' => ($questionnaire['Questionnaire']['status'] != WorkflowComponent::STATUS_PUBLISHED) ? QuestionnairesComponent::TEST_ANSWER_STATUS_TEST : QuestionnairesComponent::TEST_ANSWER_STATUS_PEFORM,
-				'answer_number' => 1,
+				'answer_number' => $answerTime,
 				'questionnaire_key' => $questionnaire['Questionnaire']['key'],
 				'session_value' => $sessionId,
 				'user_id' => $userId,
@@ -137,9 +153,6 @@ class QuestionnaireAnswerSummary extends QuestionnairesAppModel {
 				$this->rollback();
 				return false;
 			}
-			//$summary = array();
-			//$summary['QuestionnaireAnswerSummary']['id'] = $this->id;
-			//return $summary;
 			$this->commit();
 		} catch (Exception $ex) {
 			$this->rollback();

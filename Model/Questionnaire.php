@@ -100,29 +100,29 @@ class Questionnaire extends QuestionnairesAppModel {
 					'allowEmpty' => false,
 					'required' => true,
 			),
-			'public_type' => array(
+			'answer_timing' => array(
 				'publicTypeCheck' => array(
-					'rule' => array('inList', array(WorkflowBehavior::PUBLIC_TYPE_PUBLIC, WorkflowBehavior::PUBLIC_TYPE_LIMITED)),
+					'rule' => array('inList', array(QuestionnairesComponent::USES_USE, QuestionnairesComponent::USES_NOT_USE)),
 					'message' => __d('net_commons', 'Invalid request.'),
 				),
 				'requireOtherFields' => array(
-					'rule' => array('requireOtherFields', WorkflowBehavior::PUBLIC_TYPE_LIMITED, array('Questionnaire.publish_start', 'Questionnaire.publish_end'), 'OR'),
+					'rule' => array('requireOtherFields', QuestionnairesComponent::USES_USE, array('Questionnaire.answer_start_period', 'Questionnaire.answer_end_period'), 'OR'),
 					'message' => __d('questionnaires', 'if you set the period, please set time.')
 				)
 			),
-			'publish_start' => array(
+			'answer_start_period' => array(
 				'checkDateTime' => array(
 					'rule' => 'checkDateTime',
 					'message' => __d('questionnaires', 'Invalid datetime format.')
 				)
 			),
-			'publish_end' => array(
+			'answer_end_period' => array(
 				'checkDateTime' => array(
 					'rule' => 'checkDateTime',
 					'message' => __d('questionnaires', 'Invalid datetime format.')
 				),
 				'checkDateComp' => array(
-					'rule' => array('checkDateComp', '>=', 'publish_start'),
+					'rule' => array('checkDateComp', '>=', 'answer_start_period'),
 					'message' => __d('questionnaires', 'start period must be smaller than end period')
 				)
 			),
@@ -250,9 +250,9 @@ class Questionnaire extends QuestionnairesAppModel {
 			}
 
 			$val['Questionnaire']['period_range_stat'] = $this->getPeriodStatus(
-				isset($val['Questionnaire']['public_type']) ? $val['Questionnaire']['public_type'] : false,
-				$val['Questionnaire']['publish_start'],
-				$val['Questionnaire']['publish_end']);
+				isset($val['Questionnaire']['answer_timing']) ? $val['Questionnaire']['answer_timing'] : false,
+				$val['Questionnaire']['answer_start_period'],
+				$val['Questionnaire']['answer_end_period']);
 
 			//
 			// ページ配下の質問データも取り出す
@@ -371,9 +371,9 @@ class Questionnaire extends QuestionnairesAppModel {
  * @return array
  */
 	public function getCondition($addConditions = array()) {
-		// ベースとなる権限のほかに現在フレームに表示設定されているアンケートか見ている
+		// 基本条件（ワークフロー条件）
 		$conditions = $this->getBaseCondition($addConditions);
-
+		// 現在フレームに表示設定されているアンケートか
 		$frameDisplay = ClassRegistry::init('Questionnaires.QuestionnaireFrameDisplayQuestionnaires');
 		$keys = $frameDisplay->find(
 			'list',
@@ -385,10 +385,62 @@ class Questionnaire extends QuestionnairesAppModel {
 		);
 		$conditions['Questionnaire.key'] = $keys;
 
-		if ($addConditions) {
-			$conditions = array_merge($conditions, $addConditions);
+		$periodCondition = $this->_getPeriodConditions();
+		$conditions[] = $periodCondition;
+
+		if (! Current::read('User.id')) {
+			$conditions['is_no_member_allow'] = QuestionnairesComponent::PERMISSION_PERMIT;
 		}
+		$conditions = Hash::merge($conditions, $addConditions);
 		return $conditions;
+	}
+
+/**
+ * 時限公開のconditionsを返す
+ *
+ * @return array
+ */
+	protected function _getPeriodConditions() {
+		if (Current::permission('content_editable')) {
+			return array();
+		}
+		$netCommonsTime = new NetCommonsTime();
+		$nowTime = $netCommonsTime->getNowDatetime();
+
+		$limitedConditions[] = array('OR' => array(
+					'Questionnaire.answer_start_period <=' => $nowTime,
+					'Questionnaire.answer_start_period' => null,
+		));
+		$limitedConditions[] = array(
+			'OR' => array(
+				'Questionnaire.answer_end_period >=' => $nowTime,
+				'Questionnaire.answer_end_period' => null,
+		));
+
+		$timingConditions = array(
+			'OR' => array(
+				'Questionnaire.answer_timing' => QuestionnairesComponent::USES_NOT_USE,
+				$limitedConditions,
+		));
+
+		$totalLimitCond[] = array('OR' => array(
+			'Questionnaire.total_show_start_period <=' => $nowTime,
+			'Questionnaire.total_show_start_period' => null,
+		));
+
+		$totalTimingCond = array(
+			'Questionnaire.is_total_show' => QuestionnairesComponent::USES_USE,
+			'OR' => array(
+				'Questionnaire.total_show_timing' => QuestionnairesComponent::USES_NOT_USE,
+				$totalLimitCond,
+		));
+		$timingConditions['OR'][] = $totalTimingCond;
+
+		if (Current::permission('content_creatable')) {
+			$timingConditions['OR']['Questionnaire.created_user'] = Current::read('User.id');
+		}
+
+		return $timingConditions;
 	}
 
 /**
@@ -401,10 +453,6 @@ class Questionnaire extends QuestionnairesAppModel {
 		$conditions = $this->getWorkflowConditions(array(
 			'block_id' => Current::read('Block.id'),
 		));
-
-		if (! Current::read('User.id')) {
-			$conditions['is_no_member_allow'] = QuestionnairesComponent::PERMISSION_PERMIT;
-		}
 
 		if ($addConditions) {
 			$conditions = array_merge($conditions, $addConditions);

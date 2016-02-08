@@ -62,14 +62,14 @@ NetCommonsApp.controller('Questionnaires.setting',
         var elId = curEl.id;
 
         // minの制限は
-        var minDate = $('#publish_start').val();
+        var minDate = $('#answer_start_period').val();
         // maxの制限は
-        var maxDate = $('#publish_end').val();
+        var maxDate = $('#answer_end_period').val();
 
-        if (elId == 'publish_start') {
-          $('#publish_start').data('DateTimePicker').maxDate(maxDate);
+        if (elId == 'answer_start_period') {
+          $('#answer_start_period').data('DateTimePicker').maxDate(maxDate);
         } else {
-          $('#publish_end').data('DateTimePicker').minDate(minDate);
+          $('#answer_end_period').data('DateTimePicker').minDate(minDate);
         }
       };
       /**

@@ -267,13 +267,12 @@ class QuestionnairesSchema extends CakeSchema {
 		'status' => array('type' => 'integer', 'null' => true, 'default' => null, 'length' => 4, 'unsigned' => false, 'comment' => 'public status, 1: public, 2: public pending, 3: draft during 4: remand | 公開状況  1:公開中、2:公開申請中、3:下書き中、4:差し戻し |'),
 		'title' => array('type' => 'string', 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => 'アンケートタイトル', 'charset' => 'utf8'),
 		'sub_title' => array('type' => 'string', 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => 'アンケートサブタイトル', 'charset' => 'utf8'),
-		'public_type' => array('type' => 'integer', 'null' => false, 'default' => '1', 'length' => 4, 'unsigned' => false),
-		'publish_start' => array('type' => 'datetime', 'null' => true, 'default' => null),
-		'publish_end' => array('type' => 'datetime', 'null' => true, 'default' => null),
+		'answer_timing' => array('type' => 'integer', 'null' => false, 'default' => '0', 'length' => 4, 'unsigned' => false),
+		'answer_start_period' => array('type' => 'datetime', 'null' => true, 'default' => null),
+		'answer_end_period' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'is_no_member_allow' => array('type' => 'boolean', 'null' => true, 'default' => '0', 'comment' => '非会員の回答を許可するか | 0:許可しない | 1:許可する'),
 		'is_anonymity' => array('type' => 'boolean', 'null' => true, 'default' => '0', 'comment' => '会員回答であっても匿名扱いとするか否か | 0:非匿名 | 1:匿名'),
 		'is_key_pass_use' => array('type' => 'boolean', 'null' => true, 'default' => '0', 'comment' => 'キーフレーズによる回答ガードを設けるか | 0:キーフレーズガードは用いない | 1:キーフレーズガードを用いる'),
-		'key_phrase' => array('type' => 'string', 'null' => true, 'default' => 'NetCommons', 'length' => 128, 'collate' => 'utf8_general_ci', 'comment' => 'キーフレーズ', 'charset' => 'utf8'),
 		'is_repeat_allow' => array('type' => 'boolean', 'null' => true, 'default' => '0'),
 		'is_total_show' => array('type' => 'boolean', 'null' => true, 'default' => '1', 'comment' => '集計結果を表示するか否か | 0:表示しない | 1:表示する'),
 		'total_show_timing' => array('type' => 'integer', 'null' => true, 'default' => '0', 'length' => 4, 'unsigned' => false, 'comment' => '集計結果を表示するタイミング | 0:アンケート回答後、すぐ | 1:期間設定'),
@@ -300,5 +299,4 @@ class QuestionnairesSchema extends CakeSchema {
 		),
 		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'InnoDB')
 	);
-
 }

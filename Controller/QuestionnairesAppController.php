@@ -147,7 +147,7 @@ class QuestionnairesAppController extends AppController {
 		// 基本、権限上、見ることができるコンテンツだ
 		// しかし、アンケート独自の条件部分のチェックを行う必要がある
 		// 期間外
-		if ($questionnaire['Questionnaire']['public_type'] == WorkflowBehavior::PUBLIC_TYPE_LIMITED
+		if ($questionnaire['Questionnaire']['answer_timing'] == QuestionnairesComponent::USES_USE
 			&& $questionnaire['Questionnaire']['period_range_stat'] != QuestionnairesComponent::QUESTIONNAIRE_PERIOD_STAT_IN) {
 			return false;
 		}
@@ -210,6 +210,13 @@ class QuestionnairesAppController extends AppController {
 			$nowDatetime = (new NetCommonsTime())->getNowDatetime();
 			// まだ公開期間ではない
 			if (strtotime($nowDatetime) < strtotime($questionnaire['Questionnaire']['total_show_start_period'])) {
+				return false;
+			}
+		}
+
+		// 会員以外には許していないのに未ログイン
+		if ($questionnaire['Questionnaire']['is_no_member_allow'] == QuestionnairesComponent::PERMISSION_NOT_PERMIT) {
+			if (! Current::read('User.id')) {
 				return false;
 			}
 		}

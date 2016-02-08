@@ -44,5 +44,17 @@ class QuestionnaireAnswerFixture extends CakeTestFixture {
  * @var array
  */
 	public $records = array(
+		array(
+			'id' => 1,
+			'answer_value' => 'choice label26',
+			'questionnaire_answer_summary_id' => 1,
+			'questionnaire_question_key' => 'qKey_25'
+		),
+		array(
+			'id' => 2,
+			'answer_value' => 'choice label26',
+			'questionnaire_answer_summary_id' => 2,
+			'questionnaire_question_key' => 'qKey_25'
+		)
 	);
 }

@@ -137,7 +137,7 @@ class QuestionnaireFrameSetting extends QuestionnairesAppModel {
 			$sort = 'title';
 			$dir = 'ASC';
 		} elseif ($setting['sort_type'] == QuestionnairesComponent::QUESTIONNAIRE_SORT_END) {
-			$sort = 'publish_end';
+			$sort = 'answer_end_period';
 			$dir = 'ASC';
 		}
 		return array($displayType, $displayNum, $sort, $dir);

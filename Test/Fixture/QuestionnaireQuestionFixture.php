@@ -157,6 +157,9 @@ class QuestionnaireQuestionFixture extends CakeTestFixture {
 			'modified_user' => $this->getCreatedUser($questionnaireId),
 			'modified' => '2016-01-05 09:00:00',
 		);
+		if ($this->questionId == 4) {
+			$ret['is_choice_random'] = true;
+		}
 
 		if (isset($this->overwrite[$this->questionId])) {
 			$ret = Hash::merge($ret, $this->overwrite[$this->questionId]);

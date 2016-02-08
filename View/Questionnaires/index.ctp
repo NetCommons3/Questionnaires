@@ -30,11 +30,11 @@ echo $this->element('Questionnaires.scripts');
 
 						<?php echo $this->QuestionnaireStatusLabel->statusLabel($questionnaire);?>
 
-						<?php if ($questionnaire['Questionnaire']['public_type'] == WorkflowBehavior::PUBLIC_TYPE_LIMITED): ?>
+						<?php if ($questionnaire['Questionnaire']['answer_timing'] == QuestionnairesComponent::USES_USE): ?>
 							<strong>
-								<?php echo $this->Date->dateFormat($questionnaire['Questionnaire']['publish_start']); ?>
+								<?php echo $this->Date->dateFormat($questionnaire['Questionnaire']['answer_start_period']); ?>
 								<?php echo __d('questionnaires', ' - '); ?>
-								<?php echo $this->Date->dateFormat($questionnaire['Questionnaire']['publish_end']); ?>
+								<?php echo $this->Date->dateFormat($questionnaire['Questionnaire']['answer_end_period']); ?>
 							</strong>
 						<?php endif ?>
 

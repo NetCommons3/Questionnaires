@@ -264,7 +264,7 @@ class QuestionnairesControllerIndexTest extends WorkflowControllerIndexTest {
 			'urlOptions' => array('action' => 'index', 'limit' => 50),
 			'assert' => array('method' => 'assertActionLink', 'action' => 'test_mode', 'linkExist' => true, 'url' => array('controller' => 'questionnaire_answers', 'key' => 'questionnaire_28', 'limit' => null))
 		)));
-		// 自分のなら差し戻しも見える
+		// 自分のなら差し戻しも見える #5
 		array_push($results, Hash::merge($results[$base], array(
 			'urlOptions' => array('action' => 'index', 'limit' => 50),
 			'assert' => array('method' => 'assertActionLink', 'action' => 'test_mode', 'linkExist' => true, 'url' => array('controller' => 'questionnaire_answers', 'key' => 'questionnaire_10', 'limit' => null))
@@ -290,7 +290,7 @@ class QuestionnairesControllerIndexTest extends WorkflowControllerIndexTest {
 			'urlOptions' => array('action' => 'index', 'limit' => 50),
 			'assert' => array('method' => 'assertActionLink', 'action' => 'test_mode', 'linkExist' => false, 'url' => array('controller' => 'questionnaire_answers', 'key' => 'questionnaire_26', 'limit' => null))
 		)));
-		// 他人の差し戻しも見えない
+		// 他人の差し戻しも見えない #10
 		array_push($results, Hash::merge($results[$base], array(
 			'urlOptions' => array('action' => 'index', 'limit' => 50),
 			'assert' => array('method' => 'assertActionLink', 'action' => 'test_mode', 'linkExist' => false, 'url' => array('controller' => 'questionnaire_answers', 'key' => 'questionnaire_30', 'limit' => null))
@@ -300,15 +300,15 @@ class QuestionnairesControllerIndexTest extends WorkflowControllerIndexTest {
 			'urlOptions' => array('action' => 'index', 'limit' => 50),
 			'assert' => array('method' => 'assertActionLink', 'action' => 'test_mode', 'linkExist' => false, 'url' => array('controller' => 'questionnaire_answers', 'key' => 'questionnaire_36', 'limit' => null))
 		)));
-		// 他人の未来も見えない
+		// 他人の未来 発行済みで集計表示ありなので見える
 		array_push($results, Hash::merge($results[$base], array(
 			'urlOptions' => array('action' => 'index', 'limit' => 50),
-			'assert' => array('method' => 'assertActionLink', 'action' => 'view', 'linkExist' => false, 'url' => array('controller' => 'questionnaire_answers', 'key' => 'questionnaire_16', 'limit' => null))
+			'assert' => array('method' => 'assertActionLink', 'action' => 'view', 'linkExist' => true, 'url' => array('controller' => 'questionnaire_answers', 'key' => 'questionnaire_16', 'limit' => null))
 		)));
-		// 他人の過去も見えない
+		// 他人の過去 発行済みで集計表示ありなので見える
 		array_push($results, Hash::merge($results[$base], array(
 			'urlOptions' => array('action' => 'index', 'limit' => 50),
-			'assert' => array('method' => 'assertActionLink', 'action' => 'view', 'linkExist' => false, 'url' => array('controller' => 'questionnaire_answers', 'key' => 'questionnaire_22', 'limit' => null))
+			'assert' => array('method' => 'assertActionLink', 'action' => 'view', 'linkExist' => true, 'url' => array('controller' => 'questionnaire_answers', 'key' => 'questionnaire_22', 'limit' => null))
 		)));
 
 		return $results;

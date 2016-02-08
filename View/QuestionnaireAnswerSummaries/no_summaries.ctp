@@ -1,6 +1,6 @@
 <?php
 /**
- * questionnaire page setting view template
+ * questionnaire summaries view template
  *
  * @author Noriko Arai <arai@nii.ac.jp>
  * @author Allcreator <info@allcreator.net>
@@ -9,9 +9,9 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 ?>
-<?php echo __d('questionnaires', 'you will not be able to answer this questionnaire.'); ?>
+<?php echo __d('questionnaires', 'you will not be able to see this result.'); ?>
 <?php if ($displayType == QuestionnairesComponent::DISPLAY_TYPE_LIST): ?>
 	<div class="text-center">
-	    <?php echo $this->BackTo->pageLinkButton(__d('questionnaires', 'Back to Top'), array('icon' => 'chevron-left')); ?>
+		<?php echo $this->BackTo->pageLinkButton(__d('questionnaires', 'Back to Top'), array('icon' => 'chevron-left')); ?>
 	</div>
 <?php endif;

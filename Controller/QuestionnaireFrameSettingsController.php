@@ -79,7 +79,7 @@ class QuestionnaireFrameSettingsController extends QuestionnaireBlocksController
  */
 	public function edit() {
 		// Postデータ登録
-		if ($this->request->isPut() || $this->request->isPost()) {
+		if ($this->request->is('put') || $this->request->is('post')) {
 			if ($this->QuestionnaireFrameSetting->saveFrameSettings($this->request->data)) {
 				$this->NetCommons->setFlashNotification(__d('net_commons', 'Successfully saved.'), array(
 					'class' => 'success',
@@ -98,9 +98,8 @@ class QuestionnaireFrameSettingsController extends QuestionnaireBlocksController
 			'fields' => array('Questionnaire.*', 'QuestionnaireFrameDisplayQuestionnaire.*'),
 			'conditions' => $conditions,
 			'page' => 1,
-			'sort' => QuestionnairesComponent::DISPLAY_SORT_TYPE_NEW_ARRIVALS,
+			'order' => array('Questionnaire.created' => 'DESC'),
 			'limit' => 1000,
-			'direction' => 'desc',
 			'recursive' => -1,
 			'joins' => array(
 				array(
