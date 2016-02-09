@@ -18,7 +18,7 @@ App::uses('NetCommonsControllerTestCase', 'NetCommons.TestSuite');
  * @package NetCommons\AuthorizationKeys\Test\Case\Controller
  * @SuppressWarnings(PHPMD.LongVariable)
  */
-class QuestionnaireAnswersControllerViewTest extends NetCommonsControllerTestCase {
+class QuestionnaireAnswersControllerPostTest extends NetCommonsControllerTestCase {
 
 /**
  * Fixtures

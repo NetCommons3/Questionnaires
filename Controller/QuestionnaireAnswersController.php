@@ -96,7 +96,7 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 		$questionnaireKey = $this->_getQuestionnaireKeyFromPass();
 
 		// キーで指定されたアンケートデータを取り出しておく
-		$conditions = $this->Questionnaire->getWorkflowConditionsOmitPublishPeriod(
+		$conditions = $this->Questionnaire->getWorkflowConditions(
 			array('Questionnaire.key' => $questionnaireKey)
 		);
 

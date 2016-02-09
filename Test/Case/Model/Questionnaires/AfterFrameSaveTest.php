@@ -170,7 +170,6 @@ class QuestionnaireAfterFrameSaveTest extends NetCommonsModelTestCase {
 		$this->setExpectedException('InternalErrorException');
 		$this->$model->$method($data);
 	}
-
 /**
  * SaveのExceptionErrorテスト
  *
@@ -189,5 +188,4 @@ class QuestionnaireAfterFrameSaveTest extends NetCommonsModelTestCase {
 		$this->setExpectedException('InternalErrorException');
 		$this->$model->$method($data);
 	}
-
 }

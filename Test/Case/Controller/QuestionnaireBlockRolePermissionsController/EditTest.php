@@ -80,33 +80,6 @@ class QuestionnaireBlockRolePermissionsControllerEditTest extends BlockRolePermi
 	}
 
 /**
- * テストDataの取得
- *
- * @param bool $isPost POSTかどうか
- * @return array
- */
-	protected function _getPermissionData($isPost) {
-		if ($isPost) {
-			$data = array(
-				'content_creatable' => array(
-					Role::ROOM_ROLE_KEY_GENERAL_USER,
-				),
-			);
-		} else {
-			$data = array(
-				'content_creatable' => array(
-					Role::ROOM_ROLE_KEY_ROOM_ADMINISTRATOR,
-					Role::ROOM_ROLE_KEY_CHIEF_EDITOR,
-					Role::ROOM_ROLE_KEY_EDITOR,
-					Role::ROOM_ROLE_KEY_GENERAL_USER,
-				),
-			);
-		}
-
-		return $data;
-	}
-
-/**
  * edit()アクションDataProvider
  *
  * ### 戻り値
