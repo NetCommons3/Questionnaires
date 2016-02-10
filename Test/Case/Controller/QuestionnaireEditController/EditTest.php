@@ -16,7 +16,7 @@ App::uses('QuestionnairesComponent', 'Questionnaires.Controller/Component');
  * QuestionnaireEditController Test Case
  *
  * @author Allcreator <info@allcreator.net>
- * @package NetCommons\Bbses\Test\Case\Controller\QuestionnaireEditController
+ * @package NetCommons\Questionnaires\Test\Case\Controller\QuestionnaireEditController
  */
 class QuestionnaireEditControllerEditTest extends WorkflowControllerEditTest {
 

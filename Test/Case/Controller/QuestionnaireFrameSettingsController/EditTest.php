@@ -185,6 +185,10 @@ class QuestionnairesFrameSettingsControllerEditTest extends NetCommonsController
 			'urlOptions' => array('frame_id' => $data0['Frame']['id']),
 			'assert' => null
 		);
+		$results[1] = array(
+			'urlOptions' => array('frame_id' => 15),
+			'assert' => null
+		);
 
 		return $results;
 	}

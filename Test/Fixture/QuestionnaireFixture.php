@@ -484,12 +484,12 @@ class QuestionnaireFixture extends CakeTestFixture {
 		$admin = array(1, 2, 3, 4, 13, 14, 19, 20, 33, 34, 39, 40, 45, 46);
 		$chief = array(5, 6, 7, 8, 15, 16, 21, 22, 25, 26, 29, 30, 35, 36, 41, 42, 47, 48);
 		if (in_array($qId, $admin)) {
-			return 1;
+			return '1';
 		}
 		if (in_array($qId, $chief)) {
-			return 3;
+			return '3';
 		}
-		return 4;
+		return '4';
 	}
 
 }

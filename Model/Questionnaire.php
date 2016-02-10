@@ -246,6 +246,7 @@ class Questionnaire extends QuestionnairesAppModel {
 		// 引き続きアンケート本体のバリデートを実施してもらうためtrueを返す
 		return true;
 	}
+
 /**
  * AfterFind Callback function
  *
@@ -315,37 +316,7 @@ class Questionnaire extends QuestionnairesAppModel {
 		$this->begin();
 
 		try {
-			// ルームに存在するブロックを探す
-			$block = $this->Block->find('first', array(
-				'conditions' => array(
-					'Block.room_id' => $frame['room_id'],
-					'Block.plugin_key' => $frame['plugin_key'],
-				)
-			));
-			// まだない場合
-			if (empty($block)) {
-				// 作成する
-				$block = $this->Block->save(array(
-					'room_id' => $frame['room_id'],
-					'language_id' => $frame['language_id'],
-					'plugin_key' => $frame['plugin_key'],
-				));
-				if (! $block) {
-					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
-				}
-				Current::$current['Block'] = $block['Block'];
-			}
-
-			$data['Frame']['block_id'] = $block['Block']['id'];
-			if (! $this->Frame->save($data)) {
-				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
-			}
-			Current::$current['Frame']['block_id'] = $block['Block']['id'];
-
-			$blockSetting = $this->QuestionnaireSetting->create();
-			$blockSetting['QuestionnaireSetting']['block_key'] = $block['Block']['key'];
-			$this->QuestionnaireSetting->saveQuestionnaireSetting($blockSetting);
-
+			$this->_saveBlock($frame);
 			$this->commit();
 		} catch (Exception $ex) {
 			//トランザクションRollback
@@ -356,6 +327,51 @@ class Questionnaire extends QuestionnairesAppModel {
 		}
 		return $data;
 	}
+
+/**
+ * save block
+ *
+ * afterFrameSaveやsaveQuestionnaireから呼び出される
+ *
+ * @param array $frame frame data
+ * @return bool
+ * @throws InternalErrorException
+ */
+	protected function _saveBlock($frame) {
+		// ルームに存在するブロックを探す
+		$block = $this->Block->find('first', array(
+			'conditions' => array(
+				'Block.room_id' => $frame['room_id'],
+				'Block.plugin_key' => $frame['plugin_key'],
+				'Block.language_id' => $frame['language_id'],
+			)
+		));
+		// まだない場合
+		if (empty($block)) {
+			// 作成する
+			$block = $this->Block->save(array(
+				'room_id' => $frame['room_id'],
+				'language_id' => $frame['language_id'],
+				'plugin_key' => $frame['plugin_key'],
+			));
+			if (! $block) {
+				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+			}
+			Current::$current['Block'] = $block['Block'];
+		}
+
+		$frame['block_id'] = $block['Block']['id'];
+		if (! $this->Frame->save($frame)) {
+			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+		}
+		Current::$current['Frame']['block_id'] = $block['Block']['id'];
+
+		$blockSetting = $this->QuestionnaireSetting->create();
+		$blockSetting['QuestionnaireSetting']['block_key'] = $block['Block']['key'];
+		$this->QuestionnaireSetting->saveQuestionnaireSetting($blockSetting);
+		return true;
+	}
+
 /**
  * geQuestionnairesList
  * get questionnaires by specified block id and specified user id limited number
@@ -380,6 +396,23 @@ class Questionnaire extends QuestionnairesAppModel {
 			$options
 		));
 		return $list;
+	}
+
+/**
+ * get index sql condition method
+ *
+ * @param array $addConditions 追加条件
+ * @return array
+ */
+	public function getBaseCondition($addConditions = array()) {
+		$conditions = $this->getWorkflowConditions(array(
+			'block_id' => Current::read('Block.id'),
+		));
+
+		if ($addConditions) {
+			$conditions = array_merge($conditions, $addConditions);
+		}
+		return $conditions;
 	}
 
 /**
@@ -462,23 +495,6 @@ class Questionnaire extends QuestionnairesAppModel {
 	}
 
 /**
- * get index sql condition method
- *
- * @param array $addConditions 追加条件
- * @return array
- */
-	public function getBaseCondition($addConditions = array()) {
-		$conditions = $this->getWorkflowConditions(array(
-			'block_id' => Current::read('Block.id'),
-		));
-
-		if ($addConditions) {
-			$conditions = array_merge($conditions, $addConditions);
-		}
-		return $conditions;
-	}
-
-/**
  * saveQuestionnaire
  * save Questionnaire data
  *
@@ -491,6 +507,8 @@ class Questionnaire extends QuestionnairesAppModel {
 		$this->begin();
 
 		try {
+			$this->_saveBlock(Current::read('Frame'));
+			$questionnaire['Questionnaire']['block_id'] = Current::read('Frame.block_id');
 			$status = $questionnaire['Questionnaire']['status'];
 			$this->create();
 			// アンケートは履歴を取っていくタイプのコンテンツデータなのでSave前にはID項目はカット

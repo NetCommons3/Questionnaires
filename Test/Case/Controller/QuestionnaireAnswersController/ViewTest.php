@@ -15,7 +15,7 @@ App::uses('WorkflowControllerViewTest', 'Workflow.TestSuite');
  * QuestionnaireAnswerController Test Case
  *
  * @author Allcreator <info@allcreator.net>
- * @package NetCommons\Bbses\Test\Case\Controller\BbsArticlesController
+ * @package NetCommons\Questionnaires\Test\Case\Controller\QuestionnaireAsnwerController
  */
 class QuestionnaireAnswerControllerViewTest extends WorkflowControllerViewTest {
 

@@ -75,7 +75,7 @@ class QuestionnaireAnswerSummariesController extends QuestionnairesAppController
 		$questionnaireKey = $this->_getQuestionnaireKeyFromPass();
 
 		// キーで指定されたアンケートデータを取り出しておく
-		$conditions = $this->Questionnaire->getWorkflowConditionsOmitPublishPeriod(
+		$conditions = $this->Questionnaire->getWorkflowConditions(
 			array('Questionnaire.key' => $questionnaireKey)
 		);
 
@@ -84,7 +84,6 @@ class QuestionnaireAnswerSummariesController extends QuestionnairesAppController
 		));
 		if (! $this->__questionnaire) {
 			$this->setAction('throwBadRequest');
-			return;
 		}
 
 		// 現在の表示形態を調べておく
