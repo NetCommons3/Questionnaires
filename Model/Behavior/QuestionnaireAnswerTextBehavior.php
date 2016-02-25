@@ -27,6 +27,25 @@ class QuestionnaireAnswerTextBehavior extends QuestionnaireAnswerBehavior {
 	protected $_myType = QuestionnairesComponent::TYPE_TEXT;
 
 /**
+ * max length check type
+ *
+ * @var array
+ */
+	protected $_maxLengthCheckType = array(
+		QuestionnairesComponent::TYPE_TEXT,
+		QuestionnairesComponent::TYPE_TEXT_AREA
+	);
+
+/**
+ * text validate check type
+ *
+ * @var array
+ */
+	protected $_textValidateType = array(
+		QuestionnairesComponent::TYPE_TEXT,
+	);
+
+/**
  * answerMaxLength 回答がアンケートが許す最大長を超えていないかの確認
  *
  * @param object &$model use model
@@ -36,7 +55,7 @@ class QuestionnaireAnswerTextBehavior extends QuestionnaireAnswerBehavior {
  * @return bool
  */
 	public function answerMaxLength(&$model, $data, $question, $max) {
-		if ($question['question_type'] != $this->_myType) {
+		if (! in_array($question['question_type'], $this->_maxLengthCheckType)) {
 			return true;
 		}
 		return Validation::maxLength($data['answer_value'], $max);
@@ -51,12 +70,11 @@ class QuestionnaireAnswerTextBehavior extends QuestionnaireAnswerBehavior {
  * @param array $allAnswers 入力された回答すべて
  * @return bool
  */
-	public function answerValidation(&$model, $data, $question, $allAnswers) {
-		if ($question['question_type'] != $this->_myType) {
+	public function answerTextValidation(&$model, $data, $question, $allAnswers) {
+		if (! in_array($question['question_type'], $this->_textValidateType)) {
 			return true;
 		}
 		$ret = true;
-
 		// 数値型回答を望まれている場合
 		if ($question['question_type_option'] == QuestionnairesComponent::TYPE_OPTION_NUMERIC) {
 			if (!Validation::numeric($data['answer_value'])) {

@@ -27,6 +27,15 @@ class QuestionnaireAnswerDatetimeBehavior extends QuestionnaireAnswerBehavior {
 	protected $_myType = QuestionnairesComponent::TYPE_DATE_AND_TIME;
 
 /**
+ * datetime validate check type
+ *
+ * @var array
+ */
+	protected $_datetmValidateType = array(
+		QuestionnairesComponent::TYPE_DATE_AND_TIME
+	);
+
+/**
  * Answer datetime format
  *
  * @var array
@@ -46,8 +55,8 @@ class QuestionnaireAnswerDatetimeBehavior extends QuestionnaireAnswerBehavior {
  * @param array $allAnswers 入力された回答すべて
  * @return bool
  */
-	public function answerValidation(&$model, $data, $question, $allAnswers) {
-		if ($question['question_type'] != $this->_myType) {
+	public function answerDatetimeValidation(&$model, $data, $question, $allAnswers) {
+		if (! in_array($question['question_type'], $this->_datetmValidateType)) {
 			return true;
 		}
 

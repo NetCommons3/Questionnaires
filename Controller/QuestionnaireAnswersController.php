@@ -320,7 +320,7 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 		}
 		if (! ($this->request->is('post') && $nextPageSeq == $this->data['QuestionnairePage']['page_sequence'])) {
 			$summary = $this->QuestionnairesOwnAnswer->getProgressiveSummaryOfThisUser($questionnaireKey);
-			$setAnswers = $this->QuestionnaireAnswer->getProgressiveAnswerOfThisSummary($summary);
+			$setAnswers = $this->QuestionnaireAnswer->getProgressiveAnswerOfThisSummary($questionnaire, $summary);
 			$this->set('answers', $setAnswers);
 			$this->request->data['QuestionnaireAnswer'] = $setAnswers;
 
@@ -376,7 +376,7 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 
 		// 回答情報取得
 		// 回答情報並べ替え
-		$setAnswers = $this->QuestionnaireAnswer->getProgressiveAnswerOfThisSummary($summary);
+		$setAnswers = $this->QuestionnaireAnswer->getProgressiveAnswerOfThisSummary($this->__questionnaire, $summary);
 
 		// 質問情報をView変数にセット
 		$this->request->data['Frame'] = Current::read('Frame');

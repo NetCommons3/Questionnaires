@@ -89,6 +89,10 @@ class QuestionnaireQuestionFixture extends CakeTestFixture {
 		),
 		16 => array(
 			'question_type' => '7',
+			'question_type_option' => '7',
+		),
+		18 => array(
+			'question_type' => '4',
 		),
 	);
 

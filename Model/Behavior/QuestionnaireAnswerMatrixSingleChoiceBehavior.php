@@ -43,6 +43,16 @@ class QuestionnaireAnswerMatrixSingleChoiceBehavior extends QuestionnaireAnswerB
 	protected $_isTypeAnsArrShiftUp = true;
 
 /**
+ * matrix validate check type
+ *
+ * @var array
+ */
+	protected $_matrixValidateType = array(
+		QuestionnairesComponent::TYPE_MATRIX_SELECTION_LIST,
+		QuestionnairesComponent::TYPE_MATRIX_MULTIPLE,
+	);
+
+/**
  * beforeValidate is called before a model is validated, you can use this callback to
  * add behavior validation rules into a models validate array. Returning false
  * will allow you to make the validation fail.
@@ -77,8 +87,8 @@ class QuestionnaireAnswerMatrixSingleChoiceBehavior extends QuestionnaireAnswerB
  * @param array $allAnswers 入力された回答すべて
  * @return bool
  */
-	public function answerValidation(&$model, $data, $question, $allAnswers) {
-		if ($question['question_type'] != $this->_myType) {
+	public function answerMatrixValidation(&$model, $data, $question, $allAnswers) {
+		if (! in_array($question['question_type'], $this->_matrixValidateType)) {
 			return true;
 		}
 		$ret = true;

@@ -368,46 +368,6 @@ class QuestionnairesComponent extends Component {
 	const DISPLAY_TYPE_LIST = '1';
 
 /**
- * display_sort_type. new arrivals
- *
- * @var string
- */
-	const DISPLAY_SORT_TYPE_NEW_ARRIVALS = '0';
-
-/**
- * display_sort_type. response time (descending)
- *
- * @var string
- */
-	const DISPLAY_SORT_TYPE_RESPONSE_TIME_DESC = '1';
-
-/**
- * display_sort_type. survey status order (ascending)
- *
- * @var string
- */
-	const DISPLAY_SORT_TYPE_SURVEY_STATUS_ORDER_ASC = '2';
-
-/**
- * display_sort_type. by title (ascending order)
- *
- * @var string
- */
-	const DISPLAY_SORT_TYPE_BY_TITLE_ASC = '3';
-
-/**
- * display_sort_types list
- *
- * @var array
- */
-	static public $displaySortTypesList = array(
-		self::DISPLAY_SORT_TYPE_NEW_ARRIVALS,
-		self::DISPLAY_SORT_TYPE_RESPONSE_TIME_DESC,
-		self::DISPLAY_SORT_TYPE_SURVEY_STATUS_ORDER_ASC,
-		self::DISPLAY_SORT_TYPE_BY_TITLE_ASC
-	);
-
-/**
  * skip_flag. no_skip
  *
  * @var string

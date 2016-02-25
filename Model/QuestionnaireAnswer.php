@@ -121,8 +121,23 @@ class QuestionnaireAnswer extends QuestionnairesAppModel {
 					'rule' => array('answerMaxLength', $question, QuestionnairesComponent::QUESTIONNAIRE_MAX_ANSWER_LENGTH),
 					'message' => sprintf(__d('questionnaires', 'the answer is too long. Please enter under %d letters.', QuestionnairesComponent::QUESTIONNAIRE_MAX_ANSWER_LENGTH)),
 				),
-				'answerValidation' => array(
-					'rule' => array('answerValidation', $question, $allAnswers),
+				'answerChoiceValidation' => array(
+					'rule' => array('answerChoiceValidation', $question, $allAnswers),
+					'last' => true,
+					'message' => ''
+				),
+				'answerTextValidation' => array(
+					'rule' => array('answerTextValidation', $question, $allAnswers),
+					'last' => true,
+					'message' => ''
+				),
+				'answerDatetimeValidation' => array(
+					'rule' => array('answerDatetimeValidation', $question, $allAnswers),
+					'last' => true,
+					'message' => ''
+				),
+				'answerMatrixValidation' => array(
+					'rule' => array('answerMatrixValidation', $question, $allAnswers),
 					'last' => true,
 					'message' => ''
 				),
@@ -136,17 +151,22 @@ class QuestionnaireAnswer extends QuestionnairesAppModel {
 /**
  * getProgressiveAnswerOfThisSummary
  *
+ * @param array $questionnaire questionnaire data
  * @param array $summary questionnaire summary ( one record )
  * @return array
  */
-	public function getProgressiveAnswerOfThisSummary($summary) {
+	public function getProgressiveAnswerOfThisSummary($questionnaire, $summary) {
 		$answers = array();
 		if (empty($summary)) {
 			return $answers;
 		}
+		// 指定のサマリに該当するアンケートの質問ID配列を取得
+		$questionIds = Hash::extract($questionnaire, 'QuestionnairePage.{n}.QuestionnaireQuestion.{n}.id');
+		// その質問配列を取得条件に加える（間違った質問が入らないよう）
 		$answer = $this->find('all', array(
 			'conditions' => array(
-				'questionnaire_answer_summary_id' => $summary['QuestionnaireAnswerSummary']['id']
+				'questionnaire_answer_summary_id' => $summary['QuestionnaireAnswerSummary']['id'],
+				'QuestionnaireQuestion.id' => $questionIds
 			),
 			'recursive' => 0
 		));
@@ -178,7 +198,7 @@ class QuestionnaireAnswer extends QuestionnairesAppModel {
  * @param array $data Postされた回答データ
  * @param array $questionnaire questionnaire data
  * @param array $summary answer summary data
- * @throws $ex
+ * @throws InternalErrorException
  * @return bool
  */
 	public function saveAnswer($data, $questionnaire, $summary) {
@@ -192,13 +212,20 @@ class QuestionnaireAnswer extends QuestionnairesAppModel {
 			foreach ($data['QuestionnaireAnswer'] as $answer) {
 				$targetQuestionKey = $answer[0]['questionnaire_question_key'];
 				$targetQuestion = Hash::extract($questionnaire['QuestionnairePage'], '{n}.QuestionnaireQuestion.{n}[key=' . $targetQuestionKey . ']');
+				if (! $targetQuestion) {
+					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+				}
 				// データ保存
 				// Matrixタイプの場合はanswerが配列になっているがsaveでかまわない
 				$this->oneTimeValidateFlag = false;	// saveMany中で１回しかValidateしなくてよい関数のためのフラグ
-				if (!$this->saveMany($answer, array(
+				// Validate、Saveで使用するオプションデータ
+				$options = array(
 					'questionnaire_answer_summary_id' => $summaryId,
 					'question' => $targetQuestion[0],
-					'allAnswers' => $data['QuestionnaireAnswer']))) {
+					'allAnswers' => $data['QuestionnaireAnswer'],
+				);
+
+				if (! $this->saveMany($answer, $options)) {
 					$validationErrors[$targetQuestionKey] = Hash::filter($this->validationErrors);
 				}
 			}

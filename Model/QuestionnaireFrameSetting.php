@@ -155,7 +155,7 @@ class QuestionnaireFrameSetting extends QuestionnairesAppModel {
 				//'id' => '',
 				'display_type' => QuestionnairesComponent::DISPLAY_TYPE_LIST,
 				'display_num_per_page' => QuestionnairesComponent::QUESTIONNAIRE_DEFAULT_DISPLAY_NUM_PER_PAGE,
-				'sort_type' => QuestionnairesComponent::DISPLAY_SORT_TYPE_NEW_ARRIVALS,
+				'sort_type' => QuestionnairesComponent::QUESTIONNAIRE_SORT_MODIFIED,
 			)
 		);
 		return $frame;
@@ -185,12 +185,11 @@ class QuestionnaireFrameSetting extends QuestionnairesAppModel {
 
 			// フレームに表示するアンケート一覧設定のバリデート
 			// 一覧表示タイプと単独表示タイプ
-			if (isset($data['QuestionnaireFrameDisplayQuestionnaires'])) {
-				$ret = $this->QuestionnaireFrameDisplayQuestionnaire->validateFrameDisplayQuestionnaire($data);
-				if ($ret === false) {
-					return false;
-				}
+			$ret = $this->QuestionnaireFrameDisplayQuestionnaire->validateFrameDisplayQuestionnaire($data);
+			if ($ret === false) {
+				return false;
 			}
+
 			// フレーム設定の登録
 			if (! $this->save($data, false)) {
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
@@ -198,11 +197,9 @@ class QuestionnaireFrameSetting extends QuestionnairesAppModel {
 
 			// フレームに表示するアンケート一覧設定の登録
 			// 一覧表示タイプと単独表示タイプ
-			if (isset($data['QuestionnaireFrameDisplayQuestionnaires'])) {
-				$ret = $this->QuestionnaireFrameDisplayQuestionnaire->saveFrameDisplayQuestionnaire($data);
-				if ($ret === false) {
-					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
-				}
+			$ret = $this->QuestionnaireFrameDisplayQuestionnaire->saveFrameDisplayQuestionnaire($data);
+			if ($ret === false) {
+				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}
 			//トランザクションCommit
 			$this->commit();

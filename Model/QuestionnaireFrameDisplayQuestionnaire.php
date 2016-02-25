@@ -84,12 +84,18 @@ class QuestionnaireFrameDisplayQuestionnaire extends QuestionnairesAppModel {
  * @return bool
  */
 	public function validateFrameDisplayQuestionnaire($data) {
+		if (! isset($data['QuestionnaireFrameSetting']['display_type'])) {
+
+		}
 		if ($data['QuestionnaireFrameSetting']['display_type'] == QuestionnairesComponent::DISPLAY_TYPE_SINGLE) {
-			$saveData = Hash::extract($data, 'Single.QuestionnaireFrameDisplayQuestionnaires');
+			$saveData = Hash::extract($data, 'Single.QuestionnaireFrameDisplayQuestionnaire');
+			if (! $saveData) {
+				return false;
+			}
 			$this->set($saveData);
 			$ret = $this->validates();
 		} else {
-			$saveData = $data['QuestionnaireFrameDisplayQuestionnaires'];
+			$saveData = Hash::extract($data, 'List.QuestionnaireFrameDisplayQuestionnaire');
 			$ret = $this->saveAll($saveData, array('validate' => 'only'));
 		}
 		return $ret;
@@ -100,17 +106,31 @@ class QuestionnaireFrameDisplayQuestionnaire extends QuestionnairesAppModel {
  *
  * @param mix $data PostData
  * @return bool
+ * @throws $ex
  */
 	public function saveFrameDisplayQuestionnaire($data) {
-		//トランザクションは親元のQuestionnaireFrameSettingでやっているので不要
-		if ($data['QuestionnaireFrameSetting']['display_type'] == QuestionnairesComponent::DISPLAY_TYPE_SINGLE) {
-			// このフレームに設定されている全てのレコードを消す
-			// POSTされたアンケートのレコードのみ作成する
-			$ret = $this->saveDisplayQuestionnaireForSingle($data);
-		} else {
-			// hiddenでPOSTされたレコードについて全て処理する
-			// POSTのis_displayが０，１によってdeleteかinsertで処理する
-			$ret = $this->saveDisplayQuestionnaireForList($data);
+		if (! $this->validateFrameDisplayQuestionnaire($data)) {
+			return false;
+		}
+		//トランザクションBegin
+		$this->begin();
+		try {
+			if ($data['QuestionnaireFrameSetting']['display_type'] == QuestionnairesComponent::DISPLAY_TYPE_SINGLE) {
+				// このフレームに設定されている全てのレコードを消す
+				// POSTされたアンケートのレコードのみ作成する
+				$ret = $this->saveDisplayQuestionnaireForSingle($data);
+			} else {
+				// hiddenでPOSTされたレコードについて全て処理する
+				// POSTのis_displayが０，１によってdeleteかinsertで処理する
+				$ret = $this->saveDisplayQuestionnaireForList($data);
+			}
+			//トランザクションCommit
+			$this->commit();
+		} catch (Exception $ex) {
+			//トランザクションRollback
+			$this->rollback();
+			CakeLog::error($ex);
+			throw $ex;
 		}
 		return $ret;
 	}
@@ -120,30 +140,30 @@ class QuestionnaireFrameDisplayQuestionnaire extends QuestionnairesAppModel {
  *
  * @param mix $data PostData
  * @return bool
+ * @throws InternalErrorException
  */
 	public function saveDisplayQuestionnaireForList($data) {
 		$frameKey = Current::read('Frame.key');
 
-		foreach ($data['QuestionnaireFrameDisplayQuestionnaires'] as $index => $value) {
+		foreach ($data['List']['QuestionnaireFrameDisplayQuestionnaire'] as $value) {
 			$questionnaireKey = $value['questionnaire_key'];
-			$isDisplay = $data['List']['QuestionnaireFrameDisplayQuestionnaires'][$index]['is_display'];
+			$isDisplay = $value['is_display'];
 			$saveQs = array(
 				'frame_key' => $frameKey,
 				'questionnaire_key' => $questionnaireKey
 			);
 			if ($isDisplay != 0) {
-				if (!$this->saveDisplayQuestionnaire($saveQs)) {
-					return false;
-				}
+				// この関数内部でエラーがあった時は、Exceptionなので戻りは見ない
+				$this->saveDisplayQuestionnaire($saveQs);
 			} else {
-				if (!$this->deleteAll($saveQs, false)) {
-					return false;
+				if (! $this->deleteAll($saveQs, false)) {
+					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 				}
 			}
 		}
-		if (!$this->updateFrameDefaultAction("''")) {
-			return false;
-		}
+		// この関数内部でエラーがあった時は、Exceptionなので戻りは見ない
+		$this->updateFrameDefaultAction("''");
+
 		return true;
 	}
 
@@ -160,15 +180,14 @@ class QuestionnaireFrameDisplayQuestionnaire extends QuestionnairesAppModel {
 		);
 		$this->deleteAll($deleteQs, false);
 
-		$saveData = Hash::extract($data, 'Single.QuestionnaireFrameDisplayQuestionnaires');
+		$saveData = Hash::extract($data, 'Single.QuestionnaireFrameDisplayQuestionnaire');
 		$saveData['frame_key'] = $frameKey;
-		if (!$this->saveDisplayQuestionnaire($saveData)) {
-			return false;
-		}
+		// この関数内部でエラーがあった時は、Exceptionなので戻りは見ない
+		$this->saveDisplayQuestionnaire($saveData);
 		$action = "'" . 'questionnaire_answers/view/' . Current::read('Block.id') . '/' . $saveData['questionnaire_key'] . "'";
-		if (!$this->updateFrameDefaultAction($action)) {
-			return false;
-		}
+		// この関数内部でエラーがあった時は、Exceptionなので戻りは見ない
+		$this->updateFrameDefaultAction($action);
+
 		return true;
 	}
 
@@ -178,6 +197,7 @@ class QuestionnaireFrameDisplayQuestionnaire extends QuestionnairesAppModel {
  *
  * @param array $data save data
  * @return bool
+ * @throws InternalErrorException
  */
 	public function saveDisplayQuestionnaire($data) {
 		// 該当データを検索して
@@ -188,9 +208,10 @@ class QuestionnaireFrameDisplayQuestionnaire extends QuestionnairesAppModel {
 			// あるならもう作らない
 			return true;
 		}
+
 		$this->create();
 		if (!$this->save($data)) {
-			return false;
+			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 		}
 		return true;
 	}
@@ -200,6 +221,7 @@ class QuestionnaireFrameDisplayQuestionnaire extends QuestionnairesAppModel {
  *
  * @param string $action default_action
  * @return bool
+ * @throws InternalErrorException
  */
 	public function updateFrameDefaultAction($action) {
 		// frameのdefault_actionを変更しておく
@@ -213,7 +235,7 @@ class QuestionnaireFrameDisplayQuestionnaire extends QuestionnairesAppModel {
 			'default_action' => $action
 		);
 		if (! $this->Frame->updateAll($frameData, $conditions)) {
-			return false;
+			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 		}
 		return true;
 	}

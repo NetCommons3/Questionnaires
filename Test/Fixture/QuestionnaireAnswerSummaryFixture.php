@@ -61,6 +61,33 @@ class QuestionnaireAnswerSummaryFixture extends CakeTestFixture {
 			'answer_time' => '2016-02-06 00:00:00',
 			'questionnaire_key' => 'questionnaire_12',
 			'user_id' => 1,
-		)
+		),
+		array(
+			'id' => 3,
+			'answer_status' => '0',
+			'test_status' => '0',
+			'answer_number' => 1,
+			'answer_time' => '2016-02-06 00:00:00',
+			'questionnaire_key' => 'questionnaire_2',
+			'user_id' => 3,
+		),
+		array(
+			'id' => 4,
+			'answer_status' => '0',
+			'test_status' => '0',
+			'answer_number' => 1,
+			'answer_time' => '2016-02-06 00:00:00',
+			'questionnaire_key' => 'questionnaire_4',
+			'user_id' => 3,
+		),
+		array(
+			'id' => 5,
+			'answer_status' => '0',
+			'test_status' => '0',
+			'answer_number' => 1,
+			'answer_time' => '2016-02-06 00:00:00',
+			'questionnaire_key' => 'questionnaire_6',
+			'user_id' => 3,
+		),
 	);
 }

@@ -108,9 +108,8 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
 		$this->paginate = array(
 			'conditions' => $conditions,
 			'page' => 1,
-			'sort' => QuestionnairesComponent::DISPLAY_SORT_TYPE_NEW_ARRIVALS,
+			'order' => array('modified' => 'desc'),
 			'limit' => QuestionnairesComponent::QUESTIONNAIRE_DEFAULT_DISPLAY_NUM_PER_PAGE,
-			'direction' => 'desc',
 			'recursive' => 0,
 		);
 		$questionnaire = $this->paginate('Questionnaire');

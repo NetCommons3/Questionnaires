@@ -43,6 +43,17 @@ class QuestionnaireAnswerSingleListBehavior extends QuestionnaireAnswerBehavior 
 	protected $_isTypeAnsArrShiftUp = true;
 
 /**
+ * choice validate check type
+ *
+ * @var array
+ */
+	protected $_choiceValidateType = array(
+		QuestionnairesComponent::TYPE_SELECTION,
+		QuestionnairesComponent::TYPE_MULTIPLE_SELECTION,
+		QuestionnairesComponent::TYPE_SINGLE_SELECT_BOX,
+	);
+
+/**
  * beforeValidate is called before a model is validated, you can use this callback to
  * add behavior validation rules into a models validate array. Returning false
  * will allow you to make the validation fail.
@@ -72,8 +83,8 @@ class QuestionnaireAnswerSingleListBehavior extends QuestionnaireAnswerBehavior 
  * @param array $allAnswers 入力された回答すべて
  * @return bool
  */
-	public function answerValidation(&$model, $data, $question, $allAnswers) {
-		if ($question['question_type'] != $this->_myType) {
+	public function answerChoiceValidation(&$model, $data, $question, $allAnswers) {
+		if (! in_array($question['question_type'], $this->_choiceValidateType)) {
 			return true;
 		}
 		$ret = true;

@@ -10,6 +10,7 @@
  */
 
 App::uses('NetCommonsControllerTestCase', 'NetCommons.TestSuite');
+App::uses('QuestionnairesComponent', 'Questionnaires.Controller/Component');
 
 /**
  * QuestionnaireFrameSettingsController Test Case
@@ -71,16 +72,16 @@ class QuestionnairesFrameSettingsControllerEditTest extends NetCommonsController
 			'QuestionnaireFrameSetting' => array(
 				'id' => 1,
 				'frame_key' => 'frame_3',
-				'display_type' => '1',
+				'display_type' => QuestionnairesComponent::DISPLAY_TYPE_LIST,
 				'display_num_per_page' => '10',
 				'sort_type' => '0',
 			),
 		);
 		$displayQ = array();
 		for ($i = 1; $i <= 50; $i = $i + 2) {
-			$displayQ['List']['QuestionnaireFrameDisplayQuestionnaires'][] = array('is_display' => '1', 'questionnaire_key' => 'questionnaire_' . strval($i + 1));
+			$displayQ['List']['QuestionnaireFrameDisplayQuestionnaire'][] = array('is_display' => '1', 'questionnaire_key' => 'questionnaire_' . strval($i + 1));
 		}
-		$displayQ['Single']['QuestionnaireFrameDisplayQuestionnaires']['questionnaire_key'] = 'questionnaire_2';
+		$displayQ['Single']['QuestionnaireFrameDisplayQuestionnaire']['questionnaire_key'] = 'questionnaire_2';
 
 		$data = Hash::merge($data, $displayQ);
 		return $data;

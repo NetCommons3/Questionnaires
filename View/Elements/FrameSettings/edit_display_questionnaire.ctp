@@ -47,7 +47,7 @@
 		<tr class="animate-repeat btn-default">
 			<td>
 				<div class="text-center" ng-show="questionnaireFrameSettings.displayType == <?php echo QuestionnairesComponent::DISPLAY_TYPE_LIST; ?>">
-					<?php echo $this->NetCommonsForm->checkbox('List.QuestionnaireFrameDisplayQuestionnaires.' . $index . '.is_display', array(
+					<?php echo $this->NetCommonsForm->checkbox('List.QuestionnaireFrameDisplayQuestionnaire.' . $index . '.is_display', array(
 					'options' => array(true => ''),
 					'label' => false,
 					'div' => false,
@@ -57,10 +57,10 @@
 					'ng-model' => 'isDisplay[' . $index . ']'
 					));
 					?>
-					<?php echo $this->NetCommonsForm->hidden('QuestionnaireFrameDisplayQuestionnaires.' . $index . '.questionnaire_key', array('value' => $quest['Questionnaire']['key'])); ?>
+					<?php echo $this->NetCommonsForm->hidden('List.QuestionnaireFrameDisplayQuestionnaire.' . $index . '.questionnaire_key', array('value' => $quest['Questionnaire']['key'])); ?>
 				</div>
 				<div class="text-center"  ng-show="questionnaireFrameSettings.displayType == <?php echo QuestionnairesComponent::DISPLAY_TYPE_SINGLE; ?>">
-					<?php echo $this->NetCommonsForm->radio('Single.QuestionnaireFrameDisplayQuestionnaires.questionnaire_key',
+					<?php echo $this->NetCommonsForm->radio('Single.QuestionnaireFrameDisplayQuestionnaire.questionnaire_key',
 					array($quest['Questionnaire']['key'] => ''), array(
 					'legend' => false,
 					'label' => false,

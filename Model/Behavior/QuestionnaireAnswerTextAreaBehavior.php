@@ -9,7 +9,7 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 
-App::uses('QuestionnaireAnswerBehavior', 'Questionnaires.Model/Behavior');
+App::uses('QuestionnaireAnswerTextBehavior', 'Questionnaires.Model/Behavior');
 
 /**
  * TextArea Behavior
@@ -17,7 +17,7 @@ App::uses('QuestionnaireAnswerBehavior', 'Questionnaires.Model/Behavior');
  * @package  Questionnaires\Questionnaires\Model\Befavior\Answer
  * @author Allcreator <info@allcreator.net>
  */
-class QuestionnaireAnswerTextAreaBehavior extends QuestionnaireAnswerBehavior {
+class QuestionnaireAnswerTextAreaBehavior extends QuestionnaireAnswerTextBehavior {
 
 /**
  * this answer type
@@ -27,19 +27,11 @@ class QuestionnaireAnswerTextAreaBehavior extends QuestionnaireAnswerBehavior {
 	protected $_myType = QuestionnairesComponent::TYPE_TEXT_AREA;
 
 /**
- * answerMaxLength 回答がアンケートが許す最大長を超えていないかの確認
+ * this answer type
+ * needs max length check
  *
- * @param object &$model use model
- * @param array $data Validation対象データ
- * @param array $question 回答データに対応する質問
- * @param int $max 最大長
- * @return bool
+ * @var int
  */
-	public function answerMaxLength(&$model, $data, $question, $max) {
-		if ($question['question_type'] != $this->_myType) {
-			return true;
-		}
-		return Validation::maxLength($data['answer_value'], $max);
-	}
+	protected $_isMaxLengthCheck = true;
 
 }

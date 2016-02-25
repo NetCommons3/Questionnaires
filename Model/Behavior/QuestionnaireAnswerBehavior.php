@@ -90,15 +90,18 @@ class QuestionnaireAnswerBehavior extends ModelBehavior {
 					continue;
 				}
 				if ($this->_isTypeAnsChgArr) {
+					//$val['QuestionnaireAnswer']['answer_value'] == 選択肢回答の場合、回答が｜区切りで１行にまとまっています
 					$val['QuestionnaireAnswer']['answer_values'] = array();
+					// まとまっているものを分割します
 					$answers = explode(QuestionnairesComponent::ANSWER_DELIMITER, trim($val['QuestionnaireAnswer']['answer_value'], QuestionnairesComponent::ANSWER_DELIMITER));
+					// valuesエリアに分割したデータを保存
 					$val['QuestionnaireAnswer']['answer_values'] = Hash::combine(
 						array_map('explode',
 							array_fill(0, count($answers), QuestionnairesComponent::ANSWER_VALUE_DELIMITER),
 							$answers),
 						'{n}.0', '{n}.1');
+					// answer_valueは画面で回答してもらうための変数なので、画面に見合った形に整形
 					$val['QuestionnaireAnswer']['answer_value'] = array_map(array($this, 'setDelimiter'), $answers);
-
 					// array_mapで配列化するのでSingle選択のときはFlatに戻す必要がある
 					if ($this->_isTypeAnsArrShiftUp) {
 						$val['QuestionnaireAnswer']['answer_value'] = $val['QuestionnaireAnswer']['answer_value'][0];
@@ -175,29 +178,4 @@ class QuestionnaireAnswerBehavior extends ModelBehavior {
 		}
 	}
 
-/**
- * answerMaxLength 回答がアンケートが許す最大長を超えていないかの確認
- *
- * @param object &$model use model
- * @param array $data Validation対象データ
- * @param array $question 回答データに対応する質問
- * @param int $max 最大長
- * @return bool
- */
-	public function answerMaxLength(&$model, $data, $question, $max) {
-		return true;
-	}
-
-/**
- * answerValidation 回答内容の正当性
- *
- * @param object &$model use model
- * @param array $data Validation対象データ
- * @param array $question 回答データに対応する質問
- * @param array $allAnswers 入力された回答すべて
- * @return bool
- */
-	public function answerValidation(&$model, $data, $question, $allAnswers) {
-		return true;
-	}
 }
