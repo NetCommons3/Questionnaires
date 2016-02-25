@@ -226,7 +226,7 @@ class QuestionnaireAnswer extends QuestionnairesAppModel {
 				);
 
 				if (! $this->saveMany($answer, $options)) {
-					$validationErrors[$targetQuestionKey] = Hash::filter($this->validationErrors);
+					$validationErrors[$targetQuestionKey] = $this->__errorMessageUnique($targetQuestion[0], Hash::filter($this->validationErrors));
 				}
 			}
 			if (! empty($validationErrors)) {
@@ -241,5 +241,25 @@ class QuestionnaireAnswer extends QuestionnairesAppModel {
 			throw $ex;
 		}
 		return true;
+	}
+/**
+ * __errorMessageUnique
+ * マトリクスの同じエラーメッセージをまとめる
+ *
+ * @param array $question question
+ * @param array $errors error message
+ * @return array
+ */
+	private function __errorMessageUnique($question, $errors) {
+		if (! QuestionnairesComponent::isMatrixInputType($question['question_type'])) {
+			return $errors;
+		}
+		$ret = array();
+		foreach ($errors as $err) {
+			if (! in_array($err, $ret)) {
+				$ret[] = $err;
+			}
+		}
+		return $ret;
 	}
 }

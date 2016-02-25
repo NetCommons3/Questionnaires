@@ -426,4 +426,27 @@ class SaveAnswerTest extends NetCommonsModelTestCase {
 			array($data, 2, 3, 'Questionnaires.QuestionnaireAnswer', 'saveMany'),
 		);
 	}
+/**
+ * ValidationErrorのDataProvider
+ *
+ * ### 戻り値
+ *  - field フィールド名
+ *  - value セットする値
+ *  - message エラーメッセージ
+ *  - overwrite 上書きするデータ
+ *
+ * @return void
+ */
+	public function dataProviderValidationError() {
+		$options = array(
+			'pageIndex' => 0,
+			'maxPageIndex' => 0,
+		);
+		return array(
+			array($this->__getDataWithQuestion(), $options, 'page_sequence', '2',
+				__d('questionnaires', 'page sequence is illegal.')),
+			array($this->__getData(), $options, 'page_sequence', '0',
+				__d('questionnaires', 'please set at least one question.')),
+		);
+	}
 }

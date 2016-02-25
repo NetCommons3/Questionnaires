@@ -20,7 +20,7 @@ App::uses('QuestionnairesComponent', 'Questionnaires.Controller/Component');
  * @author Allcreator <info@allcreator.net>
  * @package NetCommons\Questionnaires\Test\Case\Model\QuestionnaireFrameSetting
  */
-class QuestionnaireValidateFrameSettingTest extends NetCommonsValidateTest {
+class ValidateQuestionnaireFrameSettingTest extends NetCommonsValidateTest {
 
 /**
  * Plugin name

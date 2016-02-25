@@ -63,6 +63,9 @@
 }
 
 /*--アンケートマトリクス回答画面---*/
+.questionnaire-matrix-table {
+    margin-bottom:10px;
+}
 .questionnaire-matrix-table td input[type="radio"],
 .questionnaire-matrix-table td input[type="checkbox"] {
     display:block;

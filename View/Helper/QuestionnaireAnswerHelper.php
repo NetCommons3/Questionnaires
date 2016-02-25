@@ -227,12 +227,13 @@ class QuestionnaireAnswerHelper extends AppHelper {
 		if (isset($question['QuestionnaireChoice'])) {
 			$options = $this->_getChoiceOptionElement($question['QuestionnaireChoice']);
 			$ret = $this->NetCommonsForm->input($fieldName, array(
-					'type' => 'select',
-					'options' => $options,
-					'label' => false,
-					'div' => 'form-inline',
-					'disabled' => $readonly,
-					'empty' => __d('questionnaires', 'Please choose one')
+				'type' => 'select',
+				'options' => $options,
+				'label' => false,
+				'div' => 'form-inline',
+				'disabled' => $readonly,
+				'empty' => __d('questionnaires', 'Please choose one'),
+				'error' => false,
 			));
 		}
 		return $ret;

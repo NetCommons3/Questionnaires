@@ -11,7 +11,7 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 
-App::uses('NetCommonsValidateTest', 'NetCommons.TestSuite');
+App::uses('NetCommonsModelTestCase', 'NetCommons.TestSuite');
 App::uses('QuestionnairesComponent', 'Questionnaires.Controller/Component');
 
 /**
@@ -20,7 +20,7 @@ App::uses('QuestionnairesComponent', 'Questionnaires.Controller/Component');
  * @author Allcreator <info@allcreator.net>
  * @package NetCommons\Questionnaires\Test\Case\Model\QuestionnaireFrameDisplayQuestionnaire
  */
-class QuestionnaireValidateFrameDisplayQuestionnaireTest extends NetCommonsValidateTest {
+class QuestionnaireValidateFrameDisplayQuestionnaireTest extends NetCommonsModelTestCase {
 
 /**
  * Plugin name
