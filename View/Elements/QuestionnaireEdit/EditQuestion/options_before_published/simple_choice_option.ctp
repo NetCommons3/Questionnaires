@@ -62,7 +62,7 @@
 							ng-model="choice.skipPageSequence"
 							ng-if="question.isSkip == <?php echo QuestionnairesComponent::SKIP_FLAGS_SKIP; ?>
 							&& question.questionType != <?php echo QuestionnairesComponent::TYPE_MULTIPLE_SELECTION; ?>">
-						<option ng-repeat="skipPage in questionnaire.questionnairePage | toArray | filter: greaterThan('pageSequence', page)"
+						<option ng-repeat="skipPage in questionnaire.questionnairePage | filter: greaterThan('pageSequence', page)"
 								value="{{skipPage.pageSequence}}"
 								ng-selected="choice.skipPageSequence == skipPage.pageSequence || (choice.skipPageSequence == null && skipPage.pageSequence == pageIndex+1)">
 							{{1 * skipPage.pageSequence + 1}}

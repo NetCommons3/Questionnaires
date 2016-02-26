@@ -1,30 +1,7 @@
 /**
  * Created by りか on 2015/02/18.
  */
-
 NetCommonsApp.constant('moment', moment);
-angular.module('angular-toArrayFilter', [])
-  .filter('toArray', function() {
-      return function(obj, addKey) {
-        if (!angular.isObject(obj)) {
-          return obj;
-        }
-        if (addKey === false) {
-          return Object.keys(obj).map(function(key) {
-            return obj[key];
-          });
-        } else {
-          return Object.keys(obj).map(function(key) {
-            var value = obj[key];
-            return angular.isObject(value) ?
-                Object.defineProperty(value,
-                    '$key', {enumerable: false, value: key}) :
-                { $key: key, $value: value };
-          });
-        }
-      };
-    });
-NetCommonsApp.requires.push('angular-toArrayFilter');
 
 NetCommonsApp.controller('Questionnaires.edit.question',
     function($scope, NetCommonsBase, NetCommonsWysiwyg,
@@ -93,21 +70,6 @@ NetCommonsApp.controller('Questionnaires.edit.question',
            '#be5945', '#cccccc'];
 
       /**
-       * isDateTimeType
-       *
-       * @return {bool}
-       */
-      $scope.isDateTimeType = function(typeOpt) {
-        if (typeOpt == variables.TYPE_OPTION_DATE ||
-            typeOpt == variables.TYPE_OPTION_TIME ||
-            typeOpt == variables.TYPE_OPTION_DATE_TIME) {
-          return true;
-        } else {
-          return false;
-        }
-      };
-
-      /**
          * Initialize
          *
          * @return {void}
@@ -119,6 +81,8 @@ NetCommonsApp.controller('Questionnaires.edit.question',
         $scope.frameId = frameId;
         $scope.isPublished = isPublished;
         $scope.questionnaire = questionnaire;
+        $scope.questionnaire.questionnairePage =
+            $scope.toArray(questionnaire.questionnairePage);
 
         // 各ページ処理
         for (var pIdx = 0; pIdx <
@@ -197,17 +161,35 @@ NetCommonsApp.controller('Questionnaires.edit.question',
         $scope.newChoiceColumnLabel = newChoiceColumnLabel;
         $scope.newChoiceOtherLabel = newChoiceOtherLabel;
       };
-
       /**
-         * Questionnaire EnterSubmit gard
-         *
-         * @return {void}
-         */
-      $scope.handleKeydown = function(e) {
-        if (e.which === 13) {
-          e.stopPropagation();
-          return false;
-        }
+       * toArray
+       *
+       * 配列型のはずの変数がなぜかObject扱いになる場合があるので念のための変換
+       * @return {Array}
+       */
+      $scope.toArray = function(src) {
+        var dst = new Array();
+        angular.forEach(src, function(obj, key) {
+          obj = $scope._toArray(obj);
+          dst[key] = obj;
+        });
+        return dst;
+      };
+      /**
+       * _toArray
+       *
+       * toArrayの再帰関数
+       * @return {Object}
+       */
+      $scope._toArray = function(src) {
+        var dst = new Object();
+        angular.forEach(src, function(obj, key) {
+          if (key == 'questionnaireQuestion' || key == 'questionnaireChoice') {
+            obj = $scope.toArray(obj);
+          }
+          dst[key] = obj;
+        });
+        return dst;
       };
 
       /**
@@ -241,20 +223,6 @@ NetCommonsApp.controller('Questionnaires.edit.question',
         }
 
         return dateStr;
-      };
-
-      /**
-       * get Date Object
-       *
-       * @return {Date}
-       */
-      $scope.Date = function(dateStr) {
-        dateStr = $scope.getDateStr(dateStr);
-        if (Date.parse(dateStr)) {
-          return new Date(dateStr);
-        } else {
-          return null;
-        }
       };
 
       /**

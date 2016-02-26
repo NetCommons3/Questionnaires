@@ -44,7 +44,7 @@
 <table class="table table-condensed"
 	ng-show="question.questionType == <?php echo QuestionnairesComponent::TYPE_MATRIX_SELECTION_LIST; ?>
 	|| question.questionType == <?php echo QuestionnairesComponent::TYPE_MATRIX_MULTIPLE; ?>">
-	<tr ng-repeat="(cIndex, choice) in question.questionnaireChoice | toArray | filter : {matrixType:<?php echo QuestionnairesComponent::MATRIX_TYPE_COLUMN; ?>}">
+	<tr ng-repeat="(cIndex, choice) in question.questionnaireChoice | filter : {matrixType:<?php echo QuestionnairesComponent::MATRIX_TYPE_COLUMN; ?>}">
 		<td>
 			<div class="col-sm-8">
 				{{choice.choiceLabel}}
