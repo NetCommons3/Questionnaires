@@ -81,20 +81,21 @@ class QuestionnaireAnswerDatetimeBehavior extends QuestionnaireAnswerBehavior {
 	protected function _validateDatetime(&$model, $questionTypeOption, $answer) {
 		if ($questionTypeOption == QuestionnairesComponent::TYPE_OPTION_DATE) {
 			if (! Validation::date($answer, 'ymd')) {
-				$model->validationErrors['answer_value'][] = sprintf(__d('questionnaires', 'Please enter a valid date in YY-MM-DD format.'));
+				$model->validationErrors['answer_value'][] = __d('questionnaires', 'Please enter a valid date in YY-MM-DD format.');
 				return false;
 			}
 		} elseif ($questionTypeOption == QuestionnairesComponent::TYPE_OPTION_TIME) {
 			if (! Validation::time($answer)) {
-				$model->validationErrors['answer_value'][] = sprintf(__d('questionnaires', 'Please enter the time.'));
+				$model->validationErrors['answer_value'][] = __d('questionnaires', 'Please enter the time.');
 				return false;
 			}
 		} elseif ($questionTypeOption == QuestionnairesComponent::TYPE_OPTION_DATE_TIME) {
 			if (! Validation::datetime($answer, 'ymd')) {
-				$model->validationErrors['answer_value'][] = sprintf(__d('questionnaires', 'Please enter a valid date and time.'));
+				$model->validationErrors['answer_value'][] = __d('questionnaires', 'Please enter a valid date and time.');
 				return false;
 			}
 		} else {
+			$model->validationErrors['answer_value'][] = __d('net_commons', 'Invalid request.');
 			return false;
 		}
 		return true;
@@ -110,9 +111,9 @@ class QuestionnaireAnswerDatetimeBehavior extends QuestionnaireAnswerBehavior {
 	protected function _validateTimeRange(&$model, $question, $answer) {
 		if ($question['is_range'] == QuestionnairesComponent::USES_USE) {
 			if (! Validation::range(strtotime($answer), strtotime($question['min']) - 1, strtotime($question['max']) + 1)) {
-				$model->validationErrors['answer_value'][] = sprintf(__d('questionnaires', 'Please enter the answer between %s and %s.',
+				$model->validationErrors['answer_value'][] = sprintf(__d('questionnaires', 'Please enter the answer between %s and %s.'),
 					date($this->_datetimeFormat[$question['question_type_option']], strtotime($question['min'])),
-					date($this->_datetimeFormat[$question['question_type_option']], strtotime($question['max']))));
+					date($this->_datetimeFormat[$question['question_type_option']], strtotime($question['max'])));
 				return false;
 			}
 		}

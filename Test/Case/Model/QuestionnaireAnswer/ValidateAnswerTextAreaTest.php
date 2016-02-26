@@ -20,7 +20,7 @@ App::uses('QuestionnairesComponent', 'Questionnaires.Controller/Component');
  * @author Allcreator <info@allcreator.net>
  * @package NetCommons\Questionnaires\Test\Case\Model\QuestionnaireAnswer
  */
-class ValidateAnswerSingleSelectTest extends QuestionnaireAnswerValidateTest {
+class ValidateAnswerTextAreaTest extends QuestionnaireAnswerValidateTest {
 
 /**
  * __getData
@@ -33,7 +33,7 @@ class ValidateAnswerSingleSelectTest extends QuestionnaireAnswerValidateTest {
 		$answerData = array(
 			array(
 				'questionnaire_answer_summary_id' => $summaryId,
-				'answer_value' => '|choice_2:choice label1',
+				'answer_value' => 'Test Answer!!',
 				'questionnaire_question_key' => $qKey,
 				'id' => '',
 				'matrix_choice_key' => '',
@@ -53,20 +53,16 @@ class ValidateAnswerSingleSelectTest extends QuestionnaireAnswerValidateTest {
  * @return array
  */
 	public function dataProviderValidationError() {
-		$data = $this->__getData('qKey_1', 3);
+		$data = $this->__getData('qKey_17', 5);
 		// 通常の質問
-		$normalQuestion = $this->_getQuestion(2);
+		$normalQuestion = Hash::merge($this->_getQuestion(18), array('is_range' => 0, 'is_require' => 0));
 		// 解答必須質問
 		$requireQuestion = Hash::merge($normalQuestion, array('is_require' => QuestionnairesComponent::REQUIRES_REQUIRE));
-		// その他回答がある質問
-		$otherQuestion = Hash::merge($normalQuestion, array('QuestionnaireChoice' => array(array('other_choice_type' => 1))));
 		return array(
-			array($data, 3, $normalQuestion, 'answer_value', 'aaa',
-				__d('questionnaires', 'Invalid choice')),
+			array($data, 3, $normalQuestion, 'answer_value', str_repeat('MaxLength', QuestionnairesComponent::QUESTIONNAIRE_MAX_ANSWER_LENGTH),
+				sprintf(__d('questionnaires', 'the answer is too long. Please enter under %d letters.'), QuestionnairesComponent::QUESTIONNAIRE_MAX_ANSWER_LENGTH)),
 			array($data, 3, $requireQuestion, 'answer_value', '',
 				__d('questionnaires', 'Input required')),
-			array($data, 3, $otherQuestion, 'other_answer_value', '',
-				__d('questionnaires', 'Please enter something, if you chose the other item')),
 		);
 	}
 }
