@@ -9,6 +9,8 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 App::uses('AppHelper', 'View/Helper');
+App::uses('NetCommonsTime', 'NetCommons.Utility');
+
 /**
  * Questionnaires Answer Helper
  *
@@ -23,7 +25,7 @@ class QuestionnaireAnswerHelper extends AppHelper {
  * @var array
  */
 	public $helpers = array(
-		'NetCommonsForm',
+		'NetCommons.NetCommonsForm',
 		'Form'
 	);
 
@@ -93,6 +95,7 @@ class QuestionnaireAnswerHelper extends AppHelper {
 					'label' => false,
 					'div' => false,
 					'disabled' => $readonly,
+					'error' => false,
 				));
 				$afterLabel = $otherInput . $afterLabel;
 			}
@@ -135,6 +138,7 @@ class QuestionnaireAnswerHelper extends AppHelper {
 					'label' => false,
 					'div' => false,
 					'disabled' => $readonly,
+					'error' => false,
 				));
 				$afterLabel = '<div class="checkbox-inline">' . $otherInput . '</div>';
 			}
@@ -362,9 +366,7 @@ class QuestionnaireAnswerHelper extends AppHelper {
  * @return string エラーメッセージ表示要素のHTML
  */
 	protected function _error($fieldName) {
-		$output = '<div class="has-error">';
-		$output .= $this->NetCommonsForm->error($fieldName, null, array('class' => 'help-block'));
-		$output .= '</div>';
+		$output = $this->NetCommonsForm->error($fieldName, null, array('class' => 'help-block'));
 		return $output;
 	}
 
