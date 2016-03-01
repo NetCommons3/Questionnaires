@@ -12,6 +12,7 @@
  */
 
 App::uses('QuestionnairesAppModel', 'Questionnaires.Model');
+App::uses('WorkflowComponent', 'Workflow.Controller/Component');
 
 /**
  * Summary for QuestionnaireAnswerSummary Model
@@ -202,6 +203,9 @@ class QuestionnaireAnswerSummary extends QuestionnairesAppModel {
 
 		//質問毎に集計
 		foreach ($questions as &$question) {
+			if (QuestionnairesComponent::isOnlyInputType($question['question_type'])) {
+				continue;
+			}
 			if ($question['is_result_display'] != QuestionnairesComponent::EXPRESSION_SHOW) {
 				//集計表示をしない、なので飛ばす
 				continue;

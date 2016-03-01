@@ -187,6 +187,17 @@ class QuestionnaireAnswer extends QuestionnairesAppModel {
 	public function getAnswerCount($conditions) {
 		$cnt = $this->find('count', array(
 			'conditions' => $conditions,
+			'recursive' => -1,
+			'joins' => array(
+				array(
+					'table' => 'questionnaire_answer_summaries',
+					'alias' => 'QuestionnaireAnswerSummary',
+					'type' => 'LEFT',
+					'conditions' => array(
+						'QuestionnaireAnswerSummary.id = QuestionnaireAnswer.questionnaire_answer_summary_id',
+					)
+				)
+			)
 		));
 		return $cnt;
 	}

@@ -85,45 +85,18 @@ class QuestionnaireAnswerValidateTest extends NetCommonsModelTestCase {
 				$data[0][$field] = $value;
 			}
 		}
-
-		$options = array(
-			'questionnaire_answer_summary_id' => $summaryId,
-			'question' => $targetQuestion,
-			'allAnswers' => array($targetQuestion['key'] => $data),
-			'validate' => 'only'
-		);
-		//validate処理実行
-		$result = $this->$model->saveMany($data, $options);
+		$questionnaire = $this->_getQuestionnaire(2);
+		$addQuestion = array('QuestionnairePage' => array(array('QuestionnaireQuestion' => array($targetQuestion))));
+		$questionnaire = Hash::merge($questionnaire, $addQuestion);
+		$summary = array('QuestionnaireAnswerSummary' => array('id' => $summaryId));
+		$result = $this->$model->saveAnswer(array('QuestionnaireAnswer' => array($targetQuestion['key'] => $data)), $questionnaire, $summary);
 		$this->assertFalse($result);
-		//$validationErrors = Hash::filter($this->$model->validationErrors);
-		$validationErrors = $this->__errorMessageUnique($targetQuestion, Hash::filter($this->$model->validationErrors));
 
 		if ($message) {
 			//$this->assertEquals($validationErrors[0][$field][0], $message);
 			// アンケートの回答時のエラーメッセージはすべてこのフィールドに集約してるのだった
-			$this->assertEquals($validationErrors[0]['answer_value'][0], $message);
+			$this->assertEquals($this->$model->validationErrors[$targetQuestion['key']][0]['answer_value'][0], $message);
 		}
-	}
-
-/**
- * __errorMessageUnique
- * マトリクスの同じエラーメッセージをまとめる
- *
- * @param array $question question
- * @param array $errors error message
- * @return array
- */
-	private function __errorMessageUnique($question, $errors) {
-		if (! QuestionnairesComponent::isMatrixInputType($question['question_type'])) {
-			return $errors;
-		}
-		$ret = array();
-		foreach ($errors as $err) {
-			if (! in_array($err, $ret)) {
-				$ret[] = $err;
-			}
-		}
-		return $ret;
 	}
 
 /**
@@ -141,4 +114,41 @@ class QuestionnaireAnswerValidateTest extends NetCommonsModelTestCase {
 		$question['QuestionnaireChoice'] = $rec;
 		return $question;
 	}
+
+/**
+ * _getQuestionnaire
+ *
+ * @param int $id 質問ID
+ * @return array
+ */
+	protected function _getQuestionnaire($id) {
+		$fixtureQuestionnaire = new QuestionnaireFixture();
+		$fixturePage = new QuestionnairePageFixture();
+		$fixtureQuestion = new QuestionnaireQuestionFixture();
+		$fixtureChoice = new QuestionnaireChoiceFixture();
+
+		$data = array();
+		$rec = Hash::extract($fixtureQuestionnaire->records, '{n}[id=' . $id . ']');
+		$data['Questionnaire'] = $rec[0];
+
+		$rec = Hash::extract($fixturePage->records, '{n}[questionnaire_id=' . $data['Questionnaire']['id'] . ']');
+		$rec = Hash::extract($rec, '{n}[language_id=2]');
+		$data['QuestionnairePage'] = $rec;
+
+		foreach ($data['QuestionnairePage'] as &$page) {
+			$pageId = $page['id'];
+
+			$rec = Hash::extract($fixtureQuestion->records, '{n}[questionnaire_page_id=' . $pageId . ']');
+			$rec = Hash::extract($rec, '{n}[language_id=2]');
+			$page['QuestionnaireQuestion'] = $rec;
+			$questionId = $rec[0]['id'];
+
+			$rec = Hash::extract($fixtureChoice->records, '{n}[questionnaire_question_id=' . $questionId . ']');
+			if ($rec) {
+				$page['QuestionnaireQuestion'][0]['QuestionnaireChoice'] = $rec;
+			}
+		}
+		return $data;
+	}
+
 }
