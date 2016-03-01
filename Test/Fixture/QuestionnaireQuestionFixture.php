@@ -64,7 +64,10 @@ class QuestionnaireQuestionFixture extends CakeTestFixture {
  * @var array
  */
 	public $overwrite = array(
-		4 => array('is_skip' => 1),
+		4 => array(
+			'is_skip' => 1,
+			'result_display_type' => 1,
+		),
 		6 => array(
 			'question_type' => '2',
 		),
@@ -76,9 +79,11 @@ class QuestionnaireQuestionFixture extends CakeTestFixture {
 		),
 		10 => array(
 			'question_type' => '5',
+			'result_display_type' => 2,
 		),
 		12 => array(
 			'question_type' => '6',
+			'result_display_type' => 1,
 		),
 		14 => array(
 			'question_type' => '7',
@@ -93,6 +98,21 @@ class QuestionnaireQuestionFixture extends CakeTestFixture {
 		),
 		18 => array(
 			'question_type' => '4',
+		),
+		30 => array(
+			'is_result_display' => 0,
+		),
+		40 => array(
+			'question_type' => '8',	// single select list
+			'result_display_type' => 2,	// table
+		),
+		42 => array(
+			'question_type' => '5',	// single matrix
+			'result_display_type' => 1,	// pie
+		),
+		44 => array(
+			'question_type' => '6',	// multi matrix
+			'result_display_type' => 0,	// bar
 		),
 	);
 

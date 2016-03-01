@@ -56,11 +56,11 @@ class QuestionnairesAppController extends AppController {
 		$obj['QuestionnairePage'] = Hash::sort($obj['QuestionnairePage'], '{n}.page_sequence', 'asc', 'numeric');
 
 		foreach ($obj['QuestionnairePage'] as &$page) {
-			if (!Hash::check($page, 'QuestionnaireQuestion.{n}')) {
+			if (Hash::check($page, 'QuestionnaireQuestion.{n}')) {
 				$page['QuestionnaireQuestion'] = Hash::sort($page['QuestionnaireQuestion'], '{n}.question_sequence', 'asc', 'numeric');
 
 				foreach ($page['QuestionnaireQuestion'] as &$question) {
-					if (!Hash::check($question, 'QuestionnaireChoice.{n}')) {
+					if (Hash::check($question, 'QuestionnaireChoice.{n}')) {
 						$question['QuestionnaireChoice'] = Hash::sort($question['QuestionnaireChoice'], '{n}.choice_sequence', 'asc', 'numeric');
 					}
 				}

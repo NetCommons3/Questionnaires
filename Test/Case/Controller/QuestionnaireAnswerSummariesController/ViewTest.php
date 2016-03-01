@@ -142,6 +142,19 @@ class QuestionnaireAnswerSummariesControllerViewTest extends WorkflowControllerV
 			'urlOptions' => array('frame_id' => '6', 'block_id' => '2', 'key' => 'questionnaire_12'),
 			'assert' => array('method' => 'assertTextContains', 'expected' => 'nvd3'),
 		);
+		$results[] = Hash::merge($results[0], array( // 集計表示を許してない
+			'urlOptions' => array('key' => 'questionnaire_6'),
+			'assert' => null,
+			'assert' => array('method' => 'assertTextContains', 'expected' => __d('questionnaires', 'you will not be able to see this result.')),
+		));
+		$results[] = Hash::merge($results[0], array( // 集計表示期間外
+			'urlOptions' => array('key' => 'questionnaire_8'),
+			'assert' => array('method' => 'assertTextContains', 'expected' => __d('questionnaires', 'you will not be able to see this result.')),
+		));
+		$results[] = Hash::merge($results[0], array( // 回答してない
+			'urlOptions' => array('key' => 'questionnaire_2'),
+			'assert' => array('method' => 'assertTextContains', 'expected' => __d('questionnaires', 'you will not be able to see this result.')),
+		));
 		/*
 		// 自分が書いた＆未公開
 		$results[1] = Hash::merge($results[0], array(
@@ -218,6 +231,30 @@ class QuestionnaireAnswerSummariesControllerViewTest extends WorkflowControllerV
 			'urlOptions' => array('frame_id' => '6', 'block_id' => '2', 'key' => 'questionnaire_2'),
 			'assert' => null
 		);
+		$results[] = Hash::merge($results[0], array( // 様々な種別
+			'urlOptions' => array('key' => 'questionnaire_4'),
+			'assert' => array('method' => 'assertTextContains', 'expected' => 'nvd3'),
+		));
+		$results[] = Hash::merge($results[0], array( // リストー表形式
+			'urlOptions' => array('key' => 'questionnaire_20'),
+			'assert' => array('method' => 'assertTextContains', 'expected' => 'table table-striped table-bordered questionnaire-table-vcenter table-responsive'),
+		));
+		$results[] = Hash::merge($results[0], array( // マトリクスー円
+			'urlOptions' => array('key' => 'questionnaire_22'),
+			'assert' => array('method' => 'assertTextContains', 'expected' => 'nvd3'),
+		));
+		$results[] = Hash::merge($results[0], array( // マトリクスー棒
+			'urlOptions' => array('key' => 'questionnaire_24'),
+			'assert' => array('method' => 'assertTextContains', 'expected' => 'nvd3'),
+		));
+		$results[] = Hash::merge($results[0], array( // マトリクスー表
+			'urlOptions' => array('key' => 'questionnaire_4'),
+			'assert' => array('method' => 'assertTextContains', 'expected' => 'table table-striped table-bordered questionnaire-table-vcenter'),
+		));
+		$results[] = Hash::merge($results[0], array( // 非表示の質問がある
+			'urlOptions' => array('key' => 'questionnaire_12'),
+			'assert' => array('method' => 'assertTextContains', 'expected' => 'nvd3'),
+		));
 		return $results;
 	}
 }

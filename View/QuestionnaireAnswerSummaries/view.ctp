@@ -43,6 +43,9 @@ $jsQuestions = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesAppCo
 
 	<?php foreach ($questions as $questionnaireQuestionId => $question): ?>
 		<?php
+			if (QuestionnairesComponent::isOnlyInputType($question['question_type'])) {
+				continue;	//集計表示をしない、なので飛ばす
+			}
 			if ($question['is_result_display'] != QuestionnairesComponent::EXPRESSION_SHOW) {
 				continue;	//集計表示をしない、なので飛ばす
 			}

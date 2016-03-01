@@ -56,9 +56,11 @@
 
 				//合計回答数に対する割合
 				$thePercentage = QuestionnairesComponent::NOT_OPERATION_MARK;
-				if (isset($question['answer_total_cnt'])) {
-				$percent = round( (intval($cnt) / intval($question['answer_total_cnt'])) * 100, 1, PHP_ROUND_HALF_UP );
-				$thePercentage = $percent . ' ' . QuestionnairesComponent::PERCENTAGE_UNIT;
+				if (! empty($question['answer_total_cnt'])) {
+					$percent = round( (intval($cnt) / intval($question['answer_total_cnt'])) * 100, 1, PHP_ROUND_HALF_UP );
+					$thePercentage = $percent . ' ' . QuestionnairesComponent::PERCENTAGE_UNIT;
+				} else {
+					$thePercentage = 0;
 				}
 				echo ' (' . $thePercentage . ') ';
 

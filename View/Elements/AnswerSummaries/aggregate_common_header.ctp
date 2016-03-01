@@ -9,7 +9,6 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 ?>
-
 <div class="col-xs-12">
 
 	<?php if (!empty($question['question_value'])): ?>
@@ -40,8 +39,6 @@
 			case QuestionnairesComponent::TYPE_SINGLE_SELECT_BOX:
 				$questionTypeStr = __d('questionnaires', 'List selection');
 				break;
-			default:
-				$questionTypeStr = __d('questionnaires', 'Not selection');
 			}
 		?>
 		<small>(<?php echo $questionTypeStr; ?>)</small>
