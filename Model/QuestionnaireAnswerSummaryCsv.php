@@ -111,13 +111,17 @@ class QuestionnaireAnswerSummaryCsv extends QuestionnairesAppModel {
 				'test_status' => QuestionnairesComponent::TEST_ANSWER_STATUS_PEFORM,
 				'questionnaire_key' => $key,
 			),
+			'recursive' => -1,
 			'limit' => $limit,
 			'offset' => $offset,
-			'order' => 'QuestionnaireAnswerSummaryCsv.created',
+			'order' => array('QuestionnaireAnswerSummaryCsv.created' => 'ASC'),
 		));
 		if (empty($summaries)) {
 			return $retArray;
 		}
+
+		// 質問のIDを取得
+		$questionIds = Hash::extract($questionnaire['QuestionnairePage'], '{n}.QuestionnaireQuestion.{n}.id');
 
 		// summary loop
 		foreach ($summaries as $summary) {
@@ -129,9 +133,22 @@ class QuestionnaireAnswerSummaryCsv extends QuestionnairesAppModel {
 			// そうするためにはrecursive=2でないといけないわけだが、recursive=2にするとRoleのFindでSQLエラーになる
 			// 仕方ないのでこの形式で処理を行う
 			$answers = $this->QuestionnaireAnswer->find('all', array(
+				'fields' => array('QuestionnaireAnswer.*', 'QuestionnaireQuestion.*'),
 				'conditions' => array(
-					'questionnaire_answer_summary_id' => $summary[$this->alias]['id']
+					'questionnaire_answer_summary_id' => $summary[$this->alias]['id'],
+					'QuestionnaireQuestion.id' => $questionIds
 				),
+				'recursive' => -1,
+				'joins' => array(
+					array(
+						'table' => 'questionnaire_questions',
+						'alias' => 'QuestionnaireQuestion',
+						'type' => 'LEFT',
+						'conditions' => array(
+							'QuestionnaireAnswer.questionnaire_question_key = QuestionnaireQuestion.key',
+						)
+					)
+				)
 			));
 			$retArray[] = $this->_getRows($questionnaire, $summary, $answers);
 		}
@@ -155,15 +172,17 @@ class QuestionnaireAnswerSummaryCsv extends QuestionnairesAppModel {
 
 		foreach ($questionnaire['QuestionnairePage'] as $page) {
 			foreach ($page['QuestionnaireQuestion'] as $question) {
+				$pageNumber = $page['page_sequence'] + 1;
+				$questionNumber = $question['question_sequence'] + 1;
 				if (QuestionnairesComponent::isMatrixInputType($question['question_type'])) {
 					$choiceSeq = 1;
 					foreach ($question['QuestionnaireChoice'] as $choice) {
 						if ($choice['matrix_type'] == QuestionnairesComponent::MATRIX_TYPE_ROW_OR_NO_MATRIX) {
-							$cols[] = $page['page_sequence'] . '-' . $question['question_sequence'] . '-' . $choiceSeq++ . '. ' . $choice['choice_label'];
+							$cols[] = $pageNumber . '-' . $questionNumber . '-' . $choiceSeq++ . '. ' . $question['question_value'] . ':' . $choice['choice_label'];
 						}
 					}
 				} else {
-					$cols[] = $page['page_sequence'] . '-' . $question['question_sequence'] . '. ' . $question['question_value'];
+					$cols[] = $pageNumber . '-' . $questionNumber . '. ' . $question['question_value'];
 				}
 			}
 		}
@@ -188,7 +207,7 @@ class QuestionnaireAnswerSummaryCsv extends QuestionnairesAppModel {
 
 		$cols = array();
 
-		$cols[] = ($questionnaire['Questionnaire']['is_anonymity']) ? __d('questionnaires', 'Anonymity') : $summary['TrackableCreator']['username'];
+		$cols[] = $this->_getUserName($questionnaire, $summary);
 		$cols[] = $summary['QuestionnaireAnswerSummaryCsv']['modified'];
 		$cols[] = $summary['QuestionnaireAnswerSummaryCsv']['answer_number'];
 
@@ -209,6 +228,22 @@ class QuestionnaireAnswerSummaryCsv extends QuestionnairesAppModel {
 	}
 
 /**
+ * _getUserName
+ *
+ * @param array $questionnaire questionnaire data
+ * @param array $summary answer summary
+ * @return string
+ */
+	protected function _getUserName($questionnaire, $summary) {
+		if ($questionnaire['Questionnaire']['is_anonymity']) {
+			return __d('questionnaires', 'Anonymity');
+		}
+		if (empty($summary['TrackableCreator']['username'])) {
+			return __d('questionnaires', 'Guest');
+		}
+		return $summary['TrackableCreator']['username'];
+	}
+/**
  * _getAns
  *
  * @param array $question question data
@@ -220,28 +255,31 @@ class QuestionnaireAnswerSummaryCsv extends QuestionnairesAppModel {
 		// 回答配列データの中から、現在指定された質問に該当するものを取り出す
 		$ans = Hash::extract($answers, '{n}.QuestionnaireAnswer[questionnaire_question_key=' . $question['key'] . ']');
 		// 回答が存在するとき処理
-		if ($ans) {
-			$ans = $ans[0];
-			// 単純入力タイプのときは回答の値をそのまま返す
-			if (QuestionnairesComponent::isOnlyInputType($question['question_type'])) {
-				$retAns = $ans['answer_value'];
-			} elseif (QuestionnairesComponent::isSelectionInputType($question['question_type'])) {
-				// choice_id と choice_valueに分けられた回答選択肢配列を得る
-				// 選択されていた数分処理
-				foreach ($ans['answer_values'] as $choiceKey => $dividedAns) {
-					// idから判断して、その他が選ばれていた場合、other_answer_valueを入れる
-					$choice = Hash::extract($question['QuestionnaireChoice'], '{n}[key=' . $choiceKey . ']');
-					if ($choice) {
-						if ($choice[0]['other_choice_type'] != QuestionnairesComponent::OTHER_CHOICE_TYPE_NO_OTHER_FILED) {
-							$retAns .= $ans['other_answer_value'];
-						} else {
-							$retAns .= $dividedAns;
-						}
-						$retAns .= QuestionnairesComponent::ANSWER_DELIMITER;
+		if (! $ans) {
+			return $retAns;
+		}
+
+		$ans = $ans[0];
+
+		// 単純入力タイプのときは回答の値をそのまま返す
+		if (QuestionnairesComponent::isOnlyInputType($question['question_type'])) {
+			$retAns = $ans['answer_value'];
+		} elseif (QuestionnairesComponent::isSelectionInputType($question['question_type'])) {
+			// choice_id と choice_valueに分けられた回答選択肢配列を得る
+			// 選択されていた数分処理
+			foreach ($ans['answer_values'] as $choiceKey => $dividedAns) {
+				// idから判断して、その他が選ばれていた場合、other_answer_valueを入れる
+				$choice = Hash::extract($question['QuestionnaireChoice'], '{n}[key=' . $choiceKey . ']');
+				if ($choice) {
+					if ($choice[0]['other_choice_type'] != QuestionnairesComponent::OTHER_CHOICE_TYPE_NO_OTHER_FILED) {
+						$retAns .= $ans['other_answer_value'];
+					} else {
+						$retAns .= $dividedAns;
 					}
+					$retAns .= QuestionnairesComponent::ANSWER_DELIMITER;
 				}
-				$retAns = trim($retAns, QuestionnairesComponent::ANSWER_DELIMITER);
 			}
+			$retAns = trim($retAns, QuestionnairesComponent::ANSWER_DELIMITER);
 		}
 		return $retAns;
 	}

@@ -70,23 +70,28 @@ class QuestionnaireQuestionFixture extends CakeTestFixture {
 		),
 		6 => array(
 			'question_type' => '2',
+			'question_value' => 'Question_2',
 		),
 		8 => array(
 			'question_type' => '3',
+			'question_value' => 'Question_3',
 			'is_range' => 1,
 			'min' => '5',
 			'max' => '15'
 		),
 		10 => array(
 			'question_type' => '5',
+			'question_value' => 'Question_4',
 			'result_display_type' => 2,
 		),
 		12 => array(
 			'question_type' => '6',
+			'question_value' => 'Question_5',
 			'result_display_type' => 1,
 		),
 		14 => array(
 			'question_type' => '7',
+			'question_value' => 'Question_6',
 			'question_type_option' => '2',
 			'is_range' => 1,
 			'min' => '2016-01-01 00:00:00',
@@ -94,6 +99,7 @@ class QuestionnaireQuestionFixture extends CakeTestFixture {
 		),
 		16 => array(
 			'question_type' => '7',
+			'question_value' => 'Question_7',
 			'question_type_option' => '7',
 		),
 		18 => array(
