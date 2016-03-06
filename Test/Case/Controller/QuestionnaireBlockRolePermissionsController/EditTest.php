@@ -63,7 +63,7 @@ class QuestionnaireBlockRolePermissionsControllerEditTest extends BlockRolePermi
 			$data = array(
 				'QuestionnaireSetting' => array(
 					'id' => 2,
-					'block_key' => 'block_1',
+					'block_key' => 'block_2',
 					'use_workflow' => true,
 					'approval_type' => true,
 				)
@@ -93,39 +93,6 @@ class QuestionnaireBlockRolePermissionsControllerEditTest extends BlockRolePermi
 		return array(
 			array('approvalFields' => $this->__getData(false))
 		);
-	}
-
-/**
- * editアクションのGETテスト(Exceptionエラー)
- *
- * @param array $approvalFields コンテンツ承認の利用有無のフィールド
- * @param string|null $exception Exception
- * @param string $return testActionの実行後の結果
- * @dataProvider dataProviderEditGet
- * @return void
- */
-	public function testEditGetExceptionError($approvalFields, $exception = null, $return = 'view') {
-		$this->_mockForReturnFalse('Questionnaires.QuestionnaireSetting', 'getSetting');
-
-		$exception = 'BadRequestException';
-		$this->testEditGet($approvalFields, $exception, $return);
-	}
-
-/**
- * editアクションのGET(JSON)テスト(Exceptionエラー)
- *
- * @param array $approvalFields コンテンツ承認の利用有無のフィールド
- * @param string|null $exception Exception
- * @param string $return testActionの実行後の結果
- * @dataProvider dataProviderEditGet
- * @return void
- */
-	public function testEditGetJsonExceptionError($approvalFields, $exception = null, $return = 'view') {
-		$this->_mockForReturnFalse('Questionnaires.QuestionnaireSetting', 'getSetting');
-
-		$exception = 'BadRequestException';
-		$return = 'json';
-		$this->testEditGet($approvalFields, $exception, $return);
 	}
 
 /**

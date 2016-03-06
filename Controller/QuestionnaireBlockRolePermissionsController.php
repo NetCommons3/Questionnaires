@@ -72,11 +72,9 @@ class QuestionnaireBlockRolePermissionsController extends QuestionnaireBlocksCon
  * @return void
  */
 	public function edit() {
+		// この処理に来る前に必ずSettingレコードは作成される（beforeFilterで
+		// （作成できてないときはExceptionエラーが発生して、ここにはこれない
 		$questionnaireSetting = $this->QuestionnaireSetting->getSetting();
-		if (empty($questionnaireSetting)) {
-			$this->setAction('throwBadRequest');
-			return false;
-		}
 		$permissions = $this->Workflow->getBlockRolePermissions(
 			array('content_creatable', 'content_publishable', 'content_comment_creatable', 'content_comment_publishable')
 		);

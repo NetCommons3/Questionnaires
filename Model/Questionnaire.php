@@ -307,16 +307,14 @@ class Questionnaire extends QuestionnairesAppModel {
  * @throws InternalErrorException
  */
 	public function afterFrameSave($data) {
-		// すでに結びついている場合は何もしないでよい
-		if (!empty($data['Frame']['block_id'])) {
-			return $data;
-		}
 		$frame = $data['Frame'];
 
 		$this->begin();
 
 		try {
 			$this->_saveBlock($frame);
+			// 設定情報も
+			$this->_saveSetting();
 			$this->commit();
 		} catch (Exception $ex) {
 			//トランザクションRollback
@@ -338,6 +336,10 @@ class Questionnaire extends QuestionnairesAppModel {
  * @throws InternalErrorException
  */
 	protected function _saveBlock($frame) {
+		// すでに結びついている場合はBlockは作らないでよい
+		if (! empty($data['Frame']['block_id'])) {
+			return;
+		}
 		// ルームに存在するブロックを探す
 		$block = $this->Block->find('first', array(
 			'conditions' => array(
@@ -354,23 +356,33 @@ class Questionnaire extends QuestionnairesAppModel {
 				'language_id' => $frame['language_id'],
 				'plugin_key' => $frame['plugin_key'],
 			));
-			if (! $block) {
-				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+			if (!$block) {
+				throw new InternalErrorException(__d ('net_commons', 'Internal Server Error'));
 			}
 			Current::$current['Block'] = $block['Block'];
 		}
 
 		$frame['block_id'] = $block['Block']['id'];
-		if (! $this->Frame->save($frame)) {
-			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+		if (!$this->Frame->save ($frame)) {
+			throw new InternalErrorException(__d ('net_commons', 'Internal Server Error'));
 		}
 		Current::$current['Frame']['block_id'] = $block['Block']['id'];
-
+	}
+/**
+ * save block
+ *
+ * afterFrameSaveやsaveQuestionnaireから呼び出される
+ *
+ * @param array $frame frame data
+ * @return bool
+ * @throws InternalErrorException
+ */
+	protected function _saveSetting() {
 		// block settingはあるか
 		if (empty($this->QuestionnaireSetting->getSetting())) {
 			// ないときは作る
 			$blockSetting = $this->QuestionnaireSetting->create();
-			$blockSetting['QuestionnaireSetting']['block_key'] = $block['Block']['key'];
+			$blockSetting['QuestionnaireSetting']['block_key'] = Current::read('Block.key');	//$block['Block']['key'];
 			$this->QuestionnaireSetting->saveQuestionnaireSetting($blockSetting);
 		}
 		return true;
@@ -507,11 +519,16 @@ class Questionnaire extends QuestionnairesAppModel {
  * @return bool
  */
 	public function saveQuestionnaire(&$questionnaire) {
+		// 設定画面を表示する前にこのルームのアンケートブロックがあるか確認
+		// 万が一、まだ存在しない場合には作成しておく
+		// afterFrameSaveが呼ばれず、また最初に設定画面が開かれもしなかったような状況の想定
+		$frame['Frame'] = Current::read('Frame');
+		$this->afterFrameSave($frame);
+
 		//トランザクションBegin
 		$this->begin();
 
 		try {
-			$this->_saveBlock(Current::read('Frame'));
 			$questionnaire['Questionnaire']['block_id'] = Current::read('Frame.block_id');
 			$status = $questionnaire['Questionnaire']['status'];
 			$this->create();

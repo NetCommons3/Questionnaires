@@ -47,7 +47,7 @@ class QuestionnaireSettingFixture extends CakeTestFixture {
 		),
 		array(
 			'id' => 2,
-			'block_key' => 'block_1',
+			'block_key' => 'block_2',
 			'use_workflow' => '1',
 		),
 	);
