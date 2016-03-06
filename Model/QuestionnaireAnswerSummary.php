@@ -99,12 +99,13 @@ class QuestionnaireAnswerSummary extends QuestionnairesAppModel {
 			// サマリの状態を完了にして確定する
 			$summary['QuestionnaireAnswerSummary']['answer_time'] = (new NetCommonsTime())->getNowDatetime();
 		}
-		$this->set($summary);
-		if (! $this->validates()) {
-			return false;
-		}
 		$this->begin();
 		try {
+			$this->set($summary);
+			if (! $this->validates()) {
+				$this->rollback();
+				return false;
+			}
 			if (! $this->save($summary, false)) {
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}

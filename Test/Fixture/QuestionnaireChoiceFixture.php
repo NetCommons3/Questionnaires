@@ -316,7 +316,7 @@ class QuestionnaireChoiceFixture extends CakeTestFixture {
 			'key' => 'choice_34',
 			'language_id' => '2',
 			'matrix_type' => '0',
-			'other_choice_type' => '0',
+			'other_choice_type' => '1',
 			'choice_sequence' => 1,
 			'choice_label' => 'choice label34',
 			'choice_value' => 'choice label34',

@@ -66,7 +66,7 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
 		'NetCommons.Permission' => array(
 			//アクセスの権限
 			'allow' => array(
-				'index, download, export' => 'block_editable',
+				'index,download,export' => 'block_editable',
 			),
 		),
 		'Paginator',
@@ -135,19 +135,14 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
 		// キー情報をもとにデータを取り出す
 		$questionnaire = $this->QuestionnaireAnswerSummaryCsv->getQuestionnaireForAnswerCsv($questionnaireKey);
 		if (! $questionnaire) {
-			$this->setAction('throwBadRequest');
+			$this->_setFlashMessageAndRedirect(__d('questionnaires', 'Designation of the questionnaire does not exist.'));
 			return;
 		}
 		// 圧縮用パスワードキーを求める
 		if (! empty($this->request->data['AuthorizationKey']['authorization_key'])) {
 			$zipPassword = $this->request->data['AuthorizationKey']['authorization_key'];
 		} else {
-			$this->NetCommons->setFlashNotification(__d('questionnaires', 'Setting of password is required always to download answers.'),
-				array('interval' => NetCommonsComponent::ALERT_VALIDATE_ERROR_INTERVAL));
-			$this->redirect(NetCommonsUrl::actionUrl(array(
-				'controller' => 'questionnaire_blocks',
-				'action' => 'index',
-				'frame_id' => Current::read('Frame.id'))));
+			$this->_setFlashMessageAndRedirect(__d('questionnaires', 'Setting of password is required always to download answers.'));
 			return;
 		}
 
@@ -172,12 +167,7 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
 
 		} catch (Exception $e) {
 			// NetCommonsお約束:エラーメッセージのFlash表示
-			$this->NetCommons->setFlashNotification(__d('questionnaires', 'download error'),
-				array('interval' => NetCommonsComponent::ALERT_VALIDATE_ERROR_INTERVAL));
-			$this->redirect(NetCommonsUrl::actionUrl(array(
-				'controller' => 'questionnaire_blocks',
-				'action' => 'index',
-				'frame_id' => Current::read('Frame.id'))));
+			$this->_setFlashMessageAndRedirect(__d('questionnaires', 'download error'));
 			return;
 		}
 		// Downloadの時はviewを使用しない
@@ -187,6 +177,21 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
 		$downloadFileName = $questionnaire['Questionnaire']['title'] . '.csv';
 		// 出力
 		return $csvFile->zipDownload(rawurlencode($zipFileName), $downloadFileName, $zipPassword);
+	}
+
+/**
+ * _setFlashMessageAndRedirect
+ *
+ * @param string $message flash error message
+ *
+ * @return void
+ */
+	protected function _setFlashMessageAndRedirect($message) {
+		$this->NetCommons->setFlashNotification($message, array('interval' => NetCommonsComponent::ALERT_VALIDATE_ERROR_INTERVAL));
+		$this->redirect(NetCommonsUrl::actionUrl(array(
+			'controller' => 'questionnaire_blocks',
+			'action' => 'index',
+			'frame_id' => Current::read('Frame.id'))));
 	}
 
 /**

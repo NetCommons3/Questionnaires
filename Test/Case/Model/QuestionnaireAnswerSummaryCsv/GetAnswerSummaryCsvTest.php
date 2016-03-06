@@ -77,46 +77,77 @@ class GetAnswerSummaryCsvTest extends NetCommonsGetTest {
 		$this->QuestionnaireAnswer->Behaviors->unload('QuestionnaireAnswerMatrixSingleChoice');
 		$this->QuestionnaireAnswer->Behaviors->unload('QuestionnaireAnswerMatrixMultipleChoice');
 		// ダミーデータを入れます
-		$summary = array(
-			'answer_status' => '2',
-			'test_status' => '0',
-			'answer_number' => 1,
-			'answer_time' => '2016-02-29 00:00:00',
-			'questionnaire_key' => 'questionnaire_4',
+		$summaryData = array(
+			array('questionnaire_4', ''),
+			array('questionnaire_4', ''),
+			array('questionnaire_4', 1),
+			array('questionnaire_12', ''),
+			array('questionnaire_12', 1),
+			array('questionnaire_22', ''),
 		);
-		for ($i = 0; $i < 2; $i++) {
-			$this->QuestionnaireAnswerSummary->create();
-			$this->QuestionnaireAnswerSummary->save($summary);
-			$id = $this->QuestionnaireAnswerSummary->getLastInsertID();
-			// single choice
-			$this->_insertAnswer($id, 'qKey_3', '|choice_4:choice label1');
-			// multi choice
-			if ($i % 2 == 0) {
-				$this->_insertAnswer($id, 'qKey_5', '|choice_7:choice label4|choice_8:choice label5');
-			} else {
-				$this->_insertAnswer($id, 'qKey_5', '|choice_7:choice label4');
+		for ($i = 0; $i < 6; $i++) {
+			$questionnaireKey = $summaryData[$i][0];
+			$id = $this->_insertAnswerSummary($questionnaireKey, $summaryData[$i][1]);
+
+			if ($questionnaireKey == 'questionnaire_4') {
+				// single choice
+				$this->_insertAnswer($id, 'qKey_3', '|choice_4:choice label1');
+				// multi choice
+				if ($i % 2 == 0) {
+					$this->_insertAnswer($id, 'qKey_5', '|choice_7:choice label4|choice_8:choice label5');
+				} else {
+					$this->_insertAnswer($id, 'qKey_5', '|choice_7:choice label4');
+				}
+				// text
+				$this->_insertAnswer($id, 'qKey_7', 'テキストの回答ですよ');
+				// matrix single
+				$this->_insertAnswer($id, 'qKey_9', '|choice_12:choice label12', 'choice_9');
+				$this->_insertAnswer($id, 'qKey_9', '|choice_11:choice label11', 'choice_10');
+				// matrix multi
+				if ($i % 2 == 0) {
+					$this->_insertAnswer($id, 'qKey_11', '|choice_16:choice label16', 'choice_13');
+					$this->_insertAnswer($id, 'qKey_11', '|choice_15:choice label15', 'choice_14');
+				} else {
+					$this->_insertAnswer($id, 'qKey_11', '|choice_15:choice label15|choice_16:choice label16', 'choice_13');
+					$this->_insertAnswer($id, 'qKey_11', '|choice_15:choice label15|choice_16:choice label16', 'choice_14');
+				}
+				// date
+				$this->_insertAnswer($id, 'qKey_13', '2016-03-01');
+			} elseif ($questionnaireKey == 'questionnaire_12') {
+				$this->_insertAnswer($id, 'qKey_27', '|choice_27:choice label27');
+			} elseif ($questionnaireKey == 'questionnaire_22') {
+				$this->_insertAnswer($id, 'qKey_41', '|choice_35:choice label35', 'choice_33');
+				$this->_insertAnswer($id, 'qKey_41', '|choice_36:choice label36', 'choice_34');
 			}
-			// text
-			$this->_insertAnswer($id, 'qKey_7', 'テキストの回答ですよ');
-			// matrix single
-			$this->_insertAnswer($id, 'qKey_9', '|choice_12:choice label12', 'choice_9');
-			$this->_insertAnswer($id, 'qKey_9', '|choice_11:choice label11', 'choice_10');
-			// matrix multi
-			if ($i % 2 == 0) {
-				$this->_insertAnswer($id, 'qKey_11', '|choice_16:choice label16', 'choice_13');
-				$this->_insertAnswer($id, 'qKey_11', '|choice_15:choice label15', 'choice_14');
-			} else {
-				$this->_insertAnswer($id, 'qKey_11', '|choice_15:choice label15|choice_16:choice label16', 'choice_13');
-				$this->_insertAnswer($id, 'qKey_11', '|choice_15:choice label15|choice_16:choice label16', 'choice_14');
-			}
-			// date
-			$this->_insertAnswer($id, 'qKey_13', '2016-03-01');
 		}
 		$this->QuestionnaireAnswer->Behaviors->load('QuestionnaireAnswerSingleChoice');
 		$this->QuestionnaireAnswer->Behaviors->load('QuestionnaireAnswerMultipleChoice');
 		$this->QuestionnaireAnswer->Behaviors->load('QuestionnaireAnswerSingleList');
 		$this->QuestionnaireAnswer->Behaviors->load('QuestionnaireAnswerMatrixSingleChoice');
 		$this->QuestionnaireAnswer->Behaviors->load('QuestionnaireAnswerMatrixMultipleChoice');
+	}
+
+/**
+ * _insertAnswerSummary
+ *
+ * @param int $questionnaireKey アンケートKey
+ *
+ * @return int summary id
+ */
+	protected function _insertAnswerSummary($questionnaireKey, $userId) {
+		$summary = array(
+			'answer_status' => '2',
+			'test_status' => '0',
+			'answer_number' => 1,
+			'answer_time' => '2016-02-29 00:00:00',
+			'questionnaire_key' => $questionnaireKey,
+			'user_id' => $userId,
+			'created_user' => $userId
+		);
+		$this->QuestionnaireAnswerSummary->create();
+		$this->QuestionnaireAnswerSummary->save($summary);
+		$id = $this->QuestionnaireAnswerSummary->getLastInsertID();
+		return $id;
 	}
 /**
  * _insertAnswer
@@ -135,7 +166,6 @@ class GetAnswerSummaryCsvTest extends NetCommonsGetTest {
 			'questionnaire_question_key' => $qKey,
 			'matrix_choice_key' => $cKey,
 			'other_answer_value' => 'その他の回答',
-			'modified' => '2016-03-01 01:01:01'
 		);
 		$this->QuestionnaireAnswer->create();
 		$this->QuestionnaireAnswer->save($answer, false);
@@ -196,7 +226,7 @@ class GetAnswerSummaryCsvTest extends NetCommonsGetTest {
 
 		$expected = Hash::remove($expected, '{n}.1');
 		//チェック
-		$this->assertEquals($result, $expected);
+		$this->assertEquals($expected, $result);
 	}
 /**
  * getDefaultChoiceのDataProvider
@@ -210,9 +240,7 @@ class GetAnswerSummaryCsvTest extends NetCommonsGetTest {
 	public function dataProviderGet() {
 		$expect = array(
 			array(
-				__d('questionnaires', 'Respondent'),
-				__d('questionnaires', 'Answer Date'),
-				__d('questionnaires', 'Number'),
+				__d('questionnaires', 'Respondent'), __d('questionnaires', 'Answer Date'), __d('questionnaires', 'Number'),
 				'1-1. Question_1',
 				'2-1. Question_2',
 				'3-1. Question_3',
@@ -224,9 +252,7 @@ class GetAnswerSummaryCsvTest extends NetCommonsGetTest {
 				'7-1. Question_7',
 			),	// header
 			array(
-				'Guest',
-				'2016-03-01 01:01:01',
-				'1',
+				'Guest', '2016-03-01 01:01:01', '1',
 				'choice label1',
 				'choice label4|その他の回答',
 				'テキストの回答ですよ',
@@ -238,9 +264,7 @@ class GetAnswerSummaryCsvTest extends NetCommonsGetTest {
 				''
 			),	// data1
 			array(
-				'Guest',
-				'2016-03-01 01:01:01',
-				'1',
+				'Guest', '2016-03-01 01:01:01', '1',
 				'choice label1',
 				'choice label4',
 				'テキストの回答ですよ',
@@ -251,9 +275,62 @@ class GetAnswerSummaryCsvTest extends NetCommonsGetTest {
 				'2016-03-01',
 				''
 			),	// data2
+			array(
+				'system_administrator', '2016-03-01 01:01:01', '1',
+				'choice label1',
+				'choice label4|その他の回答',
+				'テキストの回答ですよ',
+				'choice label12',
+				'choice label11',
+				'choice label16',
+				'choice label15',
+				'2016-03-01',
+				''
+			),	// data3
+		);
+		$expect2 = array(
+			array(
+				__d('questionnaires', 'Respondent'), __d('questionnaires', 'Answer Date'), __d('questionnaires', 'Number'),
+				'1-1. Question_1',
+			),	// header
+		);
+		$expect3 = array(
+			array(
+				__d('questionnaires', 'Respondent'), __d('questionnaires', 'Answer Date'), __d('questionnaires', 'Number'),
+				'1-1. Question_1',
+				'2-1. Question_1',
+				'3-1. Question_1',
+			),	// header
+			array(
+				__d('questionnaires', 'Anonymity'), '2016-03-01 01:01:01', '1',
+				'choice label27',
+				'',
+				'',
+			),	// data2
+			array(
+				__d('questionnaires', 'Anonymity'), '2016-03-01 01:01:01', '1',
+				'choice label27',
+				'',
+				'',
+			),	// data2
+		);
+		$expect4 = array(
+			array(
+				__d('questionnaires', 'Respondent'), __d('questionnaires', 'Answer Date'), __d('questionnaires', 'Number'),
+				'1-1-1. Question_1:choice label33',
+				'1-1-2. Question_1:choice label34',
+			),	// header
+			array(
+				'Guest', '2016-03-01 01:01:01', '1',
+				'choice label35',
+				'その他の回答:choice label36',
+			),	// data2
 		);
 		return array(
 			array('4', $expect),
+			array('2', $expect2),
+			array('12', $expect3),
+			array('22', $expect4),
 		);
 	}
 

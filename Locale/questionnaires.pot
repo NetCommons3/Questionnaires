@@ -14,6 +14,8 @@ msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
 #: /Controller/QuestionnaireBlocksController.php:148
+msgid "Designation of the questionnaire does not exist."
+msgstr ""
 msgid "Setting of password is required always to download answers."
 msgstr ""
 

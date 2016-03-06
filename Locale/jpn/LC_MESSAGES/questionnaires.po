@@ -16,6 +16,8 @@ msgstr ""
 "X-Generator: Poedit 1.8.6\n"
 
 #: /Controller/QuestionnaireBlocksController.php:148
+msgid "Designation of the questionnaire does not exist."
+msgstr "指定のアンケートデータは存在しません。"
 msgid "Setting of password is required always to download answers."
 msgstr "回答データをダウンロードする場合は必ず圧縮パスワードの設定が必要です。"
 

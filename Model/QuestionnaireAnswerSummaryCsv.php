@@ -70,10 +70,13 @@ class QuestionnaireAnswerSummaryCsv extends QuestionnairesAppModel {
 	public function getQuestionnaireForAnswerCsv($questionnaireKey) {
 		$this->Questionnaire = ClassRegistry::init('Questionnaires.Questionnaire', true);
 		// 指定のアンケートデータを取得
+		// CSVの取得は公開してちゃんとした回答を得ているアンケートに限定である
 		$questionnaire = $this->Questionnaire->find('first', array(
 			'conditions' => array(
+				'Questionnaire.block_id' => Current::read('Block.id'),
 				'Questionnaire.key' => $questionnaireKey,
 				'Questionnaire.is_active' => true,
+				'Questionnaire.language_id' => Current::read('Language.id'),
 			),
 			'recursive' => -1
 		));
@@ -106,12 +109,23 @@ class QuestionnaireAnswerSummaryCsv extends QuestionnairesAppModel {
 
 		// keyに一致するsummaryを取得（テストじゃない、完了している）
 		$summaries = $this->find('all', array(
+			'fields' => array('QuestionnaireAnswerSummaryCsv.*', 'User.handlename'),
 			'conditions' => array(
 				'answer_status' => QuestionnairesComponent::ACTION_ACT,
 				'test_status' => QuestionnairesComponent::TEST_ANSWER_STATUS_PEFORM,
 				'questionnaire_key' => $key,
 			),
 			'recursive' => -1,
+			'joins' => array(
+				array(
+					'table' => 'users',
+					'alias' => 'User',
+					'type' => 'LEFT',
+					'conditions' => array(
+						'QuestionnaireAnswerSummaryCsv.user_id = User.id',
+					)
+				)
+			),
 			'limit' => $limit,
 			'offset' => $offset,
 			'order' => array('QuestionnaireAnswerSummaryCsv.created' => 'ASC'),
@@ -119,7 +133,6 @@ class QuestionnaireAnswerSummaryCsv extends QuestionnairesAppModel {
 		if (empty($summaries)) {
 			return $retArray;
 		}
-
 		// 質問のIDを取得
 		$questionIds = Hash::extract($questionnaire['QuestionnairePage'], '{n}.QuestionnaireQuestion.{n}.id');
 
@@ -238,10 +251,10 @@ class QuestionnaireAnswerSummaryCsv extends QuestionnairesAppModel {
 		if ($questionnaire['Questionnaire']['is_anonymity']) {
 			return __d('questionnaires', 'Anonymity');
 		}
-		if (empty($summary['TrackableCreator']['username'])) {
+		if (empty($summary['User']['handlename'])) {
 			return __d('questionnaires', 'Guest');
 		}
-		return $summary['TrackableCreator']['username'];
+		return $summary['User']['handlename'];
 	}
 /**
  * _getAns
@@ -309,7 +322,7 @@ class QuestionnaireAnswerSummaryCsv extends QuestionnairesAppModel {
 			if ($choice['other_choice_type'] != QuestionnairesComponent::OTHER_CHOICE_TYPE_NO_OTHER_FILED) {
 				$retAns = $ans['other_answer_value'] . QuestionnairesComponent::ANSWER_VALUE_DELIMITER;
 			}
-			$retAns = implode(QuestionnairesComponent::ANSWER_DELIMITER, $ans['answer_values']);
+			$retAns .= implode(QuestionnairesComponent::ANSWER_DELIMITER, $ans['answer_values']);
 		}
 		return $retAns;
 	}
