@@ -366,9 +366,13 @@ class Questionnaire extends QuestionnairesAppModel {
 		}
 		Current::$current['Frame']['block_id'] = $block['Block']['id'];
 
-		$blockSetting = $this->QuestionnaireSetting->create();
-		$blockSetting['QuestionnaireSetting']['block_key'] = $block['Block']['key'];
-		$this->QuestionnaireSetting->saveQuestionnaireSetting($blockSetting);
+		// block settingはあるか
+		if (empty($this->QuestionnaireSetting->getSetting())) {
+			// ないときは作る
+			$blockSetting = $this->QuestionnaireSetting->create();
+			$blockSetting['QuestionnaireSetting']['block_key'] = $block['Block']['key'];
+			$this->QuestionnaireSetting->saveQuestionnaireSetting($blockSetting);
+		}
 		return true;
 	}
 

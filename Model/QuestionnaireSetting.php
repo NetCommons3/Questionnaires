@@ -61,7 +61,7 @@ class QuestionnaireSetting extends QuestionnairesAppModel {
 				array(
 					'table' => $this->table,
 					'alias' => $this->alias,
-					'type' => 'LEFT',
+					'type' => 'INNER',
 					'conditions' => array(
 						$this->Block->alias . '.key' . ' = ' . $this->alias . ' .block_key',
 					),
@@ -86,6 +86,20 @@ class QuestionnaireSetting extends QuestionnairesAppModel {
 	public function saveQuestionnaireSetting($data) {
 		//トランザクションBegin
 		$this->begin();
+
+		// idが未設定の場合は、指定されたblock_keyを頼りに既存レコードがないか調査
+		$existRecord = $this->find('first', array(
+			'recursive' => -1,
+			'fields' => 'id',
+			'conditions' => array(
+				'block_key' => $data['QuestionnaireSetting']['block_key'],
+			)
+		));
+		$data = Hash::merge($existRecord, $data);
+		$data = Hash::remove($data, 'QuestionnaireSetting.created_user');
+		$data = Hash::remove($data, 'QuestionnaireSetting.created');
+		$data = Hash::remove($data, 'QuestionnaireSetting.modified_user');
+		$data = Hash::remove($data, 'QuestionnaireSetting.modified');
 
 		//バリデーション
 		$this->set($data);

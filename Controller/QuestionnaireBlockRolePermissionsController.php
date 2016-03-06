@@ -73,7 +73,7 @@ class QuestionnaireBlockRolePermissionsController extends QuestionnaireBlocksCon
  */
 	public function edit() {
 		$questionnaireSetting = $this->QuestionnaireSetting->getSetting();
-		if (! $questionnaireSetting) {
+		if (empty($questionnaireSetting)) {
 			$this->setAction('throwBadRequest');
 			return false;
 		}
@@ -81,7 +81,7 @@ class QuestionnaireBlockRolePermissionsController extends QuestionnaireBlocksCon
 			array('content_creatable', 'content_publishable', 'content_comment_creatable', 'content_comment_publishable')
 		);
 		$this->set('roles', $permissions['Roles']);
-		if ($this->request->isPost()) {
+		if ($this->request->is('post')) {
 			if ($this->QuestionnaireSetting->saveQuestionnaireSetting($this->request->data)) {
 				$this->NetCommons->setFlashNotification(__d('net_commons', 'Successfully saved.'), array(
 					'class' => 'success',
