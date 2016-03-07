@@ -357,23 +357,22 @@ class Questionnaire extends QuestionnairesAppModel {
 				'plugin_key' => $frame['plugin_key'],
 			));
 			if (!$block) {
-				throw new InternalErrorException(__d ('net_commons', 'Internal Server Error'));
+				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}
 			Current::$current['Block'] = $block['Block'];
 		}
 
 		$frame['block_id'] = $block['Block']['id'];
-		if (!$this->Frame->save ($frame)) {
-			throw new InternalErrorException(__d ('net_commons', 'Internal Server Error'));
+		if (!$this->Frame->save($frame)) {
+			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 		}
 		Current::$current['Frame']['block_id'] = $block['Block']['id'];
 	}
 /**
- * save block
+ * save setting
  *
  * afterFrameSaveやsaveQuestionnaireから呼び出される
  *
- * @param array $frame frame data
  * @return bool
  * @throws InternalErrorException
  */
