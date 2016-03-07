@@ -12,9 +12,6 @@ echo $this->element('Questionnaires.scripts');
 echo $this->NetCommonsHtml->script(array(
 	'/components/moment/min/moment.min.js',
 	'/components/moment/min/moment-with-locales.min.js',
-	'/components/tinymce-dist/tinymce.min.js',
-	'/components/angular-ui-tinymce/src/tinymce.js',
-	'/net_commons/js/wysiwyg.js',
 	'/questionnaires/js/questionnaires_edit.js',
 ));
 $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesAppController::changeBooleansToNumbers($this->data));
