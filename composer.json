@@ -42,7 +42,9 @@
     },
     "require-dev": {
         "mustangostang/spyc":        "dev-master",
+        "netcommons/files":          "dev-master",
         "netcommons/net-commons":    "dev-master",
+        "netcommons/wysiwyg":        "dev-master",
         "netcommons/authorization-keys": "dev-master",
         "netcommons/visual-captcha": "dev-master",
         "satooshi/php-coveralls":    "dev-master"
