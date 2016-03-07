@@ -337,7 +337,7 @@ class Questionnaire extends QuestionnairesAppModel {
  */
 	protected function _saveBlock($frame) {
 		// すでに結びついている場合はBlockは作らないでよい
-		if (! empty($data['Frame']['block_id'])) {
+		if (! empty($frame['Frame']['block_id'])) {
 			return;
 		}
 		// ルームに存在するブロックを探す
@@ -424,10 +424,7 @@ class Questionnaire extends QuestionnairesAppModel {
 		$conditions = $this->getWorkflowConditions(array(
 			'block_id' => Current::read('Block.id'),
 		));
-
-		if ($addConditions) {
-			$conditions = array_merge($conditions, $addConditions);
-		}
+		$conditions = array_merge($conditions, $addConditions);
 		return $conditions;
 	}
 

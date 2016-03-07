@@ -131,6 +131,7 @@ class GetAnswerSummaryCsvTest extends NetCommonsGetTest {
  * _insertAnswerSummary
  *
  * @param int $questionnaireKey アンケートKey
+ * @param int $userId 回答した人ID
  *
  * @return int summary id
  */
