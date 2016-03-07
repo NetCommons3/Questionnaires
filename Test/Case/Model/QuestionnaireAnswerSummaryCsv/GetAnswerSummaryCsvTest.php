@@ -276,7 +276,7 @@ class GetAnswerSummaryCsvTest extends NetCommonsGetTest {
 				''
 			),	// data2
 			array(
-				'system_administrator', '2016-03-01 01:01:01', '1',
+				'System Administrator', '2016-03-01 01:01:01', '1',
 				'choice label1',
 				'choice label4|その他の回答',
 				'テキストの回答ですよ',
