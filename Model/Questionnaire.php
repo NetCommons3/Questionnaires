@@ -379,7 +379,8 @@ class Questionnaire extends QuestionnairesAppModel {
  */
 	protected function _saveSetting() {
 		// block settingはあるか
-		if (empty($this->QuestionnaireSetting->getSetting())) {
+		$setting = $this->QuestionnaireSetting->getSetting();
+		if (empty($setting)) {
 			// ないときは作る
 			$blockSetting = $this->QuestionnaireSetting->create();
 			$blockSetting['QuestionnaireSetting']['block_key'] = Current::read('Block.key');	//$block['Block']['key'];
