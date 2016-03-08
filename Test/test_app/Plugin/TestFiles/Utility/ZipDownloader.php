@@ -26,7 +26,7 @@ class ZipDownloader {
 /**
  * @var string zip filepath
  */
-	public $path;
+	public $path = __FILE__;
 
 /**
  * @var bool ファイルオープン常態
@@ -89,5 +89,15 @@ class ZipDownloader {
  */
 	public function addFromString($localname, $contents) {
 		$this->addStrings[$localname] = $contents;
+	}
+
+/**
+ * Download
+ *
+ * @param string $filename download時のファイル名
+ * @return string ファイル名
+ */
+	public function download($filename) {
+		return $filename;
 	}
 }

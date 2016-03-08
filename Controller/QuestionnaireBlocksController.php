@@ -214,7 +214,7 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
 		// キー情報をもとにデータを取り出す
 		$questionnaire = $this->QuestionnaireAnswerSummaryCsv->getQuestionnaireForAnswerCsv($questionnaireKey);
 		if (! $questionnaire) {
-			$this->setAction('throwBadRequest');
+			$this->_setFlashMessageAndRedirect(__d('questionnaires', 'Designation of the questionnaire does not exist.'));
 			return;
 		}
 
@@ -232,12 +232,7 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
 			// アーカイブ閉じる
 			$zipFile->close();
 		} catch(Exception $e) {
-			$this->Session->setFlash(__d('questionnaires', 'export error') . $e->getMessage(),
-				array('interval' => NetCommonsComponent::ALERT_VALIDATE_ERROR_INTERVAL));
-			$this->redirect(NetCommonsUrl::actionUrl(array(
-				'controller' => 'questionnaire_blocks',
-				'action' => 'index',
-				'frame_id' => Current::read('Frame.id'))));
+			$this->_setFlashMessageAndRedirect(__d('questionnaires', 'export error' . $e->getMessage()));
 			return;
 		}
 		// 大外枠zipファイル準備

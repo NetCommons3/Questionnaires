@@ -44,4 +44,16 @@ class TestQuestionnaireBlocksController extends QuestionnaireBlocksController {
 		$this->returnValue = parent::download();
 		return $this->returnValue;
 	}
+
+/**
+ * export
+ *
+ * @return void
+ * @throws InternalErrorException
+ */
+	public function export() {
+		App::uses('ZipDownloader', 'TestFiles.Utility');
+		$this->returnValue = parent::export();
+		return $this->returnValue;
+	}
 }
