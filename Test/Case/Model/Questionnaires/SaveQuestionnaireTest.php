@@ -49,6 +49,7 @@ class QuestionnaireSaveQuestionnaireTest extends WorkflowSaveTest {
 		'plugin.questionnaires.questionnaire_setting',
 		'plugin.questionnaires.questionnaire_frame_setting',
 		'plugin.questionnaires.questionnaire_frame_display_questionnaire',
+		'plugin.workflow.workflow_comment',
 	);
 
 /**
@@ -74,8 +75,6 @@ class QuestionnaireSaveQuestionnaireTest extends WorkflowSaveTest {
 		parent::setUp();
 		$model = $this->_modelName;
 		$this->$model->Behaviors->unload('AuthorizationKey');
-		$this->$model->Behaviors->unload('Workflow.Workflow');
-		$this->$model->Behaviors->unload('Workflow.WorkflowComment');
 		Current::$current['Frame']['id'] = '6';
 		Current::$current['Frame']['key'] = 'frame_3';
 		Current::$current['Frame']['room_id'] = '1';
