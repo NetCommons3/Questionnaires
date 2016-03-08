@@ -83,7 +83,7 @@ class QuestionnaireExportGetExportDataTest extends NetCommonsGetTest {
 			$this->assertEquals($result, $expected);
 		} else {
 			foreach ($expected as $expect) {
-				$this->assertTrue(Hash::check($result, $expect));
+				$this->assertTrue(Hash::check($result, $expect), $expect . ' is not found');
 			}
 		}
 	}
