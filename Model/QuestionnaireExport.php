@@ -50,13 +50,13 @@ class QuestionnaireExport extends QuestionnairesAppModel {
 		$zipData = array();
 
 		// バージョン情報を取得するためComposer情報を得る
-		$Plugin = ClassRegistry::init('Plugins.Plugin');
+		$Plugin = ClassRegistry::init('PluginManager.Plugin');
 		$composer = $Plugin->getComposer('netcommons/questionnaires');
 		// 最初のデータはアンケートプラグインのバージョン
 		$zipData['version'] = $composer['version'];
 
 		// 言語数分
-		$Language = ClassRegistry::init('Languages.Language');
+		$Language = ClassRegistry::init('M17n.Language');
 		$languages = $Language->find('all', array(
 			'recursive' => -1
 		));
@@ -82,6 +82,10 @@ class QuestionnaireExport extends QuestionnairesAppModel {
 			$questionnaire = Hash::remove($questionnaire, 'TrackableUpdater');
 			$Questionnaire->clearQuestionnaireId($questionnaire);
 			$questionnaires[] = $questionnaire;
+		}
+		// Exportするデータが一つも見つからないって
+		if (empty($questionnaire)) {
+			return false;
 		}
 		$zipData['Questionnaires'] = $questionnaires;
 		return $zipData;
