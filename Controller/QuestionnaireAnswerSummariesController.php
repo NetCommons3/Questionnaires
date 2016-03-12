@@ -49,6 +49,7 @@ class QuestionnaireAnswerSummariesController extends QuestionnairesAppController
  *
  */
 	public $helpers = array(
+		'NetCommons.TitleIcon',
 		'Workflow.Workflow',
 	);
 

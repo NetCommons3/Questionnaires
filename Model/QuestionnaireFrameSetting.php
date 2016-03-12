@@ -92,19 +92,6 @@ class QuestionnaireFrameSetting extends QuestionnairesAppModel {
 	}
 
 /**
- * getQuestionnaireFrameSettingConditions 指定されたframe_keyの設定要件をSQL検索用の配列で取り出す
- *
- * @param string $frameKey frame key
- * @return array ... displayNum sortField sortDirection
- */
-	public function getQuestionnaireFrameSettingConditions($frameKey) {
-		list(, $limit, $sort, $dir) = $this->getQuestionnaireFrameSetting($frameKey);
-		return array(
-			'offset' => 0,
-			'limit' => $limit,
-			'order' => 'Questionnaire.' . $sort . ' ' . $dir);
-	}
-/**
  * getFrameSetting 指定されたframe_keyの設定要件を取り出す
  *
  * @param string $frameKey frame key

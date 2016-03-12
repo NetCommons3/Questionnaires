@@ -123,7 +123,7 @@ class QuestionnaireSaveFrameDisplayQuestionnaireTest extends NetCommonsSaveTest 
 		$actual = $this->$model->find('all', array(
 			'recursive' => -1,
 			'conditions' => array('frame_key' => Current::read('Frame.key')),
-			'order' => array('questionnaire_key' => 'asc'),
+			'order' => array('questionnaire_key asc'),
 		));
 		$actual = Hash::remove($actual, '{n}.' . $this->$model->alias . '.created');
 		$actual = Hash::remove($actual, '{n}.' . $this->$model->alias . '.created_user');

@@ -128,7 +128,7 @@ class QuestionnaireAnswerSummaryCsv extends QuestionnairesAppModel {
 			),
 			'limit' => $limit,
 			'offset' => $offset,
-			'order' => array('QuestionnaireAnswerSummaryCsv.created' => 'ASC'),
+			'order' => array('QuestionnaireAnswerSummaryCsv.created ASC'),
 		));
 		if (empty($summaries)) {
 			return $retArray;
