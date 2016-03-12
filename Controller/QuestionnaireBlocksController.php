@@ -56,13 +56,6 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
  * @var array
  */
 	public $components = array(
-		'Blocks.BlockTabs' => array(
-			'mainTabs' => array(
-				'block_index' => array('url' => array('controller' => 'questionnaire_blocks')),
-				'role_permissions' => array('url' => array('controller' => 'questionnaire_block_role_permissions')),
-				'frame_settings' => array('url' => array('controller' => 'questionnaire_frame_settings')),
-			),
-		),
 		'NetCommons.Permission' => array(
 			//アクセスの権限
 			'allow' => array(
@@ -80,6 +73,13 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
 	public $helpers = array(
 		'Session',
 		'Blocks.BlockForm',
+		'Blocks.BlockTabs' => array(
+			'mainTabs' => array(
+				'block_index' => array('url' => array('controller' => 'questionnaire_blocks')),
+				'role_permissions' => array('url' => array('controller' => 'questionnaire_block_role_permissions')),
+				'frame_settings' => array('url' => array('controller' => 'questionnaire_frame_settings')),
+			),
+		),
 		'NetCommons.NetCommonsForm',
 		'NetCommons.Date',
 	);
