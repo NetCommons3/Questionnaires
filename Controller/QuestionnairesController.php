@@ -58,6 +58,7 @@ class QuestionnairesController extends QuestionnairesAppController {
 		'NetCommons.Date',
 		'NetCommons.DisplayNumber',
 		'NetCommons.Button',
+		'NetCommons.TitleIcon',
 		'Questionnaires.QuestionnaireStatusLabel',
 		'Questionnaires.QuestionnaireUtil'
 	);

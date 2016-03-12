@@ -54,6 +54,7 @@ echo $this->NetCommonsHtml->script(array(
 							<?php echo $this->QuestionnaireStatusLabel->statusLabelManagementWidget($questionnaire);?>
 						</td>
 						<td>
+							<?php echo $this->TitleIcon->titleIcon($questionnaire['Questionnaire']['title_icon']); ?>
 							<?php echo $this->NetCommonsHtml->link(h($questionnaire['Questionnaire']['title']),
 									NetCommonsUrl::actionUrl(array(
 										'plugin' => 'questionnaires',

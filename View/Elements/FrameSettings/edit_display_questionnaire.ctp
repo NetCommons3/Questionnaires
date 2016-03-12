@@ -76,6 +76,7 @@
 				<?php echo $this->QuestionnaireStatusLabel->statusLabelManagementWidget($quest);?>
 			</td>
 			<td>
+				<?php echo $this->TitleIcon->titleIcon($quest['Questionnaire']['title_icon']); ?>
 				<?php echo $quest['Questionnaire']['title']; ?>
 			</td>
 			<td>

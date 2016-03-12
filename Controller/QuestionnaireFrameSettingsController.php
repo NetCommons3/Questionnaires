@@ -69,6 +69,7 @@ class QuestionnaireFrameSettingsController extends QuestionnaireBlocksController
  */
 	public $helpers = array(
 		'NetCommons.Date',
+		'NetCommons.TitleIcon',
 		'Questionnaires.QuestionnaireUtil'
 	);
 
@@ -98,7 +99,7 @@ class QuestionnaireFrameSettingsController extends QuestionnaireBlocksController
 			'fields' => array('Questionnaire.*', 'QuestionnaireFrameDisplayQuestionnaire.*'),
 			'conditions' => $conditions,
 			'page' => 1,
-			'order' => array('Questionnaire.created' => 'DESC'),
+			'order' => array('Questionnaire.modified' => 'DESC'),
 			'limit' => 1000,
 			'recursive' => -1,
 			'joins' => array(

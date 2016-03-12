@@ -55,6 +55,7 @@ class QuestionnaireEditController extends QuestionnairesAppController {
  */
 	public $helpers = array(
 		'Workflow.Workflow',
+		'NetCommons.TitleIcon',
 		'Questionnaires.QuestionEdit'
 	);
 

@@ -56,6 +56,7 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
  */
 	public $helpers = [
 		'NetCommons.Date',
+		'NetCommons.TitleIcon',
 		'Workflow.Workflow',
 		'Questionnaires.QuestionnaireAnswer'
 	];

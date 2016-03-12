@@ -39,7 +39,7 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 		<div class="modal-body">
 			<div class="form-group questionnaire-group">
 				<?php /* アンケートタイトル設定 */
-					echo $this->NetCommonsForm->input('title',
+					echo $this->TitleIcon->inputWithTitleIcon('title', 'Questionnaire.title_icon',
 					array('label' => __d('questionnaires', 'Title'),
 						'ng-model' => 'questionnaires.questionnaire.title'
 					));

@@ -104,6 +104,7 @@ class QuestionnaireEditControllerEditQuestionTest extends WorkflowControllerEdit
 				'key' => $questionnaireKey,
 				'status' => WorkflowComponent::STATUS_IN_DRAFT,
 				'title' => 'EditTestTitle',
+				'title_icon' => 'ok.svg',
 				'sub_title' => 'EditTestSubTitle',
 				'is_total_show' => 0,
 				'answer_timing' => '0',

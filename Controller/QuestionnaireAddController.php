@@ -90,7 +90,14 @@ class QuestionnaireAddController extends QuestionnairesAppController {
 		}
 
 		// 過去データ 取り出し
-		$pastQuestionnaires = $this->Questionnaire->getQuestionnairesList(array(), array('limit' => 1000), array('recursive' => -1));
+		$pastQuestionnaires = $this->Questionnaire->find('all',
+			array(
+				'conditions' => $this->Questionnaire->getBaseCondition(),
+				'offset' => 0,
+				'limit' => 1000,
+				'recursive' => -1,
+				'order' => array('Questionnaire.modified DESC'),
+			));
 		$this->set('pastQuestionnaires', $pastQuestionnaires);
 
 		//

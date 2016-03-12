@@ -39,6 +39,7 @@ echo $this->element('Questionnaires.scripts');
 						<?php endif ?>
 
 						<h2>
+							<?php echo $this->TitleIcon->titleIcon($questionnaire['Questionnaire']['title_icon']); ?>
 							<?php echo h($questionnaire['Questionnaire']['title']); ?>
 							<br>
 							<small><?php echo h($questionnaire['Questionnaire']['sub_title']); ?></small>

@@ -39,6 +39,7 @@
 				ng-repeat="item in questionnaires | filter:q" ng-model="$parent.pastQuestionnaireSelect"
 				btn-radio="item.questionnaire.id" uncheckable>
 
+				<img ng-if="item.questionnaire.titleIcon != ''" src="{{item.questionnaire.titleIcon}}" class="nc-title-icon" />
 				{{item.questionnaire.title}}
 
 				<?php echo $this->element('Questionnaires.ng_status_label',

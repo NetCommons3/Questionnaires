@@ -389,32 +389,6 @@ class Questionnaire extends QuestionnairesAppModel {
 	}
 
 /**
- * geQuestionnairesList
- * get questionnaires by specified block id and specified user id limited number
- *
- * @param array $conditions find condition
- * @param array $options 検索オプション
- * @return array
- */
-	public function getQuestionnairesList($conditions, $options = array()) {
-		//$limit = QuestionnairesComponent::QUESTIONNAIRE_DEFAULT_DISPLAY_NUM_PER_PAGE}, $offset = 0, $sort = 'modified DESC') {
-		// 絞込条件
-		$baseConditions = $this->getBaseCondition();
-		$conditions = Hash::merge($baseConditions, $conditions);
-
-		// 取得オプション
-		$this->QuestionnaireFrameSetting = ClassRegistry::init('Questionnaires.QuestionnaireFrameSetting', true);
-		$defaultOptions = $this->QuestionnaireFrameSetting->getQuestionnaireFrameSettingConditions(Current::read('Frame.key'));
-		$options = Hash::merge($defaultOptions, $options);
-		$list = $this->find('all', array(
-			'recursive' => 0,
-			'conditions' => $conditions,
-			$options
-		));
-		return $list;
-	}
-
-/**
  * get index sql condition method
  *
  * @param array $addConditions 追加条件

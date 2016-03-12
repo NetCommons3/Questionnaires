@@ -10,6 +10,9 @@
  */
 ?>
 <div class="bg-info">
-    <h2 class="questionnaire-setting-ttl">{{questionnaire.questionnaire.title}}</h2>
+    <h2 class="questionnaire-setting-ttl">
+        <?php echo $this->TitleIcon->titleIcon($this->data['Questionnaire']['title_icon']); ?>
+        <?php echo h($this->data['Questionnaire']['title']); ?>
+    </h2>
     <span class="help-block questionnaire-setting-ttl-help"><?php echo __d('questionnaires', 'If you want to change the questionnaire title, please edit in "Set questionnaire" step.'); ?></span>
 </div>
