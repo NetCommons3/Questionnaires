@@ -19,7 +19,7 @@ $jsQuestionnaires = NetCommonsAppController::camelizeKeyRecursive(Questionnaires
 	 ng-init="initialize(<?php echo h(json_encode($jsQuestionnaires)); ?>,
 	 	<?php echo h(json_encode($jsQuestionnaireFrameSettings)); ?>)">
 
-	<?php echo $this->BlockTabs->main(BlockTabsComponent::MAIN_TAB_FRAME_SETTING); ?>
+	<?php echo $this->BlockTabs->main(BlockTabsHelper::MAIN_TAB_FRAME_SETTING); ?>
 
 	<div class="tab-content">
 

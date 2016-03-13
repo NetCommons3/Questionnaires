@@ -10,7 +10,7 @@
  */
 ?>
 <div class="block-setting-body">
-	<?php echo $this->BlockTabs->main(BlockTabsComponent::BLOCK_TAB_PERMISSION); ?>
+	<?php echo $this->BlockTabs->main(BlockTabsHelper::BLOCK_TAB_PERMISSION); ?>
 
 	<div class="tab-content">
 		<?php echo $this->element('Blocks.edit_form', array(
