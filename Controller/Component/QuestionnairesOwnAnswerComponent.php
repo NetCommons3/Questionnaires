@@ -43,7 +43,7 @@ class QuestionnairesOwnAnswerComponent extends Component {
 			$session = $this->_Collection->load('Session');
 			$summaryId = $session->read('Questionnaires.progressiveSummary.' . $questionnaireKey);
 			if ($summaryId) {
-				$summary = $answerSummary->findById($summaryId);
+				$summary = $answerSummary->getProgressiveSummary($summaryId);
 			}
 			return $summary;
 		}
@@ -165,7 +165,7 @@ class QuestionnairesOwnAnswerComponent extends Component {
 		$conditions = array(
 			'user_id' => Current::read('User.id'),
 			'answer_status' => QuestionnairesComponent::ACTION_ACT,
-			'test_status' => QuestionnairesComponent::TEST_ANSWER_STATUS_PEFORM,
+			//'test_status' => QuestionnairesComponent::TEST_ANSWER_STATUS_PEFORM,
 			'answer_number' => 1
 		);
 		$ownAnsweredKeys = $answerSummary->find(

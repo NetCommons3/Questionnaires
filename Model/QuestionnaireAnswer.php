@@ -162,11 +162,13 @@ class QuestionnaireAnswer extends QuestionnairesAppModel {
 		}
 		// 指定のサマリに該当するアンケートの質問ID配列を取得
 		$questionIds = Hash::extract($questionnaire, 'QuestionnairePage.{n}.QuestionnaireQuestion.{n}.id');
+		$choiceIds = Hash::extract($questionnaire, 'QuestionnairePage.{n}.QuestionnaireQuestion.{n}.QuestionnaireChoice.{n}.id');
 		// その質問配列を取得条件に加える（間違った質問が入らないよう）
 		$answer = $this->find('all', array(
 			'conditions' => array(
 				'questionnaire_answer_summary_id' => $summary['QuestionnaireAnswerSummary']['id'],
-				'QuestionnaireQuestion.id' => $questionIds
+				'QuestionnaireQuestion.id' => $questionIds,
+				'QuestionnaireChoice.id' => $choiceIds
 			),
 			'recursive' => 0
 		));

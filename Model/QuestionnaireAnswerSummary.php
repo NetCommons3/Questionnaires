@@ -118,6 +118,25 @@ class QuestionnaireAnswerSummary extends QuestionnairesAppModel {
 		return true;
 	}
 /**
+ * getProgressiveSummary
+ * 回答中サマリを取得する
+ *
+ * @param int $summaryId summary id
+ * @return array
+ */
+	public function getProgressiveSummary($summaryId) {
+		$summary = $this->find('first', array(
+			'conditions' => array(
+				'QuestionnaireAnswerSummary.id' => $summaryId,
+				'QuestionnaireAnswerSummary.created_user' => Current::read('User.id'),
+				'NOT' => array(
+					'QuestionnaireAnswerSummary.answer_status' => QuestionnairesComponent::ACTION_ACT
+				)
+			)
+		));
+		return $summary;
+	}
+/**
  * forceGetProgressiveAnswerSummary
  * get answer summary record if there is no summary , then create
  *
