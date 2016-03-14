@@ -73,10 +73,10 @@ class QuestionnaireFrameSetting extends QuestionnairesAppModel {
 				),
 			),
 			'display_num_per_page' => array(
-				'inList' => array(
-					'rule' => array('inList', array_keys(QuestionnairesComponent::getDisplayNumberOptions())),
+				'number' => array(
+					'rule' => array('numeric'),
 					'message' => __d('net_commons', 'Invalid request.'),
-				),
+				)
 			),
 			'sort_type' => array(
 				'inList' => array(
@@ -114,19 +114,7 @@ class QuestionnaireFrameSetting extends QuestionnairesAppModel {
 		$setting = $frameSetting['QuestionnaireFrameSetting'];
 		$displayType = $setting['display_type'];
 		$displayNum = $setting['display_num_per_page'];
-		if ($setting['sort_type'] == QuestionnairesComponent::QUESTIONNAIRE_SORT_MODIFIED) {
-			$sort = 'modified';
-			$dir = 'DESC';
-		} elseif ($setting['sort_type'] == QuestionnairesComponent::QUESTIONNAIRE_SORT_CREATED) {
-			$sort = 'created';
-			$dir = 'ASC';
-		} elseif ($setting['sort_type'] == QuestionnairesComponent::QUESTIONNAIRE_SORT_TITLE) {
-			$sort = 'title';
-			$dir = 'ASC';
-		} elseif ($setting['sort_type'] == QuestionnairesComponent::QUESTIONNAIRE_SORT_END) {
-			$sort = 'answer_end_period';
-			$dir = 'ASC';
-		}
+		list($sort, $dir) = explode(' ', $setting['sort_type']);
 		return array($displayType, $displayNum, $sort, $dir);
 	}
 
@@ -142,7 +130,7 @@ class QuestionnaireFrameSetting extends QuestionnairesAppModel {
 				//'id' => '',
 				'display_type' => QuestionnairesComponent::DISPLAY_TYPE_LIST,
 				'display_num_per_page' => QuestionnairesComponent::QUESTIONNAIRE_DEFAULT_DISPLAY_NUM_PER_PAGE,
-				'sort_type' => QuestionnairesComponent::QUESTIONNAIRE_SORT_MODIFIED,
+				'sort_type' => 'Questionnaire.modified DESC',
 			)
 		);
 		return $frame;

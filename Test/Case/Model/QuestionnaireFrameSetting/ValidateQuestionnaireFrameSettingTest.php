@@ -102,7 +102,7 @@ class ValidateQuestionnaireFrameSettingTest extends NetCommonsValidateTest {
 				__d('net_commons', 'Invalid request.')),
 			array($this->_getData(QuestionnairesComponent::DISPLAY_TYPE_LIST), 'display_type', '',
 				__d('net_commons', 'Invalid request.')),
-			array($this->_getData(QuestionnairesComponent::DISPLAY_TYPE_LIST), 'display_num_per_page', 9999999,
+			array($this->_getData(QuestionnairesComponent::DISPLAY_TYPE_LIST), 'display_num_per_page', 'a999999',
 				__d('net_commons', 'Invalid request.')),
 			array($this->_getData(QuestionnairesComponent::DISPLAY_TYPE_LIST), 'sort_type', 12,
 				__d('net_commons', 'Invalid request.')),

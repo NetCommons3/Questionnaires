@@ -74,7 +74,7 @@ class QuestionnairesFrameSettingsControllerEditTest extends NetCommonsController
 				'frame_key' => 'frame_3',
 				'display_type' => QuestionnairesComponent::DISPLAY_TYPE_LIST,
 				'display_num_per_page' => '10',
-				'sort_type' => '0',
+				'sort_type' => 'Questionnaire.modified DESC',
 			),
 		);
 		$displayQ = array();

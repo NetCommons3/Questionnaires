@@ -68,6 +68,7 @@ class QuestionnaireFrameSettingsController extends QuestionnaireBlocksController
 				'frame_settings' => array('url' => array('controller' => 'questionnaire_frame_settings')),
 			),
 		),
+		'NetCommons.DisplayNumber',
 		'NetCommons.Date',
 		'NetCommons.TitleIcon',
 		'Questionnaires.QuestionnaireUtil'

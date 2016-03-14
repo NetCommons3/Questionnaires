@@ -80,7 +80,7 @@ class SaveFrameSettingTest extends NetCommonsSaveTest {
 			'QuestionnaireFrameSetting' => array(
 				'display_type' => $displayType,
 				'display_num_per_page' => '10',
-				'sort_type' => '0',
+				'sort_type' => 'Questionnaire.modified DESC',
 				'frame_key' => 'frame_3',
 			),
 			'List' => array(

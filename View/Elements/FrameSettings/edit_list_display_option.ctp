@@ -10,16 +10,14 @@
  */
 ?>
 
-<div class='form-group'>
-	<?php echo $this->NetCommonsForm->input('display_num_per_page', array(
-		'label' => __d('questionnaires', 'Visible questionnaire row'),
-		'type' => 'select',
-		'options' => QuestionnairesComponent::getDisplayNumberOptions(),
-		'selected' => $questionnaireFrameSettings['display_num_per_page'],
-		'autofocus' => true,
-		));
-	?>
-</div>
+<?php echo $this->DisplayNumber->select('QuestionnaireFrameSetting.display_num_per_page', array(
+'label' => __d('questionnaires', 'Visible questionnaire row'),
+'unit' => array(
+'single' => __d('net_commons', '%s item'),
+'multiple' => __d('net_commons', '%s items')
+),
+)); ?>
+
 
 <div class='form-group'>
 	<?php echo $this->NetCommonsForm->input('sort_type', array(

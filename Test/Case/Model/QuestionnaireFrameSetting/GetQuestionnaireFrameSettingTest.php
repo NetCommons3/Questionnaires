@@ -74,7 +74,9 @@ class QuestionnaireGetQuestionnaireFrameSettingTest extends NetCommonsGetTest {
 		$method = $this->_methodName;
 
 		$condition = array('frame_key' => $frameKey);
-		$field = array('sort_type' => $sort);
+		$db = $this->$model->getDataSource();
+		$value = $db->value($sort, 'string');
+		$field = array('sort_type' => $value);
 		$this->$model->updateAll($field, $condition);
 		//テスト実行
 		$result = $this->$model->$method($frameKey);
@@ -95,23 +97,24 @@ class QuestionnaireGetQuestionnaireFrameSettingTest extends NetCommonsGetTest {
 		$expect0 = array(
 			QuestionnairesComponent::DISPLAY_TYPE_LIST,
 			'10',
-			'modified',
-			'ASC',
+			'Questionnaire.modified',
+			'DESC',
 		);
 		$expect1 = $expect0;
-		$expect1[3] = 'DESC';
+		//$expect1[2] = 'Questionnaire.modified DESC';
 		$expect2 = $expect0;
-		$expect2[2] = 'created';
-		$expect3 = $expect0;
-		$expect3[2] = 'title';
-		$expect4 = $expect0;
-		$expect4[2] = 'answer_end_period';
+		$expect2[2] = 'Questionnaire.created';
+		$expect2[3] = 'ASC';
+		$expect3 = $expect2;
+		$expect3[2] = 'Questionnaire.title';
+		$expect4 = $expect2;
+		$expect4[2] = 'Questionnaire.answer_end_period';
 		return array(
-			array('frame_3', QuestionnairesComponent::QUESTIONNAIRE_SORT_MODIFIED, $expect1),
-			array('frame_3', QuestionnairesComponent::QUESTIONNAIRE_SORT_CREATED, $expect2),
-			array('frame_3', QuestionnairesComponent::QUESTIONNAIRE_SORT_TITLE, $expect3),
-			array('frame_3', QuestionnairesComponent::QUESTIONNAIRE_SORT_END, $expect4),
-			array('frame_99999', null, $expect1),
+			array('frame_3', 'Questionnaire.modified DESC', $expect1),
+			array('frame_3', 'Questionnaire.created ASC', $expect2),
+			array('frame_3', 'Questionnaire.title ASC', $expect3),
+			array('frame_3', 'Questionnaire.answer_end_period ASC', $expect4),
+			array('frame_99999', null, $expect0),
 		);
 	}
 

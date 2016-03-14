@@ -438,16 +438,6 @@ class QuestionnairesComponent extends Component {
 	const QUESTIONNAIRE_PERIOD_STAT_END = 3;
 
 /**
- * questionnaire sort type
- *
- * @var integer
- */
-	const QUESTIONNAIRE_SORT_MODIFIED = 0;
-	const QUESTIONNAIRE_SORT_CREATED = 1;
-	const QUESTIONNAIRE_SORT_TITLE = 2;
-	const QUESTIONNAIRE_SORT_END = 3;
-
-/**
  * questionnaire template exoprt file name
  *
  * @var string
@@ -458,31 +448,16 @@ class QuestionnairesComponent extends Component {
 	const QUESTIONNAIRE_FINGER_PRINT_FILENAME = 'finger_print.txt';
 
 /**
- * getDisplayNumberOptions
- *
- * @return array
- */
-	public static function getDisplayNumberOptions() {
-		return array(
-			5 => 5 . __d('questionnaires', 'item'),
-			10 => 10 . __d('questionnaires', 'item'),
-			20 => 20 . __d('questionnaires', 'item'),
-			50 => 50 . __d('questionnaires', 'item'),
-			100 => 100 . __d('questionnaires', 'item'),
-		);
-	}
-
-/**
  * getSortOrders
  *
  * @return array
  */
 	public static function getSortOrders() {
 		return array(
-			self::QUESTIONNAIRE_SORT_MODIFIED => __d('questionnaires', 'New Modified'),
-			self::QUESTIONNAIRE_SORT_CREATED => __d('questionnaires', 'Registration order'),
-			self::QUESTIONNAIRE_SORT_TITLE => __d('questionnaires', 'Title'),
-			self::QUESTIONNAIRE_SORT_END => __d('questionnaires', 'End period'),
+			'Questionnaire.modified DESC' => __d('net_commons', 'Newest'),
+			'Questionnaire.created ASC' => __d('net_commons', 'Oldest'),
+			'Questionnaire.title ASC' => __d('net_commons', 'Title'),
+			'Questionnaire.answer_end_period ASC' => __d('questionnaires', 'End period'),
 		);
 	}
 
