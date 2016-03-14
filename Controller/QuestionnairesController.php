@@ -91,9 +91,8 @@ class QuestionnairesController extends QuestionnairesAppController {
 			array(
 				'conditions' => $conditions,
 				'page' => 1,
-				'sort' => $sort,
+				'order' => array($sort => $dir),
 				'limit' => $displayNum,
-				'direction' => $dir,
 				'recursive' => 0,
 			)
 		);
