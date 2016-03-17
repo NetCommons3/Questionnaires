@@ -17,7 +17,6 @@ echo $this->NetCommonsHtml->script(array(
 ));
 $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesAppController::changeBooleansToNumbers($this->data));
 ?>
-<?php echo $this->element('Wysiwyg.wysiwyg_js'); ?>
 
 <div id="nc-questionnaires-question-edit-result"
 	 ng-controller="Questionnaires.edit.question"
@@ -61,15 +60,11 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 
 				<div class="form-group questionnaire-group">
 					<label><?php echo __d('questionnaires', 'Text to be displayed in the aggregate results page'); ?></label>
-					<div class="nc-wysiwyg-alert">
-						<?php echo $this->NetCommonsForm->textarea('Questionnaire.total_comment',
+						<?php echo $this->NetCommonsForm->wysiwyg('Questionnaire.total_comment',
 						array(
-						'class' => 'form-control',
+						'label' => false,
 						'ng-model' => 'questionnaire.questionnaire.totalComment',
-						'ui-tinymce' => 'tinymce.options',
-						'rows' => 5,
 						)) ?>
-					</div>
 				</div>
 
 				<div class="questionnaire-group">

@@ -13,7 +13,7 @@
 	<h2 class="questionnaire-setting-ttl">
 		<?php if (isset($this->data['Questionnaire']['title_icon'])) {
 		echo $this->TitleIcon->titleIcon($this->data['Questionnaire']['title_icon']);
-		}
+								}
 		?>
 		<?php echo h($this->data['Questionnaire']['title']); ?>
 	</h2>

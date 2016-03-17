@@ -32,9 +32,16 @@ NetCommonsApp.controller('Questionnaires.add',
     });
 
 NetCommonsApp.controller('Questionnaires.setting',
-    function($scope, NetCommonsBase) {
+    function($scope, NetCommonsBase, NetCommonsWysiwyg) {
 
       /**
+       * tinymce
+       *
+       * @type {object}
+       */
+      $scope.tinymce = NetCommonsWysiwyg.new();
+
+        /**
        * Initialize
        *
        * @return {void}

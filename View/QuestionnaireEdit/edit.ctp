@@ -114,13 +114,11 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 
 			<label class="h3"><?php echo __d('questionnaires', 'Thanks page message settings'); ?></label>
 			<div class="form-group questionnaire-group">
-				<div class="nc-wysiwyg-alert">
-					<?php
-						echo $this->NetCommonsForm->wysiwyg('thanks_content', array(
-							'label' => false,
-							'ng-model' => 'questionnaires.questionnaire.thanksContent'));
-					?>
-				</div>
+				<?php
+					echo $this->NetCommonsForm->wysiwyg('thanks_content', array(
+						'label' => false,
+						'ng-model' => 'questionnaires.questionnaire.thanksContent'));
+				?>
 			</div>
 			<?php echo $this->Workflow->inputComment('Questionnaire.status'); ?>
 		</div>

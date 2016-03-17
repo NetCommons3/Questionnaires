@@ -17,7 +17,6 @@ echo $this->NetCommonsHtml->script(array(
 ));
 $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesAppController::changeBooleansToNumbers($this->data));
 ?>
-<?php echo $this->element('Wysiwyg.wysiwyg_js'); ?>
 
 <?php
 	if ($isPublished) {
@@ -102,7 +101,7 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 								/* 質問文 */
 								echo $this->QuestionEdit->questionInput('QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.description',
 									__d('questionnaires', 'question sentence'),
-									array('type' => 'wysiswyg',
+									array('type' => 'wysiwyg',
 										'id' => false,
 										'ng-model' => 'question.description',
 										'ui-tinymce' => 'tinymce.options',
