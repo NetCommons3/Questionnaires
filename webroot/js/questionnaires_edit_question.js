@@ -4,15 +4,7 @@
 NetCommonsApp.constant('moment', moment);
 
 NetCommonsApp.controller('Questionnaires.edit.question',
-    function($scope, NetCommonsBase, NetCommonsWysiwyg,
-             $timeout, moment) {
-
-      /**
-         * tinymce
-         *
-         * @type {object}
-         */
-      $scope.tinymce = NetCommonsWysiwyg.new();
+    function($scope, NetCommonsBase, $timeout, moment) {
 
       /**
          * serverValidationClear method

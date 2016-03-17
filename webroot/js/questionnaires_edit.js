@@ -32,7 +32,7 @@ NetCommonsApp.controller('Questionnaires.add',
     });
 
 NetCommonsApp.controller('Questionnaires.setting',
-    function($scope, NetCommonsBase, NetCommonsWysiwyg) {
+    function($scope, NetCommonsBase) {
 
       /**
        * Initialize
@@ -43,13 +43,6 @@ NetCommonsApp.controller('Questionnaires.setting',
         $scope.frameId = frameId;
         $scope.questionnaires = questionnaires;
       };
-
-      /**
-       * tinymce
-       *
-       * @type {object}
-       */
-      $scope.tinymce = NetCommonsWysiwyg.new();
 
       /**
        * focus DateTimePicker
