@@ -37,7 +37,7 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 		echo $this->NetCommonsForm->hidden('Questionnaire.export_key');
 	?>
 		<div class="modal-body">
-			<div class="form-group questionnaire-group">
+			<div class="form-group">
 				<?php /* アンケートタイトル設定 */
 					echo $this->TitleIcon->inputWithTitleIcon('title', 'Questionnaire.title_icon',
 					array('label' => __d('questionnaires', 'Title'),
