@@ -168,7 +168,10 @@ class QuestionnaireAnswer extends QuestionnairesAppModel {
 			'conditions' => array(
 				'questionnaire_answer_summary_id' => $summary['QuestionnaireAnswerSummary']['id'],
 				'QuestionnaireQuestion.id' => $questionIds,
-				'QuestionnaireChoice.id' => $choiceIds
+				'OR' => array(
+					array('QuestionnaireChoice.id' => $choiceIds),
+					array('QuestionnaireChoice.id' => null),
+				)
 			),
 			'recursive' => 0
 		));
