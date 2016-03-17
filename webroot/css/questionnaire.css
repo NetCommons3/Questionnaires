@@ -97,6 +97,6 @@ table.table.questionnaire-table-vcenter tbody td {
  * 縦スクロールバー付き
  */
 .questionnaire-list-wrapper {
-    height:200px;
+    max-height:200px;
     overflow-y: scroll;
 }
