@@ -18,8 +18,6 @@
  * error
  */
 ?>
-<?php echo $this->element('NetCommons.datetimepicker'); ?>
-
 <div class="input-group"
 	 ng-if="question.questionTypeOption == <?php echo QuestionnairesComponent::TYPE_OPTION_DATE; ?>">
 	<?php echo $this->NetCommonsForm->input($field,

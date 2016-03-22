@@ -147,8 +147,7 @@ class QuestionEditHelper extends AppHelper {
 			));
 		}
 
-		$ret = $this->_View->element('NetCommons.datetimepicker');
-		$ret .= '<div class="form-group "><div class="input-group">';
+		$ret = '<div class="form-group "><div class="input-group">';
 		$ret .= $this->NetCommonsForm->input($fieldName, $options);
 		if (!empty($help)) {
 			$ret .= '<span class="help-block">' . $help . '</span>';

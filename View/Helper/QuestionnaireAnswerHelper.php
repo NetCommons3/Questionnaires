@@ -340,7 +340,6 @@ class QuestionnaireAnswerHelper extends AppHelper {
 		$rangeMessage .= '</span>';
 
 		$ret = '<div class="row"><div class="col-sm-4">';
-		$ret .= $this->_View->element('NetCommons.datetimepicker');
 		$ret .= '<div class="input-group date" >';
 		$ret .= $this->NetCommonsForm->input($fieldName,
 							array('type' => 'text',
