@@ -41,7 +41,7 @@ NetCommonsApp.controller('Questionnaires.setting',
        */
       $scope.tinymce = NetCommonsWysiwyg.new();
 
-        /**
+      /**
        * Initialize
        *
        * @return {void}

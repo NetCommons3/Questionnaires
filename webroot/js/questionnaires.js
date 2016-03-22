@@ -76,7 +76,7 @@ NetCommonsApp.controller('QuestionnairesAnswer',
     }
 );
 NetCommonsApp.controller('QuestionnairesFrame',
-    function($scope, $sce, $log, NetCommonsBase, $attrs, $timeout) {
+    function($scope, $filter, $sce, $log, NetCommonsBase, $attrs, $timeout) {
       /**
        * Initialize
        *
@@ -96,6 +96,11 @@ NetCommonsApp.controller('QuestionnairesFrame',
             $scope.isDisplay[i] = false;
           }
         }
+        $scope.status = false;
+        $scope.title = false;
+        $scope.answerStartPeriod = false;
+        $scope.isTotalShow = false;
+        $scope.modified = false;
       };
       /**
        * Questionnaire Frame Setting AllCheckbox clicked
@@ -110,6 +115,15 @@ NetCommonsApp.controller('QuestionnairesFrame',
             $scope.isDisplay[i] = false;
           }
         }
+      };
+      /**
+       * Questionnaire Frame Setting questionnaire list sort
+       *
+       * @return {void}
+       */
+      $scope.sort = function(fieldName, direction) {
+        $scope.questionnaires =
+            $filter('orderBy')($scope.questionnaires, fieldName, direction);
       };
     }
 );

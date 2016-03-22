@@ -10,6 +10,7 @@
  */
 
 App::uses('QuestionnaireBlocksController', 'Questionnaires.Controller');
+App::uses('QuestionnaireFrameSetting', 'Questionnaires.Model');
 
 /**
  * QuestionnaireFrameSettingsController
@@ -92,16 +93,13 @@ class QuestionnaireFrameSettingsController extends QuestionnaireBlocksController
 			$this->NetCommons->handleValidationError($this->QuestionnaireFrameSetting->validationErrors);
 		}
 
-		$conditions = array(
-			'block_id' => Current::read('Block.id'),
-			'is_latest' => true,
-		);
+		$conditions = $this->Questionnaire->getBaseCondition();
 		$this->paginate = array(
 			'fields' => array('Questionnaire.*', 'QuestionnaireFrameDisplayQuestionnaire.*'),
 			'conditions' => $conditions,
 			'page' => 1,
 			'order' => array('Questionnaire.modified' => 'DESC'),
-			'limit' => 1000,
+			//'limit' => 1000,
 			'recursive' => -1,
 			'joins' => array(
 				array(

@@ -10,12 +10,13 @@
  */
 ?>
 <?php echo $this->NetCommonsForm->label(__d('questionnaires', 'select display questionnaires.')); ?>
+<?php $this->NetCommonsForm->unlockField('List'); ?>
 
 <div class="questionnaire-list-wrapper">
 	<table class="table table-hover questionnaire-table-vcenter">
 		<tr>
 			<th>
-				<?php echo __d('questionnaires', 'Display'); ?>
+				<?php /* echo __d('questionnaires', 'Display'); */?>
 				<div class="text-center" ng-if="questionnaireFrameSettings.displayType == <?php echo QuestionnairesComponent::DISPLAY_TYPE_LIST; ?>">
 					<?php $this->NetCommonsForm->unlockField('all_check'); ?>
 					<?php echo $this->NetCommonsForm->checkbox('all_check', array(
@@ -28,74 +29,73 @@
 				</div>
 			</th>
 			<th>
-				<?php echo $this->Paginator->sort('Questionnaire.status', __d('questionnaires', 'Status')); ?>
+				<a href="" ng-click="status=!status;sort('questionnaire.status', status)"><?php echo __d('questionnaires', 'Status'); ?></a>
 			</th>
 			<th>
-				<?php echo $this->Paginator->sort('Questionnaire.title', __d('questionnaires', 'Title')); ?>
+				<a href="" ng-click="title=!title;sort('questionnaire.title', title)"><?php echo __d('questionnaires', 'Title'); ?></a>
 			</th>
 			<th>
-				<?php echo $this->Paginator->sort('Questionnaire.answer_start_period', __d('questionnaires', 'Implementation date')); ?>
+				<a href="" ng-click="answerStartPeriod=!answerStartPeriod;sort('questionnaire.answerStartPeriod', answerStartPeriod)"><?php echo __d('questionnaires', 'Implementation date'); ?></a>
 			</th>
 			<th>
-				<?php echo $this->Paginator->sort('Questionnaire.is_total_show', __d('questionnaires', 'Aggregates')); ?>
+				<a href="" ng-click="isTotalShow=!isTotalShow;sort('questionnaire.isTotalShow', isTotalShow)"><?php echo __d('questionnaires', 'Aggregates'); ?></a>
 			</th>
 			<th>
-				<?php echo $this->Paginator->sort('Questionnaire.modified', __d('net_commons', 'Updated date')); ?>
+				<a href="" ng-click="modified=!modified;sort('questionnaire.modified', modified)"><?php echo __d('questionnaires', 'Updated date'); ?></a>
 			</th>
 		</tr>
-		<?php foreach ((array)$questionnaires as $index => $quest): ?>
-		<tr class="animate-repeat btn-default">
+		<tr class="animate-repeat btn-default" ng-repeat="(index, quest) in questionnaires">
 			<td>
 				<div class="text-center" ng-show="questionnaireFrameSettings.displayType == <?php echo QuestionnairesComponent::DISPLAY_TYPE_LIST; ?>">
-					<?php echo $this->NetCommonsForm->checkbox('List.QuestionnaireFrameDisplayQuestionnaire.' . $index . '.is_display', array(
+					<?php echo $this->NetCommonsForm->checkbox('List.QuestionnaireFrameDisplayQuestionnaire.{{index}}.is_display', array(
 					'options' => array(true => ''),
 					'label' => false,
 					'div' => false,
 					'class' => '',
-					//'value' => $quest['Questionnaire']['key'],
-					//'checked' => (isset($quest['QuestionnaireFrameDisplayQuestionnaire']['questionnaire_key'])) ? true : false,
-					'ng-model' => 'isDisplay[' . $index . ']'
+					'ng-model' => 'isDisplay[index]'
 					));
 					?>
-					<?php echo $this->NetCommonsForm->hidden('List.QuestionnaireFrameDisplayQuestionnaire.' . $index . '.questionnaire_key', array('value' => $quest['Questionnaire']['key'])); ?>
+					<?php echo $this->NetCommonsForm->hidden('List.QuestionnaireFrameDisplayQuestionnaire.{{index}}.questionnaire_key', array('ng-value' => 'quest.questionnaire.key')); ?>
 				</div>
 				<div class="text-center"  ng-show="questionnaireFrameSettings.displayType == <?php echo QuestionnairesComponent::DISPLAY_TYPE_SINGLE; ?>">
 					<?php echo $this->NetCommonsForm->radio('Single.QuestionnaireFrameDisplayQuestionnaire.questionnaire_key',
-					array($quest['Questionnaire']['key'] => ''), array(
+					array('{{quest.questionnaire.key}}' => ''), array(
 					'legend' => false,
 					'label' => false,
 					'div' => false,
 					'class' => false,
 					'hiddenField' => false,
-					'checked' => (isset($quest['QuestionnaireFrameDisplayQuestionnaire']['questionnaire_key'])) ? true : false,
+					'ng-model' => 'quest.questionnaireFrameDisplayQuestionnaire.questionnaireKey',
 					));
 					?>
 				</div>
 			</td>
 			<td>
-				<?php echo $this->QuestionnaireStatusLabel->statusLabelManagementWidget($quest);?>
+				<?php echo $this->element('Questionnaires.ng_status_label', array('status' => 'quest.questionnaire.status', 'periodRangeStat' => 'quest.questionnaire.periodRangeStat')); ?>
 			</td>
 			<td>
-				<?php echo $this->TitleIcon->titleIcon($quest['Questionnaire']['title_icon']); ?>
-				<?php echo $quest['Questionnaire']['title']; ?>
+				<img ng-if="quest.questionnaire.titleIcon != ''" ng-src="{{quest.questionnaire.titleIcon}}" class="nc-title-icon" />
+				{{quest.questionnaire.title}}
 			</td>
 			<td>
-				<?php if ($quest['Questionnaire']['answer_timing'] == QuestionnairesComponent::USES_USE): ?>
-					<?php echo $this->Date->dateFormat($quest['Questionnaire']['answer_start_period']); ?>
+				<span ng-if="quest.questionnaire.answerTiming == <?php echo QuestionnairesComponent::USES_USE; ?>">
+				(
+					{{quest.questionnaire.answerStartPeriod | ncDatetime}}
 					<?php echo __d('questionnaires', ' - '); ?>
-					<?php echo $this->Date->dateFormat($quest['Questionnaire']['answer_end_period']); ?>
-				<?php endif ?>
+					{{quest.questionnaire.answerEndPeriod | ncDatetime}}
+					<?php echo __d('questionnaires', 'Implementation'); ?>
+					)
+				</span>
 			</td>
 			<td>
-				<?php if ($quest['Questionnaire']['is_total_show'] == QuestionnairesComponent::EXPRESSION_SHOW): ?>
+				<span ng-if="quest.questionnaire.isTotalShow == <?php echo QuestionnairesComponent::EXPRESSION_SHOW ?>">
 					<?php echo __d('questionnaires', 'On'); ?>
-				<?php endif ?>
+				</span>
 			</td>
 			<td>
-				<?php echo $this->Date->dateFormat($quest['Questionnaire']['modified']); ?>
+				{{quest.questionnaire.modified | ncDatetime}}
 			</td>
 		</tr>
-		<?php endforeach; ?>
 	</table>
 </div>
 

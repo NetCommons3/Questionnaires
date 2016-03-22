@@ -50,6 +50,13 @@ class QuestionnaireFrameDisplayQuestionnaire extends QuestionnairesAppModel {
 	);
 
 /**
+ * Questionnaire list for check
+ *
+ * @var array
+ */
+	public $chkQuestionnaireList = array();
+
+/**
  * Called during validation operations, before validation. Please note that custom
  * validation rules can be defined in $validate.
  *
@@ -70,6 +77,10 @@ class QuestionnaireFrameDisplayQuestionnaire extends QuestionnairesAppModel {
 					//'last' => false, // Stop validation after this rule
 					//'on' => 'create', // Limit validation to 'create' or 'update' operations
 				),
+				'inList' => array(
+					'rule' => array('inList', $this->chkQuestionnaireList),
+					'message' => __d('net_commons', 'Invalid request.'),
+				),
 			),
 		));
 		parent::beforeValidate($options);
@@ -84,9 +95,13 @@ class QuestionnaireFrameDisplayQuestionnaire extends QuestionnairesAppModel {
  * @return bool
  */
 	public function validateFrameDisplayQuestionnaire($data) {
-		if (! isset($data['QuestionnaireFrameSetting']['display_type'])) {
-
-		}
+		// チェック用のアンケートリストを確保しておく
+		$Questionnaire = ClassRegistry::init('Questionnaires.Questionnaire');
+		$questionnaires = $Questionnaire->find('all', array(
+			'conditions' => $Questionnaire->getBaseCondition(),
+			'recursive' => -1
+		));
+		$this->chkQuestionnaireList = Hash::combine($questionnaires, '{n}.Questionnaire.id', '{n}.Questionnaire.key');
 		if ($data['QuestionnaireFrameSetting']['display_type'] == QuestionnairesComponent::DISPLAY_TYPE_SINGLE) {
 			$saveData = Hash::extract($data, 'Single.QuestionnaireFrameDisplayQuestionnaire');
 			if (! $saveData) {

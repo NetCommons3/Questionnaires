@@ -79,6 +79,9 @@ class QuestionnairesFrameSettingsControllerEditTest extends NetCommonsController
 		);
 		$displayQ = array();
 		for ($i = 1; $i <= 50; $i = $i + 2) {
+			if ($i == 31 || $i == 33) {
+				continue;
+			}
 			$displayQ['List']['QuestionnaireFrameDisplayQuestionnaire'][] = array('is_display' => '1', 'questionnaire_key' => 'questionnaire_' . strval($i + 1));
 		}
 		$displayQ['Single']['QuestionnaireFrameDisplayQuestionnaire']['questionnaire_key'] = 'questionnaire_2';
