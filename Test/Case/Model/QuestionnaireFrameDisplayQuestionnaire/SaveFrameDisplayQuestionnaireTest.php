@@ -69,7 +69,6 @@ class QuestionnaireSaveFrameDisplayQuestionnaireTest extends NetCommonsSaveTest 
 		parent::setUp();
 		Current::$current['Frame']['key'] = 'frame_3';
 		$this->_mockForReturn($this->_modelName, 'Questionnaires.Questionnaire', 'getBaseCondition', array());
-
 	}
 /**
  * テストDataの取得

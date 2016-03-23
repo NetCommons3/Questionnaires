@@ -111,37 +111,6 @@ class QuestionnaireValidateBehavior extends ModelBehavior {
 	}
 
 /**
- * checkMinMax
- * min and max is require both value
- *
- * @param object &$model use model
- * @param bool $check post data
- * @return bool
- */
-	public function checkMinMax(&$model, $check) {
-		// 範囲使わない設定のときはチェックしない
-		if ($model->data['QuestionnaireQuestion']['is_range'] == QuestionnairesComponent::USES_NOT_USE) {
-			return true;
-		}
-
-		// 最大値、最小値はテキストで「数値型」の場合と、日付け型の「日」「日時」の場合のみ設定可能
-		if (!$this->__checkMinMaxNumeric($model, $check)) {
-			return false;
-		}
-		if (!$this->__checkMinMaxDate($model, $check)) {
-			return false;
-		}
-		if (!$this->__checkMinMaxDateTime($model, $check)) {
-			return false;
-		}
-		if ($model->data['QuestionnaireQuestion']['min'] >= $model->data['QuestionnaireQuestion']['max']) {
-			return false;
-		}
-
-		return true;
-	}
-
-/**
  * getPeriodStatus
  * get period status now and specified time
  *
@@ -165,65 +134,5 @@ class QuestionnaireValidateBehavior extends ModelBehavior {
 			}
 		}
 		return $ret;
-	}
-
-/**
- * __checkMinMaxNumeric
- * min and max is require both value
- *
- * @param object &$model use model
- * @param bool $check post data
- * @return bool
- */
-	private function __checkMinMaxNumeric(&$model, $check) {
-		if ($model->data['QuestionnaireQuestion']['question_type_option'] == QuestionnairesComponent::TYPE_OPTION_NUMERIC) {
-			if (!Validation::numeric($model->data['QuestionnaireQuestion']['min'])) {
-				return false;
-			}
-			if (!Validation::numeric($model->data['QuestionnaireQuestion']['max'])) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-/**
- * __checkMinMaxDate
- * min and max is require both value
- *
- * @param object &$model use model
- * @param bool $check post data
- * @return bool
- */
-	private function __checkMinMaxDate(&$model, $check) {
-		if ($model->data['QuestionnaireQuestion']['question_type_option'] == QuestionnairesComponent::TYPE_OPTION_DATE) {
-			if (!Validation::date($model->data['QuestionnaireQuestion']['min'])) {
-				return false;
-			}
-			if (!Validation::date($model->data['QuestionnaireQuestion']['max'])) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-/**
- * __checkMinMaxDateTime
- * min and max is require both value
- *
- * @param object &$model use model
- * @param bool $check post data
- * @return bool
- */
-	private function __checkMinMaxDateTime(&$model, $check) {
-		if ($model->data['QuestionnaireQuestion']['question_type_option'] == QuestionnairesComponent::TYPE_OPTION_DATE_TIME) {
-			if (!Validation::datetime($model->data['QuestionnaireQuestion']['min'])) {
-				return false;
-			}
-			if (!Validation::datetime($model->data['QuestionnaireQuestion']['max'])) {
-				return false;
-			}
-		}
-		return true;
 	}
 }
