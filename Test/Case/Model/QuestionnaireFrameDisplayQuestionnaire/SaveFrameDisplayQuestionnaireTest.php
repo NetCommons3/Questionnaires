@@ -68,6 +68,8 @@ class QuestionnaireSaveFrameDisplayQuestionnaireTest extends NetCommonsSaveTest 
 	public function setUp() {
 		parent::setUp();
 		Current::$current['Frame']['key'] = 'frame_3';
+		$this->_mockForReturn($this->_modelName, 'Questionnaires.Questionnaire', 'getBaseCondition', array());
+
 	}
 /**
  * テストDataの取得
@@ -108,8 +110,6 @@ class QuestionnaireSaveFrameDisplayQuestionnaireTest extends NetCommonsSaveTest 
 	public function testSave($data) {
 		$model = $this->_modelName;
 		$method = $this->_methodName;
-
-		$this->_mockForReturn($model, 'Questionnaires.Questionnaire', 'getBaseCondition', array());
 
 		//チェック用データ取得
 		$before = $this->$model->find('all', array(
