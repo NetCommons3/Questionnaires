@@ -225,7 +225,7 @@ class QuestionnaireFrameDisplayQuestionnaire extends QuestionnairesAppModel {
 		}
 
 		$this->create();
-		if (!$this->save($data)) {
+		if (!$this->save($data, false)) {
 			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 		}
 		return true;

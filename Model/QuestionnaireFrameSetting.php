@@ -162,7 +162,6 @@ class QuestionnaireFrameSetting extends QuestionnairesAppModel {
 				return false;
 			}
 
-
 			// フレームに表示するアンケート一覧設定のバリデート
 			// 一覧表示タイプと単独表示タイプ
 			$ret = $this->QuestionnaireFrameDisplayQuestionnaire->validateFrameDisplayQuestionnaire($data);

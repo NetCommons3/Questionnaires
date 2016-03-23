@@ -43,6 +43,7 @@ class SaveFrameSettingTest extends NetCommonsSaveTest {
 		'plugin.questionnaires.questionnaire_question',
 		'plugin.questionnaires.questionnaire_choice',
 		'plugin.questionnaires.questionnaire_answer_summary',
+		'plugin.authorization_keys.authorization_keys'
 	);
 
 /**
@@ -67,6 +68,10 @@ class SaveFrameSettingTest extends NetCommonsSaveTest {
 	public function setUp() {
 		parent::setUp();
 		Current::$current['Frame']['key'] = 'frame_3';
+		$mock = $this->getMockForModel('Questionnaires.QuestionnaireFrameDisplayQuestionnaire', array('validateFrameDisplayQuestionnaire'));
+		$mock->expects($this->any())
+			->method('validateFrameDisplayQuestionnaire')
+			->will($this->returnValue(true));
 	}
 
 /**

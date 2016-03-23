@@ -43,6 +43,7 @@ class QuestionnaireSaveFrameDisplayQuestionnaireTest extends NetCommonsSaveTest 
 		'plugin.questionnaires.questionnaire_question',
 		'plugin.questionnaires.questionnaire_choice',
 		'plugin.questionnaires.questionnaire_answer_summary',
+		'plugin.authorization_keys.authorization_keys'
 	);
 
 /**
@@ -68,7 +69,6 @@ class QuestionnaireSaveFrameDisplayQuestionnaireTest extends NetCommonsSaveTest 
 		parent::setUp();
 		Current::$current['Frame']['key'] = 'frame_3';
 	}
-
 /**
  * テストDataの取得
  *
@@ -80,7 +80,7 @@ class QuestionnaireSaveFrameDisplayQuestionnaireTest extends NetCommonsSaveTest 
 			'QuestionnaireFrameSetting' => array(
 				'display_type' => $displayType,
 				'display_num_per_page' => 10,
-				'sort_type' => 0,
+				'sort_type' => 'Questionnaire.modified DESC',
 			),
 			'List' => array(
 				'QuestionnaireFrameDisplayQuestionnaire' => array(
@@ -108,6 +108,8 @@ class QuestionnaireSaveFrameDisplayQuestionnaireTest extends NetCommonsSaveTest 
 	public function testSave($data) {
 		$model = $this->_modelName;
 		$method = $this->_methodName;
+
+		$this->_mockForReturn($model, 'Questionnaires.Questionnaire', 'getBaseCondition', array());
 
 		//チェック用データ取得
 		$before = $this->$model->find('all', array(
