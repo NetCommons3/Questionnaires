@@ -120,7 +120,6 @@
 			'name' => 'next_' . '',
 			)) ?>
 		</div>
-	</div>
 	<?php echo $this->NetCommonsForm->end(); ?>
 
 </article>
