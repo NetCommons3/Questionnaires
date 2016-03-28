@@ -103,6 +103,10 @@ class QuestionnairePage extends QuestionnairesAppModel {
  * @return array
  */
 	public function getNextPage($questionnaire, $nowPageSeq, $nowAnswers) {
+		// ページ情報がない？終わりにする
+		if (!isset($questionnaire['QuestionnairePage'])) {
+			return false;
+		}
 		// 次ページはデフォルトならば＋１です
 		$nextPageSeq = $nowPageSeq + 1;
 		// 回答にスキップロジックで指定されたものがないかチェックし、行き先があるならそのページ番号を返す
@@ -131,13 +135,10 @@ class QuestionnairePage extends QuestionnairesAppModel {
 		if ($nextPageSeq == QuestionnairesComponent::SKIP_GO_TO_END) {
 			return false;
 		}
-		// ページ情報がない？終わりにする
-		if (!isset($questionnaire['QuestionnairePage'])) {
-			return false;
-		}
 		// ページ配列はページのシーケンス番号順に取り出されているので
 		$pages = $questionnaire['QuestionnairePage'];
 		$endPage = end($pages);
+
 		if ($endPage['page_sequence'] < $nextPageSeq) {
 			return false;
 		}
