@@ -111,13 +111,12 @@ class QuestionnaireGetNextPageTest extends NetCommonsGetTest {
 /**
  * getNextPageのテスト
  *
- * @param array $expected 期待値（取得したキー情報）
- * @dataProvider dataProviderGet
- *
  * @param array $questionnaire questionnaire
  * @param int $nowPageSeq current page sequence number
  * @param array $nowAnswers now answer
  * @param mix $expected 期待値
+ * @dataProvider dataProviderGet
+ *
  * @return void
  */
 	public function testGetNextPage($questionnaire, $nowPageSeq, $nowAnswers, $expected) {

@@ -66,7 +66,7 @@ class QuestionnaireAddController extends QuestionnairesAppController {
 		// アクション処理内でチェックする必要はない
 
 		// POSTされたデータを読み取り
-		if ($this->request->isPost()) {
+		if ($this->request->is('post')) {
 			// Postデータをもとにした新アンケートデータの取得をModelに依頼する
 			$actionModel = ClassRegistry::init('Questionnaires.ActionQuestionnaireAdd', 'true');
 			if ($questionnaire = $actionModel->createQuestionnaire($this->request->data)) {
