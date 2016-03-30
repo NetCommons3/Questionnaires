@@ -58,12 +58,12 @@ class TestActionQuestionnaireAddSuccess extends ActionQuestionnaireAdd {
 		return $this->returnValue;
 	}
 /**
- * __checkVersion
+ * _checkVersion
  *
  * @param array $jsonData バージョンが含まれたJson
  * @return bool
  */
-	private function __checkVersion($jsonData) {
+	protected function _checkVersion($jsonData) {
 		return true;
 	}
 }

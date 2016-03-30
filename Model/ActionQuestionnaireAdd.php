@@ -295,7 +295,7 @@ class ActionQuestionnaireAdd extends QuestionnairesAppModel {
 
 		// 初めにファイルに記載されているアンケートプラグインのバージョンと
 		// 現サイトのアンケートプラグインのバージョンを突合し、差分がある場合はインポート処理を中断する。
-		if ($this->__checkVersion($jsonQuestionnaire) === false) {
+		if ($this->_checkVersion($jsonQuestionnaire) === false) {
 			$this->validationErrors['template_file'][] = __d('questionnaires', 'version is different.');
 			return null;
 		}
@@ -372,12 +372,12 @@ class ActionQuestionnaireAdd extends QuestionnairesAppModel {
 		return $fingerPrint;
 	}
 /**
- * __checkVersion
+ * _checkVersion
  *
  * @param array $jsonData バージョンが含まれたJson
  * @return bool
  */
-	private function __checkVersion($jsonData) {
+	protected function _checkVersion($jsonData) {
 		// バージョン情報を取得するためComposer情報を得る
 		$Plugin = ClassRegistry::init('PluginManager.Plugin');
 		$composer = $Plugin->getComposer('netcommons/questionnaires');
