@@ -112,6 +112,9 @@ class ActionQuestionnaireAddCreateFromTemplateTest extends NetCommonsGetTest {
 		$this->TestActionQuestionnaireAddSuccess->set($data);
 		// getNewQuestionnaireを呼ぶことで_createFromTemplateが呼ばれる仕組み
 		$result = $this->TestActionQuestionnaireAddSuccess->getNewQuestionnaire();
+		if (isset($this->TestActionQuestionnaireAddSuccess->validationErrors['template_file'])) {
+			$this->assertTextEquals($this->TestActionQuestionnaireAddSuccess->validationErrors['template_file'][0], '');
+		}
 		$this->assertNotNull($result);
 		$this->assertTrue(Hash::check($result, 'Questionnaire[import_key=9f1cd3e7ea0cb15c4d6adbe3cabcdb81a20b339a]'));
 		for ($i = 0; $i < 10; $i++) {
