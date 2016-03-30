@@ -60,11 +60,6 @@ class ActionQuestionnaireAddCreateFromTemplateTest extends NetCommonsGetTest {
 	protected $_methodName = 'getNewQuestionnaire';
 
 /**
- * @var TemporaryFolder テンポラリフォルダ
- */
-	protected $_tmpFolder = null;
-
-/**
  * setUp method
  *
  * @return void
@@ -80,8 +75,6 @@ class ActionQuestionnaireAddCreateFromTemplateTest extends NetCommonsGetTest {
 		$this->Questionnaire->Behaviors->unload('AuthorizationKey');
 
 		Current::$current['Block']['id'] = 2;
-
-		$this->_tmpFolder = new TemporaryFolder();
 	}
 
 /**
@@ -101,13 +94,14 @@ class ActionQuestionnaireAddCreateFromTemplateTest extends NetCommonsGetTest {
  * @return void
  */
 	public function testCreateFromTemplate() {
-		copy(APP . 'Plugin/Questionnaires/Test/Fixture/TemplateTest.zip', $this->_tmpFolder->path . DS . 'TemplateTest.zip');
+		$tmpFolder = new TemporaryFolder();
+		copy(APP . 'Plugin/Questionnaires/Test/Fixture/TemplateTest.zip', $tmpFolder->path . DS . 'TemplateTest.zip');
 		$data = array('ActionQuestionnaireAdd' => array(
 			'create_option' => 'template',
 			'template_file' => array(
 				'name' => 'TemplateTest.zip',
 				'type' => 'application/x-zip-compressed',
-				'tmp_name' => $this->_tmpFolder->path . DS . 'TemplateTest.zip',
+				'tmp_name' => $tmpFolder->path . DS . 'TemplateTest.zip',
 				'error' => 0,
 				'size' => 2218
 			)
@@ -144,6 +138,7 @@ class ActionQuestionnaireAddCreateFromTemplateTest extends NetCommonsGetTest {
 /**
  * _createFromTemplate()のテスト
  * ファイルアップロードエラーが発生したNGパターン
+ * 実際には存在しないファイルを指定している
  *
  * @param array $data POSTデータ
  * @return void
@@ -154,7 +149,7 @@ class ActionQuestionnaireAddCreateFromTemplateTest extends NetCommonsGetTest {
 			'template_file' => array(
 				'name' => 'no_TemplateTest.zip',
 				'type' => 'application/x-zip-compressed',
-				'tmp_name' => $this->_tmpFolder->path . DS . 'no_TemplateTest.zip',
+				'tmp_name' => 'no_TemplateTest.zip',
 				'error' => 0,
 				'size' => 2218
 			)
@@ -173,13 +168,14 @@ class ActionQuestionnaireAddCreateFromTemplateTest extends NetCommonsGetTest {
  * @return void
  */
 	public function testCreateFromTemplateNG3() {
-		copy(APP . 'Plugin/Questionnaires/Test/Fixture/emptyErrorTemplateTest.zip', $this->_tmpFolder->path . DS . 'emptyErrorTemplateTest.zip');
+		$tmpFolder = new TemporaryFolder();
+		copy(APP . 'Plugin/Questionnaires/Test/Fixture/emptyErrorTemplateTest.zip', $tmpFolder->path . DS . 'emptyErrorTemplateTest.zip');
 		$data = array('ActionQuestionnaireAdd' => array(
 			'create_option' => 'template',
 			'template_file' => array(
 				'name' => 'TemplateTest.zip',
 				'type' => 'application/x-zip-compressed',
-				'tmp_name' => $this->_tmpFolder->path . DS . 'emptyErrorTemplateTest.zip',
+				'tmp_name' => $tmpFolder->path . DS . 'emptyErrorTemplateTest.zip',
 				'error' => 0,
 				'size' => 2218
 			)
@@ -199,13 +195,14 @@ class ActionQuestionnaireAddCreateFromTemplateTest extends NetCommonsGetTest {
  * @return void
  */
 	public function testCreateFromTemplateNG4() {
-		copy(APP . 'Plugin/Questionnaires/Test/Fixture/fingerPrintErrorTest.zip', $this->_tmpFolder->path . DS . 'fingerPrintErrorTest.zip');
+		$tmpFolder = new TemporaryFolder();
+		copy(APP . 'Plugin/Questionnaires/Test/Fixture/fingerPrintErrorTest.zip', $tmpFolder->path . DS . 'fingerPrintErrorTest.zip');
 		$data = array('ActionQuestionnaireAdd' => array(
 			'create_option' => 'template',
 			'template_file' => array(
 				'name' => 'TemplateTest.zip',
 				'type' => 'application/x-zip-compressed',
-				'tmp_name' => $this->_tmpFolder->path . DS . 'fingerPrintErrorTest.zip',
+				'tmp_name' => $tmpFolder->path . DS . 'fingerPrintErrorTest.zip',
 				'error' => 0,
 				'size' => 2218
 			)
@@ -224,13 +221,14 @@ class ActionQuestionnaireAddCreateFromTemplateTest extends NetCommonsGetTest {
  * @return void
  */
 	public function testCreateFromTemplateNG5() {
-		copy(APP . 'Plugin/Questionnaires/Test/Fixture/versionErrorTest.zip', $this->_tmpFolder->path . DS . 'versionErrorTest.zip');
+		$tmpFolder = new TemporaryFolder();
+		copy(APP . 'Plugin/Questionnaires/Test/Fixture/versionErrorTest.zip', $tmpFolder->path . DS . 'versionErrorTest.zip');
 		$data = array('ActionQuestionnaireAdd' => array(
 			'create_option' => 'template',
 			'template_file' => array(
 				'name' => 'TemplateTest.zip',
 				'type' => 'application/x-zip-compressed',
-				'tmp_name' => $this->_tmpFolder->path . DS . 'versionErrorTest.zip',
+				'tmp_name' => $tmpFolder->path . DS . 'versionErrorTest.zip',
 				'error' => 0,
 				'size' => 2218
 			)
