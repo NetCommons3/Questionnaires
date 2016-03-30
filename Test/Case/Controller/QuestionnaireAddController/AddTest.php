@@ -117,7 +117,7 @@ class QuestionnaireAddControllerAddTest extends WorkflowControllerAddTest {
 			),
 			'ActionQuestionnaireAdd' => array(
 				'create_option' => 'reuse',
-				'past_questionnaire_id' => '4',
+				'past_questionnaire_id' => '32',
 			),
 		);
 
