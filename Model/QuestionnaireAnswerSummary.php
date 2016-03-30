@@ -13,6 +13,7 @@
 
 App::uses('QuestionnairesAppModel', 'Questionnaires.Model');
 App::uses('WorkflowComponent', 'Workflow.Controller/Component');
+App::uses('NetCommonsTime', 'NetCommons.Utility');
 
 /**
  * Summary for QuestionnaireAnswerSummary Model
@@ -93,7 +94,6 @@ class QuestionnaireAnswerSummary extends QuestionnairesAppModel {
  */
 	public function saveAnswerStatus($summary, $status) {
 		$summary['QuestionnaireAnswerSummary']['answer_status'] = $status;
-		$summary['QuestionnaireAnswerSummary']['answer_time'] = 1;
 
 		if ($status == QuestionnairesComponent::ACTION_ACT) {
 			// サマリの状態を完了にして確定する
@@ -143,8 +143,8 @@ class QuestionnaireAnswerSummary extends QuestionnairesAppModel {
  * @param array $questionnaire questionnaire
  * @param int $userId user id
  * @param string $sessionId session id
- * @throws $ex
  * @return array summary
+ * @throws InternalErrorException
  */
 	public function forceGetProgressiveAnswerSummary($questionnaire, $userId, $sessionId) {
 		$this->begin();
@@ -152,7 +152,7 @@ class QuestionnaireAnswerSummary extends QuestionnairesAppModel {
 			$answerTime = 1;
 			if ($userId) {
 				$maxTime = $this->find('first', array(
-					'fields' => array('MAX(answer_time) AS max_answer_time'),
+					'fields' => array('MAX(answer_number) AS max_answer_time'),
 					'conditions' => array(
 						'questionnaire_key' => $questionnaire['Questionnaire']['key'],
 						'user_id' => $userId
@@ -162,6 +162,7 @@ class QuestionnaireAnswerSummary extends QuestionnairesAppModel {
 					$answerTime = $maxTime[0]['max_answer_time'] + 1;
 				}
 			}
+			// 完全にこのコード上で作成しているものであるのでvalidatesでのチェックは行っていない
 			$this->create();
 			if (! $this->save(array(
 				'answer_status' => QuestionnairesComponent::ACTION_NOT_ACT,
@@ -171,16 +172,20 @@ class QuestionnaireAnswerSummary extends QuestionnairesAppModel {
 				'session_value' => $sessionId,
 				'user_id' => $userId,
 			))) {
-				$this->rollback();
-				return false;
+				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}
 			$this->commit();
 		} catch (Exception $ex) {
 			$this->rollback();
 			CakeLog::error($ex);
-			throw $ex;
+			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 		}
-		$summary = $this->findById($this->id);
+		$summary = $this->find('first', array(
+			'recursive' => -1,
+			'conditions' => array(
+				'id' => $this->id
+			)
+		));
 		return $summary;
 	}
 

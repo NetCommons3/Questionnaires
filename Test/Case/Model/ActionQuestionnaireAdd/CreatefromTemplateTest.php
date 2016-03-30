@@ -68,6 +68,7 @@ class ActionQuestionnaireAddCreateFromTemplateTest extends NetCommonsGetTest {
 		parent::setUp();
 		NetCommonsCakeTestCase::loadTestPlugin($this, 'Questionnaires', 'TestQuestionnaires');
 		$this->TestActionQuestionnaireAdd = ClassRegistry::init('TestQuestionnaires.TestActionQuestionnaireAdd');
+		$this->TestActionQuestionnaireAddSuccess = ClassRegistry::init('TestQuestionnaires.TestActionQuestionnaireAddSuccess');
 
 		NetCommonsCakeTestCase::loadTestPlugin($this, 'Questionnaires', 'TestFiles');
 
@@ -84,6 +85,7 @@ class ActionQuestionnaireAddCreateFromTemplateTest extends NetCommonsGetTest {
  */
 	public function tearDown() {
 		unset($this->TestActionQuestionnaireAdd);
+		unset($this->TestActionQuestionnaireAddSuccess);
 		parent::tearDown();
 	}
 /**
@@ -106,13 +108,10 @@ class ActionQuestionnaireAddCreateFromTemplateTest extends NetCommonsGetTest {
 				'size' => 2218
 			)
 		));
-		$this->TestActionQuestionnaireAdd->create();
-		$this->TestActionQuestionnaireAdd->set($data);
+		$this->TestActionQuestionnaireAddSuccess->create();
+		$this->TestActionQuestionnaireAddSuccess->set($data);
 		// getNewQuestionnaireを呼ぶことで_createFromTemplateが呼ばれる仕組み
-		$result = $this->TestActionQuestionnaireAdd->getNewQuestionnaire();
-		if (isset($this->TestActionQuestionnaireAdd->validationErrors['template_file'])) {
-			$this->assertTextEquals($this->TestActionQuestionnaireAdd->validationErrors['template_file'][0], '');
-		}
+		$result = $this->TestActionQuestionnaireAddSuccess->getNewQuestionnaire();
 		$this->assertNotNull($result);
 		$this->assertTrue(Hash::check($result, 'Questionnaire[import_key=9f1cd3e7ea0cb15c4d6adbe3cabcdb81a20b339a]'));
 		for ($i = 0; $i < 10; $i++) {

@@ -52,6 +52,7 @@ class QuestionnaireAnswerSummaryFixture extends CakeTestFixture {
 			'answer_time' => '2016-02-06 00:00:00',
 			'questionnaire_key' => 'questionnaire_12',
 			'user_id' => 3,
+			'created_user' => 3
 		),
 		array(
 			'id' => 2,
@@ -61,6 +62,7 @@ class QuestionnaireAnswerSummaryFixture extends CakeTestFixture {
 			'answer_time' => '2016-02-06 00:00:00',
 			'questionnaire_key' => 'questionnaire_12',
 			'user_id' => 1,
+			'created_user' => 1
 		),
 		array(
 			'id' => 3,
@@ -70,6 +72,7 @@ class QuestionnaireAnswerSummaryFixture extends CakeTestFixture {
 			'answer_time' => '2016-02-06 00:00:00',
 			'questionnaire_key' => 'questionnaire_2',
 			'user_id' => 3,
+			'created_user' => 3
 		),
 		array(
 			'id' => 4,
@@ -79,6 +82,7 @@ class QuestionnaireAnswerSummaryFixture extends CakeTestFixture {
 			'answer_time' => '2016-02-06 00:00:00',
 			'questionnaire_key' => 'questionnaire_4',
 			'user_id' => 3,
+			'created_user' => 3
 		),
 		array(
 			'id' => 5,
@@ -88,6 +92,7 @@ class QuestionnaireAnswerSummaryFixture extends CakeTestFixture {
 			'answer_time' => '2016-02-06 00:00:00',
 			'questionnaire_key' => 'questionnaire_6',
 			'user_id' => 3,
+			'created_user' => 3
 		),
 		array(
 			'id' => 6,
@@ -97,6 +102,7 @@ class QuestionnaireAnswerSummaryFixture extends CakeTestFixture {
 			'answer_time' => '2016-02-06 00:00:00',
 			'questionnaire_key' => 'questionnaire_6',
 			'user_id' => 4,
+			'created_user' => 4
 		),
 		array(
 			'id' => 7,
@@ -106,6 +112,7 @@ class QuestionnaireAnswerSummaryFixture extends CakeTestFixture {
 			'answer_time' => '2016-02-06 00:00:00',
 			'questionnaire_key' => 'questionnaire_8',
 			'user_id' => 4,
+			'created_user' => 4
 		),
 		array(
 			'id' => 8,
@@ -115,6 +122,7 @@ class QuestionnaireAnswerSummaryFixture extends CakeTestFixture {
 			'answer_time' => '2016-02-06 00:00:00',
 			'questionnaire_key' => 'questionnaire_20',
 			'user_id' => 1,
+			'created_user' => 1
 		),
 		array(
 			'id' => 9,
@@ -124,6 +132,7 @@ class QuestionnaireAnswerSummaryFixture extends CakeTestFixture {
 			'answer_time' => '2016-02-06 00:00:00',
 			'questionnaire_key' => 'questionnaire_22',
 			'user_id' => 1,
+			'created_user' => 1
 		),
 		array(
 			'id' => 10,
@@ -133,6 +142,7 @@ class QuestionnaireAnswerSummaryFixture extends CakeTestFixture {
 			'answer_time' => '2016-02-06 00:00:00',
 			'questionnaire_key' => 'questionnaire_24',
 			'user_id' => 1,
+			'created_user' => 1
 		),
 		array(
 			'id' => 11,
@@ -142,6 +152,7 @@ class QuestionnaireAnswerSummaryFixture extends CakeTestFixture {
 			'answer_time' => '2016-02-06 00:00:00',
 			'questionnaire_key' => 'questionnaire_4',
 			'user_id' => 1,
+			'created_user' => 1
 		),
 		array(
 			'id' => 12,
@@ -151,6 +162,7 @@ class QuestionnaireAnswerSummaryFixture extends CakeTestFixture {
 			'answer_time' => '2016-02-06 00:00:00',
 			'questionnaire_key' => 'questionnaire_12',
 			'user_id' => '',
+			'created_user' => ''
 		),
 	);
 }
