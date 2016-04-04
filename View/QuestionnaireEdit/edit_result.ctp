@@ -69,12 +69,12 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 
 				<div class="questionnaire-group">
 					<label><?php echo __d('questionnaires', 'Question you want to display the aggregate results'); ?></label>
-					<accordion ng-repeat="(pageIndex, page) in questionnaire.questionnairePage">
-						<accordion-group ng-repeat="(qIndex, question) in page.questionnaireQuestion" ng-class="{'panel-success': question.isResultDisplay == <?php echo QuestionnairesComponent::EXPRESSION_SHOW; ?>}">
+					<uib-accordion ng-repeat="(pageIndex, page) in questionnaire.questionnairePage">
+						<uib-accordion-group ng-repeat="(qIndex, question) in page.questionnaireQuestion" ng-class="{'panel-success': question.isResultDisplay == <?php echo QuestionnairesComponent::EXPRESSION_SHOW; ?>}">
 
-							<accordion-heading>
+							<uib-accordion-heading>
 								<?php echo $this->element('Questionnaires.QuestionnaireEdit/EditResult/accordion_heading'); ?>
-							</accordion-heading>
+							</uib-accordion-heading>
 
 							<?php echo $this->element('Questionnaires.QuestionnaireEdit/EditResult/is_display_set'); ?>
 
@@ -88,8 +88,8 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 
 								</div>
 							</div>
-						</accordion-group>
-					</accordion>
+						</uib-accordion-group>
+					</uib-accordion>
 				</div>
 			</div>
 		</div>

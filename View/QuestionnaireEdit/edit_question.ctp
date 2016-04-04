@@ -53,11 +53,11 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 
 			<?php echo $this->element('Questionnaires.QuestionnaireEdit/questionnaire_title'); ?>
 
-			<tabset>
-				<tab ng-repeat="(pageIndex, page) in questionnaire.questionnairePage" active="page.tabActive">
-					<tab-heading>
+			<uib-tabset>
+				<uib-tab ng-repeat="(pageIndex, page) in questionnaire.questionnairePage" active="page.tabActive">
+					<uib-tab-heading>
 						{{pageIndex+1}}<span class="glyphicon glyphicon-exclamation-sign text-danger" ng-if="page.hasError"></span>
-					</tab-heading>
+					</uib-tab-heading>
 
 					<div class="tab-body">
 						<?php echo $this->element('Questionnaires.QuestionnaireEdit/EditQuestion/add_question_button', array('isPublished' => $isPublished)); ?>
@@ -65,17 +65,17 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 
 						<?php echo $this->element('Questionnaires.QuestionnaireEdit/EditQuestion/hidden_page_info_set'); ?>
 
-					<accordion close-others="true">
-						<accordion-group
+					<uib-accordion close-others="true">
+						<uib-accordion-group
 								class="form-horizontal"
 								ng-repeat="(qIndex, question) in page.questionnaireQuestion"
 								is-open="question.isOpen">
 
-							<accordion-heading>
+							<uib-accordion-heading>
 								<?php /* 質問ヘッダーセット（移動ボタン、削除ボタンなどの集合体 */
 									echo $this->element('Questionnaires.QuestionnaireEdit/EditQuestion/accordion_heading', array('isPublished' => $isPublished)); ?>
 								<div class="clearfix"></div>
-							</accordion-heading>
+							</uib-accordion-heading>
 
 							<?php echo $this->element('Questionnaires.QuestionnaireEdit/EditQuestion/hidden_question_info_set'); ?>
 
@@ -151,8 +151,8 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 								</div>
 							</div >
 
-						</accordion-group>
-					</accordion>
+						</uib-accordion-group>
+					</uib-accordion>
 
 					<?php echo $this->element('Questionnaires.QuestionnaireEdit/EditQuestion/add_question_button'); ?>
 
@@ -166,16 +166,16 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 						</div>
 					<?php endif; ?>
 				</div>
-			</tab>
+			</uib-tab>
 			<?php if (! $isPublished): ?>
-				<tab class="questionnaire-add-page-tab" ng-click="addPage($event)">
-					<tab-heading>
+				<uib-tab class="questionnaire-add-page-tab" ng-click="addPage($event)">
+					<uib-tab-heading>
 						<span class="glyphicon glyphicon-plus"></span>
 						<span class=""><?php echo __d('questionnaires', 'Add Page'); ?></span>
-					</tab-heading>
-				</tab>
+					</uib-tab-heading>
+				</uib-tab>
 			<?php endif; ?>
-		</tabset>
+		</uib-tabset>
 
 	</div>
 	<div class="modal-footer">
