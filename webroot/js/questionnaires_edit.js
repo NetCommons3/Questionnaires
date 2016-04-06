@@ -8,7 +8,7 @@
  */
 
 NetCommonsApp.controller('Questionnaires.add',
-    function($scope, NetCommonsBase) {
+    function($scope) {
       /**
        * Initialize
        *
@@ -32,7 +32,7 @@ NetCommonsApp.controller('Questionnaires.add',
     });
 
 NetCommonsApp.controller('Questionnaires.setting',
-    function($scope, NetCommonsBase, NetCommonsWysiwyg) {
+    function($scope, NetCommonsWysiwyg) {
 
       /**
        * tinymce

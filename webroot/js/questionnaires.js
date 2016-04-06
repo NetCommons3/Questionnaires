@@ -15,8 +15,7 @@
  */
 
 NetCommonsApp.controller('Questionnaires',
-    function($scope, $sce, $timeout, $log, $attrs,
-    NetCommonsBase, NetCommonsWorkflow, NetCommonsFlash) {
+    function($scope, $sce, $timeout, $log, $attrs) {
 
       //$attrsと$evalを使い、ng-initディレクティブの評価をcontrollerの最初に行う.
       $scope.$eval($attrs.ngInit);
@@ -34,7 +33,7 @@ NetCommonsApp.controller('Questionnaires',
 );
 
 NetCommonsApp.controller('QuestionnairesAnswer',
-    function($scope, $sce, $timeout, $log, NetCommonsBase, NetCommonsFlash) {
+    function($scope, $sce, $timeout, $log) {
       /**
        * variables
        *
@@ -76,7 +75,7 @@ NetCommonsApp.controller('QuestionnairesAnswer',
     }
 );
 NetCommonsApp.controller('QuestionnairesFrame',
-    function($scope, $filter, $sce, $log, NetCommonsBase, $attrs, $timeout) {
+    function($scope, $filter, $sce, $log, $attrs, $timeout) {
       /**
        * Initialize
        *
