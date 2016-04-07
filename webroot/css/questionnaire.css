@@ -26,8 +26,8 @@
     padding:0px 0.5em
 }
 /*--アンケート編集画面のform-group枠への追加スタイル---*/
-.questionnaire-group { margin-top:0.5em ;margin-bottom:1.5em;margin-left: 2em;
-}
+.questionnaire-group { margin-top:0.5em ;margin-bottom:1.5em;margin-left: 2em;}
+.questionnaire-sub-group { margin-left: 2em;}
 /*--アンケート編集画面のアンケートタイトルスタイル---*/
 .questionnaire-setting-ttl {
     padding: 10px 20px 0px;
@@ -35,6 +35,12 @@
 .questionnaire-setting-ttl-help {
     padding-bottom:1em;
     padding-left: 2em;
+}
+/*--アンケート編集画面のページ追加タブスタイル--*/
+.questionnaire-add-page-tab {
+    display: block;
+    padding: 10px 25px;
+    float: left;
 }
 /*--アンケート編集画面の質問アコーディオンスタイル---*/
 .questionnaire-accordion-header-title {

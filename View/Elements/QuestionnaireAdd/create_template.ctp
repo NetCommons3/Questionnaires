@@ -15,13 +15,15 @@
 	'hiddenField' => false,
 	));
 ?>
-<div  collapse="createOption != '<?php echo QuestionnairesComponent::QUESTIONNAIRE_CREATE_OPT_TEMPLATE; ?>'">
-	<?php echo $this->NetCommonsForm->input('template_file', array(
-		'type' => 'file',
-		'accept' => "text/comma-separated-values",
-		'div' => false,
-		'label' => __d('questionnaires', 'Questionnaire template file'),
-		'required' => true,
-		'class' => '',
-	)); ?>
+<div  uib-collapse="createOption != '<?php echo QuestionnairesComponent::QUESTIONNAIRE_CREATE_OPT_TEMPLATE; ?>'">
+	<div class="col-lg-11 col-lg-offset-1">
+		<?php echo $this->NetCommonsForm->input('template_file', array(
+			'type' => 'file',
+			'accept' => "text/comma-separated-values",
+			'div' => false,
+			'label' => __d('questionnaires', 'Questionnaire template file'),
+			'required' => true,
+			'class' => '',
+		)); ?>
+	</div>
 </div>

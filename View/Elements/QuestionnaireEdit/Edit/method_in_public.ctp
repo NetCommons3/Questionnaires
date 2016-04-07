@@ -15,7 +15,7 @@
 			__d('questionnaires', 'accept the non-members answer'
 		));
 	?>
-	<div ng-show="questionnaires.questionnaire.isNoMemberAllow==<?php echo QuestionnairesComponent::USES_USE; ?>">
+	<div class="questionnaire-sub-group" ng-show="questionnaires.questionnaire.isNoMemberAllow==<?php echo QuestionnairesComponent::USES_USE; ?>">
 		<?php
 			echo $this->QuestionEdit->questionnaireAttributeCheckbox('is_key_pass_use',
 				__d('questionnaires', 'use key phrase'), array(
@@ -23,6 +23,7 @@
 			));
 			echo $this->element('AuthorizationKeys.edit_form', [
 				'options' => array(
+					'div' => false,
 					'ng-show' => 'questionnaires.questionnaire.isKeyPassUse != 0',
 			)]);
 			echo $this->QuestionEdit->questionnaireAttributeCheckbox('is_image_authentication',

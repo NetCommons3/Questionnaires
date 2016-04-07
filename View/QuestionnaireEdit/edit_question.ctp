@@ -53,8 +53,8 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 
 			<?php echo $this->element('Questionnaires.QuestionnaireEdit/questionnaire_title'); ?>
 
-			<uib-tabset>
-				<uib-tab ng-repeat="(pageIndex, page) in questionnaire.questionnairePage" active="page.tabActive">
+			<uib-tabset active="activeTabIndex">
+				<uib-tab ng-repeat="(pageIndex, page) in questionnaire.questionnairePage" index="$index">
 					<uib-tab-heading>
 						{{pageIndex+1}}<span class="glyphicon glyphicon-exclamation-sign text-danger" ng-if="page.hasError"></span>
 					</uib-tab-heading>
@@ -168,12 +168,10 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 				</div>
 			</uib-tab>
 			<?php if (! $isPublished): ?>
-				<uib-tab class="questionnaire-add-page-tab" ng-click="addPage($event)">
-					<uib-tab-heading>
-						<span class="glyphicon glyphicon-plus"></span>
-						<span class=""><?php echo __d('questionnaires', 'Add Page'); ?></span>
-					</uib-tab-heading>
-				</uib-tab>
+				<a class="questionnaire-add-page-tab" ng-click="addPage($event)">
+					<span class="glyphicon glyphicon-plus"></span>
+					<span class=""><?php echo __d('questionnaires', 'Add Page'); ?></span>
+				</a>
 			<?php endif; ?>
 		</uib-tabset>
 

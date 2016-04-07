@@ -16,10 +16,12 @@
 	'hiddenField' => false,
 	));
 ?>
-<div  collapse="createOption != '<?php echo QuestionnairesComponent::QUESTIONNAIRE_CREATE_OPT_NEW; ?>'">
-	<?php echo $this->NetCommonsForm->input('title', array(
-	'label' => __d('questionnaires', 'Questionnaire title'),
-	'required' => true,
-	'placeholder' => __d('questionnaires', 'Please input questionnaire title')
-	)); ?>
+<div  uib-collapse="createOption != '<?php echo QuestionnairesComponent::QUESTIONNAIRE_CREATE_OPT_NEW; ?>'">
+	<div class="col-lg-11 col-lg-offset-1">
+		<?php echo $this->NetCommonsForm->input('title', array(
+		'label' => __d('questionnaires', 'Questionnaire title'),
+		'required' => true,
+		'placeholder' => __d('questionnaires', 'Please input questionnaire title')
+		)); ?>
+	</div>
 </div>

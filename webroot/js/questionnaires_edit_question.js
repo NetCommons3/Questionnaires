@@ -74,14 +74,13 @@ NetCommonsApp.controller('Questionnaires.edit.question',
         $scope.questionnaire = questionnaire;
         $scope.questionnaire.questionnairePage =
             $scope.toArray(questionnaire.questionnairePage);
+        $scope.activeTabIndex = 0;
 
         // 各ページ処理
         for (var pIdx = 0; pIdx <
              $scope.questionnaire.questionnairePage.length;
              pIdx++) {
           var page = $scope.questionnaire.questionnairePage[pIdx];
-
-          $scope.questionnaire.questionnairePage[pIdx].tabActive = false;
 
           // 質問アコーディオンクローズ
           //$scope.questionnaire.questionnairePage[pIdx].isOpen = false;
@@ -144,7 +143,6 @@ NetCommonsApp.controller('Questionnaires.edit.question',
 
           }
         }
-        $scope.questionnaire.questionnairePage[0].tabActive = true;
 
         $scope.newPageLabel = newPageLabel;
         $scope.newQuestionLabel = newQuestionLabel;
@@ -182,7 +180,16 @@ NetCommonsApp.controller('Questionnaires.edit.question',
         });
         return dst;
       };
-
+      /**
+       * アコーディオンヘッダの中のドロップダウンメニューボタンのクリックで
+       * アコーディオンが開閉するのを抑止するための
+       *
+       * @return {String}
+       */
+      $scope.deter = function($event) {
+        $event.preventDefault();
+        $event.stopPropagation();
+      };
       /**
        * get Date String
        *
@@ -276,7 +283,6 @@ NetCommonsApp.controller('Questionnaires.edit.question',
           }
         }
       };
-
       /**
          * Add Questionnaire Page
          *
@@ -297,11 +303,12 @@ NetCommonsApp.controller('Questionnaires.edit.question',
         $scope.addQuestion($event,
             $scope.questionnaire.questionnairePage.length - 1);
 
-        $scope.questionnaire.questionnairePage[$scope.questionnaire.
-            questionnairePage.length - 1].tabActive = true;
         if ($event) {
           $event.stopPropagation();
         }
+        /*$scope.activeTabIndex =
+              $scope.questionnaire.questionnairePage.length - 1;
+          console.log($scope.activeTabIndex);*/
       };
 
       /**
@@ -722,5 +729,16 @@ NetCommonsApp.controller('Questionnaires.edit.question',
         }
         return false;
       };
-
+      /**
+       * 結果画面でアコーディオンの色を決定する
+       *
+       * @return {bool}
+       */
+      $scope.getResultAccordionClass = function(question) {
+        if (question.isResultDisplay != variables.EXPRESSION_NOT_SHOW) {
+          return 'panel-success';
+        } else {
+          return 'panel-default';
+        }
+      };
     });
