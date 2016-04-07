@@ -17,7 +17,7 @@ App::uses('ZipDownloader', 'Files.Utility');
 /**
  * BlocksController
  *
- * @author Ryo Ozawa <ozawa.ryo@withone.co.jp>
+ * @author AllCreator <info@allcreator.net>
  * @package NetCommons\Questionnaires\Controller
  */
 class QuestionnaireBlocksController extends QuestionnairesAppController {
@@ -84,6 +84,7 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
 		'NetCommons.NetCommonsForm',
 		'NetCommons.Date',
 		'NetCommons.TitleIcon',
+		'AuthorizationKeys.AuthKeyPopupButton',
 	);
 
 /**

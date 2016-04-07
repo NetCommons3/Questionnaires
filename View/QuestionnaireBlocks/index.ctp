@@ -69,17 +69,18 @@ echo $this->NetCommonsHtml->script(array(
 						</td>
 						<td>
 							<?php if ($questionnaire['Questionnaire']['all_answer_count'] > 0): ?>
-							<a  authorization-keys-popup-link frame-id="<?php echo Current::read('Frame.id'); ?>"
-								class="btn btn-success"
-								url="<?php echo NetCommonsUrl::actionUrl(array(
-										'plugin' => 'questionnaires',
-										'controller' => 'questionnaire_blocks',
-										'action' => 'download',
-										Current::read('Block.id'),
-										$questionnaire['Questionnaire']['key'],
-										'frame_id' => Current::read('Frame.id'))); ?>">
-								<span class="glyphicon glyphicon-download" ></span>
-							</a>
+							<?php echo $this->AuthKeyPopupButton->popupButton(	array(
+								'url' => NetCommonsUrl::actionUrl(array(
+								'plugin' => 'questionnaires',
+								'controller' => 'questionnaire_blocks',
+								'action' => 'download',
+								Current::read('Block.id'),
+								$questionnaire['Questionnaire']['key'],
+								'frame_id' => Current::read('Frame.id'))),
+								'popup-title' => __d('authorization_keys', 'Compression password'),
+								'popup-label' => __d('authorization_keys', 'Compression password'),
+								'popup-placeholder' => __d('authorization_keys', 'please input compression password'),
+							)); ?>
 							<?php endif; ?>
 						</td>
 						<td>
