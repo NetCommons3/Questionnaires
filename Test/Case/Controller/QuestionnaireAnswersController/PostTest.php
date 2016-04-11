@@ -167,11 +167,13 @@ class QuestionnaireAnswersControllerPostTest extends NetCommonsControllerTestCas
 
 		//正常の場合、リダイレクト
 		if (! $exception) {
-			if ($assert == 'next') {
+			if ($assert == 'confirm') {
 				$header = $this->controller->response->header();
 				$this->assertNotEmpty($header['Location']);
 			} elseif ($assert == 'err') {
 				$this->assertTextContains('Question_1', $result);
+			} else {
+				$this->assertTextContains($assert, $result);
 			}
 		}
 
@@ -201,18 +203,43 @@ class QuestionnaireAnswersControllerPostTest extends NetCommonsControllerTestCas
 					)))
 		);
 		$errData = $data;
-		$errData['data']['QuestionnaireAnswer']['questionnaire_2']['answer_value'] = '|choice_2:nainainai';
+		$errData['data']['QuestionnaireAnswer']['questionnaire_2'][0]['answer_value'] = '|choice_800:nainainai';
+		$skipData = array(
+			'data' => array(
+				'Frame' => array('id' => 6),
+				'Block' => array('id' => 2),
+				'QuestionnairePage' => array('page_sequence' => 0),
+				'QuestionnaireAnswer' => array(
+					'questionnaire_4' => array(
+						array(
+							'answer_value' => '|choice_6:choice label3',
+							'questionnaire_question_key' => 'qKey_3')
+					)))
+		);
+		$skipNoSelectData = $skipData;
+		$skipNoSelectData['data']['QuestionnaireAnswer']['questionnaire_4'][0]['answer_value'] = '';
+
 		return array(
 			array(
 				'data' => $data,
 				'role' => Role::ROOM_ROLE_KEY_GENERAL_USER,
 				'urlOptions' => array('frame_id' => 6, 'block_id' => 2, 'key' => 'questionnaire_2'),
-				'assert' => 'next'),
+				'assert' => 'confirm'),
 			array(
 				'data' => $errData,
 				'role' => Role::ROOM_ROLE_KEY_GENERAL_USER,
 				'urlOptions' => array('frame_id' => 6, 'block_id' => 2, 'key' => 'questionnaire_2'),
 				'assert' => 'err'),
+			array(
+				'data' => $skipData,
+				'role' => Role::ROOM_ROLE_KEY_ROOM_ADMINISTRATOR,
+				'urlOptions' => array('frame_id' => 6, 'block_id' => 2, 'key' => 'questionnaire_4'),
+				'assert' => 'name="data[QuestionnairePage][page_sequence]" value="4"'),
+			array(
+				'data' => $skipNoSelectData,
+				'role' => Role::ROOM_ROLE_KEY_ROOM_ADMINISTRATOR,
+				'urlOptions' => array('frame_id' => 6, 'block_id' => 2, 'key' => 'questionnaire_4'),
+				'assert' => 'name="data[QuestionnairePage][page_sequence]" value="1"'),
 		);
 	}
 

@@ -173,7 +173,7 @@ class QuestionnaireAnswer extends QuestionnairesAppModel {
 					array('QuestionnaireChoice.id' => null),
 				)
 			),
-			//'recursive' => 0
+			//'recursive' => 1
 		));
 		if (!empty($answer)) {
 			foreach ($answer as $ans) {

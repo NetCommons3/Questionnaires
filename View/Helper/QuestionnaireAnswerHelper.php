@@ -99,7 +99,10 @@ class QuestionnaireAnswerHelper extends AppHelper {
 				));
 				$afterLabel = $otherInput . $afterLabel;
 			}
-			$ret = $this->Form->input($fieldName, array(
+			// 下のような形でradioをつくるとHiddenが自動的には付随されなかった！
+			// 仕方ないので意図的に作成している
+			$ret = $this->NetCommonsForm->hidden($fieldName, array('value' => ''));
+			$ret .= $this->Form->input($fieldName, array(
 				'type' => 'radio',
 				'options' => $options,
 				'legend' => false,

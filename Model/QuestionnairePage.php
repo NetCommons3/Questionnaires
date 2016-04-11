@@ -116,6 +116,10 @@ class QuestionnairePage extends QuestionnairesAppModel {
 				$q = $targetQuestion[0];
 				// skipロジック対象の質問ならば次ページのチェックを行う
 				if ($q['is_skip'] == QuestionnairesComponent::SKIP_FLAGS_SKIP) {
+					if ($answer[0]['answer_value'] == '') {
+						// スキップロジックのところで未回答とされたら無条件に次ページとする
+						break;
+					}
 					$choiceIds = explode(QuestionnairesComponent::ANSWER_VALUE_DELIMITER,
 						trim($answer[0]['answer_value'], QuestionnairesComponent::ANSWER_DELIMITER));
 					// スキップロジックの選択肢みつけた
@@ -131,14 +135,13 @@ class QuestionnairePage extends QuestionnairesAppModel {
 				}
 			}
 		}
-		// 次ページがもしかして存在しない（つまりエンドかも）
-		if ($nextPageSeq == QuestionnairesComponent::SKIP_GO_TO_END) {
-			return false;
-		}
 		// ページ配列はページのシーケンス番号順に取り出されているので
 		$pages = $questionnaire['QuestionnairePage'];
 		$endPage = end($pages);
 
+		// 指定されたページ番号が全体のページ数よりも大きな数
+		// 次ページがもしかして存在しない（つまりエンドかも）もこれでフォローされる
+		//if ($nextPageSeq == QuestionnairesComponent::SKIP_GO_TO_END) {
 		if ($endPage['page_sequence'] < $nextPageSeq) {
 			return false;
 		}
