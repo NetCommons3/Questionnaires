@@ -21,26 +21,25 @@ $urlParams = Hash::merge(array(
 	'controller' => 'questionnaires',
 	'action' => 'index'),
 	$this->params['named']);
-if (isset($this->params['named']['answer_status']) && in_array($this->params['named']['answer_status'], $list)) {
+if (isset($this->params['named']['answer_status']) && array_key_exists($this->params['named']['answer_status'], $list)) {
 	$currentStatus = $this->params['named']['answer_status'];
 } else {
 	$currentStatus = QuestionnairesComponent::QUESTIONNAIRE_ANSWER_VIEW_ALL;
 }
-
 ?>
 
 <div class="form-group questionnaire-list-select">
 
 	<label><?php echo __d('questionnaires', 'Answer status'); ?></label>
 
-	<span class="btn-group">
-		<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+	<span uib-dropdown>
+		<button type="button" class="btn btn-default"  uib-dropdown-toggle>
 			<?php echo $list[$currentStatus]; ?>
 			<span class="caret"></span>
 		</button>
-		<ul class="dropdown-menu" role="menu">
+		<ul class="dropdown-menu" uib-dropdown-menu role="menu"  aria-labelledby="false">
 			<?php foreach ($list as $key => $status) : ?>
-				<li<?php echo ($status === $currentStatus ? ' class="active"' : ''); ?>>
+				<li>
 					<?php echo $this->NetCommonsHtml->link($status,
 						Hash::merge($urlParams, array('answer_status' => $key))
 					); ?>
@@ -48,5 +47,4 @@ if (isset($this->params['named']['answer_status']) && in_array($this->params['na
 			<?php endforeach; ?>
 		</ul>
 	</span>
-
 </div>
