@@ -13,6 +13,7 @@
 
 App::uses('View', 'View');
 App::uses('NetCommonsCakeTestCase', 'NetCommons.TestSuite');
+App::uses('NetCommonsHtmlHelper', 'NetCommons.View/Helper');
 App::uses('QuestionnaireAnswerHelper', 'Questionnaires.View/Helper');
 App::uses('QuestionnairesComponent', 'Questionnaires.Controller/Component');
 
@@ -30,6 +31,7 @@ class QuestionnaireAnswerHelperChoiceTest extends NetCommonsCakeTestCase {
 		parent::setUp();
 
 		$View = new View();
+		$this->NetCommonsHtml = new NetCommonsHtmlHelper($View);
 		$this->QuestionnaireAnswer = new QuestionnaireAnswerHelper($View);
 	}
 
@@ -66,6 +68,7 @@ EOT;
  */
 	public function testSingleChoice() {
 		$expected = <<< EOT
+<input type="hidden" name="data[QuestionnaireAnswer][qKey1][0][answer_value]" value="" id="QuestionnaireAnswerQKey10AnswerValue" />
 <div class="input radio">
 	<div class="radio">
 		<label>

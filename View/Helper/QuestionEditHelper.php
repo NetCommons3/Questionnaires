@@ -23,8 +23,8 @@ class QuestionEditHelper extends AppHelper {
  * @var array
  */
 	public $helpers = array(
-		'NetCommonsForm',
-		'NetCommonsHtml',
+		'NetCommons.NetCommonsForm',
+		'NetCommons.NetCommonsHtml',
 		'Form'
 	);
 

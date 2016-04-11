@@ -24,7 +24,7 @@ class QuestionnaireUtilHelper extends AppHelper {
  * @var array
  */
 	public $helpers = array(
-		'NetCommonsHtml',
+		'NetCommons.NetCommonsHtml',
 		'Html'
 	);
 
