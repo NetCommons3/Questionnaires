@@ -846,7 +846,7 @@ msgstr "回答期間を設定する"
 
 #: /View/QuestionnaireEdit/edit.ctp:71
 msgid "After approval will be immediately published . Stop of the questionnaire to select the stop from the questionnaire data list ."
-msgstr "承認後即時公開されます。アンケートの停止はアンケートデータ一覧から停止を選びます。"
+msgstr "回答できる期間を設定します。アンケートの表示／非表示の制御ではありません。表示の制御は表示設定画面で行います。"
 
 #: /View/QuestionnaireEdit/edit.ctp:97
 msgid "set the aggregate display period"
