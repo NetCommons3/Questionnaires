@@ -74,6 +74,7 @@ class QuestionnaireSaveQuestionnaireQuestionTest extends QuestionnairesSaveTest 
 			'is_require' => false,
 			'question_type_option' => '0', // '1: 数値 | 2:日付(未実装) | 3:時刻(未実装) | 4:メール(未実装) | 5:URL(未実装) | 6:電話番号(未実装) | HTML５チェックで将来的に実装されそうなものに順次対応'),
 			'is_choice_random' => false,
+			'is_choice_horizon' => false,
 			'is_skip' => false,
 			'is_jump' => false,
 			'is_range' => false,

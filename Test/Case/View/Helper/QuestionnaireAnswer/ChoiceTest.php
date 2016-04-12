@@ -96,6 +96,7 @@ EOT;
 		$question = array(
 			'key' => 'qKey1',
 			'question_type' => QuestionnairesComponent::TYPE_SELECTION,
+			'is_choice_horizon' => false,
 			'QuestionnaireChoice' => array(
 				array(
 					'key' => 'cKey1',
@@ -124,6 +125,12 @@ EOT;
 			)
 		);
 
+		$actual = $this->QuestionnaireAnswer->answer($question);
+		$actual = preg_replace('/[\n|\r|\t|\s]/', '', $actual);
+		$this->assertTextEquals($expected, $actual);
+
+		$expected = preg_replace('/class="radio/', 'class="radio-inline', $expected);
+		$question['is_choice_horizon'] = true;
 		$actual = $this->QuestionnaireAnswer->answer($question);
 		$actual = preg_replace('/[\n|\r|\t|\s]/', '', $actual);
 		$this->assertTextEquals($expected, $actual);
@@ -163,6 +170,7 @@ EOT;
 		$question = array(
 			'key' => 'qKey1',
 			'question_type' => QuestionnairesComponent::TYPE_MULTIPLE_SELECTION,
+			'is_choice_horizon' => false,
 			'QuestionnaireChoice' => array(
 				array(
 					'key' => 'cKey1',
@@ -191,6 +199,12 @@ EOT;
 			)
 		);
 
+		$actual = $this->QuestionnaireAnswer->answer($question);
+		$actual = preg_replace('/[\n|\r|\t|\s]/', '', $actual);
+		$this->assertTextEquals($expected, $actual);
+
+		$expected = preg_replace('/class="checkboxnc-checkbox/', 'class="checkbox-inlinenc-checkbox', $expected);
+		$question['is_choice_horizon'] = true;
 		$actual = $this->QuestionnaireAnswer->answer($question);
 		$actual = preg_replace('/[\n|\r|\t|\s]/', '', $actual);
 		$this->assertTextEquals($expected, $actual);
