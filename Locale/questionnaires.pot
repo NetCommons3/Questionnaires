@@ -523,6 +523,8 @@ msgstr ""
 
 #: /View/Elements/QuestionnaireEdit/EditQuestion/options_after_published/simple_choice_option.ctp:26
 #: /View/Elements/QuestionnaireEdit/EditQuestion/options_before_published/simple_choice_option.ctp:30
+msgid "horizontal choices"
+msgstr ""
 msgid "randomaize choices"
 msgstr ""
 

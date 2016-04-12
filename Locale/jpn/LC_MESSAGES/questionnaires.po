@@ -522,6 +522,8 @@ msgstr "列の選択肢"
 
 #: /View/Elements/QuestionnaireEdit/EditQuestion/options_after_published/simple_choice_option.ctp:26
 #: /View/Elements/QuestionnaireEdit/EditQuestion/options_before_published/simple_choice_option.ctp:30
+msgid "horizontal choices"
+msgstr "選択肢を横並びにする"
 msgid "randomaize choices"
 msgstr "選択肢をランダムに表示する"
 

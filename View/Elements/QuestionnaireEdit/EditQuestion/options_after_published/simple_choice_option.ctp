@@ -15,6 +15,17 @@
 <div class="row">
 	<div class="col-sm-12">
 		<label class="checkbox-inline" ng-show="question.questionType != <?php echo QuestionnairesComponent::TYPE_SINGLE_SELECT_BOX; ?>">
+			<?php echo $this->NetCommonsForm->checkbox('QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.is_choice_horizon',
+			array(
+			'value' => QuestionnairesComponent::USES_USE,
+			'ng-model' => 'question.isChoiceHorizon',
+			'ng-checked' => 'question.isChoiceHorizon == ' . QuestionnairesComponent::USES_USE,
+			'disabled' => 'disabled',
+			));
+			?>
+			<?php echo __d('questionnaires', 'horizontal choices'); ?>
+		</label>
+		<label class="checkbox-inline" ng-show="question.questionType != <?php echo QuestionnairesComponent::TYPE_SINGLE_SELECT_BOX; ?>">
 			<?php echo $this->NetCommonsForm->checkbox('QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.is_choice_random',
 			array(
 			'value' => QuestionnairesComponent::USES_USE,

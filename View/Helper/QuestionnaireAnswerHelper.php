@@ -99,6 +99,11 @@ class QuestionnaireAnswerHelper extends AppHelper {
 				));
 				$afterLabel = $otherInput . $afterLabel;
 			}
+
+			$radioClass = 'radio';
+			if ($question['is_choice_horizon'] == QuestionnairesComponent::USES_USE) {
+				$radioClass = 'radio-inline';
+			}
 			// 下のような形でradioをつくるとHiddenが自動的には付随されなかった！
 			// 仕方ないので意図的に作成している
 			$ret = $this->NetCommonsForm->hidden($fieldName, array('value' => ''));
@@ -107,8 +112,8 @@ class QuestionnaireAnswerHelper extends AppHelper {
 				'options' => $options,
 				'legend' => false,
 				'label' => false,
-				'before' => '<div class="radio"><label>',
-				'separator' => '</label></div><div class="radio"><label>',
+				'before' => '<div class="' . $radioClass . '"><label>',
+				'separator' => '</label></div><div class="' . $radioClass . '"><label>',
 				'after' => $afterLabel,
 				'disabled' => $readonly,
 				'error' => false,
@@ -146,13 +151,17 @@ class QuestionnaireAnswerHelper extends AppHelper {
 				$afterLabel = '<div class="checkbox-inline">' . $otherInput . '</div>';
 			}
 
+			$checkboxClass = 'checkbox';
+			if ($question['is_choice_horizon'] == QuestionnairesComponent::USES_USE) {
+				$checkboxClass = 'checkbox-inline';
+			}
 			$ret .= $this->NetCommonsForm->input($fieldName, array(
 				'type' => 'select',
 				'multiple' => 'checkbox',
 				'options' => $options,
 				'label' => false,
 				'div' => false,
-				'class' => 'checkbox nc-checkbox',
+				'class' => $checkboxClass . ' nc-checkbox',
 				'disabled' => $readonly,
 				'hiddenField' => !$readonly,
 				'error' => false,

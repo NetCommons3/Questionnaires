@@ -19,6 +19,22 @@
 		<button type="button" class="btn btn-default pull-right" ng-click="addChoice($event, pageIndex, qIndex, question.questionnaireChoice.length, '<?php echo QuestionnairesComponent::OTHER_CHOICE_TYPE_NO_OTHER_FILED ?>', '<?php echo QuestionnairesComponent::MATRIX_TYPE_ROW_OR_NO_MATRIX; ?>');">
 			<span class="glyphicon glyphicon-plus"></span><?php echo __d('questionnaires', 'add choices'); ?>
 		</button>
+		<?php /* 選択肢を横並びにする */ ?>
+		<label class="checkbox-inline" ng-show="question.questionType != <?php echo QuestionnairesComponent::TYPE_SINGLE_SELECT_BOX; ?>">
+			<?php echo $this->NetCommonsForm->checkbox('QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.is_choice_horizon',
+			array(
+			'value' => QuestionnairesComponent::USES_USE,
+			'ng-model' => 'question.isChoiceHorizon',
+			'ng-checked' => 'question.isChoiceHorizon == ' . QuestionnairesComponent::USES_USE
+			));
+			?>
+			<?php echo __d('questionnaires', 'horizontal choices'); ?>
+			<?php echo $this->element(
+			'Questionnaires.QuestionnaireEdit/ng_errors', array(
+			'errorArrayName' => 'question.errorMessages.isChoiceHorizon',
+			)); ?>
+		</label>
+		<?php /* 選択肢をランダムにする */ ?>
 		<label class="checkbox-inline" ng-show="question.questionType != <?php echo QuestionnairesComponent::TYPE_SINGLE_SELECT_BOX; ?>">
 			<?php echo $this->NetCommonsForm->checkbox('QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.is_choice_random',
 			array(
@@ -33,6 +49,7 @@
 			'errorArrayName' => 'question.errorMessages.isChoiceRandom',
 			)); ?>
 		</label>
+		<?php /* スキップにする */ ?>
 		<label class="checkbox-inline" ng-show="question.questionType != <?php echo QuestionnairesComponent::TYPE_MULTIPLE_SELECTION; ?>">
 			<?php echo $this->NetCommonsForm->checkbox('QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.is_skip',
 			array(
