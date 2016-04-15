@@ -110,8 +110,6 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 				<?php echo $this->element('Questionnaires.QuestionnaireEdit/Edit/method_in_group'); ?>
 			<?php endif; ?>
 
-			<?php echo $this->element('Questionnaires.QuestionnaireEdit/Edit/open_mail'); ?>
-
 			<label class="h3"><?php echo __d('questionnaires', 'Thanks page message settings'); ?></label>
 			<div class="form-group questionnaire-group">
 				<?php

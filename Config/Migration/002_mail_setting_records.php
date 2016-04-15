@@ -60,19 +60,15 @@ class QuestionnaireMailSettingRecords extends NetCommonsMigration {
 				'type_key' => 'contents',
 				'is_mail_send' => false,
 				'mail_fixed_phrase_subject' => '[{X-SITE_NAME}-{X-PLUGIN_NAME}]{X-SUBJECT}({X-ROOM})',
-				'mail_fixed_phrase_body' => '{X-SUBJECT}に回答されたのでお知らせします。
+				'mail_fixed_phrase_body' => '{X-SUBJECT}が開始されます。
 ルーム名:{X-ROOM}
 アンケート名:{X-SUBJECT}
-回答者:{X-USER}
-回答日時:{X-TO_DATE}
 
-この回答内容を確認するにはCSVファイルをダウンロードする必要があります。
-（CSVファイルのダウンロードには編集長以上の権限が必要です）
+回答のご協力をお願いいたします。
 下記のリンクをクリックして下さい。
 {X-URL}',
 			),
-		),
-	);
+	));
 
 /**
  * Before migration callback

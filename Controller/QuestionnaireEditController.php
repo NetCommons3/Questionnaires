@@ -10,6 +10,7 @@
  */
 
 App::uses('AppController', 'Controller');
+App::uses('MailSetting', 'Mails.Model');
 
 /**
  * QuestionnaireEditController
@@ -86,7 +87,7 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 		// セッションインデックスパラメータ
 		$sessionName = self::QUESTIONNAIRE_EDIT_SESSION_INDEX . $this->_getQuestionnaireEditSessionIndex();
 
-		if ($this->request->isPost() || $this->request->isPut()) {
+		if ($this->request->is('post') || $this->request->is('put')) {
 			// ウィザード画面なのでセッションに記録された前画面データが必要
 			$this->_questionnaire = $this->Session->read($sessionName);
 			if (! $this->_questionnaire) {

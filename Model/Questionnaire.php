@@ -26,6 +26,12 @@ class Questionnaire extends QuestionnairesAppModel {
 		'Workflow.WorkflowComment',
 		'AuthorizationKeys.AuthorizationKey',
 		'Questionnaires.QuestionnaireValidate',
+		'Mails.MailQueue' => array(		// 自動でメールキューの登録, 削除。ワークフロー利用時はWorkflow.Workflowより下に記述する
+			'embedTags' => array(
+				'X-SUBJECT' => 'Questionnaire.title',
+			),
+		),
+		'Mails.MailQueueDelete',
 	);
 
 /**
@@ -514,6 +520,8 @@ class Questionnaire extends QuestionnairesAppModel {
 				return false;
 			}
 
+			$this->_sendMail($questionnaire);
+
 			$saveQuestionnaire = $this->save($questionnaire, false);
 			if (! $saveQuestionnaire) {
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
@@ -542,6 +550,34 @@ class Questionnaire extends QuestionnairesAppModel {
 			throw $ex;
 		}
 		return $questionnaire;
+	}
+/**
+ * _sendMail
+ * Send Questionnaire mail
+ *
+ * @param array $questionnaire questionnaire
+ * @return void
+ */
+	protected function _sendMail($questionnaire) {
+		// メールのembed のURL設定を行っておく
+		$url = NetCommonsUrl::actionUrl(array(
+			'controller' => 'questionnaire_answers',
+			'action' => 'view',
+			Current::read('Block.id'),
+			$questionnaire['Questionnaire']['key'],
+			'frame_id' => Current::read('Frame.id'),
+		));
+		$this->Behaviors->MailQueue->settings[$this->alias]['embedTags']['X-URL'] = $url;
+		// 回答期間の設定があるときはリマインダ設定をする
+		$netCommonsTime = new NetCommonsTime();
+		if ($questionnaire['Questionnaire']['answer_timing'] == QuestionnairesComponent::USES_USE) {
+			$sendTimes = array(
+				$netCommonsTime->toServerDatetime($questionnaire['Questionnaire']['answer_start_period']),
+			);
+		} else {
+			$sendTimes = array($netCommonsTime->getNowDatetime());
+		}
+		$this->setSendTimeReminder($sendTimes);
 	}
 
 /**

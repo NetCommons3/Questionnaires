@@ -863,20 +863,27 @@ msgid "Result will display at this time."
 msgstr "から集計結果を表示する"
 
 #: /View/QuestionnaireEdit/edit.ctp:144
-msgid "Questionnaire open mail"
-msgstr "アンケート開始メール"
+msgid "Questionnaire answer mail"
+msgstr "アンケートの回答通知メール"
 
 #: /View/QuestionnaireEdit/edit.ctp:148
-msgid "Deliver e-mail when questionnaire has opened"
-msgstr "アンケートが開始されたらメールで通知する"
+msgid "Deliver e-mail when questionnaire has answered"
+msgstr "アンケートに回答されたらアンケート作成者にメールで通知する"
 
 #: /View/QuestionnaireEdit/edit.ctp:153
-msgid "open mail subject"
-msgstr "開始メールタイトル"
+msgid "answer mail subject"
+msgstr "回答通知メールタイトル"
 
 #: /View/QuestionnaireEdit/edit.ctp:156
-msgid "open mail text"
-msgstr "開始メール本文"
+msgid "answer mail text"
+msgstr "回答通知メール本文"
+
+msgid "questionnaire.answer.mail.subject"
+msgstr "[{X-SITE_NAME}-{X-PLUGIN_NAME}]{X-SUBJECT}({X-ROOM})回答通知"
+msgid "questionnaire.answer.mail.body"
+msgstr "{X-SUBJECT}に回答されたのでお知らせします。\nルーム名:{X-ROOM}\nアンケート名:{X-SUBJECT}\n回答日時:{X-TO_DATE}"
+msgid "questionnaire.answer.mail.body.help"
+msgstr ""
 
 #: /View/QuestionnaireEdit/edit.ctp:162
 msgid "Thanks page message settings"
