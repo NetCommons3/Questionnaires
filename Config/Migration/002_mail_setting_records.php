@@ -8,14 +8,21 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 
-App::uses('NetCommonsMigration', 'NetCommons.Config/Migration');
+App::uses('MailsMigration', 'Mails.Config/Migration');
 
 /**
  * メール設定データのMigration
  *
  * @package NetCommons\Questionnaires\Config\Migration
  */
-class QuestionnaireMailSettingRecords extends NetCommonsMigration {
+class QuestionnaireMailSettingRecords extends MailsMigration {
+
+/**
+ * プラグインキー
+ *
+ * @var string
+ */
+	const PLUGIN_KEY = 'questionnaires';
 
 /**
  * Migration description
@@ -41,24 +48,30 @@ class QuestionnaireMailSettingRecords extends NetCommonsMigration {
  */
 	public $records = array(
 		'MailSetting' => array(
-			//コンテンツ通知
+			//コンテンツ通知 - 設定
+			array(
+				'plugin_key' => self::PLUGIN_KEY,
+				'block_key' => null,
+				'is_mail_send' => false,
+			),
+		),
+		'MailSettingFixedPhrase' => array(
+			//コンテンツ通知 - 定型文
 			// * 英語
 			array(
 				'language_id' => '1',
-				'plugin_key' => 'questionnaires',
+				'plugin_key' => self::PLUGIN_KEY,
 				'block_key' => null,
 				'type_key' => 'contents',
-				'is_mail_send' => false,
 				'mail_fixed_phrase_subject' => '', //デフォルト(__d('mails', 'MailSetting.mail_fixed_phrase_subject'))
 				'mail_fixed_phrase_body' => '', //デフォルト(__d('mails', 'MailSetting.mail_fixed_phrase_body'))
 			),
 			// * 日本語
 			array(
 				'language_id' => '2',
-				'plugin_key' => 'questionnaires',
+				'plugin_key' => self::PLUGIN_KEY,
 				'block_key' => null,
 				'type_key' => 'contents',
-				'is_mail_send' => false,
 				'mail_fixed_phrase_subject' => '[{X-SITE_NAME}-{X-PLUGIN_NAME}]{X-SUBJECT}({X-ROOM})',
 				'mail_fixed_phrase_body' => '{X-SUBJECT}に回答されたのでお知らせします。
 ルーム名:{X-ROOM}
@@ -91,11 +104,6 @@ class QuestionnaireMailSettingRecords extends NetCommonsMigration {
  * @return bool Should process continue
  */
 	public function after($direction) {
-		foreach ($this->records as $model => $records) {
-			if (!$this->updateRecords($model, $records)) {
-				return false;
-			}
-		}
-		return true;
+		return parent::updateAndDelete($direction, self::PLUGIN_KEY);
 	}
 }
