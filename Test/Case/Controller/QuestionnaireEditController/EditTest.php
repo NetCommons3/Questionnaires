@@ -270,9 +270,9 @@ class QuestionnaireEditControllerEditTest extends WorkflowControllerEditTest {
 		array_push($results, Hash::merge($results[$base], array(
 			'assert' => array('method' => 'assertInput', 'type' => 'input', 'name' => 'data[Questionnaire][is_image_authentication]', 'value' => null),
 		)));
-		array_push($results, Hash::merge($results[$base], array(
-			'assert' => array('method' => 'assertInput', 'type' => 'input', 'name' => 'data[Questionnaire][is_repeat_allow]', 'value' => null),
-		)));
+		//array_push($results, Hash::merge($results[$base], array(
+		//	'assert' => array('method' => 'assertInput', 'type' => 'input', 'name' => 'data[Questionnaire][is_repeat_allow]', 'value' => null),
+		//)));
 		array_push($results, Hash::merge($results[$base], array(
 			'assert' => array('method' => 'assertInput', 'type' => 'input', 'name' => 'data[Questionnaire][is_anonymity]', 'value' => null),
 		)));
@@ -475,13 +475,13 @@ class QuestionnaireEditControllerEditTest extends WorkflowControllerEditTest {
 					'message' => __d('net_commons', 'Invalid request.'),
 				)
 			)),
-			Hash::merge($result, array(
-				'validationError' => array(
-					'field' => 'Questionnaire.is_repeat_allow',
-					'value' => 'aa',
-					'message' => __d('net_commons', 'Invalid request.'),
-				)
-			)),
+			//Hash::merge($result, array(
+			//	'validationError' => array(
+			//		'field' => 'Questionnaire.is_repeat_allow',
+			//		'value' => 'aa',
+			//		'message' => __d('net_commons', 'Invalid request.'),
+			//	)
+			//)),
 			Hash::merge($result, array(
 				'validationError' => array(
 					'field' => 'Questionnaire.is_image_authentication',

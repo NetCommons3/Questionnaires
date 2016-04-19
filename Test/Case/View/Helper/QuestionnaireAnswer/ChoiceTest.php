@@ -144,19 +144,19 @@ EOT;
 	public function testMultipleChoice() {
 		$expected = <<< EOT
 <input type="hidden" name="data[QuestionnaireAnswer][qKey1][0][answer_value]" value="" id="QuestionnaireAnswerQKey10AnswerValue"/>
-<div class="checkbox nc-checkbox">
+<div class="checkbox">
 	<input type="checkbox" name="data[QuestionnaireAnswer][qKey1][0][answer_value][]" value="cKey1:選択肢1" id="QuestionnaireAnswerQKey10AnswerValueCKey1選択肢1" />
 	<label for="QuestionnaireAnswerQKey10AnswerValueCKey1選択肢1">
 		選択肢1
 	</label>
 </div>
-<div class="checkbox nc-checkbox">
+<div class="checkbox">
 	<input type="checkbox" name="data[QuestionnaireAnswer][qKey1][0][answer_value][]" value="cKey2:選択肢2" id="QuestionnaireAnswerQKey10AnswerValueCKey2選択肢2" />
 	<label for="QuestionnaireAnswerQKey10AnswerValueCKey2選択肢2">
 		選択肢2
 	</label>
 </div>
-<div class="checkbox nc-checkbox">
+<div class="checkbox">
 	<input type="checkbox" name="data[QuestionnaireAnswer][qKey1][0][answer_value][]" value="cKey3:その他" id="QuestionnaireAnswerQKey10AnswerValueCKey3その他" />
 	<label for="QuestionnaireAnswerQKey10AnswerValueCKey3その他">
 		その他
