@@ -18,8 +18,7 @@
  * error
  */
 ?>
-<div class="input-group"
-	 ng-if="question.questionTypeOption == <?php echo QuestionnairesComponent::TYPE_OPTION_DATE; ?>">
+<div ng-if="question.questionTypeOption == <?php echo QuestionnairesComponent::TYPE_OPTION_DATE; ?>">
 	<?php echo $this->NetCommonsForm->input($field,
 	array(
 		'id' => 'date_' . $field,
@@ -31,10 +30,8 @@
 		'ng-focus' => 'setMinMaxDate($event, pageIndex, qIndex)',
 	));
 	?>
-	<div class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></div>
 </div>
-<div class="input-group"
-	 ng-if="question.questionTypeOption == <?php echo QuestionnairesComponent::TYPE_OPTION_TIME; ?>">
+<div ng-if="question.questionTypeOption == <?php echo QuestionnairesComponent::TYPE_OPTION_TIME; ?>">
 	<?php echo $this->NetCommonsForm->input($field,
 	array(
 		'id' => 'time_' . $field,
@@ -46,10 +43,8 @@
 		'ng-focus' => 'setMinMaxDate($event, pageIndex, qIndex)',
 	));
 	?>
-	<div class="input-group-addon"><i class="glyphicon glyphicon-time"></i></div>
 </div>
-<div class="input-group"
-	 ng-if="question.questionTypeOption == <?php echo QuestionnairesComponent::TYPE_OPTION_DATE_TIME; ?>">
+<div ng-if="question.questionTypeOption == <?php echo QuestionnairesComponent::TYPE_OPTION_DATE_TIME; ?>">
 	<?php echo $this->NetCommonsForm->input($field,
 	array(
 		'id' => 'datetime_' . $field,
@@ -61,7 +56,6 @@
 		'ng-focus' => 'setMinMaxDate($event, pageIndex, qIndex)',
 	));
 	?>
-	<div class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></div>
 </div>
 
 <?php echo $this->element(

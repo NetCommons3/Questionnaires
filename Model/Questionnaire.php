@@ -9,6 +9,7 @@
  */
 
 App::uses('QuestionnairesAppModel', 'Questionnaires.Model');
+App::uses('NetCommonsUrl', 'NetCommons.Utility');
 
 /**
  * Summary for Questionnaire Model
@@ -318,9 +319,9 @@ class Questionnaire extends QuestionnairesAppModel {
 		$this->begin();
 
 		try {
-			$this->_saveBlock($frame);
+			$this->QuestionnaireSetting->saveBlock($frame);
 			// 設定情報も
-			$this->_saveSetting();
+			$this->QuestionnaireSetting->saveSetting();
 			$this->commit();
 		} catch (Exception $ex) {
 			//トランザクションRollback
@@ -330,68 +331,6 @@ class Questionnaire extends QuestionnairesAppModel {
 			throw $ex;
 		}
 		return $data;
-	}
-
-/**
- * save block
- *
- * afterFrameSaveやsaveQuestionnaireから呼び出される
- *
- * @param array $frame frame data
- * @return bool
- * @throws InternalErrorException
- */
-	protected function _saveBlock($frame) {
-		// すでに結びついている場合はBlockは作らないでよい
-		if (! empty($frame['Frame']['block_id'])) {
-			return;
-		}
-		// ルームに存在するブロックを探す
-		$block = $this->Block->find('first', array(
-			'conditions' => array(
-				'Block.room_id' => $frame['room_id'],
-				'Block.plugin_key' => $frame['plugin_key'],
-				'Block.language_id' => $frame['language_id'],
-			)
-		));
-		// まだない場合
-		if (empty($block)) {
-			// 作成する
-			$block = $this->Block->save(array(
-				'room_id' => $frame['room_id'],
-				'language_id' => $frame['language_id'],
-				'plugin_key' => $frame['plugin_key'],
-			));
-			if (!$block) {
-				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
-			}
-			Current::$current['Block'] = $block['Block'];
-		}
-
-		$frame['block_id'] = $block['Block']['id'];
-		if (!$this->Frame->save($frame)) {
-			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
-		}
-		Current::$current['Frame']['block_id'] = $block['Block']['id'];
-	}
-/**
- * save setting
- *
- * afterFrameSaveやsaveQuestionnaireから呼び出される
- *
- * @return bool
- * @throws InternalErrorException
- */
-	protected function _saveSetting() {
-		// block settingはあるか
-		$setting = $this->QuestionnaireSetting->getSetting();
-		if (empty($setting)) {
-			// ないときは作る
-			$blockSetting = $this->QuestionnaireSetting->create();
-			$blockSetting['QuestionnaireSetting']['block_key'] = Current::read('Block.key');	//$block['Block']['key'];
-			$this->QuestionnaireSetting->saveQuestionnaireSetting($blockSetting);
-		}
-		return true;
 	}
 
 /**
@@ -567,7 +506,7 @@ class Questionnaire extends QuestionnairesAppModel {
 			$questionnaire['Questionnaire']['key'],
 			'frame_id' => Current::read('Frame.id'),
 		));
-		$this->Behaviors->MailQueue->settings[$this->alias]['embedTags']['X-URL'] = $url;
+		$this->setAddEmbedTagValue('X-URL', $url);
 		// 回答期間の設定があるときはリマインダ設定をする
 		$netCommonsTime = new NetCommonsTime();
 		if ($questionnaire['Questionnaire']['answer_timing'] == QuestionnairesComponent::USES_USE) {

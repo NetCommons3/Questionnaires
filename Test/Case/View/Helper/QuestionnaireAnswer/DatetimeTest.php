@@ -71,12 +71,11 @@ EOT;
 		$ret = <<< EOT
 <div class="row">
 	<div class="col-sm-4">
-		<div class="input-group date">
-			<input name="data[QuestionnaireAnswer][qKey1][0][answer_value]" class="form-control glyphicon"
+		<div class="date">
+			<input name="data[QuestionnaireAnswer][qKey1][0][answer_value]" class="form-control"
 			datetimepicker="datetimepicker" datetimepicker-options="%s"
 			ng-model="dateAnswer[&#039;qKey1&#039;]"
 			type="text" id="QuestionnaireAnswerQKey10AnswerValue"/>
-			<span class="input-group-addon glyphicon glyphicon-calendar"></span>
 		</div>
 	</div>
 </div>

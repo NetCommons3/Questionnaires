@@ -352,18 +352,17 @@ class QuestionnaireAnswerHelper extends AppHelper {
 		$rangeMessage .= '</span>';
 
 		$ret = '<div class="row"><div class="col-sm-4">';
-		$ret .= '<div class="input-group date" >';
+		$ret .= '<div class="date" >';
 		$ret .= $this->NetCommonsForm->input($fieldName,
 							array('type' => 'text',
 								'div' => false,
-								'class' => 'form-control glyphicon',
+								'class' => 'form-control',
 								'datetimepicker',
 								'datetimepicker-options' => $options,
 								'ng-model' => 'dateAnswer[' . "'" . $question['key'] . "'" . ']',
 								//'value' => $this->value($fieldName),
 								'label' => false,
 								'error' => false));
-		$ret .= '<span class="input-group-addon glyphicon ' . $icon . '"></span>';
 		$ret .= '</div>';
 		$ret .= '</div></div>';
 		$ret .= $rangeMessage;

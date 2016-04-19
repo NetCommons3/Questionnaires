@@ -80,6 +80,23 @@ class QuestionnaireSaveQuestionnaireTest extends WorkflowSaveTest {
 		Current::$current['Frame']['room_id'] = '1';
 		Current::$current['Frame']['plugin_key'] = 'questionnaires';
 		Current::$current['Frame']['language_id'] = '2';
+		$mailQueueMock = $this->getMock('MailQueueBehavior',
+			['setAddEmbedTagValue', 'afterSave']);
+		$mailQueueMock->expects($this->any())
+		->method('setAddEmbedTagValue')
+			->will($this->returnValue(true));
+		$mailQueueMock->expects($this->any())
+			->method('afterSave')
+			->will($this->returnValue(true));
+
+		// ClassRegistoryを使ってモックを登録。
+		// まずremoveObjectしないとaddObjectできないのでremoveObjectする
+		ClassRegistry::removeObject('MailQueueBehavior');
+		// addObjectでUploadBehaviorでMockが使われる
+		ClassRegistry::addObject('MailQueueBehavior', $mailQueueMock);
+
+		// このloadではモックがロードされる
+		$this->$model->Behaviors->load('MailQueue');
 	}
 
 /**

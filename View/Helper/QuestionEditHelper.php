@@ -147,12 +147,12 @@ class QuestionEditHelper extends AppHelper {
 			));
 		}
 
-		$ret = '<div class="form-group "><div class="input-group">';
+		$ret = '<div class="form-group ">';
 		$ret .= $this->NetCommonsForm->input($fieldName, $options);
 		if (!empty($help)) {
 			$ret .= '<span class="help-block">' . $help . '</span>';
 		}
-		$ret .= '<div class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></div></div></div>';
+		$ret .= '</div>';
 		return $ret;
 	}
 
