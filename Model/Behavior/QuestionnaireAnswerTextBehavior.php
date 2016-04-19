@@ -82,16 +82,27 @@ class QuestionnaireAnswerTextBehavior extends QuestionnaireAnswerBehavior {
 				$model->validationErrors['answer_value'][] = __d('questionnaires', 'Number required');
 			}
 			if ($question['is_range'] == QuestionnairesComponent::USES_USE) {
-				if (!Validation::range($data['answer_value'], intval($question['min']), intval($question['max']))) {
+				$rangeRes = Validation::range(
+					$data['answer_value'],
+					intval($question['min']),
+					intval($question['max']));
+				if (!$rangeRes) {
 					$ret = false;
-					$model->validationErrors['answer_value'][] = sprintf(__d('questionnaires', 'Please enter the answer between %s and %s.', $question['min'], $question['max']));
+					$model->validationErrors['answer_value'][] = sprintf(
+						__d('questionnaires', 'Please enter the answer between %s and %s.'),
+						$question['min'],
+						$question['max']);
 				}
 			}
 		} else {
 			if ($question['is_range'] == QuestionnairesComponent::USES_USE) {
-				if (!Validation::minLength($data['answer_value'], intval($question['min'])) || !Validation::maxLength($data['answer_value'], intval($question['max']))) {
+				if (! Validation::minLength($data['answer_value'], intval($question['min'])) ||
+					! Validation::maxLength($data['answer_value'], intval($question['max']))) {
 					$ret = false;
-					$model->validationErrors['answer_value'][] = sprintf(__d('questionnaires', 'Please enter the answer between %s letters and %s letters.', $question['min'], $question['max']));
+					$model->validationErrors['answer_value'][] = sprintf(
+						__d('questionnaires', 'Please enter the answer between %s letters and %s letters.'),
+						$question['min'],
+						$question['max']);
 				}
 			}
 		}

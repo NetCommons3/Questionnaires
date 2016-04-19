@@ -85,7 +85,8 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 		$questionnaireKey = $this->_getQuestionnaireKeyFromPass();
 
 		// セッションインデックスパラメータ
-		$sessionName = self::QUESTIONNAIRE_EDIT_SESSION_INDEX . $this->_getQuestionnaireEditSessionIndex();
+		$sessionName =
+			self::QUESTIONNAIRE_EDIT_SESSION_INDEX . $this->_getQuestionnaireEditSessionIndex();
 
 		if ($this->request->is('post') || $this->request->is('put')) {
 			// ウィザード画面なのでセッションに記録された前画面データが必要
@@ -137,7 +138,9 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 			// アンケートデータに作成されたPost質問データをかぶせる
 			// （質問作成画面では質問データ属性全てをPOSTしているのですり替えでOK）
 			$questionnaire = $this->_questionnaire;
-			$questionnaire['Questionnaire'] = Hash::merge($this->_questionnaire['Questionnaire'], $postQuestionnaire['Questionnaire']);
+			$questionnaire['Questionnaire'] = Hash::merge(
+				$this->_questionnaire['Questionnaire'],
+				$postQuestionnaire['Questionnaire']);
 
 			// 発行後のアンケートは質問情報は書き換えない
 			// 未発行の場合はPostデータを上書き設定して
@@ -145,7 +148,9 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 				$questionnaire['QuestionnairePage'] = $postQuestionnaire['QuestionnairePage'];
 			} else {
 				// booleanの値がPOST時と同じようになるように調整
-				$questionnaire['QuestionnairePage'] = QuestionnairesAppController::changeBooleansToNumbers($questionnaire['QuestionnairePage']);
+				$questionnaire['QuestionnairePage'] =
+					QuestionnairesAppController::changeBooleansToNumbers(
+						$questionnaire['QuestionnairePage']);
 			}
 			// バリデート
 			$this->Questionnaire->set($questionnaire);
@@ -155,7 +160,9 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 			}
 
 			// バリデートがOKであればPOSTで出来上がったデータをセッションキャッシュに書く
-			$this->Session->write(self::QUESTIONNAIRE_EDIT_SESSION_INDEX . $this->_sessionIndex, $questionnaire);
+			$this->Session->write(
+				self::QUESTIONNAIRE_EDIT_SESSION_INDEX . $this->_sessionIndex,
+				$questionnaire);
 
 			// 次の画面へリダイレクト
 			$this->redirect($this->_getActionUrl('edit_result'));
@@ -194,13 +201,17 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 				return;
 			}
 			// それをキャッシュに書く
-			$this->Session->write(self::QUESTIONNAIRE_EDIT_SESSION_INDEX . $this->_getQuestionnaireEditSessionIndex(), $questionnaire);
+			$this->Session->write(
+				self::QUESTIONNAIRE_EDIT_SESSION_INDEX . $this->_getQuestionnaireEditSessionIndex(),
+				$questionnaire);
 
 			// 次の画面へリダイレクト
 			$this->redirect($this->_getActionUrl('edit'));
 
 		} else {
-			$this->Session->write(self::QUESTIONNAIRE_EDIT_SESSION_INDEX . $this->_getQuestionnaireEditSessionIndex(), $this->_questionnaire);
+			$this->Session->write(
+				self::QUESTIONNAIRE_EDIT_SESSION_INDEX . $this->_getQuestionnaireEditSessionIndex(),
+				$this->_questionnaire);
 			$this->__setupViewParameters($this->_questionnaire, $this->_getActionUrl('edit_question'));
 		}
 	}
@@ -237,14 +248,19 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 				$this->__setupViewParameters($questionnaire, $this->_getActionUrl('edit_result'));
 				return;
 			}
+
 			// 成功時 セッションに書き溜めた編集情報を削除
-			$this->Session->delete(self::QUESTIONNAIRE_EDIT_SESSION_INDEX . $this->_getQuestionnaireEditSessionIndex());
+			$this->Session->delete(
+				self::QUESTIONNAIRE_EDIT_SESSION_INDEX . $this->_getQuestionnaireEditSessionIndex());
+
 			// ページトップへリダイレクト
 			$this->redirect(NetCommonsUrl::backToPageUrl());
 			return;
 		} else {
 			// 指定されて取り出したアンケートデータをセッションキャッシュに書く
-			$this->Session->write($this->_getQuestionnaireEditSessionIndex(), $this->_questionnaire);
+			$this->Session->write(
+				$this->_getQuestionnaireEditSessionIndex(),
+				$this->_questionnaire);
 			$this->__setupViewParameters($this->_questionnaire, $this->_getActionUrl('edit_result'));
 		}
 	}

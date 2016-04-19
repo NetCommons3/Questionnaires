@@ -58,10 +58,18 @@ class QuestionnaireBlockRolePermissionsController extends QuestionnaireBlocksCon
 		'Blocks.BlockRolePermissionForm',
 		'Blocks.BlockTabs' => array(
 			'mainTabs' => array(
-				'block_index' => array('url' => array('controller' => 'questionnaire_blocks')),
-				'role_permissions' => array('url' => array('controller' => 'questionnaire_block_role_permissions')),
-				'frame_settings' => array('url' => array('controller' => 'questionnaire_frame_settings')),
-				'mail_settings' => array('url' => array('controller' => 'questionnaire_mail_settings')),
+				'block_index' => array(
+					'url' => array('controller' => 'questionnaire_blocks')
+				),
+				'role_permissions' => array(
+					'url' => array('controller' => 'questionnaire_block_role_permissions')
+				),
+				'frame_settings' => array(
+					'url' => array('controller' => 'questionnaire_frame_settings')
+				),
+				'mail_settings' => array(
+					'url' => array('controller' => 'questionnaire_mail_settings')
+				),
 			),
 		),
 		'NetCommons.Date',
@@ -77,14 +85,22 @@ class QuestionnaireBlockRolePermissionsController extends QuestionnaireBlocksCon
 		// （作成できてないときはExceptionエラーが発生して、ここにはこれない
 		$questionnaireSetting = $this->QuestionnaireSetting->getSetting();
 		$permissions = $this->Workflow->getBlockRolePermissions(
-			array('content_creatable', 'content_publishable', 'content_comment_creatable', 'content_comment_publishable')
+			array(
+				'content_creatable',
+				'content_publishable',
+				'content_comment_creatable',
+				'content_comment_publishable'
+			)
 		);
 		$this->set('roles', $permissions['Roles']);
 		if ($this->request->is('post')) {
 			if ($this->QuestionnaireSetting->saveQuestionnaireSetting($this->request->data)) {
-				$this->NetCommons->setFlashNotification(__d('net_commons', 'Successfully saved.'), array(
-					'class' => 'success',
-				));
+				$this->NetCommons->setFlashNotification(
+					__d('net_commons', 'Successfully saved.'),
+					array(
+						'class' => 'success',
+					)
+				);
 				$this->redirect(NetCommonsUrl::backToIndexUrl('default_setting_action'));
 				return;
 			}

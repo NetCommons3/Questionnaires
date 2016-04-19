@@ -88,7 +88,8 @@ class QuestionnaireAnswerSummariesController extends QuestionnairesAppController
 		}
 
 		// 現在の表示形態を調べておく
-		list($this->__displayType) = $this->QuestionnaireFrameSetting->getQuestionnaireFrameSetting(Current::read('Frame.key'));
+		list($this->__displayType) =
+			$this->QuestionnaireFrameSetting->getQuestionnaireFrameSetting(Current::read('Frame.key'));
 
 		//集計表示していいかどうかの判断
 

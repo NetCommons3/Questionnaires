@@ -57,7 +57,8 @@ class QuestionnaireAnswerHelper extends AppHelper {
 		// 質問セットをもらう
 		// 種別に応じて質問＆回答の要素を作成し返す
 		$index = $question['key'];
-		$fieldName = 'QuestionnaireAnswer.' . $index . '.0.answer_value';
+		$baseFieldName = 'QuestionnaireAnswer.' . $index . '.0.';
+		$fieldName = $baseFieldName . 'answer_value';
 
 		$ret = call_user_func_array(
 			array($this, $this->_answerFunc[$question['question_type']]),
@@ -65,10 +66,12 @@ class QuestionnaireAnswerHelper extends AppHelper {
 
 		if (! QuestionnairesComponent::isMatrixInputType($question['question_type'])) {
 			$ret .= $this->_error($fieldName);
-			$ret .= $this->NetCommonsForm->hidden('QuestionnaireAnswer.' . $index . '.0.questionnaire_answer_summary_id');
-			$ret .= $this->NetCommonsForm->hidden('QuestionnaireAnswer.' . $index . '.0.questionnaire_question_key', array('value' => $index));
-			$ret .= $this->NetCommonsForm->hidden('QuestionnaireAnswer.' . $index . '.0.id');
-			$ret .= $this->NetCommonsForm->hidden('QuestionnaireAnswer.' . $index . '.0.matrix_choice_key', array('value' => null));
+			$ret .= $this->NetCommonsForm->hidden($baseFieldName . 'questionnaire_answer_summary_id');
+			$ret .= $this->NetCommonsForm->hidden($baseFieldName . 'questionnaire_question_key',
+				array('value' => $index));
+			$ret .= $this->NetCommonsForm->hidden($baseFieldName . 'id');
+			$ret .= $this->NetCommonsForm->hidden($baseFieldName . 'matrix_choice_key',
+				array('value' => null));
 		}
 		return $ret;
 	}
@@ -89,7 +92,9 @@ class QuestionnaireAnswerHelper extends AppHelper {
 			$afterLabel = '</label></div>';
 			$choices = Hash::sort($question['QuestionnaireChoice'], '{n}.other_choice_type', 'asc');
 			$options = $this->_getChoiceOptionElement($choices);
-			if (Hash::extract($question['QuestionnaireChoice'], '{n}[other_choice_type!=' . QuestionnairesComponent::OTHER_CHOICE_TYPE_NO_OTHER_FILED . ']')) {
+			$otherChoice = Hash::extract($question['QuestionnaireChoice'],
+				'{n}[other_choice_type!=' . QuestionnairesComponent::OTHER_CHOICE_TYPE_NO_OTHER_FILED . ']');
+			if ($otherChoice) {
 				$otherInput = $this->NetCommonsForm->input($otherAnswerFieldName, array(
 					'type' => 'text',
 					'label' => false,
@@ -140,7 +145,9 @@ class QuestionnaireAnswerHelper extends AppHelper {
 			$choices = Hash::sort($question['QuestionnaireChoice'], '{n}.other_choice_type', 'asc');
 			$options = $this->_getChoiceOptionElement($choices);
 
-			if (Hash::extract($question['QuestionnaireChoice'], '{n}[other_choice_type!=' . QuestionnairesComponent::OTHER_CHOICE_TYPE_NO_OTHER_FILED . ']')) {
+			$otherChoice = Hash::extract($question['QuestionnaireChoice'],
+				'{n}[other_choice_type!=' . QuestionnairesComponent::OTHER_CHOICE_TYPE_NO_OTHER_FILED . ']');
+			if ($otherChoice) {
 				$otherInput = $this->NetCommonsForm->input($otherAnswerFieldName, array(
 					'type' => 'text',
 					'label' => false,
@@ -194,9 +201,15 @@ class QuestionnaireAnswerHelper extends AppHelper {
 		if ($question['is_range'] == QuestionnairesComponent::USES_USE) {
 			$ret .= '<span class="help-block">';
 			if ($question['question_type_option'] == QuestionnairesComponent::TYPE_OPTION_NUMERIC) {
-				$ret .= sprintf(__d('questionnaires', 'Please enter a number between %s and %s'), $question['min'], $question['max']);
+				$ret .= sprintf(
+					__d('questionnaires', 'Please enter a number between %s and %s'),
+					$question['min'],
+					$question['max']);
 			} else {
-				$ret .= sprintf(__d('questionnaires', 'Please enter between %s letters and %s letters'), $question['min'], $question['max']);
+				$ret .= sprintf(
+					__d('questionnaires', 'Please enter between %s letters and %s letters'),
+					$question['min'],
+					$question['max']);
 			}
 			$ret .= '</span>';
 		}
@@ -265,8 +278,10 @@ class QuestionnaireAnswerHelper extends AppHelper {
  */
 	public function matrix($index, $fieldName, $question, $readonly) {
 		if (isset($question['QuestionnaireChoice'])) {
-			$cols = Hash::extract($question['QuestionnaireChoice'], '{n}[matrix_type=' . QuestionnairesComponent::MATRIX_TYPE_COLUMN . ']');
-			$rowChoices = Hash::extract($question['QuestionnaireChoice'], '{n}[matrix_type!=' . QuestionnairesComponent::MATRIX_TYPE_COLUMN . ']');
+			$cols = Hash::extract($question['QuestionnaireChoice'],
+				'{n}[matrix_type=' . QuestionnairesComponent::MATRIX_TYPE_COLUMN . ']');
+			$rowChoices = Hash::extract($question['QuestionnaireChoice'],
+				'{n}[matrix_type!=' . QuestionnairesComponent::MATRIX_TYPE_COLUMN . ']');
 			$options = $this->_getChoiceOptionElement($cols);
 		}
 		$addClass = '';
@@ -275,7 +290,9 @@ class QuestionnaireAnswerHelper extends AppHelper {
 		}
 		$errorMessage = '';
 
-		$ret = '<table class="table ' . $addClass . 'table-bordered text-center questionnaire-matrix-table">';
+		$ret = '<table class="table ';
+		$ret .= $addClass;
+		$ret .= 'table-bordered text-center questionnaire-matrix-table">';
 		$ret .= '<thead><tr><th></th>';
 		foreach ($options as $opt) {
 			$ret .= '<th class="text-center">' . $opt . '</th>';
@@ -283,13 +300,16 @@ class QuestionnaireAnswerHelper extends AppHelper {
 		$ret .= '</thead><tbody>';
 
 		foreach ($rowChoices as $rowIndex => $row) {
+			$baseFieldName = 'QuestionnaireAnswer.' . $index . '.' . $rowIndex;
 			$ret .= '<tr><th>' . $row['choice_label'];
-			$ret .= $this->NetCommonsForm->hidden('QuestionnaireAnswer.' . $index . '.' . $rowIndex . '.questionnaire_answer_summary_id');
-			$ret .= $this->NetCommonsForm->hidden('QuestionnaireAnswer.' . $index . '.' . $rowIndex . '.questionnaire_question_key', array('value' => $index));
-			$ret .= $this->NetCommonsForm->hidden('QuestionnaireAnswer.' . $index . '.' . $rowIndex . '.matrix_choice_key', array('value' => $row['key']));
-			$ret .= $this->NetCommonsForm->hidden('QuestionnaireAnswer.' . $index . '.' . $rowIndex . '.id');
+			$ret .= $this->NetCommonsForm->hidden(	$baseFieldName . '.questionnaire_answer_summary_id');
+			$ret .= $this->NetCommonsForm->hidden(	$baseFieldName . '.questionnaire_question_key',
+				array('value' => $index));
+			$ret .= $this->NetCommonsForm->hidden(	$baseFieldName . '.matrix_choice_key',
+				array('value' => $row['key']));
+			$ret .= $this->NetCommonsForm->hidden(	$baseFieldName . '.id');
 			if ($row['other_choice_type'] != QuestionnairesComponent::OTHER_CHOICE_TYPE_NO_OTHER_FILED) {
-				$ret .= $this->NetCommonsForm->input('QuestionnaireAnswer.' . $index . '.' . $rowIndex . '.other_answer_value', array(
+				$ret .= $this->NetCommonsForm->input($baseFieldName . '.other_answer_value', array(
 					'type' => 'text',
 					'label' => false,
 					'div' => false,
@@ -297,9 +317,13 @@ class QuestionnaireAnswerHelper extends AppHelper {
 				));
 			}
 			$ret .= '</th>';
-			$ret .= $this->_getMatrixRow($question['question_type'], 'QuestionnaireAnswer.' . $index . '.' . $rowIndex . '.answer_value', $options, $readonly);
+			$ret .= $this->_getMatrixRow(
+				$question['question_type'],
+				$baseFieldName . '.answer_value',
+				$options,
+				$readonly);
 			$ret .= '</tr>';
-			$errorMessage .= $this->_error('QuestionnaireAnswer.' . $index . '.' . $rowIndex . '.answer_value');
+			$errorMessage .= $this->_error($baseFieldName . '.answer_value');
 		}
 		$ret .= '</tbody></table>';
 		$ret .= $errorMessage;
@@ -328,7 +352,9 @@ class QuestionnaireAnswerHelper extends AppHelper {
 			if ($question['is_range'] == QuestionnairesComponent::USES_USE) {
 				$options['minDate'] = $question['min'];
 				$options['maxDate'] = $question['max'];
-				$rangeMessage .= sprintf(__d('questionnaires', 'Please enter at %s to %s'), date('Y-m-d', strtotime($question['min'])), date('Y-m-d', strtotime($question['max'])));
+				$rangeMessage .= sprintf(__d('questionnaires', 'Please enter at %s to %s'),
+					date('Y-m-d', strtotime($question['min'])),
+					date('Y-m-d', strtotime($question['max'])));
 			}
 		} elseif ($question['question_type_option'] == QuestionnairesComponent::TYPE_OPTION_TIME) {
 			$icon = 'glyphicon-time';
@@ -337,7 +363,9 @@ class QuestionnaireAnswerHelper extends AppHelper {
 				$tm = new NetCommonsTime();
 				$options['minDate'] = date('Y-m-d ', strtotime($tm->getNowDatetime())) . $question['min'];
 				$options['maxDate'] = date('Y-m-d ', strtotime($tm->getNowDatetime())) . $question['max'];
-				$rangeMessage .= sprintf(__d('questionnaires', 'Please enter at %s to %s'), date('H:i', strtotime($question['min'])), date('H:i', strtotime($question['max'])));
+				$rangeMessage .= sprintf(__d('questionnaires', 'Please enter at %s to %s'),
+					date('H:i', strtotime($question['min'])),
+					date('H:i', strtotime($question['max'])));
 			}
 		} elseif ($question['question_type_option'] == QuestionnairesComponent::TYPE_OPTION_DATE_TIME) {
 			$icon = 'glyphicon-calendar';
@@ -345,7 +373,9 @@ class QuestionnaireAnswerHelper extends AppHelper {
 			if ($question['is_range'] == QuestionnairesComponent::USES_USE) {
 				$options['minDate'] = $question['min'];
 				$options['maxDate'] = $question['max'];
-				$rangeMessage .= sprintf(__d('questionnaires', 'Please enter at %s to %s'), date('Y-m-d H:i', strtotime($question['min'])), date('Y-m-d H:i', strtotime($question['max'])));
+				$rangeMessage .= sprintf(__d('questionnaires', 'Please enter at %s to %s'),
+					date('Y-m-d H:i', strtotime($question['min'])),
+					date('Y-m-d H:i', strtotime($question['max'])));
 			}
 		}
 		$options = json_encode($options);
@@ -389,7 +419,12 @@ class QuestionnaireAnswerHelper extends AppHelper {
 	protected function _getChoiceOptionElement($choices) {
 		$ret = array();
 		foreach ($choices as $choice) {
-			$ret[QuestionnairesComponent::ANSWER_DELIMITER . $choice['key'] . QuestionnairesComponent::ANSWER_VALUE_DELIMITER . $choice['choice_label']] = $choice['choice_label'];
+			$choiceIndex = sprintf('%s%s%s%s',
+				QuestionnairesComponent::ANSWER_DELIMITER,
+				$choice['key'],
+				QuestionnairesComponent::ANSWER_VALUE_DELIMITER,
+				$choice['choice_label']);
+			$ret[$choiceIndex] = $choice['choice_label'];
 		}
 		return $ret;
 	}

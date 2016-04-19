@@ -79,7 +79,8 @@ class QuestionnairesSaveTest extends NetCommonsModelTestCase {
 			$actual[$this->$model->alias] = Hash::remove($actual[$this->$model->alias], 'modified_user');
 
 			if ($this->$model->hasField('key') && !isset($data[$this->$model->alias][0]['key'])) {
-				$data[$this->$model->alias][0]['key'] = OriginalKeyBehavior::generateKey($this->$model->name, $this->$model->useDbConfig);
+				$data[$this->$model->alias][0]['key'] =
+					OriginalKeyBehavior::generateKey($this->$model->name, $this->$model->useDbConfig);
 			}
 			$before[$this->$model->alias] = array();
 		}
@@ -150,7 +151,8 @@ class QuestionnairesSaveTest extends NetCommonsModelTestCase {
  * @dataProvider dataProviderValidationError
  * @return void
  */
-	public function testValidationError($datas, $options, $field, $value, $message, $overwrite = array()) {
+	public function testValidationError(
+		$datas, $options, $field, $value, $message, $overwrite = array()) {
 		$model = $this->_modelName;
 
 		// 試験データは１つ分しか来ないけど

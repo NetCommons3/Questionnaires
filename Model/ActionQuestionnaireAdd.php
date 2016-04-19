@@ -56,13 +56,18 @@ class ActionQuestionnaireAdd extends QuestionnairesAppModel {
 			),
 			'title' => array(
 				'rule' => array(
-					'requireWhen', 'create_option', QuestionnairesComponent::QUESTIONNAIRE_CREATE_OPT_NEW),
+					'requireWhen',
+					'create_option',
+					QuestionnairesComponent::QUESTIONNAIRE_CREATE_OPT_NEW),
 				'message' => sprintf(__d('net_commons', 'Please input %s.'), __d('questionnaires', 'Title')),
 				'required' => false,
 			),
 			'past_questionnaire_id' => array(
 				'requireWhen' => array(
-					'rule' => array('requireWhen', 'create_option', QuestionnairesComponent::QUESTIONNAIRE_CREATE_OPT_REUSE),
+					'rule' => array(
+						'requireWhen',
+						'create_option',
+						QuestionnairesComponent::QUESTIONNAIRE_CREATE_OPT_REUSE),
 					'message' => __d('questionnaires', 'Please select past questionnaire.'),
 				),
 				'checkPastQuestionnaire' => array(
@@ -125,7 +130,8 @@ class ActionQuestionnaireAdd extends QuestionnairesAppModel {
  * @return bool
  */
 	public function checkPastQuestionnaire($check) {
-		if ($this->data['ActionQuestionnaireAdd']['create_option'] != QuestionnairesComponent::QUESTIONNAIRE_CREATE_OPT_REUSE) {
+		if ($this->data['ActionQuestionnaireAdd']['create_option'] !=
+			QuestionnairesComponent::QUESTIONNAIRE_CREATE_OPT_REUSE) {
 			return true;
 		}
 		$this->Questionnaire = ClassRegistry::init('Questionnaires.Questionnaire', true);
@@ -194,7 +200,8 @@ class ActionQuestionnaireAdd extends QuestionnairesAppModel {
 		// そのデータから今回作成するアンケートデータ基本構成を作成し返す
 
 		// 過去のアンケートのコピー・クローンで作成
-		$questionnaire = $this->_getQuestionnaireCloneById($this->data['ActionQuestionnaireAdd']['past_questionnaire_id']);
+		$questionnaireId = $this->data['ActionQuestionnaireAdd']['past_questionnaire_id'];
+		$questionnaire = $this->_getQuestionnaireCloneById($questionnaireId);
 		return $questionnaire;
 	}
 /**
@@ -251,7 +258,8 @@ class ActionQuestionnaireAdd extends QuestionnairesAppModel {
 		// そのデータから今回作成するアンケートデータ基本構成を作成し返す
 
 		if (empty($this->data['ActionQuestionnaireAdd']['template_file']['name'])) {
-			$this->validationErrors['template_file'][] = __d('questionnaires', 'Please input template file.');
+			$this->validationErrors['template_file'][] =
+				__d('questionnaires', 'Please input template file.');
 			return null;
 		}
 
@@ -277,14 +285,17 @@ class ActionQuestionnaireAdd extends QuestionnairesAppModel {
 			}
 
 			// アンケートテンプレートファイル本体をテンポラリフォルダに展開する。
-			$questionnaireZip = new UnZip($temporaryFolder->path . DS . QuestionnairesComponent::QUESTIONNAIRE_TEMPLATE_FILENAME);
+			$questionnaireZip = new UnZip(
+				$temporaryFolder->path . DS . QuestionnairesComponent::QUESTIONNAIRE_TEMPLATE_FILENAME);
 			if (! $questionnaireZip->extract()) {
-				$this->validationErrors['template_file'][] = __d('questionnaires', 'illegal import file.');
+				$this->validationErrors['template_file'][] =
+					__d('questionnaires', 'illegal import file.');
 				return null;
 			}
 
 			// jsonファイルを読み取り、PHPオブジェクトに変換
-			$jsonFilePath = $questionnaireZip->path . DS . QuestionnairesComponent::QUESTIONNAIRE_JSON_FILENAME;
+			$jsonFilePath =
+				$questionnaireZip->path . DS . QuestionnairesComponent::QUESTIONNAIRE_JSON_FILENAME;
 			$jsonFile = new File($jsonFilePath);
 			$jsonData = $jsonFile->read();
 			$jsonQuestionnaire = json_decode($jsonData, true);
@@ -342,7 +353,9 @@ class ActionQuestionnaireAdd extends QuestionnairesAppModel {
 					if ($model->getColumnType($columnName) == 'text') {
 						// keyと同じ名前のフォルダの下にあるkeyの名前のZIPファイルを渡して
 						// その返ってきた値をこのカラムに設定
-						$value = $wysiswyg->getFromWysIsWygZIP($folderPath . DS . $value, $model->alias . '.' . $columnName);
+						$value =
+							$wysiswyg->getFromWysIsWygZIP(
+								$folderPath . DS . $value, $model->alias . '.' . $columnName);
 					}
 				}
 			}
@@ -359,12 +372,15 @@ class ActionQuestionnaireAdd extends QuestionnairesAppModel {
  */
 	private function __checkFingerPrint($folderPath) {
 		// フィンガープリントファイルを取得
-		$file = new File($folderPath . DS . QuestionnairesComponent::QUESTIONNAIRE_FINGER_PRINT_FILENAME, false);
+		$file = new File(
+				$folderPath . DS . QuestionnairesComponent::QUESTIONNAIRE_FINGER_PRINT_FILENAME,
+				false);
 		$fingerPrint = $file->read();
 
 		// ファイル内容から算出されるハッシュ値と指定されたフットプリント値を比較し
 		// 同一であれば正当性が保証されたと判断する（フォーマットチェックなどは行わない）
-		$questionnaireZipFile = $folderPath . DS . QuestionnairesComponent::QUESTIONNAIRE_TEMPLATE_FILENAME;
+		$questionnaireZipFile =
+			$folderPath . DS . QuestionnairesComponent::QUESTIONNAIRE_TEMPLATE_FILENAME;
 		if (sha1_file($questionnaireZipFile, false) != $fingerPrint) {
 			return false;
 		}

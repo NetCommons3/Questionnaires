@@ -152,40 +152,4 @@ class QuestionnaireAfterFrameSaveTest extends NetCommonsModelTestCase {
 		);
 	}
 
-/**
- * SaveのExceptionErrorテスト
- *
- * @param array $data 登録データ
- * @param string $mockModel Mockのモデル
- * @param string $mockMethod Mockのメソッド
- * @return void
- */
-	public function testBlockSaveOnExceptionError() {
-		$model = $this->_modelName;
-		$method = $this->_methodName;
-		$data = $this->__getData(16, null, 4);
-
-		$this->_mockForReturnFalse($model, 'Blocks.Block', 'save');
-
-		$this->setExpectedException('InternalErrorException');
-		$this->$model->$method($data);
-	}
-/**
- * SaveのExceptionErrorテスト
- *
- * @param array $data 登録データ
- * @param string $mockModel Mockのモデル
- * @param string $mockMethod Mockのメソッド
- * @return void
- */
-	public function testFrameSaveOnExceptionError() {
-		$model = $this->_modelName;
-		$method = $this->_methodName;
-		$data = $this->__getData(16, null, 4);
-
-		$this->_mockForReturnFalse($model, 'Frames.Frame', 'save');
-
-		$this->setExpectedException('InternalErrorException');
-		$this->$model->$method($data);
-	}
 }

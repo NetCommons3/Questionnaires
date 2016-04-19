@@ -43,11 +43,12 @@ class QuestionnaireStatusLabelHelper extends AppHelper {
 			$lblColor = 'danger';
 			$lblMsg = __d('net_commons', 'Disapproving');
 		} else {
-			if ($questionnaire['Questionnaire']['period_range_stat'] == QuestionnairesComponent::QUESTIONNAIRE_PERIOD_STAT_BEFORE) {
+			$rangeStat = $questionnaire['Questionnaire']['period_range_stat'];
+			if ($rangeStat == QuestionnairesComponent::QUESTIONNAIRE_PERIOD_STAT_BEFORE) {
 				//未実施
 				$lblColor = 'default';
 				$lblMsg = __d('questionnaires', 'Before public');
-			} elseif ($questionnaire['Questionnaire']['period_range_stat'] == QuestionnairesComponent::QUESTIONNAIRE_PERIOD_STAT_END) {
+			} elseif ($rangeStat == QuestionnairesComponent::QUESTIONNAIRE_PERIOD_STAT_END) {
 				//終了
 				$lblColor = 'default';
 				$lblMsg = __d('questionnaires', 'End');

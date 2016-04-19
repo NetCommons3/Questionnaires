@@ -62,13 +62,31 @@ class QuestionnaireAnswerSummaryCsv extends QuestionnairesAppModel {
 	);
 
 /**
+ * Constructor. Binds the model's database table to the object.
+ *
+ * @param bool|int|string|array $id Set this ID for this model on startup,
+ * can also be an array of options, see above.
+ * @param string $table Name of database table to use.
+ * @param string $ds DataSource connection name.
+ * @see Model::__construct()
+ * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
+ */
+	public function __construct($id = false, $table = null, $ds = null) {
+		parent::__construct($id, $table, $ds);
+
+		$this->loadModels([
+			'Questionnaire' => 'Questionnaires.Questionnaire',
+			'QuestionnaireAnswer' => 'Questionnaires.QuestionnaireAnswer',
+		]);
+	}
+
+/**
  * getQuestionnaireForAnswerCsv
  *
  * @param int $questionnaireKey questionnaire key
  * @return array questionnaire data
  */
 	public function getQuestionnaireForAnswerCsv($questionnaireKey) {
-		$this->Questionnaire = ClassRegistry::init('Questionnaires.Questionnaire', true);
 		// 指定のアンケートデータを取得
 		// CSVの取得は公開してちゃんとした回答を得ているアンケートに限定である
 		$questionnaire = $this->Questionnaire->find('first', array(
@@ -92,8 +110,6 @@ class QuestionnaireAnswerSummaryCsv extends QuestionnairesAppModel {
  * @return array
  */
 	public function getAnswerSummaryCsv($questionnaire, $limit, $offset) {
-		$this->QuestionnaireAnswer = ClassRegistry::init('Questionnaires.QuestionnaireAnswer', true);
-
 		// 指定されたアンケートの回答データをＣｓｖに出力しやすい行形式で返す
 		$retArray = array();
 
@@ -133,8 +149,11 @@ class QuestionnaireAnswerSummaryCsv extends QuestionnairesAppModel {
 		if (empty($summaries)) {
 			return $retArray;
 		}
+
 		// 質問のIDを取得
-		$questionIds = Hash::extract($questionnaire['QuestionnairePage'], '{n}.QuestionnaireQuestion.{n}.id');
+		$questionIds = Hash::extract(
+			$questionnaire['QuestionnairePage'],
+			'{n}.QuestionnaireQuestion.{n}.id');
 
 		// summary loop
 		foreach ($summaries as $summary) {
@@ -191,11 +210,19 @@ class QuestionnaireAnswerSummaryCsv extends QuestionnairesAppModel {
 					$choiceSeq = 1;
 					foreach ($question['QuestionnaireChoice'] as $choice) {
 						if ($choice['matrix_type'] == QuestionnairesComponent::MATRIX_TYPE_ROW_OR_NO_MATRIX) {
-							$cols[] = $pageNumber . '-' . $questionNumber . '-' . $choiceSeq++ . '. ' . $question['question_value'] . ':' . $choice['choice_label'];
+							$cols[] = sprintf('%d-%d-%d. %s:%s',
+								$pageNumber,
+								$questionNumber,
+								$choiceSeq++,
+								$question['question_value'],
+								$choice['choice_label']);
 						}
 					}
 				} else {
-					$cols[] = $pageNumber . '-' . $questionNumber . '. ' . $question['question_value'];
+					$cols[] = sprintf('%d-%d. %s',
+						$pageNumber,
+						$questionNumber,
+						$question['question_value']);
 				}
 			}
 		}
@@ -266,7 +293,9 @@ class QuestionnaireAnswerSummaryCsv extends QuestionnairesAppModel {
 	protected function _getAns($question, $answers) {
 		$retAns = '';
 		// 回答配列データの中から、現在指定された質問に該当するものを取り出す
-		$ans = Hash::extract($answers, '{n}.QuestionnaireAnswer[questionnaire_question_key=' . $question['key'] . ']');
+		$ans = Hash::extract(
+			$answers,
+			'{n}.QuestionnaireAnswer[questionnaire_question_key=' . $question['key'] . ']');
 		// 回答が存在するとき処理
 		if (! $ans) {
 			return $retAns;
@@ -282,9 +311,13 @@ class QuestionnaireAnswerSummaryCsv extends QuestionnairesAppModel {
 			// 選択されていた数分処理
 			foreach ($ans['answer_values'] as $choiceKey => $dividedAns) {
 				// idから判断して、その他が選ばれていた場合、other_answer_valueを入れる
-				$choice = Hash::extract($question['QuestionnaireChoice'], '{n}[key=' . $choiceKey . ']');
+				$choice = Hash::extract(
+					$question['QuestionnaireChoice'],
+					'{n}[key=' . $choiceKey . ']');
 				if ($choice) {
-					if ($choice[0]['other_choice_type'] != QuestionnairesComponent::OTHER_CHOICE_TYPE_NO_OTHER_FILED) {
+					$choice = $choice[0];
+					if ($choice['other_choice_type'] !=
+						QuestionnairesComponent::OTHER_CHOICE_TYPE_NO_OTHER_FILED) {
 						$retAns .= $ans['other_answer_value'];
 					} else {
 						$retAns .= $dividedAns;
@@ -309,7 +342,9 @@ class QuestionnaireAnswerSummaryCsv extends QuestionnairesAppModel {
 		$retAns = '';
 		// 回答配列データの中から、現在指定された質問に該当するものを取り出す
 		// マトリクスタイプのときは複数存在する（行数分）
-		$anss = Hash::extract($answers, '{n}.QuestionnaireAnswer[questionnaire_question_key=' . $question['key'] . ']');
+		$anss = Hash::extract(
+			$answers,
+			'{n}.QuestionnaireAnswer[questionnaire_question_key=' . $question['key'] . ']');
 		if (empty($anss)) {
 			return $retAns;
 		}

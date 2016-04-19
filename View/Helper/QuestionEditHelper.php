@@ -87,8 +87,8 @@ class QuestionEditHelper extends AppHelper {
  * @param string $help 追加説明文
  * @return string HTML
  */
-	public function questionnaireAttributeCheckbox($fieldName, $label, $options = array(), $help = '') {
-		$this->log($help, 'debug');
+	public function questionnaireAttributeCheckbox(
+		$fieldName, $label, $options = array(), $help = '') {
 		$ngModel = 'questionnaires.questionnaire.' . Inflector::variable($fieldName);
 		$ret = '<div class=" checkbox"><label>';
 		$options = Hash::merge(array(
@@ -99,7 +99,8 @@ class QuestionEditHelper extends AppHelper {
 			'error' => false,
 			'ng-model' => $ngModel,
 			//'ng-checked' => $ngModel . '==' . RegistrationsComponent::USES_USE,
-			'ng-false-value' => '"0"', // この記述でないと チェックON,OFFが正常に動作しない。
+			// この記述でないと チェックON,OFFが正常に動作しない。
+			'ng-false-value' => '"0"',
 			'ng-true-value' => '"1"'
 		),
 			$options
@@ -111,7 +112,9 @@ class QuestionEditHelper extends AppHelper {
 			$ret .= '<span class="help-block">' . $help . '</span>';
 		}
 		$ret .= '</label>';
-		$ret .= '<div class="has-error">' . $this->NetCommonsForm->error($fieldName, null, array('class' => 'help-block')) . '</div>';
+		$ret .= '<div class="has-error">';
+		$ret .= $this->NetCommonsForm->error($fieldName, null, array('class' => 'help-block'));
+		$ret .= '</div>';
 		$ret .= '</div>';
 		return $ret;
 	}

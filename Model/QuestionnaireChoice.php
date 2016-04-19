@@ -103,7 +103,9 @@ class QuestionnaireChoice extends QuestionnairesAppModel {
 			),
 			'graph_color' => array(
 				'rule' => '/^#[a-f0-9]{6}$/i',
-				'message' => __d('questionnaires', 'First character is "#". And input the hexadecimal numbers by six digits.'),
+				'message' =>
+					__d('questionnaires',
+						'First character is "#". And input the hexadecimal numbers by six digits.'),
 				//'allowEmpty' => false,
 				//'required' => false,
 			),
@@ -175,15 +177,18 @@ class QuestionnaireChoice extends QuestionnairesAppModel {
 		if (! isset($this->data['QuestionnaireChoice']['skip_page_sequence'])) {
 			$this->data['QuestionnaireChoice']['skip_page_sequence'] = $pageIndex + 1;
 		}
+		$skipPage = $this->data['QuestionnaireChoice']['skip_page_sequence'];
 		// 最後ページへの指定ではない場合
-		if ($this->data['QuestionnaireChoice']['skip_page_sequence'] != QuestionnairesComponent::SKIP_GO_TO_END) {
+		if ($skipPage != QuestionnairesComponent::SKIP_GO_TO_END) {
 			// そのジャンプ先は現在ページから戻っていないか
-			if ($this->data['QuestionnaireChoice']['skip_page_sequence'] <= $pageIndex) {
-				$this->validationErrors['skip_page_sequence'][] = __d('questionnaires', 'Invalid skip page. Please set forward page.');
+			if ($skipPage <= $pageIndex) {
+				$this->validationErrors['skip_page_sequence'][] =
+					__d('questionnaires', 'Invalid skip page. Please set forward page.');
 			}
 			// そのジャンプ先は存在するページシーケンスか
-			if ($this->data['QuestionnaireChoice']['skip_page_sequence'] > $maxPageIndex) {
-				$this->validationErrors['skip_page_sequence'][] = __d('questionnaires', 'Invalid skip page. page does not exist.');
+			if ($skipPage > $maxPageIndex) {
+				$this->validationErrors['skip_page_sequence'][] =
+					__d('questionnaires', 'Invalid skip page. page does not exist.');
 			}
 		}
 	}

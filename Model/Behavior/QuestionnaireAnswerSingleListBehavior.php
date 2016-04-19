@@ -87,27 +87,31 @@ class QuestionnaireAnswerSingleListBehavior extends QuestionnaireAnswerBehavior 
 		if (! in_array($question['question_type'], $this->_choiceValidateType)) {
 			return true;
 		}
-		$ret = true;
-		if (isset($model->data['QuestionnaireAnswer']['answer_values'])) {
-			// 質問に設定されている選択肢を配列にまとめる
-			$list = Hash::combine($question['QuestionnaireChoice'], '{n}.id', '{n}.key');
+		if (! isset($model->data['QuestionnaireAnswer']['answer_values'])) {
+			return true;
+		}
+		// 質問に設定されている選択肢を配列にまとめる
+		$list = Hash::combine($question['QuestionnaireChoice'], '{n}.id', '{n}.key');
 
-			// 選択された選択肢IDすべてについて調査する
-			$choiceIds = array_keys($model->data['QuestionnaireAnswer']['answer_values']);
-			foreach ($choiceIds as $choiceId) {
-				// 選択されたIDは、ちゃんと用意されている選択肢の中のひとつであるか
-				if ($choiceId != '' && !Validation::inList(strval($choiceId), $list)) {
+		$ret = true;
+		// 選択された選択肢IDすべてについて調査する
+		$choiceIds = array_keys($model->data['QuestionnaireAnswer']['answer_values']);
+		foreach ($choiceIds as $choiceId) {
+			// 選択されたIDは、ちゃんと用意されている選択肢の中のひとつであるか
+			if ($choiceId != '' && !Validation::inList(strval($choiceId), $list)) {
+				$ret = false;
+				$model->validationErrors['answer_value'][] =
+					__d('questionnaires', 'Invalid choice');
+			}
+			// チェックされている選択肢が「その他」の項目である場合は
+			$choice = Hash::extract($question['QuestionnaireChoice'], '{n}[key=' . $choiceId . ']');
+			if ($choice &&
+				$choice[0]['other_choice_type'] != QuestionnairesComponent::OTHER_CHOICE_TYPE_NO_OTHER_FILED) {
+				// 具体的なテキストが書かれていないといけない
+				if (empty($model->data['QuestionnaireAnswer']['other_answer_value'])) {
 					$ret = false;
-					$model->validationErrors['answer_value'][] = __d('questionnaires', 'Invalid choice');
-				}
-				// チェックされている選択肢が「その他」の項目である場合は
-				$choice = Hash::extract($question['QuestionnaireChoice'], '{n}[key=' . $choiceId . ']');
-				if ($choice && $choice[0]['other_choice_type'] != QuestionnairesComponent::OTHER_CHOICE_TYPE_NO_OTHER_FILED) {
-					// 具体的なテキストが書かれていないといけない
-					if (empty($model->data['QuestionnaireAnswer']['other_answer_value'])) {
-						$ret = false;
-						$model->validationErrors['answer_value'][] = __d('questionnaires', 'Please enter something, if you chose the other item');
-					}
+					$model->validationErrors['answer_value'][] =
+						__d('questionnaires', 'Please enter something, if you chose the other item');
 				}
 			}
 		}

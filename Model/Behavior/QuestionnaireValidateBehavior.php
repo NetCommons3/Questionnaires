@@ -31,9 +31,33 @@ class QuestionnaireValidateBehavior extends ModelBehavior {
  */
 	public function requireOtherFields(&$model, $check, $requireValue, $others, $ope) {
 		$checkPatterns = array(
-			'AND' => array('midstream' => array('chk' => true, 'ret' => false), 'end' => array('ret' => true)),
-			'OR' => array('midstream' => array('chk' => false, 'ret' => true), 'end' => array('ret' => false)),
-			'XOR' => array('midstream' => array('chk' => false, 'ret' => false), 'end' => array('ret' => true)),
+			'AND' => array(
+				'midstream' => array(
+					'chk' => true,
+					'ret' => false
+				),
+				'end' => array(
+					'ret' => true
+				)
+			),
+			'OR' => array(
+				'midstream' => array(
+					'chk' => false,
+					'ret' => true
+				),
+				'end' => array(
+					'ret' => false
+				)
+			),
+			'XOR' => array(
+				'midstream' => array(
+					'chk' => false,
+					'ret' => false
+				),
+				'end' => array(
+					'ret' => true
+				)
+			),
 		);
 		$ope = strtoupper($ope);
 		$checkPattern = $checkPatterns[$ope];

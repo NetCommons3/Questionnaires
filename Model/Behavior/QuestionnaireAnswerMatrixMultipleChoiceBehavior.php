@@ -17,7 +17,8 @@ App::uses('QuestionnaireAnswerBehavior', 'Questionnaires.Model/Behavior');
  * @package  Questionnaires\Questionnaires\Model\Befavior\Answer
  * @author Allcreator <info@allcreator.net>
  */
-class QuestionnaireAnswerMatrixMultipleChoiceBehavior extends QuestionnaireAnswerMatrixSingleChoiceBehavior {
+class QuestionnaireAnswerMatrixMultipleChoiceBehavior
+	extends QuestionnaireAnswerMatrixSingleChoiceBehavior {
 
 /**
  * this answer type
@@ -62,7 +63,9 @@ class QuestionnaireAnswerMatrixMultipleChoiceBehavior extends QuestionnaireAnswe
 		$matrixChoiceId = $model->data['QuestionnaireAnswer']['matrix_choice_key'];
 		if (is_array($model->data['QuestionnaireAnswer']['answer_value'])) {
 			foreach ($model->data['QuestionnaireAnswer']['answer_value'] as $ans) {
-				$this->_decomposeAnswerValue($model->data['QuestionnaireAnswer']['matrix_answer_values'][$matrixChoiceId], $ans);
+				$this->_decomposeAnswerValue(
+					$model->data['QuestionnaireAnswer']['matrix_answer_values'][$matrixChoiceId],
+					$ans);
 				$model->data['QuestionnaireAnswer']['multi_answer_values'] .= $ans;
 			}
 		}

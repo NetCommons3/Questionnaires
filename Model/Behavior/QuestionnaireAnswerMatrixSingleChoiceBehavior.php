@@ -69,10 +69,13 @@ class QuestionnaireAnswerMatrixSingleChoiceBehavior extends QuestionnaireAnswerB
 		}
 		$model->data['QuestionnaireAnswer']['matrix_answer_values'] = array();
 		$matrixChoiceId = $model->data['QuestionnaireAnswer']['matrix_choice_key'];
+
 		if (isset($model->data['QuestionnaireAnswer']['answer_value'])) {
-			$this->_decomposeAnswerValue($model->data['QuestionnaireAnswer']['answer_values'],
+			$this->_decomposeAnswerValue(
+				$model->data['QuestionnaireAnswer']['answer_values'],
 				$model->data['QuestionnaireAnswer']['answer_value']);
-			$this->_decomposeAnswerValue($model->data['QuestionnaireAnswer']['matrix_answer_values'][$matrixChoiceId],
+			$this->_decomposeAnswerValue(
+				$model->data['QuestionnaireAnswer']['matrix_answer_values'][$matrixChoiceId],
 				$model->data['QuestionnaireAnswer']['answer_value']);
 		}
 		$this->_setupOtherAnswerValue($model, $question);
@@ -94,13 +97,24 @@ class QuestionnaireAnswerMatrixSingleChoiceBehavior extends QuestionnaireAnswerB
 		$ret = true;
 		if (isset($model->data['QuestionnaireAnswer']['matrix_answer_values'])) {
 			$list = Hash::combine($question['QuestionnaireChoice'], '{n}.key', '{n}.key');
-			if (! $this->checkMatrixAnswerInList($model, $model->data['QuestionnaireAnswer']['matrix_answer_values'], $list)) {
+			if (! $this->checkMatrixAnswerInList(
+				$model,
+				$model->data['QuestionnaireAnswer']['matrix_answer_values'],
+				$list)) {
 				$ret = false;
 			}
-			if (! $this->checkMatrixOtherAnswer($model, $question, $model->data['QuestionnaireAnswer']['matrix_answer_values'], $model->data['QuestionnaireAnswer'])) {
+			if (! $this->checkMatrixOtherAnswer(
+				$model,
+				$question,
+				$model->data['QuestionnaireAnswer']['matrix_answer_values'],
+				$model->data['QuestionnaireAnswer'])) {
 				$ret = false;
 			}
-			if (! $this->checkMatrixAnswerFill($model, $question, $model->data['QuestionnaireAnswer'], $allAnswers)) {
+			if (! $this->checkMatrixAnswerFill(
+				$model,
+				$question,
+				$model->data['QuestionnaireAnswer'],
+				$allAnswers)) {
 				$ret = false;
 			}
 		}
@@ -146,11 +160,18 @@ class QuestionnaireAnswerMatrixSingleChoiceBehavior extends QuestionnaireAnswerB
 		// このやり方だと、「その他」行がマトリクスにある時は必ず入力しなきゃいけなくなる？
 		// 選択肢を何も選択しなかったらAnswerデータが飛んでこないからチェックにかからないか？
 		$rowIds = array_keys($answers);
+
 		foreach ($rowIds as $matrixRowId) {
-			$results = Hash::extract($question['QuestionnaireChoice'], '{n}[key=' . $matrixRowId . ']');
-			if ($results && $results[0]['other_choice_type'] != QuestionnairesComponent::OTHER_CHOICE_TYPE_NO_OTHER_FILED) {
+
+			$results = Hash::extract(
+				$question['QuestionnaireChoice'],
+				'{n}[key=' . $matrixRowId . ']');
+
+			if ($results &&
+				$results[0]['other_choice_type'] != QuestionnairesComponent::OTHER_CHOICE_TYPE_NO_OTHER_FILED) {
 				if (empty($otherAnswer['other_answer_value'])) {
-					$model->validationErrors['answer_value'][] = __d('questionnaires', 'Please enter something in other item');
+					$model->validationErrors['answer_value'][] =
+						__d('questionnaires', 'Please enter something in other item');
 					return false;
 				}
 			}
@@ -188,7 +209,8 @@ class QuestionnaireAnswerMatrixSingleChoiceBehavior extends QuestionnaireAnswerB
 		}
 		$model->oneTimeValidateFlag = true;	// チェックした
 		if ($noAnswerCount > 0 && $noAnswerCount < $answerCount) {
-			$model->validationErrors['answer_value'][] = __d('questionnaires', 'Please answer about all rows.');
+			$model->validationErrors['answer_value'][] =
+				__d('questionnaires', 'Please answer about all rows.');
 			return false;
 		}
 		return true;

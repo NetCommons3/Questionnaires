@@ -109,7 +109,9 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 		}
 
 		// 現在の表示形態を調べておく
-		list($this->__displayType) = $this->QuestionnaireFrameSetting->getQuestionnaireFrameSetting(Current::read('Frame.key'));
+		list($this->__displayType) = $this->QuestionnaireFrameSetting->getQuestionnaireFrameSetting(
+			Current::read('Frame.key')
+		);
 
 		// 以下のisAbleto..の内部関数にてNetCommonsお約束である編集権限、参照権限チェックを済ませています
 		// 閲覧可能か
@@ -171,16 +173,22 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 	protected function _viewGuard() {
 		$questionnaireKey = $this->_getQuestionnaireKey($this->__questionnaire);
 
+		$quest = $this->__questionnaire['Questionnaire'];
+
 		if (!$this->Session->check('Questionnaire.auth_ok.' . $questionnaireKey)) {
-			if ($this->request->is('get') || !isset($this->request->data['QuestionnairePage']['page_sequence'])) {
+			if ($this->request->is('get') ||
+				!isset($this->request->data['QuestionnairePage']['page_sequence'])) {
 				// 認証キーコンポーネントお約束：
-				if ($this->__questionnaire['Questionnaire']['is_key_pass_use'] == QuestionnairesComponent::USES_USE) {
-					$this->AuthorizationKey->contentId = $this->__questionnaire['Questionnaire']['id'];
-					$this->AuthorizationKey->guard(AuthorizationKeyComponent::OPERATION_EMBEDDING, 'Questionnaire', $this->__questionnaire);
+				if ($quest['is_key_pass_use'] == QuestionnairesComponent::USES_USE) {
+					$this->AuthorizationKey->contentId = $quest['id'];
+					$this->AuthorizationKey->guard(
+						AuthorizationKeyComponent::OPERATION_EMBEDDING,
+						'Questionnaire',
+						$this->__questionnaire);
 					$this->setAction('key_auth');
 					return;
 				}
-				if ($this->__questionnaire['Questionnaire']['is_image_authentication'] == QuestionnairesComponent::USES_USE) {
+				if ($quest['is_image_authentication'] == QuestionnairesComponent::USES_USE) {
 					// 画像認証コンポーネントお約束：
 					$this->setAction('img_auth');
 					return;
@@ -284,29 +292,39 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 		// ページの指定のない場合はFIRST_PAGE_SEQUENCEをデフォルトとする
 		$nextPageSeq = QuestionnairesComponent::FIRST_PAGE_SEQUENCE;	// default
 
+		$postPageSeq = null;
+		if (isset($this->data['QuestionnairePage']['page_sequence'])) {
+			$postPageSeq = $this->data['QuestionnairePage']['page_sequence'];
+		}
+
 		// POSTチェック
 		if ($this->request->is('post')) {
 			// サマリ情報準備
-			$summary = $this->QuestionnairesOwnAnswer->forceGetProgressiveAnswerSummary($this->__questionnaire);
-			$nextPageSeq = $this->data['QuestionnairePage']['page_sequence'];
+			$summary = $this->QuestionnairesOwnAnswer->forceGetProgressiveAnswerSummary(
+				$this->__questionnaire
+			);
+			$nextPageSeq = $postPageSeq;
 
 			// 回答データがある場合は回答をDBに書きこむ
 			if (isset($this->data['QuestionnaireAnswer'])) {
 				if (! $this->QuestionnaireAnswer->saveAnswer($this->data, $questionnaire, $summary)) {
 					// 保存エラーの場合は今のページを再表示
-					$nextPageSeq = $this->data['QuestionnairePage']['page_sequence'];
+					$nextPageSeq = $postPageSeq;
 				} else {
 					// 回答データがあり、無事保存できたら次ページを取得する
 					$nextPageSeq = $this->QuestionnairePage->getNextPage(
 						$questionnaire,
-						$this->data['QuestionnairePage']['page_sequence'],
+						$postPageSeq,
 						$this->data['QuestionnaireAnswer']);
 				}
 			}
 			// 次ページはもう存在しない
 			if ($nextPageSeq === false) {
 				// 確認画面へいってもよい状態ですと書きこむ
-				$this->QuestionnaireAnswerSummary->saveAnswerStatus($summary, QuestionnairesComponent::ACTION_BEFORE_ACT);
+				$this->QuestionnaireAnswerSummary->saveAnswerStatus(
+					$summary,
+					QuestionnairesComponent::ACTION_BEFORE_ACT
+				);
 				// 確認画面へ
 				$url = NetCommonsUrl::actionUrl(array(
 					'controller' => 'questionnaire_answers',
@@ -319,9 +337,12 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 				return;
 			}
 		}
-		if (! ($this->request->is('post') && $nextPageSeq == $this->data['QuestionnairePage']['page_sequence'])) {
-			$summary = $this->QuestionnairesOwnAnswer->getProgressiveSummaryOfThisUser($questionnaireKey);
-			$setAnswers = $this->QuestionnaireAnswer->getProgressiveAnswerOfThisSummary($questionnaire, $summary);
+		if (! ($this->request->is('post') && $nextPageSeq == $postPageSeq)) {
+			$summary = $this->QuestionnairesOwnAnswer->getProgressiveSummaryOfThisUser(
+				$questionnaireKey);
+			$setAnswers = $this->QuestionnaireAnswer->getProgressiveAnswerOfThisSummary(
+				$questionnaire,
+				$summary);
 			$this->set('answers', $setAnswers);
 			$this->request->data['QuestionnaireAnswer'] = $setAnswers;
 
@@ -361,8 +382,11 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 		// POSTチェック
 		if ($this->request->is('post')) {
 			// サマリの状態を完了にして確定する
-			$this->QuestionnaireAnswerSummary->saveAnswerStatus($summary, QuestionnairesComponent::ACTION_ACT);
-			$this->QuestionnairesOwnAnswer->saveOwnAnsweredKeys($this->_getQuestionnaireKey($this->__questionnaire));
+			$this->QuestionnaireAnswerSummary->saveAnswerStatus(
+				$summary,
+				QuestionnairesComponent::ACTION_ACT);
+			$this->QuestionnairesOwnAnswer->saveOwnAnsweredKeys(
+				$this->_getQuestionnaireKey($this->__questionnaire));
 
 			// ありがとう画面へ行く
 			$url = NetCommonsUrl::actionUrl(array(
@@ -377,7 +401,9 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 
 		// 回答情報取得
 		// 回答情報並べ替え
-		$setAnswers = $this->QuestionnaireAnswer->getProgressiveAnswerOfThisSummary($this->__questionnaire, $summary);
+		$setAnswers = $this->QuestionnaireAnswer->getProgressiveAnswerOfThisSummary(
+			$this->__questionnaire,
+			$summary);
 
 		// 質問情報をView変数にセット
 		$this->request->data['Frame'] = Current::read('Frame');
@@ -434,7 +460,11 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 			foreach ($page['QuestionnaireQuestion'] as &$q) {
 				$choices = $q['QuestionnaireChoice'];
 				if ($q['is_choice_random'] == QuestionnairesComponent::USES_USE) {
-					$sessionPath = 'Questionnaires.' . $questionnaire['Questionnaire']['key'] . '.QuestionnaireQuestion.' . $q['key'] . '.QuestionnaireChoice';
+					$sessionPath = sprintf(
+						'Questionnaires.%s.QuestionnaireQuestion.%s.QuestionnaireChoice',
+						$questionnaire['Questionnaire']['key'],
+						$q['key']
+					);
 					if ($this->Session->check($sessionPath)) {
 						$choices = $this->Session->read($sessionPath);
 					} else {

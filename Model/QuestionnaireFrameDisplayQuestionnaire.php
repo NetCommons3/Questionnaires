@@ -95,14 +95,18 @@ class QuestionnaireFrameDisplayQuestionnaire extends QuestionnairesAppModel {
  * @return bool
  */
 	public function validateFrameDisplayQuestionnaire($data) {
+		$frameSetting = $data['QuestionnaireFrameSetting'];
+
 		// チェック用のアンケートリストを確保しておく
 		$Questionnaire = ClassRegistry::init('Questionnaires.Questionnaire');
 		$questionnaires = $Questionnaire->find('all', array(
 			'conditions' => $Questionnaire->getBaseCondition(),
 			'recursive' => -1
 		));
-		$this->chkQuestionnaireList = Hash::combine($questionnaires, '{n}.Questionnaire.id', '{n}.Questionnaire.key');
-		if ($data['QuestionnaireFrameSetting']['display_type'] == QuestionnairesComponent::DISPLAY_TYPE_SINGLE) {
+		$this->chkQuestionnaireList = Hash::combine(
+			$questionnaires, '{n}.Questionnaire.id', '{n}.Questionnaire.key');
+
+		if ($frameSetting['display_type'] == QuestionnairesComponent::DISPLAY_TYPE_SINGLE) {
 			$saveData = Hash::extract($data, 'Single.QuestionnaireFrameDisplayQuestionnaire');
 			if (! $saveData) {
 				return false;
@@ -127,10 +131,12 @@ class QuestionnaireFrameDisplayQuestionnaire extends QuestionnairesAppModel {
 		if (! $this->validateFrameDisplayQuestionnaire($data)) {
 			return false;
 		}
+		$frameSetting = $data['QuestionnaireFrameSetting'];
+
 		//トランザクションBegin
 		$this->begin();
 		try {
-			if ($data['QuestionnaireFrameSetting']['display_type'] == QuestionnairesComponent::DISPLAY_TYPE_SINGLE) {
+			if ($frameSetting['display_type'] == QuestionnairesComponent::DISPLAY_TYPE_SINGLE) {
 				// このフレームに設定されている全てのレコードを消す
 				// POSTされたアンケートのレコードのみ作成する
 				$ret = $this->saveDisplayQuestionnaireForSingle($data);
@@ -199,7 +205,9 @@ class QuestionnaireFrameDisplayQuestionnaire extends QuestionnairesAppModel {
 		$saveData['frame_key'] = $frameKey;
 		// この関数内部でエラーがあった時は、Exceptionなので戻りは見ない
 		$this->saveDisplayQuestionnaire($saveData);
-		$action = "'" . 'questionnaire_answers/view/' . Current::read('Block.id') . '/' . $saveData['questionnaire_key'] . "'";
+		$action = sprintf('\'questionnaire_answers/view/%s/%s\'',
+			Current::read('Block.id'),
+			$saveData['questionnaire_key']);
 		// この関数内部でエラーがあった時は、Exceptionなので戻りは見ない
 		$this->updateFrameDefaultAction($action);
 

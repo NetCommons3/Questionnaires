@@ -118,8 +118,13 @@ class QuestionnaireAnswer extends QuestionnairesAppModel {
 					'message' => __d('questionnaires', 'Input required'),
 				),
 				'answerMaxLength' => array(
-					'rule' => array('answerMaxLength', $question, QuestionnairesComponent::QUESTIONNAIRE_MAX_ANSWER_LENGTH),
-					'message' => sprintf(__d('questionnaires', 'the answer is too long. Please enter under %d letters.', QuestionnairesComponent::QUESTIONNAIRE_MAX_ANSWER_LENGTH)),
+					'rule' => array(
+						'answerMaxLength',
+						$question, QuestionnairesComponent::QUESTIONNAIRE_MAX_ANSWER_LENGTH
+					),
+					'message' => sprintf(
+						__d('questionnaires', 'the answer is too long. Please enter under %d letters.',
+							QuestionnairesComponent::QUESTIONNAIRE_MAX_ANSWER_LENGTH)),
 				),
 				'answerChoiceValidation' => array(
 					'rule' => array('answerChoiceValidation', $question, $allAnswers),
@@ -161,8 +166,12 @@ class QuestionnaireAnswer extends QuestionnairesAppModel {
 			return $answers;
 		}
 		// 指定のサマリに該当するアンケートの質問ID配列を取得
-		$questionIds = Hash::extract($questionnaire, 'QuestionnairePage.{n}.QuestionnaireQuestion.{n}.id');
-		$choiceIds = Hash::extract($questionnaire, 'QuestionnairePage.{n}.QuestionnaireQuestion.{n}.QuestionnaireChoice.{n}.id');
+		$questionIds = Hash::extract(
+			$questionnaire,
+			'QuestionnairePage.{n}.QuestionnaireQuestion.{n}.id');
+		$choiceIds = Hash::extract(
+			$questionnaire,
+			'QuestionnairePage.{n}.QuestionnaireQuestion.{n}.QuestionnaireChoice.{n}.id');
 		// その質問配列を取得条件に加える（間違った質問が入らないよう）
 		$answer = $this->find('all', array(
 			'conditions' => array(
@@ -177,7 +186,8 @@ class QuestionnaireAnswer extends QuestionnairesAppModel {
 		));
 		if (!empty($answer)) {
 			foreach ($answer as $ans) {
-				$answers[$ans['QuestionnaireAnswer']['questionnaire_question_key']][] = $ans['QuestionnaireAnswer'];
+				$answerIndex = $ans['QuestionnaireAnswer']['questionnaire_question_key'];
+				$answers[$answerIndex][] = $ans['QuestionnaireAnswer'];
 			}
 		}
 		return $answers;
@@ -227,13 +237,16 @@ class QuestionnaireAnswer extends QuestionnairesAppModel {
 			$validationErrors = array();
 			foreach ($data['QuestionnaireAnswer'] as $answer) {
 				$targetQuestionKey = $answer[0]['questionnaire_question_key'];
-				$targetQuestion = Hash::extract($questionnaire['QuestionnairePage'], '{n}.QuestionnaireQuestion.{n}[key=' . $targetQuestionKey . ']');
+				$targetQuestion = Hash::extract(
+					$questionnaire['QuestionnairePage'],
+					'{n}.QuestionnaireQuestion.{n}[key=' . $targetQuestionKey . ']');
 				if (! $targetQuestion) {
 					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 				}
 				// データ保存
 				// Matrixタイプの場合はanswerが配列になっているがsaveでかまわない
-				$this->oneTimeValidateFlag = false;	// saveMany中で１回しかValidateしなくてよい関数のためのフラグ
+				// saveMany中で１回しかValidateしなくてよい関数のためのフラグ
+				$this->oneTimeValidateFlag = false;
 				// Validate、Saveで使用するオプションデータ
 				$options = array(
 					'questionnaire_answer_summary_id' => $summaryId,
@@ -242,7 +255,9 @@ class QuestionnaireAnswer extends QuestionnairesAppModel {
 				);
 
 				if (! $this->saveMany($answer, $options)) {
-					$validationErrors[$targetQuestionKey] = $this->__errorMessageUnique($targetQuestion[0], Hash::filter($this->validationErrors));
+					$validationErrors[$targetQuestionKey] = $this->__errorMessageUnique(
+						$targetQuestion[0],
+						Hash::filter($this->validationErrors));
 				}
 			}
 			if (! empty($validationErrors)) {

@@ -66,7 +66,8 @@ class QuestionnaireAnswerBehavior extends ModelBehavior {
  */
 	public function beforeSave(Model $model, $options = array()) {
 		if (isset($model->data['QuestionnaireAnswer']['multi_answer_values'])) {
-			$model->data['QuestionnaireAnswer']['answer_value'] = $model->data['QuestionnaireAnswer']['multi_answer_values'];
+			$model->data['QuestionnaireAnswer']['answer_value'] =
+				$model->data['QuestionnaireAnswer']['multi_answer_values'];
 		}
 		// elseif (isset($this->data['QuestionnaireAnswer']['matrix_answer_values'])) {
 		return true;
@@ -85,27 +86,39 @@ class QuestionnaireAnswerBehavior extends ModelBehavior {
 		// afterFind 選択肢系の回答の場合、answer_value に　[id:value|id:value....]の形で収まっているので
 		// それをデータ入力画面から渡されるデータ形式と同じにする
 		foreach ($results as &$val) {
-			if (isset($val['QuestionnaireAnswer']['answer_value']) && isset($val['QuestionnaireQuestion']['question_type'])) {
+
+			if (isset($val['QuestionnaireAnswer']['answer_value']) &&
+				isset($val['QuestionnaireQuestion']['question_type'])) {
+
 				if ($val['QuestionnaireQuestion']['question_type'] != $this->_myType) {
 					continue;
 				}
-				if ($this->_isTypeAnsChgArr) {
-					//$val['QuestionnaireAnswer']['answer_value'] == 選択肢回答の場合、回答が｜区切りで１行にまとまっています
-					$val['QuestionnaireAnswer']['answer_values'] = array();
-					// まとまっているものを分割します
-					$answers = explode(QuestionnairesComponent::ANSWER_DELIMITER, trim($val['QuestionnaireAnswer']['answer_value'], QuestionnairesComponent::ANSWER_DELIMITER));
-					// valuesエリアに分割したデータを保存
-					$val['QuestionnaireAnswer']['answer_values'] = Hash::combine(
-						array_map('explode',
-							array_fill(0, count($answers), QuestionnairesComponent::ANSWER_VALUE_DELIMITER),
-							$answers),
-						'{n}.0', '{n}.1');
-					// answer_valueは画面で回答してもらうための変数なので、画面に見合った形に整形
-					$val['QuestionnaireAnswer']['answer_value'] = array_map(array($this, 'setDelimiter'), $answers);
-					// array_mapで配列化するのでSingle選択のときはFlatに戻す必要がある
-					if ($this->_isTypeAnsArrShiftUp) {
-						$val['QuestionnaireAnswer']['answer_value'] = $val['QuestionnaireAnswer']['answer_value'][0];
-					}
+				if (! $this->_isTypeAnsChgArr) {
+					continue;
+				}
+				//$val['QuestionnaireAnswer']['answer_value'] == 選択肢回答の場合、回答が｜区切りで１行にまとまっています
+				$val['QuestionnaireAnswer']['answer_values'] = array();
+				// まとまっているものを分割します
+				$answers = explode(
+					QuestionnairesComponent::ANSWER_DELIMITER,
+					trim(
+						$val['QuestionnaireAnswer']['answer_value'],
+						QuestionnairesComponent::ANSWER_DELIMITER));
+				// valuesエリアに分割したデータを保存
+				$val['QuestionnaireAnswer']['answer_values'] = Hash::combine(
+					array_map(
+						'explode',
+						array_fill(0, count($answers), QuestionnairesComponent::ANSWER_VALUE_DELIMITER),
+						$answers),
+					'{n}.0',
+					'{n}.1');
+				// answer_valueは画面で回答してもらうための変数なので、画面に見合った形に整形
+				$val['QuestionnaireAnswer']['answer_value'] = array_map(
+					array($this, 'setDelimiter'),
+					$answers);
+				// array_mapで配列化するのでSingle選択のときはFlatに戻す必要がある
+				if ($this->_isTypeAnsArrShiftUp) {
+					$val['QuestionnaireAnswer']['answer_value'] = $val['QuestionnaireAnswer']['answer_value'][0];
 				}
 			}
 		}
@@ -135,7 +148,9 @@ class QuestionnaireAnswerBehavior extends ModelBehavior {
 		if (!is_array($dst)) {
 			$dst = array();	// 初期化
 		}
-		$answers = explode(QuestionnairesComponent::ANSWER_VALUE_DELIMITER, trim($src, QuestionnairesComponent::ANSWER_DELIMITER));
+		$answers = explode(
+			QuestionnairesComponent::ANSWER_VALUE_DELIMITER,
+			trim($src, QuestionnairesComponent::ANSWER_DELIMITER));
 		$dst[$answers[0]] = isset($answers[1]) ? $answers[1] : '';
 	}
 
@@ -148,7 +163,9 @@ class QuestionnaireAnswerBehavior extends ModelBehavior {
  * @return void
  */
 	protected function _setupOtherAnswerValue(Model $model, $question) {
-		$choice = Hash::extract($question['QuestionnaireChoice'], '{n}[other_choice_type!=' . QuestionnairesComponent::OTHER_CHOICE_TYPE_NO_OTHER_FILED . ']');
+		$choice = Hash::extract(
+			$question['QuestionnaireChoice'],
+			'{n}[other_choice_type!=' . QuestionnairesComponent::OTHER_CHOICE_TYPE_NO_OTHER_FILED . ']');
 		if (! $choice) {
 			return;
 		}

@@ -75,7 +75,8 @@ class QuestionnaireAnswerValidateTest extends NetCommonsModelTestCase {
  * @dataProvider dataProviderValidationError
  * @return void
  */
-	public function testValidationError($data, $summaryId, $targetQuestion, $field, $value, $message, $overwrite = array()) {
+	public function testValidationError(
+		$data, $summaryId, $targetQuestion, $field, $value, $message, $overwrite = array()) {
 		$model = $this->_modelName;
 
 		if (! is_null($field)) {
@@ -86,16 +87,27 @@ class QuestionnaireAnswerValidateTest extends NetCommonsModelTestCase {
 			}
 		}
 		$questionnaire = $this->_getQuestionnaire(2);
-		$addQuestion = array('QuestionnairePage' => array(array('QuestionnaireQuestion' => array($targetQuestion))));
+		$addQuestion = array(
+			'QuestionnairePage' => array(
+				array(
+					'QuestionnaireQuestion' => array($targetQuestion)
+				)
+			)
+		);
 		$questionnaire = Hash::merge($questionnaire, $addQuestion);
 		$summary = array('QuestionnaireAnswerSummary' => array('id' => $summaryId));
-		$result = $this->$model->saveAnswer(array('QuestionnaireAnswer' => array($targetQuestion['key'] => $data)), $questionnaire, $summary);
+		$result = $this->$model->saveAnswer(
+			array('QuestionnaireAnswer' => array($targetQuestion['key'] => $data)),
+			$questionnaire,
+			$summary);
 		$this->assertFalse($result);
 
 		if ($message) {
 			//$this->assertEquals($validationErrors[0][$field][0], $message);
 			// アンケートの回答時のエラーメッセージはすべてこのフィールドに集約してるのだった
-			$this->assertEquals($this->$model->validationErrors[$targetQuestion['key']][0]['answer_value'][0], $message);
+			$this->assertEquals(
+				$this->$model->validationErrors[$targetQuestion['key']][0]['answer_value'][0],
+				$message);
 		}
 	}
 
@@ -128,22 +140,27 @@ class QuestionnaireAnswerValidateTest extends NetCommonsModelTestCase {
 		$fixtureChoice = new QuestionnaireChoiceFixture();
 
 		$data = array();
-		$rec = Hash::extract($fixtureQuestionnaire->records, '{n}[id=' . $id . ']');
+		$rec = Hash::extract($fixtureQuestionnaire->records,
+			'{n}[id=' . $id . ']');
 		$data['Questionnaire'] = $rec[0];
 
-		$rec = Hash::extract($fixturePage->records, '{n}[questionnaire_id=' . $data['Questionnaire']['id'] . ']');
-		$rec = Hash::extract($rec, '{n}[language_id=2]');
+		$rec = Hash::extract($fixturePage->records,
+			'{n}[questionnaire_id=' . $data['Questionnaire']['id'] . ']');
+		$rec = Hash::extract($rec,
+			'{n}[language_id=2]');
 		$data['QuestionnairePage'] = $rec;
 
 		foreach ($data['QuestionnairePage'] as &$page) {
 			$pageId = $page['id'];
 
-			$rec = Hash::extract($fixtureQuestion->records, '{n}[questionnaire_page_id=' . $pageId . ']');
+			$rec = Hash::extract($fixtureQuestion->records,
+				'{n}[questionnaire_page_id=' . $pageId . ']');
 			$rec = Hash::extract($rec, '{n}[language_id=2]');
 			$page['QuestionnaireQuestion'] = $rec;
 			$questionId = $rec[0]['id'];
 
-			$rec = Hash::extract($fixtureChoice->records, '{n}[questionnaire_question_id=' . $questionId . ']');
+			$rec = Hash::extract($fixtureChoice->records,
+				'{n}[questionnaire_question_id=' . $questionId . ']');
 			if ($rec) {
 				$page['QuestionnaireQuestion'][0]['QuestionnaireChoice'] = $rec;
 			}

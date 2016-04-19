@@ -69,6 +69,7 @@ NetCommonsApp.controller('Questionnaires.edit.question',
           function(frameId, isPublished, questionnaire,
           newPageLabel, newQuestionLabel, newChoiceLabel,
           newChoiceColumnLabel, newChoiceOtherLabel) {
+
         $scope.frameId = frameId;
         $scope.isPublished = isPublished;
         $scope.questionnaire = questionnaire;
@@ -77,9 +78,8 @@ NetCommonsApp.controller('Questionnaires.edit.question',
         $scope.activeTabIndex = 0;
 
         // 各ページ処理
-        for (var pIdx = 0; pIdx <
-             $scope.questionnaire.questionnairePage.length;
-             pIdx++) {
+        for (var pIdx = 0; pIdx < $scope.questionnaire.questionnairePage.length; pIdx++) {
+
           var page = $scope.questionnaire.questionnairePage[pIdx];
 
           // 質問アコーディオンクローズ
@@ -96,9 +96,8 @@ NetCommonsApp.controller('Questionnaires.edit.question',
           }
 
           // 各質問処理
-          for (var qIdx = 0;
-              qIdx < page.questionnaireQuestion.length;
-              qIdx++) {
+          for (var qIdx = 0; qIdx < page.questionnaireQuestion.length; qIdx++) {
+
             var question = $scope.questionnaire.questionnairePage[pIdx].
                 questionnaireQuestion[qIdx];
 
@@ -114,8 +113,7 @@ NetCommonsApp.controller('Questionnaires.edit.question',
             if (question.errorMessages) {
               $scope.questionnaire.questionnairePage[pIdx].
                   questionnaireQuestion[qIdx].hasError = true;
-              $scope.questionnaire.questionnairePage[pIdx].
-                  hasError = true;
+              $scope.questionnaire.questionnairePage[pIdx].hasError = true;
             }
 
             // 選択肢がないのならここでcontinue;
@@ -124,20 +122,17 @@ NetCommonsApp.controller('Questionnaires.edit.question',
             }
             // 各質問の選択肢があればその選択肢の中に「その他」が入っているかの確認とフラグ設定
             // また質問の選択肢の中にエラーがあるかのフラグ設定
-            for (var cIdx = 0;
-                cIdx < question.questionnaireChoice.length;
-                cIdx++) {
+            for (var cIdx = 0; cIdx < question.questionnaireChoice.length; cIdx++) {
+
               var choice = question.questionnaireChoice[cIdx];
-              if (choice.otherChoiceType !=
-                  variables.OTHER_CHOICE_TYPE_NO_OTHER_FILED) {
+              if (choice.otherChoiceType != variables.OTHER_CHOICE_TYPE_NO_OTHER_FILED) {
                 $scope.questionnaire.questionnairePage[pIdx].
                     questionnaireQuestion[qIdx].hasAnotherChoice = true;
               }
               if (choice.errorMessages) {
                 $scope.questionnaire.questionnairePage[pIdx].
                     questionnaireQuestion[qIdx].hasError = true;
-                $scope.questionnaire.questionnairePage[pIdx].
-                    hasError = true;
+                $scope.questionnaire.questionnairePage[pIdx].hasError = true;
               }
             }
 
@@ -229,8 +224,9 @@ NetCommonsApp.controller('Questionnaires.edit.question',
        * @return {void}
        */
       $scope.changeDatetimepickerType = function(pIdx, qIdx) {
-        var type = $scope.questionnaire.questionnairePage[pIdx].
-            questionnaireQuestion[qIdx].questionTypeOption;
+        var page = $scope.questionnaire.questionnairePage[pIdx];
+        var question = page.questionnaireQuestion[qIdx];
+        var type = question.questionTypeOption;
         var format;
         if (type == variables.TYPE_OPTION_DATE) {
           format = 'YYYY-MM-DD';
@@ -239,14 +235,12 @@ NetCommonsApp.controller('Questionnaires.edit.question',
         } else if (type == variables.TYPE_OPTION_DATE_TIME) {
           format = 'YYYY-MM-DD HH:mm';
         }
+        var min = question.min;
+        var max = question.max;
         $scope.questionnaire.questionnairePage[pIdx].
-            questionnaireQuestion[qIdx].min =
-            $scope.getDateStr($scope.questionnaire.questionnairePage[pIdx].
-                questionnaireQuestion[qIdx].min, format);
+            questionnaireQuestion[qIdx].min = $scope.getDateStr(min, format);
         $scope.questionnaire.questionnairePage[pIdx].
-            questionnaireQuestion[qIdx].max =
-            $scope.getDateStr($scope.questionnaire.questionnairePage[pIdx].
-                questionnaireQuestion[qIdx].max, format);
+            questionnaireQuestion[qIdx].max = $scope.getDateStr(max, format);
       };
 
       /**
@@ -335,8 +329,7 @@ NetCommonsApp.controller('Questionnaires.edit.question',
          * @return {void}
          */
       $scope._resetQuestionnairePageSequence = function() {
-        for (var i = 0;
-            i < $scope.questionnaire.questionnairePage.length; i++) {
+        for (var i = 0; i < $scope.questionnaire.questionnairePage.length; i++) {
           $scope.questionnaire.questionnairePage[i].pageSequence = i;
         }
       };
@@ -348,8 +341,7 @@ NetCommonsApp.controller('Questionnaires.edit.question',
          */
       $scope.addQuestion = function($event, pageIndex) {
         var question = new Object();
-        if (!$scope.questionnaire.questionnairePage[pageIndex].
-            questionnaireQuestion) {
+        if (!$scope.questionnaire.questionnairePage[pageIndex].questionnaireQuestion) {
           $scope.questionnaire.questionnairePage[pageIndex].
               questionnaireQuestion = new Array();
         }
@@ -432,8 +424,7 @@ NetCommonsApp.controller('Questionnaires.edit.question',
       $scope.copyQuestionToAnotherPage =
           function($event, pageIndex, qIndex, copyPageIndex) {
         var tmpQ = angular.copy(
-            $scope.questionnaire.questionnairePage[pageIndex].
-                questionnaireQuestion[qIndex]);
+            $scope.questionnaire.questionnairePage[pageIndex].questionnaireQuestion[qIndex]);
         $scope.questionnaire.questionnairePage[copyPageIndex].
             questionnaireQuestion.push(tmpQ);
 
@@ -480,10 +471,8 @@ NetCommonsApp.controller('Questionnaires.edit.question',
          */
       $scope.addChoice =
           function($event, pIdx, qIdx, choiceCount, otherType, matrixType) {
-        var page = $scope.questionnaire.
-            questionnairePage[pIdx];
-        var question = $scope.questionnaire.
-            questionnairePage[pIdx].questionnaireQuestion[qIdx];
+        var page = $scope.questionnaire.questionnairePage[pIdx];
+        var question = page.questionnaireQuestion[qIdx];
         var choice = new Object();
         var choiceColorIdx = choiceCount % $scope.colorPickerPalette.length;
 
@@ -497,11 +486,9 @@ NetCommonsApp.controller('Questionnaires.edit.question',
           choice['choiceLabel'] = $scope.newChoiceOtherLabel;
         } else {
           if (matrixType == variables.MATRIX_TYPE_ROW_OR_NO_MATRIX) {
-            choice['choiceLabel'] =
-                $scope.newChoiceLabel + (choiceCount + 1);
+            choice['choiceLabel'] = $scope.newChoiceLabel + (choiceCount + 1);
           } else {
-            choice['choiceLabel'] =
-                $scope.newChoiceColumnLabel + (choiceCount + 1);
+            choice['choiceLabel'] = $scope.newChoiceColumnLabel + (choiceCount + 1);
           }
         }
         // skipPageIndex仮設定
@@ -513,8 +500,7 @@ NetCommonsApp.controller('Questionnaires.edit.question',
 
         // その他選択肢は必ず最後にするためにいったん取りのけておく
         var otherChoice = null;
-        for (var i = 0;
-            i < question.questionnaireChoice.length; i++) {
+        for (var i = 0; i < question.questionnaireChoice.length; i++) {
           if (question.questionnaireChoice[i].otherChoiceType !=
               variables.OTHER_CHOICE_TYPE_NO_OTHER_FILED) {
             otherChoice = question.questionnaireChoice[i];
@@ -534,8 +520,7 @@ NetCommonsApp.controller('Questionnaires.edit.question',
         choice['matrixType'] = matrixType;
         choice['key'] = '';
         if (otherType != variables.OTHER_CHOICE_TYPE_NO_OTHER_FILED) {
-          choiceColorIdx =
-              choice['choiceSequence'] % $scope.colorPickerPalette.length;
+          choiceColorIdx = choice['choiceSequence'] % $scope.colorPickerPalette.length;
         }
         choice['graphColor'] = $scope.colorPickerPalette[choiceColorIdx];
 
@@ -557,8 +542,7 @@ NetCommonsApp.controller('Questionnaires.edit.question',
          *
          * @return {void}
          */
-      $scope.changeAnotherChoice =
-          function(pIdx, qIdx, otherType, matrixType) {
+      $scope.changeAnotherChoice = function(pIdx, qIdx, otherType, matrixType) {
 
         var question = $scope.questionnaire.
             questionnairePage[pIdx].questionnaireQuestion[qIdx];
@@ -568,8 +552,7 @@ NetCommonsApp.controller('Questionnaires.edit.question',
           $scope.addChoice(null, pIdx, qIdx, 0, otherType, matrixType);
         } else {
           // その他選択肢をなくすように指示されている
-          for (var i = 0;
-              i < question.questionnaireChoice.length; i++) {
+          for (var i = 0; i < question.questionnaireChoice.length; i++) {
             if (question.questionnaireChoice[i].otherChoiceType !=
                 variables.OTHER_CHOICE_TYPE_NO_OTHER_FILED) {
               $scope.questionnaire.questionnairePage[pIdx].
@@ -590,8 +573,7 @@ NetCommonsApp.controller('Questionnaires.edit.question',
         if (skipPageIndex == variables.SKIP_GO_TO_END) {
           return;
         }
-        if ($scope.questionnaire.questionnairePage.length - 1 >=
-            skipPageIndex) {
+        if ($scope.questionnaire.questionnairePage.length - 1 >= skipPageIndex) {
           return;
         }
         // ないページを指定された場合は新しく作る
@@ -629,9 +611,9 @@ NetCommonsApp.controller('Questionnaires.edit.question',
          * @return {void}
          */
       $scope._resetQuestionnaireChoiceSequence = function(pageIndex, qIndex) {
-        for (var i = 0; i <
-            $scope.questionnaire.questionnairePage[pageIndex].
-            questionnaireQuestion[qIndex].questionnaireChoice.length; i++) {
+        var len = $scope.questionnaire.questionnairePage[pageIndex].
+          questionnaireQuestion[qIndex].questionnaireChoice.length;
+        for (var i = 0; i < len; i++) {
           $scope.questionnaire.questionnairePage[pageIndex].
               questionnaireQuestion[qIndex].questionnaireChoice[i].
               choiceSequence = i;

@@ -27,7 +27,8 @@ class Questionnaire extends QuestionnairesAppModel {
 		'Workflow.WorkflowComment',
 		'AuthorizationKeys.AuthorizationKey',
 		'Questionnaires.QuestionnaireValidate',
-		'Mails.MailQueue' => array(		// 自動でメールキューの登録, 削除。ワークフロー利用時はWorkflow.Workflowより下に記述する
+		// 自動でメールキューの登録, 削除。ワークフロー利用時はWorkflow.Workflowより下に記述する
+		'Mails.MailQueue' => array(
 			'embedTags' => array(
 				'X-SUBJECT' => 'Questionnaire.title',
 			),
@@ -96,10 +97,13 @@ class Questionnaire extends QuestionnairesAppModel {
 
 		$this->loadModels([
 			'Frame' => 'Frames.Frame',
-			'QuestionnaireSetting' => 'Questionnaires.QuestionnaireSetting',
 			'QuestionnairePage' => 'Questionnaires.QuestionnairePage',
-			'QuestionnaireFrameDisplayQuestionnaire' => 'Questionnaires.QuestionnaireFrameDisplayQuestionnaire',
-			'QuestionnaireAnswerSummary' => 'Questionnaires.QuestionnaireAnswerSummary',
+			'QuestionnaireSetting' =>
+				'Questionnaires.QuestionnaireSetting',
+			'QuestionnaireFrameDisplayQuestionnaire' =>
+				'Questionnaires.QuestionnaireFrameDisplayQuestionnaire',
+			'QuestionnaireAnswerSummary' =>
+				'Questionnaires.QuestionnaireAnswerSummary',
 		]);
 	}
 
@@ -119,7 +123,8 @@ class Questionnaire extends QuestionnairesAppModel {
 				'numeric' => array(
 					'rule' => array('numeric'),
 					'message' => __d('net_commons', 'Invalid request.'),
-					'on' => 'update', // Limit validation to 'create' or 'update' operations 新規の時はブロックIDがなかったりするから
+					// Limit validation to 'create' or 'update' operations 新規の時はブロックIDがなかったりするから
+					'on' => 'update',
 				)
 			),
 			'title' => array(
@@ -131,11 +136,19 @@ class Questionnaire extends QuestionnairesAppModel {
 			),
 			'answer_timing' => array(
 				'publicTypeCheck' => array(
-					'rule' => array('inList', array(QuestionnairesComponent::USES_USE, QuestionnairesComponent::USES_NOT_USE)),
+					'rule' => array(
+						'inList', array(
+							QuestionnairesComponent::USES_USE, QuestionnairesComponent::USES_NOT_USE
+					)),
 					'message' => __d('net_commons', 'Invalid request.'),
 				),
 				'requireOtherFields' => array(
-					'rule' => array('requireOtherFields', QuestionnairesComponent::USES_USE, array('Questionnaire.answer_start_period', 'Questionnaire.answer_end_period'), 'OR'),
+					'rule' => array(
+						'requireOtherFields',
+						QuestionnairesComponent::USES_USE,
+						array('Questionnaire.answer_start_period', 'Questionnaire.answer_end_period'),
+						'OR'
+					),
 					'message' => __d('questionnaires', 'if you set the period, please set time.')
 				)
 			),
@@ -163,11 +176,19 @@ class Questionnaire extends QuestionnairesAppModel {
 			),
 			'total_show_timing' => array(
 				'inList' => array(
-					'rule' => array('inList', array(QuestionnairesComponent::USES_USE, QuestionnairesComponent::USES_NOT_USE)),
+					'rule' => array(
+						'inList',
+						array(QuestionnairesComponent::USES_USE, QuestionnairesComponent::USES_NOT_USE)
+					),
 					'message' => __d('net_commons', 'Invalid request.'),
 				),
 				'requireOtherFields' => array(
-					'rule' => array('requireOtherFields', QuestionnairesComponent::USES_USE, array('Questionnaire.total_show_start_period'), 'AND'),
+					'rule' => array(
+						'requireOtherFields',
+						QuestionnairesComponent::USES_USE,
+						array('Questionnaire.total_show_start_period'),
+						'AND'
+					),
 					'message' => __d('questionnaires', 'if you set the period, please set time.')
 				)
 			),
@@ -195,12 +216,26 @@ class Questionnaire extends QuestionnairesAppModel {
 					'message' => __d('net_commons', 'Invalid request.'),
 				),
 				'requireOtherFieldsKey' => array(
-					'rule' => array('requireOtherFields', QuestionnairesComponent::USES_USE, array('AuthorizationKey.authorization_key'), 'AND'),
-					'message' => __d('questionnaires', 'if you set the use key phrase period, please set key phrase text.')
+					'rule' => array(
+						'requireOtherFields',
+						QuestionnairesComponent::USES_USE,
+						array('AuthorizationKey.authorization_key'),
+						'AND'
+					),
+					'message' =>
+						__d('questionnaires',
+							'if you set the use key phrase period, please set key phrase text.')
 				),
 				'authentication' => array(
-					'rule' => array('requireOtherFields', QuestionnairesComponent::USES_USE, array('Questionnaire.is_image_authentication'), 'XOR'),
-					'message' => __d('questionnaires', 'Authentication key setting , image authentication , either only one can not be selected.')
+					'rule' => array(
+						'requireOtherFields',
+						QuestionnairesComponent::USES_USE,
+						array('Questionnaire.is_image_authentication'),
+						'XOR'
+					),
+					'message' =>
+						__d('questionnaires',
+							'Authentication key setting , image authentication , either only one can not be selected.')
 				)
 			),
 			'is_repeat_allow' => array(
@@ -215,8 +250,15 @@ class Questionnaire extends QuestionnairesAppModel {
 					'message' => __d('net_commons', 'Invalid request.'),
 				),
 				'authentication' => array(
-					'rule' => array('requireOtherFields', QuestionnairesComponent::USES_USE, array('Questionnaire.is_key_pass_use'), 'XOR'),
-					'message' => __d('questionnaires', 'Authentication key setting , image authentication , either only one can not be selected.')
+					'rule' => array(
+						'requireOtherFields',
+						QuestionnairesComponent::USES_USE,
+						array('Questionnaire.is_key_pass_use'),
+						'XOR'
+					),
+					'message' =>
+						__d('questionnaires',
+							'Authentication key setting , image authentication , either only one can not be selected.')
 				)
 			),
 			'is_answer_mail_send' => array(
@@ -235,7 +277,6 @@ class Questionnaire extends QuestionnairesAppModel {
 			// ページデータが存在する場合
 			// 配下のページについてバリデート
 			$validationErrors = array();
-			$this->QuestionnairePage = ClassRegistry::init('Questionnaires.QuestionnairePage', true);
 			$maxPageIndex = count($this->data['QuestionnairePage']);
 			$options['maxPageIndex'] = $maxPageIndex;
 			foreach ($this->data['QuestionnairePage'] as $pageIndex => $page) {
@@ -245,7 +286,8 @@ class Questionnaire extends QuestionnairesAppModel {
 				// ページシーケンス番号の正当性を確認するため、現在の配列インデックスを渡す
 				$options['pageIndex'] = $pageIndex;
 				if (! $this->QuestionnairePage->validates($options)) {
-					$validationErrors['QuestionnairePage'][$pageIndex] = $this->QuestionnairePage->validationErrors;
+					$validationErrors['QuestionnairePage'][$pageIndex] =
+						$this->QuestionnairePage->validationErrors;
 				}
 			}
 			$this->validationErrors += $validationErrors;
@@ -266,8 +308,6 @@ class Questionnaire extends QuestionnairesAppModel {
 		if ($this->recursive == -1) {
 			return $results;
 		}
-		$this->QuestionnairePage = ClassRegistry::init('Questionnaires.QuestionnairePage', true);
-		$this->QuestionnaireAnswerSummary = ClassRegistry::init('Questionnaires.QuestionnaireAnswerSummary', true);
 
 		foreach ($results as &$val) {
 			// この場合はcount
@@ -291,13 +331,14 @@ class Questionnaire extends QuestionnairesAppModel {
 			$val['Questionnaire']['question_count'] = 0;
 			$this->QuestionnairePage->setPageToQuestionnaire($val);
 
-			$val['Questionnaire']['all_answer_count'] = $this->QuestionnaireAnswerSummary->find('count', array(
-				'conditions' => array(
-					'questionnaire_key' => $val['Questionnaire']['key'],
-					'answer_status' => QuestionnairesComponent::ACTION_ACT,
-					'test_status' => QuestionnairesComponent::TEST_ANSWER_STATUS_PEFORM
-				),
-				'recursive' => -1
+			$val['Questionnaire']['all_answer_count'] =
+				$this->QuestionnaireAnswerSummary->find('count', array(
+					'conditions' => array(
+						'questionnaire_key' => $val['Questionnaire']['key'],
+						'answer_status' => QuestionnairesComponent::ACTION_ACT,
+						'test_status' => QuestionnairesComponent::TEST_ANSWER_STATUS_PEFORM
+					),
+					'recursive' => -1
 			));
 		}
 		return $results;
@@ -357,12 +398,12 @@ class Questionnaire extends QuestionnairesAppModel {
 		// 基本条件（ワークフロー条件）
 		$conditions = $this->getBaseCondition($addConditions);
 		// 現在フレームに表示設定されているアンケートか
-		$frameDisplay = ClassRegistry::init('Questionnaires.QuestionnaireFrameDisplayQuestionnaires');
-		$keys = $frameDisplay->find(
+		$keys = $this->QuestionnaireFrameDisplayQuestionnaire->find(
 			'list',
 			array(
-				'conditions' => array('QuestionnaireFrameDisplayQuestionnaires.frame_key' => Current::read('Frame.key')),
-				'fields' => array('QuestionnaireFrameDisplayQuestionnaires.questionnaire_key'),
+				'conditions' => array(
+					'QuestionnaireFrameDisplayQuestionnaire.frame_key' => Current::read('Frame.key')),
+				'fields' => array('QuestionnaireFrameDisplayQuestionnaire.questionnaire_key'),
 				'recursive' => -1
 			)
 		);
@@ -468,7 +509,11 @@ class Questionnaire extends QuestionnairesAppModel {
 			$questionnaireId = $this->id;
 
 			// ページ以降のデータを登録
-			$questionnaire = Hash::insert($questionnaire, 'QuestionnairePage.{n}.questionnaire_id', $questionnaireId);
+			$questionnaire = Hash::insert(
+				$questionnaire,
+				'QuestionnairePage.{n}.questionnaire_id',
+				$questionnaireId);
+
 			if (! $this->QuestionnairePage->saveQuestionnairePage($questionnaire['QuestionnairePage'])) {
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}
@@ -480,7 +525,9 @@ class Questionnaire extends QuestionnairesAppModel {
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}
 			// これまでのテスト回答データを消す
-			$this->QuestionnaireAnswerSummary->deleteTestAnswerSummary($saveQuestionnaire['Questionnaire']['key'], $status);
+			$this->QuestionnaireAnswerSummary->deleteTestAnswerSummary(
+				$saveQuestionnaire['Questionnaire']['key'],
+				$status);
 
 			$this->commit();
 		} catch (Exception $ex) {
@@ -528,10 +575,6 @@ class Questionnaire extends QuestionnairesAppModel {
  * @return bool
  */
 	public function deleteQuestionnaire($data) {
-		$this->loadModels([
-			'QuestionnaireFrameDisplayQuestionnaire' => 'Questionnaires.QuestionnaireFrameDisplayQuestionnaire',
-			'QuestionnaireAnswerSummary' => 'Questionnaires.QuestionnaireAnswerSummary',
-		]);
 		$this->begin();
 		try {
 			// アンケート質問データ削除
@@ -577,6 +620,7 @@ class Questionnaire extends QuestionnairesAppModel {
 		$this->begin();
 		try {
 			$this->id = $questionnaireId;
+			$this->Behaviors->unload('Mails.MailQueue');
 			$this->saveField('export_key', $exportKey);
 			$this->commit();
 		} catch (Exception $ex) {

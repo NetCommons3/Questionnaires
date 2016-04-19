@@ -164,9 +164,15 @@ class QuestionnaireAnswerSummary extends QuestionnairesAppModel {
 			}
 			// 完全にこのコード上で作成しているものであるのでvalidatesでのチェックは行っていない
 			$this->create();
+
+			$testStatus = QuestionnairesComponent::TEST_ANSWER_STATUS_PEFORM;
+			if ($questionnaire['Questionnaire']['status'] != WorkflowComponent::STATUS_PUBLISHED) {
+				$testStatus = QuestionnairesComponent::TEST_ANSWER_STATUS_TEST;
+			}
+
 			if (! $this->save(array(
 				'answer_status' => QuestionnairesComponent::ACTION_NOT_ACT,
-				'test_status' => ($questionnaire['Questionnaire']['status'] != WorkflowComponent::STATUS_PUBLISHED) ? QuestionnairesComponent::TEST_ANSWER_STATUS_TEST : QuestionnairesComponent::TEST_ANSWER_STATUS_PEFORM,
+				'test_status' => $testStatus,
 				'answer_number' => $answerTime,
 				'questionnaire_key' => $questionnaire['Questionnaire']['key'],
 				'session_value' => $sessionId,
@@ -203,7 +209,8 @@ class QuestionnaireAnswerSummary extends QuestionnairesAppModel {
 		);
 		//公開時は本番時回答のみ、テスト時(=非公開時)は本番回答＋テスト回答を対象とする。
 		if ($questionnaire['Questionnaire']['status'] == WorkflowComponent::STATUS_PUBLISHED) {
-			$baseConditions['QuestionnaireAnswerSummary.test_status'] = QuestionnairesComponent::TEST_ANSWER_STATUS_PEFORM;
+			$baseConditions['QuestionnaireAnswerSummary.test_status'] =
+				QuestionnairesComponent::TEST_ANSWER_STATUS_PEFORM;
 		}
 		return $baseConditions;
 	}
@@ -261,13 +268,21 @@ class QuestionnaireAnswerSummary extends QuestionnairesAppModel {
  */
 	private function __aggregateAnswerForMatrix(&$question, $questionConditions) {
 		$rowCnt = 0;
-		$cols = Hash::extract($question['QuestionnaireChoice'], '{n}[matrix_type=' . QuestionnairesComponent::MATRIX_TYPE_COLUMN . ']');
+		$cols = Hash::extract(
+			$question['QuestionnaireChoice'],
+			'{n}[matrix_type=' . QuestionnairesComponent::MATRIX_TYPE_COLUMN . ']');
+
 		foreach ($question['QuestionnaireChoice'] as &$c) {
 			if ($c['matrix_type'] == QuestionnairesComponent::MATRIX_TYPE_ROW_OR_NO_MATRIX) {
 				foreach ($cols as $col) {
+					$searchWord = sprintf(
+						'%%%s%s%s%%',
+						QuestionnairesComponent::ANSWER_DELIMITER,
+						$col['key'],
+						QuestionnairesComponent::ANSWER_VALUE_DELIMITER);
 					$conditions = $questionConditions + array(
 							'QuestionnaireAnswer.matrix_choice_key' => $c['key'],
-							'QuestionnaireAnswer.answer_value LIKE ' => '%' . QuestionnairesComponent::ANSWER_DELIMITER . $col['key'] . QuestionnairesComponent::ANSWER_VALUE_DELIMITER . '%',
+							'QuestionnaireAnswer.answer_value LIKE ' => $searchWord,
 						);
 					$cnt = $this->QuestionnaireAnswer->getAnswerCount($conditions);
 					$c['aggregate_total'][$col['key']] = $cnt;
@@ -288,8 +303,13 @@ class QuestionnaireAnswerSummary extends QuestionnairesAppModel {
  */
 	private function __aggregateAnswerForNotMatrix(&$question, $questionConditions) {
 		foreach ($question['QuestionnaireChoice'] as &$c) {
+			$searchWord = sprintf(
+				'%%%s%s%s%%',
+				QuestionnairesComponent::ANSWER_DELIMITER,
+				$c['key'],
+				QuestionnairesComponent::ANSWER_VALUE_DELIMITER);
 			$conditions = $questionConditions + array(
-					'QuestionnaireAnswer.answer_value LIKE ' => '%' . QuestionnairesComponent::ANSWER_DELIMITER . $c['key'] . QuestionnairesComponent::ANSWER_VALUE_DELIMITER . '%',
+					'QuestionnaireAnswer.answer_value LIKE ' => $searchWord,
 				);
 			$cnt = $this->QuestionnaireAnswer->getAnswerCount($conditions);
 			$c['aggregate_total']['aggregate_not_matrix'] = $cnt;

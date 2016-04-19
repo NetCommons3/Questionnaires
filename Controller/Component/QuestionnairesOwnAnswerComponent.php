@@ -103,13 +103,19 @@ class QuestionnairesOwnAnswerComponent extends Component {
  * @return progressive Answer Summary data
  */
 	public function forceGetProgressiveAnswerSummary($questionnaire) {
-		$summary = $this->getProgressiveSummaryOfThisUser($questionnaire['Questionnaire']['key']);
+		$summary = $this->getProgressiveSummaryOfThisUser(
+			$questionnaire['Questionnaire']['key']);
+
 		if (! $summary) {
 			$answerSummary = ClassRegistry::init('Questionnaires.QuestionnaireAnswerSummary');
 			$session = $this->_Collection->load('Session');
-			$summary = $answerSummary->forceGetProgressiveAnswerSummary($questionnaire, Current::read('User.id'), $session->id());
+			$summary = $answerSummary->forceGetProgressiveAnswerSummary(
+				$questionnaire, Current::read('User.id'),
+				$session->id());
 			if ($summary) {
-				$this->saveProgressiveSummaryOfThisUser($questionnaire['Questionnaire']['key'], $summary['QuestionnaireAnswerSummary']['id']);
+				$this->saveProgressiveSummaryOfThisUser(
+					$questionnaire['Questionnaire']['key'],
+					$summary['QuestionnaireAnswerSummary']['id']);
 			}
 		}
 
@@ -176,7 +182,7 @@ class QuestionnairesOwnAnswerComponent extends Component {
 				'recursive' => -1
 			)
 		);
-		$this->__ownAnsweredKeys = array_values($ownAnsweredKeys);	// idの使用を防ぐ（いらない？）
+		$this->__ownAnsweredKeys = array_values($ownAnsweredKeys);
 
 		return $this->__ownAnsweredKeys;
 	}
@@ -216,7 +222,9 @@ class QuestionnairesOwnAnswerComponent extends Component {
 		// 未ログインの人の場合はセッションに書いておく
 		$session = $this->_Collection->load('Session');
 		$blockId = Current::read('Block.id');
-		$session->write('Questionnaires.ownAnsweredKeys.' . $blockId, implode(',', $this->__ownAnsweredKeys));
+		$session->write(
+			'Questionnaires.ownAnsweredKeys.' . $blockId,
+			implode(',', $this->__ownAnsweredKeys));
 
 		// 回答中アンケートからは削除しておく
 		$this->deleteProgressiveSummaryOfThisUser($questionnaireKey);

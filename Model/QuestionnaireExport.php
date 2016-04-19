@@ -40,6 +40,26 @@ class QuestionnaireExport extends QuestionnairesAppModel {
 	public $validate = array();
 
 /**
+ * Constructor. Binds the model's database table to the object.
+ *
+ * @param bool|int|string|array $id Set this ID for this model on startup,
+ * can also be an array of options, see above.
+ * @param string $table Name of database table to use.
+ * @param string $ds DataSource connection name.
+ * @see Model::__construct()
+ * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
+ */
+	public function __construct($id = false, $table = null, $ds = null) {
+		parent::__construct($id, $table, $ds);
+
+		$this->loadModels([
+			'Questionnaire' => 'Questionnaires.Questionnaire',
+			'QuestionnairePage' => 'Questionnaires.QuestionnairePage',
+			'QuestionnaireQuestion' => 'Questionnaires.QuestionnaireQuestion',
+		]);
+	}
+
+/**
  * getExportData
  *
  * @param string $questionnaireKey アンケートキー
@@ -60,11 +80,10 @@ class QuestionnaireExport extends QuestionnairesAppModel {
 		$languages = $Language->find('all', array(
 			'recursive' => -1
 		));
-		$Questionnaire = ClassRegistry::init('Questionnaires.Questionnaire');
 		$questionnaires = array();
 		foreach ($languages as $lang) {
 			// 指定のアンケートデータを取得
-			$questionnaire = $Questionnaire->find('first', array(
+			$questionnaire = $this->Questionnaire->find('first', array(
 				'conditions' => array(
 					'Questionnaire.key' => $questionnaireKey,
 					'Questionnaire.is_active' => true,
@@ -80,7 +99,7 @@ class QuestionnaireExport extends QuestionnairesAppModel {
 			$questionnaire = Hash::remove($questionnaire, 'Block');
 			$questionnaire = Hash::remove($questionnaire, 'TrackableCreator');
 			$questionnaire = Hash::remove($questionnaire, 'TrackableUpdater');
-			$Questionnaire->clearQuestionnaireId($questionnaire);
+			$this->Questionnaire->clearQuestionnaireId($questionnaire);
 			$questionnaires[] = $questionnaire;
 		}
 		// Exportするデータが一つも見つからないって
@@ -98,10 +117,6 @@ class QuestionnaireExport extends QuestionnairesAppModel {
  * @return void
  */
 	public function putToZip($zipFile, $zipData) {
-		$this->Questionnaire = ClassRegistry::init('Questionnaires.Questionnaire');
-		$this->QuestionnairePage = ClassRegistry::init('Questionnaires.QuestionnairePage');
-		$this->QuestionnaireQuestion = ClassRegistry::init('Questionnaires.QuestionnaireQuestion');
-
 		$wysiswyg = new WysIsWygDownloader();
 
 		// アンケートデータの中でもWYSISWYGデータのものについては
@@ -131,6 +146,8 @@ class QuestionnaireExport extends QuestionnairesAppModel {
 		}
 		$questionnaire = Hash::expand($flatQuestionnaire);
 		// jsonデータにして書き込み
-		$zipFile->addFromString(QuestionnairesComponent::QUESTIONNAIRE_JSON_FILENAME, json_encode($questionnaire));
+		$zipFile->addFromString(
+			QuestionnairesComponent::QUESTIONNAIRE_JSON_FILENAME,
+			json_encode($questionnaire));
 	}
 }

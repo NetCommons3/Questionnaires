@@ -79,8 +79,7 @@ NetCommonsApp.controller('Questionnaires.setting',
        */
       $scope.deleteQuestionnaire = function(e, message) {
         if (confirm(message)) {
-          angular.element('#questionnaireDeleteForm-' +
-              $scope.frameId).submit();
+          angular.element('#questionnaireDeleteForm-' + $scope.frameId).submit();
           return true;
         }
         e.stopPropagation();

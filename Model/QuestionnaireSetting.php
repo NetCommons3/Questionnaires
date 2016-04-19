@@ -137,6 +137,7 @@ class QuestionnaireSetting extends QuestionnairesAppModel {
 		} catch (Exception $ex) {
 			//トランザクションRollback
 			$this->rollback($ex);
+			throw $ex;
 		}
 		return true;
 	}
@@ -153,35 +154,45 @@ class QuestionnaireSetting extends QuestionnairesAppModel {
 	public function saveBlock($frame) {
 		// すでに結びついている場合はBlockは作らないでよい
 		if (! empty($frame['Frame']['block_id'])) {
-			return;
+			return true;
 		}
-		// ルームに存在するブロックを探す
-		$block = $this->Block->find('first', array(
-			'conditions' => array(
-				'Block.room_id' => $frame['room_id'],
-				'Block.plugin_key' => $frame['plugin_key'],
-				'Block.language_id' => $frame['language_id'],
-			)
-		));
-		// まだない場合
-		if (empty($block)) {
-			// 作成する
-			$block = $this->Block->save(array(
-				'room_id' => $frame['room_id'],
-				'language_id' => $frame['language_id'],
-				'plugin_key' => $frame['plugin_key'],
+		//トランザクションBegin
+		$this->begin();
+
+		try {
+			// ルームに存在するブロックを探す
+			$block = $this->Block->find('first', array(
+				'conditions' => array(
+					'Block.room_id' => $frame['room_id'],
+					'Block.plugin_key' => $frame['plugin_key'],
+					'Block.language_id' => $frame['language_id'],
+				)
 			));
-			if (!$block) {
+			// まだない場合
+			if (empty($block)) {
+				// 作成する
+				$block = $this->Block->save(array(
+					'room_id' => $frame['room_id'],
+					'language_id' => $frame['language_id'],
+					'plugin_key' => $frame['plugin_key'],
+				));
+				if (!$block) {
+					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+				}
+				Current::$current['Block'] = $block['Block'];
+			}
+
+			$frame['block_id'] = $block['Block']['id'];
+			if (!$this->Frame->save($frame)) {
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}
-			Current::$current['Block'] = $block['Block'];
+			Current::$current['Frame']['block_id'] = $block['Block']['id'];
+		} catch (Exception $ex) {
+			//トランザクションRollback
+			$this->rollback($ex);
+			throw $ex;
 		}
-
-		$frame['block_id'] = $block['Block']['id'];
-		if (!$this->Frame->save($frame)) {
-			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
-		}
-		Current::$current['Frame']['block_id'] = $block['Block']['id'];
+		return true;
 	}
 /**
  * save setting
@@ -194,12 +205,13 @@ class QuestionnaireSetting extends QuestionnairesAppModel {
 	public function saveSetting() {
 		// block settingはあるか
 		$setting = $this->getSetting();
-		if (empty($setting)) {
-			// ないときは作る
-			$blockSetting = $this->create();
-			$blockSetting['QuestionnaireSetting']['block_key'] = Current::read('Block.key');	//$block['Block']['key'];
-			$this->saveQuestionnaireSetting($blockSetting);
+		if (! empty($setting)) {
+			return true;
 		}
+		// ないときは作る
+		$blockSetting = $this->create();
+		$blockSetting['QuestionnaireSetting']['block_key'] = Current::read('Block.key');
+		$this->saveQuestionnaireSetting($blockSetting);
 		return true;
 	}
 }

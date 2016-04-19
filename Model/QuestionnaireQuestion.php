@@ -73,6 +73,24 @@ class QuestionnaireQuestion extends QuestionnairesAppModel {
 	);
 
 /**
+ * Constructor. Binds the model's database table to the object.
+ *
+ * @param bool|int|string|array $id Set this ID for this model on startup,
+ * can also be an array of options, see above.
+ * @param string $table Name of database table to use.
+ * @param string $ds DataSource connection name.
+ * @see Model::__construct()
+ * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
+ */
+	public function __construct($id = false, $table = null, $ds = null) {
+		parent::__construct($id, $table, $ds);
+
+		$this->loadModels([
+			'QuestionnaireChoice' => 'Questionnaires.QuestionnaireChoice',
+		]);
+	}
+
+/**
  * Called during validation operations, before validation. Please note that custom
  * validation rules can be defined in $validate.
  *
@@ -129,7 +147,10 @@ class QuestionnaireQuestion extends QuestionnairesAppModel {
 			),
 			'is_result_display' => array(
 				'inList' => array(
-					'rule' => array('inList', $this->_getResultDisplayList($this->data['QuestionnaireQuestion']['question_type'])),
+					'rule' => array(
+						'inList',
+						$this->_getResultDisplayList($this->data['QuestionnaireQuestion']['question_type'])
+					),
 					'message' => __d('net_commons', 'Invalid request.'),
 				),
 			),
@@ -182,7 +203,6 @@ class QuestionnaireQuestion extends QuestionnairesAppModel {
 		if ($this->_checkChoiceExists() && isset($this->data['QuestionnaireChoice'])) {
 			// この質問種別に必要な選択肢データがちゃんとあるなら選択肢をバリデート
 			$validationErrors = array();
-			$this->QuestionnaireChoice = ClassRegistry::init('Questionnaires.QuestionnaireChoice', true);
 			foreach ($this->data['QuestionnaireChoice'] as $cIndex => $choice) {
 				// 質問データバリデータ
 				$this->QuestionnaireChoice->create();
@@ -190,7 +210,8 @@ class QuestionnaireQuestion extends QuestionnairesAppModel {
 				$options['choiceIndex'] = $cIndex;
 				$options['isSkip'] = $isSkip;
 				if (!$this->QuestionnaireChoice->validates($options)) {
-					$validationErrors['QuestionnaireChoice'][$cIndex] = $this->QuestionnaireChoice->validationErrors;
+					$validationErrors['QuestionnaireChoice'][$cIndex] =
+						$this->QuestionnaireChoice->validationErrors;
 				}
 			}
 			$this->validationErrors += $validationErrors;
@@ -206,7 +227,6 @@ class QuestionnaireQuestion extends QuestionnairesAppModel {
  * @return array
  */
 	public function getDefaultQuestion() {
-		$this->QuestionnaireChoice = ClassRegistry::init('Questionnaires.QuestionnaireChoice', true);
 		$question = array(
 			'question_sequence' => 0,
 			'question_value' => __d('questionnaires', 'New Question') . '1',
@@ -283,7 +303,9 @@ class QuestionnaireQuestion extends QuestionnairesAppModel {
 			$questionId = $this->id;
 
 			if (isset($question['QuestionnaireChoice'])) {
-				$question = Hash::insert($question, 'QuestionnaireChoice.{n}.questionnaire_question_id', $questionId);
+				$question = Hash::insert(
+					$question,
+					'QuestionnaireChoice.{n}.questionnaire_question_id', $questionId);
 				// もしもChoiceのsaveがエラーになった場合は、
 				// ChoiceのほうでInternalExceptionErrorが発行されるのでここでは何も行わない
 				$this->QuestionnaireChoice->saveQuestionnaireChoice($question['QuestionnaireChoice']);
@@ -300,25 +322,32 @@ class QuestionnaireQuestion extends QuestionnairesAppModel {
  * @return bool
  */
 	protected function _checkChoiceExists() {
+		$questionType = $this->data['QuestionnaireQuestion']['question_type'];
 		// テキストタイプ、テキストエリアタイプの時は選択肢不要
-		if (QuestionnairesComponent::isOnlyInputType($this->data['QuestionnaireQuestion']['question_type'])) {
+		if (QuestionnairesComponent::isOnlyInputType($questionType)) {
 			return true;
 		}
 
 		// 上記以外の場合は最低１つは必要
 		if (! Hash::check($this->data, 'QuestionnaireChoice.{n}')) {
-			$this->validationErrors['question_type'][] = __d('questionnaires', 'please set at least one choice.');
+			$this->validationErrors['question_type'][] =
+				__d('questionnaires', 'please set at least one choice.');
 			return false;
 		}
 
 		// マトリクスタイプの時は行に１つ列に一つ必要
 		// マトリクスタイプのときは、行、カラムの両方ともに最低一つは必要
-		if (QuestionnairesComponent::isMatrixInputType($this->data['QuestionnaireQuestion']['question_type'])) {
-			$rows = Hash::extract($this->data['QuestionnaireChoice'], '{n}[matrix_type=' . QuestionnairesComponent::MATRIX_TYPE_ROW_OR_NO_MATRIX . ']');
-			$cols = Hash::extract($this->data['QuestionnaireChoice'], '{n}[matrix_type=' . QuestionnairesComponent::MATRIX_TYPE_COLUMN . ']');
+		if (QuestionnairesComponent::isMatrixInputType($questionType)) {
+			$rows = Hash::extract(
+				$this->data['QuestionnaireChoice'],
+				'{n}[matrix_type=' . QuestionnairesComponent::MATRIX_TYPE_ROW_OR_NO_MATRIX . ']');
+			$cols = Hash::extract(
+				$this->data['QuestionnaireChoice'],
+				'{n}[matrix_type=' . QuestionnairesComponent::MATRIX_TYPE_COLUMN . ']');
 
 			if (empty($rows) || empty($cols)) {
-				$this->validationErrors['question_type'][] = __d('questionnaires', 'please set at least one choice at row and column.');
+				$this->validationErrors['question_type'][] =
+					__d('questionnaires', 'please set at least one choice at row and column.');
 				return false;
 			}
 		}

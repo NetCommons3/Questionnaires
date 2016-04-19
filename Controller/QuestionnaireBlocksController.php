@@ -75,10 +75,18 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
 		'Blocks.BlockForm',
 		'Blocks.BlockTabs' => array(
 			'mainTabs' => array(
-				'block_index' => array('url' => array('controller' => 'questionnaire_blocks')),
-				'role_permissions' => array('url' => array('controller' => 'questionnaire_block_role_permissions')),
-				'frame_settings' => array('url' => array('controller' => 'questionnaire_frame_settings')),
-				'mail_settings' => array('url' => array('controller' => 'questionnaire_mail_settings')),
+				'block_index' => array(
+					'url' => array('controller' => 'questionnaire_blocks')
+				),
+				'role_permissions' => array(
+					'url' => array('controller' => 'questionnaire_block_role_permissions')
+				),
+				'frame_settings' => array(
+					'url' => array('controller' => 'questionnaire_frame_settings')
+				),
+				'mail_settings' => array(
+					'url' => array('controller' => 'questionnaire_mail_settings')
+				),
 			),
 		),
 		'NetCommons.NetCommonsForm',
@@ -141,16 +149,19 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
 		// アンケートキー
 		$questionnaireKey = $this->_getQuestionnaireKeyFromPass();
 		// キー情報をもとにデータを取り出す
-		$questionnaire = $this->QuestionnaireAnswerSummaryCsv->getQuestionnaireForAnswerCsv($questionnaireKey);
+		$questionnaire = $this->QuestionnaireAnswerSummaryCsv->getQuestionnaireForAnswerCsv(
+			$questionnaireKey);
 		if (! $questionnaire) {
-			$this->_setFlashMessageAndRedirect(__d('questionnaires', 'Designation of the questionnaire does not exist.'));
+			$this->_setFlashMessageAndRedirect(
+				__d('questionnaires', 'Designation of the questionnaire does not exist.'));
 			return;
 		}
 		// 圧縮用パスワードキーを求める
 		if (! empty($this->request->data['AuthorizationKey']['authorization_key'])) {
 			$zipPassword = $this->request->data['AuthorizationKey']['authorization_key'];
 		} else {
-			$this->_setFlashMessageAndRedirect(__d('questionnaires', 'Setting of password is required always to download answers.'));
+			$this->_setFlashMessageAndRedirect(
+				__d('questionnaires', 'Setting of password is required always to download answers.'));
 			return;
 		}
 
@@ -163,7 +174,9 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
 			// QUESTIONNAIRE_CSV_UNIT_NUMBER分に制限して取得する
 			$offset = 0;
 			do {
-				$datas = $this->QuestionnaireAnswerSummaryCsv->getAnswerSummaryCsv($questionnaire, self::QUESTIONNAIRE_CSV_UNIT_NUMBER, $offset);
+				$datas = $this->QuestionnaireAnswerSummaryCsv->getAnswerSummaryCsv(
+					$questionnaire,
+					self::QUESTIONNAIRE_CSV_UNIT_NUMBER, $offset);
 				// CSV形式で書きこみ
 				foreach ($datas as $data) {
 					$csvFile->add($data);
@@ -195,11 +208,16 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
  * @return void
  */
 	protected function _setFlashMessageAndRedirect($message) {
-		$this->NetCommons->setFlashNotification($message, array('interval' => NetCommonsComponent::ALERT_VALIDATE_ERROR_INTERVAL));
+		$this->NetCommons->setFlashNotification(
+			$message,
+			array(
+				'interval' => NetCommonsComponent::ALERT_VALIDATE_ERROR_INTERVAL
+			));
 		$this->redirect(NetCommonsUrl::actionUrl(array(
 			'controller' => 'questionnaire_blocks',
 			'action' => 'index',
-			'frame_id' => Current::read('Frame.id'))));
+			'frame_id' => Current::read('Frame.id')
+		)));
 	}
 
 /**
@@ -215,9 +233,11 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
 		// アンケートキー
 		$questionnaireKey = $this->_getQuestionnaireKeyFromPass();
 		// キー情報をもとにデータを取り出す
-		$questionnaire = $this->QuestionnaireAnswerSummaryCsv->getQuestionnaireForAnswerCsv($questionnaireKey);
+		$questionnaire = $this->QuestionnaireAnswerSummaryCsv->getQuestionnaireForAnswerCsv(
+			$questionnaireKey);
 		if (! $questionnaire) {
-			$this->_setFlashMessageAndRedirect(__d('questionnaires', 'Designation of the questionnaire does not exist.'));
+			$this->_setFlashMessageAndRedirect(
+				__d('questionnaires', 'Designation of the questionnaire does not exist.'));
 			return;
 		}
 
@@ -235,7 +255,8 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
 			// アーカイブ閉じる
 			$zipFile->close();
 		} catch(Exception $e) {
-			$this->_setFlashMessageAndRedirect(__d('questionnaires', 'export error' . $e->getMessage()));
+			$this->_setFlashMessageAndRedirect(
+				__d('questionnaires', 'export error' . $e->getMessage()));
 			return;
 		}
 		// 大外枠zipファイル準備
@@ -243,9 +264,13 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
 		// アンケートデータファイルのフィンガープリントを得る
 		$fingerPrint = sha1_file($zipFile->path, false);
 		// フィンガープリントをアーカイブに加える
-		$zipWrapperFile->addFromString(QuestionnairesComponent::QUESTIONNAIRE_FINGER_PRINT_FILENAME, $fingerPrint);
+		$zipWrapperFile->addFromString(
+			QuestionnairesComponent::QUESTIONNAIRE_FINGER_PRINT_FILENAME,
+			$fingerPrint);
 		// 本体ファイルを
-		$zipWrapperFile->addFile($zipFile->path, QuestionnairesComponent::QUESTIONNAIRE_TEMPLATE_FILENAME);
+		$zipWrapperFile->addFile(
+			$zipFile->path,
+			QuestionnairesComponent::QUESTIONNAIRE_TEMPLATE_FILENAME);
 		// export-key 設定
 		$this->Questionnaire->saveExportKey($questionnaire['Questionnaire']['id'], $fingerPrint);
 

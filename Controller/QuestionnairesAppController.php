@@ -53,15 +53,18 @@ class QuestionnairesAppController extends AppController {
 		if (!Hash::check($obj, 'QuestionnairePage.{n}')) {
 			return $obj;
 		}
-		$obj['QuestionnairePage'] = Hash::sort($obj['QuestionnairePage'], '{n}.page_sequence', 'asc', 'numeric');
+		$obj['QuestionnairePage'] =
+			Hash::sort($obj['QuestionnairePage'], '{n}.page_sequence', 'asc', 'numeric');
 
 		foreach ($obj['QuestionnairePage'] as &$page) {
 			if (Hash::check($page, 'QuestionnaireQuestion.{n}')) {
-				$page['QuestionnaireQuestion'] = Hash::sort($page['QuestionnaireQuestion'], '{n}.question_sequence', 'asc', 'numeric');
+				$page['QuestionnaireQuestion'] =
+					Hash::sort($page['QuestionnaireQuestion'], '{n}.question_sequence', 'asc', 'numeric');
 
 				foreach ($page['QuestionnaireQuestion'] as &$question) {
 					if (Hash::check($question, 'QuestionnaireChoice.{n}')) {
-						$question['QuestionnaireChoice'] = Hash::sort($question['QuestionnaireChoice'], '{n}.choice_sequence', 'asc', 'numeric');
+						$question['QuestionnaireChoice'] =
+							Hash::sort($question['QuestionnaireChoice'], '{n}.choice_sequence', 'asc', 'numeric');
 					}
 				}
 			}
@@ -144,16 +147,18 @@ class QuestionnairesAppController extends AppController {
 			return false;
 		}
 
+		$quest = $questionnaire['Questionnaire'];
+
 		// 基本、権限上、見ることができるコンテンツだ
 		// しかし、アンケート独自の条件部分のチェックを行う必要がある
 		// 期間外
-		if ($questionnaire['Questionnaire']['answer_timing'] == QuestionnairesComponent::USES_USE
-			&& $questionnaire['Questionnaire']['period_range_stat'] != QuestionnairesComponent::QUESTIONNAIRE_PERIOD_STAT_IN) {
+		if ($quest['answer_timing'] == QuestionnairesComponent::USES_USE
+			&& $quest['period_range_stat'] != QuestionnairesComponent::QUESTIONNAIRE_PERIOD_STAT_IN) {
 			return false;
 		}
 
 		// 会員以外には許していないのに未ログイン
-		if ($questionnaire['Questionnaire']['is_no_member_allow'] == QuestionnairesComponent::PERMISSION_NOT_PERMIT) {
+		if ($quest['is_no_member_allow'] == QuestionnairesComponent::PERMISSION_NOT_PERMIT) {
 			if (! Current::read('User.id')) {
 				return false;
 			}
@@ -175,12 +180,13 @@ class QuestionnairesAppController extends AppController {
  * @return bool
  */
 	public function isAbleToAnswer($questionnaire) {
-		if ($questionnaire['Questionnaire']['status'] != WorkflowComponent::STATUS_PUBLISHED) {
+		$quest = $questionnaire['Questionnaire'];
+		if ($quest['status'] != WorkflowComponent::STATUS_PUBLISHED) {
 			return true;
 		}
 		// 繰り返し回答を許していないのにすでに回答済みか
-		if ($questionnaire['Questionnaire']['is_repeat_allow'] == QuestionnairesComponent::PERMISSION_NOT_PERMIT) {
-			if ($this->QuestionnairesOwnAnswer->checkOwnAnsweredKeys($questionnaire['Questionnaire']['key'])) {
+		if ($quest['is_repeat_allow'] == QuestionnairesComponent::PERMISSION_NOT_PERMIT) {
+			if ($this->QuestionnairesOwnAnswer->checkOwnAnsweredKeys($quest['key'])) {
 				return false;
 			}
 		}
@@ -194,8 +200,9 @@ class QuestionnairesAppController extends AppController {
  * @return bool
  */
 	public function isAbleToDisplayAggregatedData($questionnaire) {
+		$quest = $questionnaire['Questionnaire'];
 		// 集計表示許さているか
-		if ($questionnaire['Questionnaire']['is_total_show'] != QuestionnairesComponent::EXPRESSION_SHOW) {
+		if ($quest['is_total_show'] != QuestionnairesComponent::EXPRESSION_SHOW) {
 			return false;
 		}
 
@@ -206,16 +213,16 @@ class QuestionnairesAppController extends AppController {
 
 		// 集計表示に期間設定しているか
 		// 期間設定がある
-		if ($questionnaire['Questionnaire']['total_show_timing'] == QuestionnairesComponent::USES_USE) {
+		if ($quest['total_show_timing'] == QuestionnairesComponent::USES_USE) {
 			$nowDatetime = (new NetCommonsTime())->getNowDatetime();
 			// まだ公開期間ではない
-			if (strtotime($nowDatetime) < strtotime($questionnaire['Questionnaire']['total_show_start_period'])) {
+			if (strtotime($nowDatetime) < strtotime($quest['total_show_start_period'])) {
 				return false;
 			}
 		}
 
 		// 会員以外には許していないのに未ログイン
-		if ($questionnaire['Questionnaire']['is_no_member_allow'] == QuestionnairesComponent::PERMISSION_NOT_PERMIT) {
+		if ($quest['is_no_member_allow'] == QuestionnairesComponent::PERMISSION_NOT_PERMIT) {
 			if (! Current::read('User.id')) {
 				return false;
 			}
@@ -223,7 +230,7 @@ class QuestionnairesAppController extends AppController {
 
 		// していない または 公開期間内
 		// 本人回答があるかどうがか表示有無の判断基準
-		if (! $this->QuestionnairesOwnAnswer->checkOwnAnsweredKeys($questionnaire['Questionnaire']['key'])) {
+		if (! $this->QuestionnairesOwnAnswer->checkOwnAnsweredKeys($quest['key'])) {
 			//本人による「回答」データなし
 			return false;	// 見てはいけない
 		}
@@ -238,10 +245,11 @@ class QuestionnairesAppController extends AppController {
  */
 	protected function _getQuestionnaireKeyFromPass() {
 		if (isset($this->params['pass'][QuestionnairesComponent::QUESTIONNAIRE_KEY_PASS_INDEX])) {
-			if (strpos($this->params['pass'][QuestionnairesComponent::QUESTIONNAIRE_KEY_PASS_INDEX], 's_id:') === 0) {
+			$key = $this->params['pass'][QuestionnairesComponent::QUESTIONNAIRE_KEY_PASS_INDEX];
+			if (strpos($key, 's_id:') === 0) {
 				return '';
 			}
-			return $this->params['pass'][QuestionnairesComponent::QUESTIONNAIRE_KEY_PASS_INDEX];
+			return $key;
 		}
 		return '';
 	}

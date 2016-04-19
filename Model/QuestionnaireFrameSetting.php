@@ -68,7 +68,10 @@ class QuestionnaireFrameSetting extends QuestionnairesAppModel {
 			),
 			'display_type' => array(
 				'inList' => array(
-					'rule' => array('inList', array(QuestionnairesComponent::DISPLAY_TYPE_SINGLE, QuestionnairesComponent::DISPLAY_TYPE_LIST)),
+					'rule' => array('inList', array(
+						QuestionnairesComponent::DISPLAY_TYPE_SINGLE,
+						QuestionnairesComponent::DISPLAY_TYPE_LIST
+					)),
 					'message' => __d('net_commons', 'Invalid request.'),
 				),
 			),
@@ -149,7 +152,8 @@ class QuestionnaireFrameSetting extends QuestionnairesAppModel {
  */
 	public function saveFrameSettings($data) {
 		$this->loadModels([
-			'QuestionnaireFrameDisplayQuestionnaire' => 'Questionnaires.QuestionnaireFrameDisplayQuestionnaire',
+			'QuestionnaireFrameDisplayQuestionnaire' =>
+				'Questionnaires.QuestionnaireFrameDisplayQuestionnaire',
 		]);
 
 		//トランザクションBegin
@@ -166,7 +170,8 @@ class QuestionnaireFrameSetting extends QuestionnairesAppModel {
 			// 一覧表示タイプと単独表示タイプ
 			$ret = $this->QuestionnaireFrameDisplayQuestionnaire->validateFrameDisplayQuestionnaire($data);
 			if ($ret === false) {
-				$this->validationErrors['QuestionnaireFrameDisplayQuestionnaire'] = $this->QuestionnaireFrameDisplayQuestionnaire->validationErrors;
+				$this->validationErrors['QuestionnaireFrameDisplayQuestionnaire'] =
+					$this->QuestionnaireFrameDisplayQuestionnaire->validationErrors;
 				return false;
 			}
 

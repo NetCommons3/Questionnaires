@@ -23,7 +23,7 @@ class WysIsWygDownloader {
 
 /**
  * getFromWysIsWygZIP
- *このメソッドはいずれはWYSISWYGエディタダウンロードコンポーネントへ移動します
+ * このメソッドはいずれはWYSISWYGエディタダウンロードコンポーネントへ移動します
  *
  * @param string $zipFilePath Zipファイルへのパス
  * @param string $file Zipファイルの中にある読み取るべきファイル名

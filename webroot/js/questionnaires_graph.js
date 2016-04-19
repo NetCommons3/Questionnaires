@@ -59,33 +59,24 @@ NetCommonsApp.controller('QuestionnairesAnswerSummary',
 
             $scope.data[key] = new Array();
 
-            if ($scope.questions[key].questionType ==
-                variables.TYPE_MATRIX_MULTIPLE ||
-                $scope.questions[key].questionType ==
-                variables.TYPE_MATRIX_SELECTION_LIST) {
-              $scope.config[key]['chart'] =
-                  $scope.getMatrixBarConf($scope.questions[key]);
+            if ($scope.questions[key].questionType == variables.TYPE_MATRIX_MULTIPLE ||
+                $scope.questions[key].questionType == variables.TYPE_MATRIX_SELECTION_LIST) {
+              $scope.config[key]['chart'] = $scope.getMatrixBarConf($scope.questions[key]);
               $scope.data[key] = $scope.getMatrixBarData($scope.questions[key]);
             } else {
-              $scope.config[key]['chart'] =
-                  $scope.getBarConf($scope.questions[key]);
+              $scope.config[key]['chart'] = $scope.getBarConf($scope.questions[key]);
               $scope.data[key].push($scope.getBarData($scope.questions[key]));
             }
           } else {
 
-            if ($scope.questions[key].questionType ==
-                variables.TYPE_MATRIX_MULTIPLE ||
-                $scope.questions[key].questionType ==
-                variables.TYPE_MATRIX_SELECTION_LIST) {
+            if ($scope.questions[key].questionType == variables.TYPE_MATRIX_MULTIPLE ||
+                $scope.questions[key].questionType == variables.TYPE_MATRIX_SELECTION_LIST) {
 
               $scope.data[key] = new Object();
 
-              for (var choiceId in
-                  $scope.questions[key]['questionnaireChoice']) {
-                var choice =
-                    $scope.questions[key]['questionnaireChoice'][choiceId];
-                if (choice.matrixType ==
-                    variables.MATRIX_TYPE_ROW_OR_NO_MATRIX) {
+              for (var choiceId in $scope.questions[key]['questionnaireChoice']) {
+                var choice = $scope.questions[key]['questionnaireChoice'][choiceId];
+                if (choice.matrixType == variables.MATRIX_TYPE_ROW_OR_NO_MATRIX) {
                   $scope.config[key][choice.key] =
                       $scope.getMatrixPieConf($scope.questions[key], choice);
                   $scope.data[key][choice.key] =
@@ -96,8 +87,7 @@ NetCommonsApp.controller('QuestionnairesAnswerSummary',
 
               $scope.data[key] = new Array();
 
-              $scope.config[key]['chart'] =
-                  $scope.getPieConf($scope.questions[key]);
+              $scope.config[key]['chart'] = $scope.getPieConf($scope.questions[key]);
               $scope.data[key] = $scope.getPieData($scope.questions[key]);
             }
           }

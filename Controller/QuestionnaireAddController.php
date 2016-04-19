@@ -69,6 +69,7 @@ class QuestionnaireAddController extends QuestionnairesAppController {
 		if ($this->request->is('post')) {
 			// Postデータをもとにした新アンケートデータの取得をModelに依頼する
 			$actionModel = ClassRegistry::init('Questionnaires.ActionQuestionnaireAdd', 'true');
+
 			if ($questionnaire = $actionModel->createQuestionnaire($this->request->data)) {
 				$tm = $this->_getQuestionnaireEditSessionIndex();
 				// 作成中アンケートデータをセッションキャッシュに書く
@@ -107,7 +108,9 @@ class QuestionnaireAddController extends QuestionnairesAppController {
 		$this->request->data['Block'] = Current::read('Block');
 		// create_optionが未設定のときは初期値として「ＮＥＷ」を設定する
 		if (! $this->request->data('ActionQuestionnaireAdd.create_option')) {
-			$this->request->data('ActionQuestionnaireAdd.create_option', QuestionnairesComponent::QUESTIONNAIRE_CREATE_OPT_NEW);
+			$this->request->data(
+				'ActionQuestionnaireAdd.create_option',
+				QuestionnairesComponent::QUESTIONNAIRE_CREATE_OPT_NEW);
 		}
 	}
 }

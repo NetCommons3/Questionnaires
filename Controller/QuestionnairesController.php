@@ -97,7 +97,8 @@ class QuestionnairesController extends QuestionnairesAppController {
 			)
 		);
 		if (!isset($this->params['named']['answer_status'])) {
-			$this->request->params['named']['answer_status'] = QuestionnairesComponent::QUESTIONNAIRE_ANSWER_VIEW_ALL;
+			$this->request->params['named']['answer_status'] =
+				QuestionnairesComponent::QUESTIONNAIRE_ANSWER_VIEW_ALL;
 		}
 		$questionnaire = $this->paginate('Questionnaire', $this->_getPaginateFilter());
 		$this->set('questionnaires', $questionnaire);
@@ -117,19 +118,23 @@ class QuestionnairesController extends QuestionnairesAppController {
 	protected function _getPaginateFilter() {
 		$filter = array();
 
-		if ($this->request->params['named']['answer_status'] == QuestionnairesComponent::QUESTIONNAIRE_ANSWER_TEST) {
+		$answerStat = $this->request->params['named']['answer_status'];
+
+		if ($answerStat == QuestionnairesComponent::QUESTIONNAIRE_ANSWER_TEST) {
 			$filter = array(
 				'Questionnaire.status !=' => WorkflowComponent::STATUS_PUBLISHED
 			);
 			return $filter;
 		}
 
-		$filterCondition = array('Questionnaire.key' => $this->QuestionnairesOwnAnswer->getOwnAnsweredKeys());
-		if ($this->request->params['named']['answer_status'] == QuestionnairesComponent::QUESTIONNAIRE_ANSWER_UNANSWERED) {
+		$filterCondition = array(
+			'Questionnaire.key' => $this->QuestionnairesOwnAnswer->getOwnAnsweredKeys()
+		);
+		if ($answerStat == QuestionnairesComponent::QUESTIONNAIRE_ANSWER_UNANSWERED) {
 			$filter = array(
 				'NOT' => $filterCondition
 			);
-		} elseif ($this->request->params['named']['answer_status'] == QuestionnairesComponent::QUESTIONNAIRE_ANSWER_ANSWERED) {
+		} elseif ($answerStat == QuestionnairesComponent::QUESTIONNAIRE_ANSWER_ANSWERED) {
 			$filter = array(
 				$filterCondition
 			);
@@ -144,7 +149,8 @@ class QuestionnairesController extends QuestionnairesAppController {
  * @return void
  */
 	private function __setOwnAnsweredKeys() {
-		if ($this->request->params['named']['answer_status'] == QuestionnairesComponent::QUESTIONNAIRE_ANSWER_UNANSWERED) {
+		$answerStat = $this->request->params['named']['answer_status'];
+		if ($answerStat == QuestionnairesComponent::QUESTIONNAIRE_ANSWER_UNANSWERED) {
 			$this->set('ownAnsweredKeys', array());
 
 			return;

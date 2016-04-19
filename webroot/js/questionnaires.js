@@ -54,19 +54,15 @@ NetCommonsApp.controller('QuestionnairesAnswer',
        */
       $scope.initialize = function(questionnairePage, answers) {
         $scope.dateAnswer = new Object();
-        for (var qIdx = 0;
-             qIdx < questionnairePage.questionnaireQuestion.length;
-             qIdx++) {
+        for (var qIdx = 0; qIdx < questionnairePage.questionnaireQuestion.length; qIdx++) {
           var question = questionnairePage.questionnaireQuestion[qIdx];
           // 各質問が日付・時刻のタイプならば
           if (question.questionType == variables.TYPE_DATE_AND_TIME) {
             if (answers[question.key]) {
               if (angular.isArray(answers[question.key])) {
-                $scope.dateAnswer[question.key] =
-                    answers[question.key][0].answerValue;
+                $scope.dateAnswer[question.key] = answers[question.key][0].answerValue;
               } else {
-                $scope.dateAnswer[question.key] =
-                    answers[question.key].answerValue;
+                $scope.dateAnswer[question.key] = answers[question.key].answerValue;
               }
             }
           }
@@ -81,15 +77,13 @@ NetCommonsApp.controller('QuestionnairesFrame',
        *
        * @return {void}
        */
-      $scope.initialize = function(questionnaires,
-                                   questionnaireFrameSettings) {
+      $scope.initialize = function(questionnaires, questionnaireFrameSettings) {
         $scope.questionnaires = questionnaires;
         $scope.questionnaireFrameSettings = questionnaireFrameSettings;
         $scope.WinBuf = {allCheck: false};
         $scope.isDisplay = new Array();
         for (var i = 0; i < $scope.questionnaires.length; i++) {
-          if ($scope.questionnaires[i].
-              questionnaireFrameDisplayQuestionnaire.id) {
+          if ($scope.questionnaires[i].questionnaireFrameDisplayQuestionnaire.id) {
             $scope.isDisplay[i] = true;
           } else {
             $scope.isDisplay[i] = false;

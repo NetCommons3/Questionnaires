@@ -64,10 +64,18 @@ class QuestionnaireFrameSettingsController extends QuestionnaireBlocksController
 	public $helpers = array(
 		'Blocks.BlockTabs' => array(
 			'mainTabs' => array(
-				'block_index' => array('url' => array('controller' => 'questionnaire_blocks')),
-				'role_permissions' => array('url' => array('controller' => 'questionnaire_block_role_permissions')),
-				'frame_settings' => array('url' => array('controller' => 'questionnaire_frame_settings')),
-				'mail_settings' => array('url' => array('controller' => 'questionnaire_mail_settings')),
+				'block_index' => array(
+					'url' => array('controller' => 'questionnaire_blocks')
+				),
+				'role_permissions' => array(
+					'url' => array('controller' => 'questionnaire_block_role_permissions')
+				),
+				'frame_settings' => array(
+					'url' => array('controller' => 'questionnaire_frame_settings')
+				),
+				'mail_settings' => array(
+					'url' => array('controller' => 'questionnaire_mail_settings')
+				),
 			),
 		),
 		'NetCommons.DisplayNumber',

@@ -99,19 +99,21 @@ class QuestionnaireUtilHelper extends AppHelper {
 		$answerButtonClass = 'success';
 		$answerButtonDisabled = '';
 
+		$rangeStat = $questionnaire['Questionnaire']['period_range_stat'];
+		$isRepeat = $questionnaire['Questionnaire']['is_repeat_allow'];
 		// 操作できるかできないかの決定
 		// 期間外だったら操作不可能
 		// 繰り返し回答不可で回答済なら操作不可能
-		if ($questionnaire['Questionnaire']['period_range_stat'] != QuestionnairesComponent::QUESTIONNAIRE_PERIOD_STAT_IN
-			|| (in_array($key, $this->_View->viewVars['ownAnsweredKeys'])
-				&& $questionnaire['Questionnaire']['is_repeat_allow'] == QuestionnairesComponent::PERMISSION_NOT_PERMIT)) {
+		if ($rangeStat != QuestionnairesComponent::QUESTIONNAIRE_PERIOD_STAT_IN ||
+				(in_array($key, $this->_View->viewVars['ownAnsweredKeys'])
+					&& $isRepeat == QuestionnairesComponent::PERMISSION_NOT_PERMIT)) {
 			$answerButtonClass = 'default';
 			$answerButtonDisabled = 'disabled';
 			$buttonStr = $disabledButtonStr;
 		}
 
 		// ラベル名の決定
-		if ($questionnaire['Questionnaire']['period_range_stat'] == QuestionnairesComponent::QUESTIONNAIRE_PERIOD_STAT_BEFORE) {
+		if ($rangeStat == QuestionnairesComponent::QUESTIONNAIRE_PERIOD_STAT_BEFORE) {
 			// 未公開
 			$answerButtonLabel = __d('questionnaires', 'Unpublished');
 		}
@@ -120,7 +122,12 @@ class QuestionnaireUtilHelper extends AppHelper {
 			$answerButtonLabel = __d('questionnaires', 'Finished');
 		}
 
-		return sprintf($buttonStr, $answerButtonClass, '', $answerButtonDisabled, $url, $answerButtonLabel);
+		return sprintf($buttonStr,
+			$answerButtonClass,
+			'',
+			$answerButtonDisabled,
+			$url,
+			$answerButtonLabel);
 	}
 
 /**
@@ -139,14 +146,16 @@ class QuestionnaireUtilHelper extends AppHelper {
 		//			     未回答＆回答期間内　　　　　　　集計ボタン（disabled）
 		$key = $questionnaire['Questionnaire']['key'];
 
-		if ($questionnaire['Questionnaire']['is_total_show'] == QuestionnairesComponent::EXPRESSION_NOT_SHOW) {
+		if ($questionnaire['Questionnaire']['is_total_show'] ==
+			QuestionnairesComponent::EXPRESSION_NOT_SHOW) {
 			return '';
 		}
 
 		$disabled = '';
 
 		// アンケート本体が始まってない
-		if ($questionnaire['Questionnaire']['period_range_stat'] == QuestionnairesComponent::QUESTIONNAIRE_PERIOD_STAT_BEFORE) {
+		if ($questionnaire['Questionnaire']['period_range_stat'] ==
+			QuestionnairesComponent::QUESTIONNAIRE_PERIOD_STAT_BEFORE) {
 			$disabled = 'disabled';
 		} else {
 			// 始まっている

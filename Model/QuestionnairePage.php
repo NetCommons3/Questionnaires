@@ -34,8 +34,6 @@ class QuestionnairePage extends QuestionnairesAppModel {
  */
 	public $validate = array();
 
-	//The Associations below have been created with all possible keys, those that are not needed can be removed
-
 /**
  * belongsTo associations
  *
@@ -73,14 +71,30 @@ class QuestionnairePage extends QuestionnairesAppModel {
 	);
 
 /**
+ * Constructor. Binds the model's database table to the object.
+ *
+ * @param bool|int|string|array $id Set this ID for this model on startup,
+ * can also be an array of options, see above.
+ * @param string $table Name of database table to use.
+ * @param string $ds DataSource connection name.
+ * @see Model::__construct()
+ * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
+ */
+	public function __construct($id = false, $table = null, $ds = null) {
+		parent::__construct($id, $table, $ds);
+
+		$this->loadModels([
+			'QuestionnaireQuestion' => 'Questionnaires.QuestionnaireQuestion',
+		]);
+	}
+
+/**
  * getDefaultPage
  * get default data of questionnaire page
  *
  * @return array
  */
 	public function getDefaultPage() {
-		$this->QuestionnaireQuestion = ClassRegistry::init('Questionnaires.QuestionnaireQuestion', true);
-
 		$page = array(
 			'page_title' => __d('questionnaires', 'First Page'),
 			'page_sequence' => 0,
@@ -109,9 +123,14 @@ class QuestionnairePage extends QuestionnairesAppModel {
 		}
 		// 次ページはデフォルトならば＋１です
 		$nextPageSeq = $nowPageSeq + 1;
+
 		// 回答にスキップロジックで指定されたものがないかチェックし、行き先があるならそのページ番号を返す
 		foreach ($nowAnswers as $answer) {
-			$targetQuestion = Hash::extract($questionnaire['QuestionnairePage'], '{n}.QuestionnaireQuestion.{n}[key=' . $answer[0]['questionnaire_question_key'] . ']');
+
+			$targetQuestion = Hash::extract(
+				$questionnaire['QuestionnairePage'],
+				'{n}.QuestionnaireQuestion.{n}[key=' . $answer[0]['questionnaire_question_key'] . ']');
+
 			if ($targetQuestion) {
 				$q = $targetQuestion[0];
 				// skipロジック対象の質問ならば次ページのチェックを行う
@@ -155,7 +174,6 @@ class QuestionnairePage extends QuestionnairesAppModel {
  * @return void
  */
 	public function setPageToQuestionnaire(&$questionnaire) {
-		$this->QuestionnaireQuestion = ClassRegistry::init('Questionnaires.QuestionnaireQuestion', true);
 		// ページデータがアンケートデータの中にない状態でここが呼ばれている場合、
 		if (!isset($questionnaire['QuestionnairePage'])) {
 			$pages = $this->find('all', array(
@@ -165,7 +183,8 @@ class QuestionnairePage extends QuestionnairesAppModel {
 				'order' => array('page_sequence ASC'),
 				'recursive' => -1));
 
-			$questionnaire['QuestionnairePage'] = Hash::combine($pages, '{n}.QuestionnairePage.page_sequence', '{n}.QuestionnairePage');
+			$questionnaire['QuestionnairePage'] = Hash::combine($pages,
+				'{n}.QuestionnairePage.page_sequence', '{n}.QuestionnairePage');
 		}
 		$questionnaire['Questionnaire']['page_count'] = 0;
 		if (isset($questionnaire['QuestionnairePage'])) {
@@ -218,17 +237,18 @@ class QuestionnairePage extends QuestionnairesAppModel {
 
 		// 付属の質問以下のvalidate
 		if (! isset($this->data['QuestionnaireQuestion'][0])) {
-			$this->validationErrors['page_sequence'][] = __d('questionnaires', 'please set at least one question.');
+			$this->validationErrors['page_sequence'][] =
+				__d('questionnaires', 'please set at least one question.');
 		} else {
 			$validationErrors = array();
-			$this->QuestionnaireQuestion = ClassRegistry::init('Questionnaires.QuestionnaireQuestion', true);
 			foreach ($this->data['QuestionnaireQuestion'] as $qIndex => $question) {
 				// 質問データバリデータ
 				$this->QuestionnaireQuestion->create();
 				$this->QuestionnaireQuestion->set($question);
 				$options['questionIndex'] = $qIndex;
 				if (! $this->QuestionnaireQuestion->validates($options)) {
-					$validationErrors['QuestionnaireQuestion'][$qIndex] = $this->QuestionnaireQuestion->validationErrors;
+					$validationErrors['QuestionnaireQuestion'][$qIndex] =
+						$this->QuestionnaireQuestion->validationErrors;
 				}
 			}
 			$this->validationErrors += $validationErrors;
