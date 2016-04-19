@@ -948,3 +948,6 @@ msgstr ""
 # メール関連
 msgid "MailSetting.mail_fixed_phrase_body.popover"
 msgstr "{X-SITE_NAME} : サイト名<br />{X-PLUGIN_NAME} : プラグイン名<br />{X-ROOM} : ルーム名<br />{X-SUBJECT} : アンケート名<br />{X-TO_DATE} : 開始日時<br />{X-URL} : アンケートへのURL"
+
+msgid "If you allowed to say also to non-members , the questionnaire will be possible to repeatedly answer."
+msgstr ""

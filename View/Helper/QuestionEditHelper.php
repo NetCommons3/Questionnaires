@@ -88,6 +88,7 @@ class QuestionEditHelper extends AppHelper {
  * @return string HTML
  */
 	public function questionnaireAttributeCheckbox($fieldName, $label, $options = array(), $help = '') {
+		$this->log($help, 'debug');
 		$ngModel = 'questionnaires.questionnaire.' . Inflector::variable($fieldName);
 		$ret = '<div class=" checkbox"><label>';
 		$options = Hash::merge(array(

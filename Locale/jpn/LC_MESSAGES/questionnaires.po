@@ -952,3 +952,6 @@ msgstr "+ボタンをクリックしてアンケートを作成してくださ�
 # メール関連
 msgid "MailSetting.mail_fixed_phrase_body.popover"
 msgstr "{X-SITE_NAME} : サイト名<br />{X-PLUGIN_NAME} : プラグイン名<br />{X-ROOM} : ルーム名<br />{X-SUBJECT} : アンケート名<br />{X-TO_DATE} : 開始日時<br />{X-URL} : アンケートへのURL"
+
+msgid "If you allowed to say also to non-members , the questionnaire will be possible to repeatedly answer."
+msgstr "非会員にも回答することを許した場合は、アンケートは繰り返し回答が可能のものになります。<br />また非会員にも回答を許す場合は、認証キーや画像認証を併用することが望ましいです。"

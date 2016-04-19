@@ -12,8 +12,8 @@
 <div class="form-group questionnaire-group">
 	<?php
 		echo $this->QuestionEdit->questionnaireAttributeCheckbox('is_no_member_allow',
-			__d('questionnaires', 'accept the non-members answer'
-		));
+			__d('questionnaires', 'accept the non-members answer')
+		);
 	?>
 	<div class="questionnaire-sub-group" ng-show="questionnaires.questionnaire.isNoMemberAllow==<?php echo QuestionnairesComponent::USES_USE; ?>">
 		<?php
@@ -31,17 +31,17 @@
 				'ng-disabled' => 'questionnaires.questionnaire.isKeyPassUse == ' . QuestionnairesComponent::USES_USE . ' || questionnaires.questionnaire.isNoMemberAllow != ' . QuestionnairesComponent::USES_USE
 			));
 		?>
+		<?php
+		/* 繰り返しを認めるかどうかは「非会員の回答を許す」と足並みをそろえる */
+		echo $this->NetCommonsForm->hidden('is_repeat_allow', array(
+		'ng-value' => 'questionnaires.questionnaire.isNoMemberAllow'
+		));
+		?>
+		<span class="help-block">
+			<?php echo __d('questionnaires', 'If you allowed to say also to non-members , the questionnaire will be possible to repeatedly answer.'); ?>
+		</span>
 	</div>
 	<?php
-		echo $this->QuestionEdit->questionnaireAttributeCheckbox('is_repeat_allow',
-			__d('questionnaires', 'forgive the repetition of the answer'), array(
-			'ng-checked' => 'questionnaires.questionnaire.isNoMemberAllow == ' . QuestionnairesComponent::USES_USE,
-			'ng-disabled' => 'questionnaires.questionnaire.isNoMemberAllow == ' . QuestionnairesComponent::USES_USE
-		));
-		echo $this->NetCommonsForm->hidden('is_repeat_allow', array(
-			'ng-if' => 'questionnaires.questionnaire.isNoMemberAllow == ' . QuestionnairesComponent::USES_USE,
-			'value' => QuestionnairesComponent::USES_USE
-		));
 		echo $this->QuestionEdit->questionnaireAttributeCheckbox('is_anonymity',
 			__d('questionnaires', 'anonymous answer'
 		));

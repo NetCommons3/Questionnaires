@@ -45,12 +45,30 @@ class QuestionnaireSetting extends QuestionnairesAppModel {
 	);
 
 /**
+ * Constructor. Binds the model's database table to the object.
+ *
+ * @param bool|int|string|array $id Set this ID for this model on startup,
+ * can also be an array of options, see above.
+ * @param string $table Name of database table to use.
+ * @param string $ds DataSource connection name.
+ * @see Model::__construct()
+ * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
+ */
+	public function __construct($id = false, $table = null, $ds = null) {
+		parent::__construct($id, $table, $ds);
+
+		$this->loadModels([
+			'Frame' => 'Frames.Frame',
+			'Block' => 'Blocks.Block',
+		]);
+	}
+
+/**
  * getSetting
  *
  * @return mix QuestionnaireBlockSetting data
  */
 	public function getSetting() {
-		$this->Block = ClassRegistry::init('Blocks.Block', true);
 		$blockSetting = $this->Block->find('all', array(
 			'recursive' => -1,
 			'fields' => array(
@@ -137,7 +155,6 @@ class QuestionnaireSetting extends QuestionnairesAppModel {
 		if (! empty($frame['Frame']['block_id'])) {
 			return;
 		}
-		$this->Block = ClassRegistry::init('Blocks.Block', true);
 		// ルームに存在するブロックを探す
 		$block = $this->Block->find('first', array(
 			'conditions' => array(
