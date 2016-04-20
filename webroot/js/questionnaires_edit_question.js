@@ -612,7 +612,7 @@ NetCommonsApp.controller('Questionnaires.edit.question',
          */
       $scope._resetQuestionnaireChoiceSequence = function(pageIndex, qIndex) {
         var len = $scope.questionnaire.questionnairePage[pageIndex].
-          questionnaireQuestion[qIndex].questionnaireChoice.length;
+            questionnaireQuestion[qIndex].questionnaireChoice.length;
         for (var i = 0; i < len; i++) {
           $scope.questionnaire.questionnairePage[pageIndex].
               questionnaireQuestion[qIndex].questionnaireChoice[i].
