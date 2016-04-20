@@ -55,6 +55,7 @@ class QuestionnairesOwnAnswerComponent extends Component {
 		);
 		$summary = $answerSummary->find('first', array(
 			'conditions' => $conditions,
+			'recursive' => -1,
 			'order' => 'QuestionnaireAnswerSummary.created DESC'	// 最も新しいものを一つ選ぶ
 		));
 		return $summary;

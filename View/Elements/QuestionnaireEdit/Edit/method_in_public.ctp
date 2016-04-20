@@ -31,12 +31,6 @@
 				'ng-disabled' => 'questionnaires.questionnaire.isKeyPassUse == ' . QuestionnairesComponent::USES_USE . ' || questionnaires.questionnaire.isNoMemberAllow != ' . QuestionnairesComponent::USES_USE
 			));
 		?>
-		<?php
-		/* 繰り返しを認めるかどうかは「非会員の回答を許す」と足並みをそろえる */
-		echo $this->NetCommonsForm->hidden('is_repeat_allow', array(
-		'ng-value' => 'questionnaires.questionnaire.isNoMemberAllow'
-		));
-		?>
 		<span class="help-block">
 			<?php echo __d('questionnaires', 'If you allowed to say also to non-members , the questionnaire will be possible to repeatedly answer.'); ?>
 		</span>

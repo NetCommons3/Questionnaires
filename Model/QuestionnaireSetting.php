@@ -187,6 +187,8 @@ class QuestionnaireSetting extends QuestionnairesAppModel {
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}
 			Current::$current['Frame']['block_id'] = $block['Block']['id'];
+
+			$this->commit();
 		} catch (Exception $ex) {
 			//トランザクションRollback
 			$this->rollback($ex);

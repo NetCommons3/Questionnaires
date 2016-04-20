@@ -23,9 +23,6 @@
 			'value' => QuestionnairesComponent::USES_NOT_USE,
 			'ng-model' => 'questionnaires.questionnaire.isImageAuthentication'
 		));
-		echo $this->NetCommonsForm->hidden('is_repeat_allow', array(
-			'value' => QuestionnairesComponent::USES_NOT_USE,
-		));
 		echo $this->QuestionEdit->questionnaireAttributeCheckbox('is_anonymity',
 			__d('questionnaires', 'anonymous answer'
 		));

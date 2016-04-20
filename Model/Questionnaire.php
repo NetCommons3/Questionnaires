@@ -238,12 +238,12 @@ class Questionnaire extends QuestionnairesAppModel {
 							'Authentication key setting , image authentication , either only one can not be selected.')
 				)
 			),
-			'is_repeat_allow' => array(
-				'boolean' => array(
-					'rule' => array('boolean'),
-					'message' => __d('net_commons', 'Invalid request.'),
-				),
-			),
+			//'is_repeat_allow' => array(
+			//	'boolean' => array(
+			//		'rule' => array('boolean'),
+			//		'message' => __d('net_commons', 'Invalid request.'),
+			//	),
+			//),
 			'is_image_authentication' => array(
 				'boolean' => array(
 					'rule' => array('boolean'),
@@ -272,7 +272,8 @@ class Questionnaire extends QuestionnairesAppModel {
 		parent::beforeValidate($options);
 		// 最低でも１ページは存在しないとエラー
 		if (! isset($this->data['QuestionnairePage'][0])) {
-			$this->validationErrors['pickup_error'] = __d('questionnaires', 'please set at least one page.');
+			$this->validationErrors['pickup_error'] =
+				__d('questionnaires', 'please set at least one page.');
 		} else {
 			// ページデータが存在する場合
 			// 配下のページについてバリデート
@@ -292,6 +293,7 @@ class Questionnaire extends QuestionnairesAppModel {
 			}
 			$this->validationErrors += $validationErrors;
 		}
+
 		// 引き続きアンケート本体のバリデートを実施してもらうためtrueを返す
 		return true;
 	}
@@ -487,6 +489,11 @@ class Questionnaire extends QuestionnairesAppModel {
 
 		try {
 			$questionnaire['Questionnaire']['block_id'] = Current::read('Frame.block_id');
+			// is_no_member_allowの値によってis_repeat_allowを決定する
+			$questionnaire['Questionnaire']['is_repeat_allow'] = QuestionnairesComponent::USES_NOT_USE;
+			if ($questionnaire['Questionnaire']['is_no_member_allow'] == QuestionnairesComponent::USES_USE) {
+				$questionnaire['Questionnaire']['is_repeat_allow'] = QuestionnairesComponent::USES_USE;
+			}
 			$status = $questionnaire['Questionnaire']['status'];
 			$this->create();
 			// アンケートは履歴を取っていくタイプのコンテンツデータなのでSave前にはID項目はカット
