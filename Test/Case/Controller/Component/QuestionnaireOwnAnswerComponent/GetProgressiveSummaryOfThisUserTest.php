@@ -138,7 +138,7 @@ class QuestionnaireOwnAnswerComponentGetProgressiveSummaryOfThisUserTest
 			->will(
 				$this->returnValueMap([
 					['Questionnaires.progressiveSummary.questionnaire_12', 12]
-			]));
+				]));
 
 		//テスト実行
 		$this->_testGetAction(
@@ -151,7 +151,7 @@ class QuestionnaireOwnAnswerComponentGetProgressiveSummaryOfThisUserTest
 			'questionnaire_12');
 
 		//チェック
-		$this->assertFalse($result);
+		$this->assertEmpty($result);
 	}
 
 }

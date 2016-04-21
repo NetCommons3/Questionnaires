@@ -121,18 +121,23 @@ class QuestionnaireAnswerSummary extends QuestionnairesAppModel {
  * getProgressiveSummary
  * 回答中サマリを取得する
  *
+ * @param string $questionnaireKey questionnaire key
  * @param int $summaryId summary id
  * @return array
  */
-	public function getProgressiveSummary($summaryId) {
+	public function getProgressiveSummary($questionnaireKey, $summaryId = null) {
+		$conditions = array(
+			'answer_status !=' => QuestionnairesComponent::ACTION_ACT,
+			'questionnaire_key' => $questionnaireKey,
+			'user_id' => Current::read('User.id'),
+		);
+		if (! is_null($summaryId)) {
+			$conditions['QuestionnaireAnswerSummary.id'] = $summaryId;
+		}
 		$summary = $this->find('first', array(
-			'conditions' => array(
-				'QuestionnaireAnswerSummary.id' => $summaryId,
-				'QuestionnaireAnswerSummary.created_user' => Current::read('User.id'),
-				'NOT' => array(
-					'QuestionnaireAnswerSummary.answer_status' => QuestionnairesComponent::ACTION_ACT
-				)
-			)
+			'conditions' => $conditions,
+			'recursive' => -1,
+			'order' => 'QuestionnaireAnswerSummary.created DESC'	// 最も新しいものを一つ選ぶ
 		));
 		return $summary;
 	}

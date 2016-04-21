@@ -108,6 +108,7 @@ class QuestionnaireEditControllerEditTest extends WorkflowControllerEditTest {
 				'sub_title' => 'EditTestSubTitle',
 				'is_total_show' => 0,
 				'answer_timing' => '0',
+				//'is_no_member_allow' => 0,
 				'is_key_pass_use' => 0,
 				'total_show_timing' => 0,
 				'total_show_start_period' => '',

@@ -35,29 +35,18 @@ class QuestionnairesOwnAnswerComponent extends Component {
  * @return array progressive Answer Summary
  */
 	public function getProgressiveSummaryOfThisUser($questionnaireKey) {
-		// 戻り値初期化
-		$summary = false;
-		$answerSummary = ClassRegistry::init('Questionnaires.QuestionnaireAnswerSummary');
+		$summaryId = null;
 		// 未ログインの人の場合はセッションにある回答中データを参照する
 		if (! Current::read('User.id')) {
 			$session = $this->_Collection->load('Session');
 			$summaryId = $session->read('Questionnaires.progressiveSummary.' . $questionnaireKey);
-			if ($summaryId) {
-				$summary = $answerSummary->getProgressiveSummary($summaryId);
+			// セッションに「回答中ID」がない場合はfalseリターン
+			if (! $summaryId) {
+				return false;
 			}
-			return $summary;
 		}
-		// ログインユーザーはDBから探す
-		$conditions = array(
-			'answer_status !=' => QuestionnairesComponent::ACTION_ACT,
-			'questionnaire_key' => $questionnaireKey,
-			'user_id' => Current::read('User.id'),
-		);
-		$summary = $answerSummary->find('first', array(
-			'conditions' => $conditions,
-			'recursive' => -1,
-			'order' => 'QuestionnaireAnswerSummary.created DESC'	// 最も新しいものを一つ選ぶ
-		));
+		$answerSummary = ClassRegistry::init('Questionnaires.QuestionnaireAnswerSummary');
+		$summary = $answerSummary->getProgressiveSummary($questionnaireKey, $summaryId);
 		return $summary;
 	}
 

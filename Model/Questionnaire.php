@@ -491,7 +491,9 @@ class Questionnaire extends QuestionnairesAppModel {
 			$questionnaire['Questionnaire']['block_id'] = Current::read('Frame.block_id');
 			// is_no_member_allowの値によってis_repeat_allowを決定する
 			$questionnaire['Questionnaire']['is_repeat_allow'] = QuestionnairesComponent::USES_NOT_USE;
-			if ($questionnaire['Questionnaire']['is_no_member_allow'] == QuestionnairesComponent::USES_USE) {
+			if (Hash::get(
+					$questionnaire,
+					'Questionnaire.is_no_member_allow') == QuestionnairesComponent::USES_USE) {
 				$questionnaire['Questionnaire']['is_repeat_allow'] = QuestionnairesComponent::USES_USE;
 			}
 			$status = $questionnaire['Questionnaire']['status'];
