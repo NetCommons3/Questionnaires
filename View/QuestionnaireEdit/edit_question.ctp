@@ -41,9 +41,6 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 		<?php echo $this->NetCommonsForm->hidden('Frame.id'); ?>
 		<?php echo $this->NetCommonsForm->hidden('Block.id'); ?>
 		<?php echo $this->NetCommonsForm->hidden('Questionnaire.key');?>
-		<?php	/* Wizard中は一時保存ステータスで回さないとWorkflowに叱られる */
-		echo $this->NetCommonsForm->hidden('Questionnaire.status', array('value' => WorkflowComponent::STATUS_IN_DRAFT));
-		?>
 
 		<?php $this->NetCommonsForm->unlockField('QuestionnairePage'); ?>
 

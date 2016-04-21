@@ -29,9 +29,6 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 		<?php $this->NetCommonsForm->unlockField('QuestionnairePage'); ?>
 
 		<?php echo $this->NetCommonsForm->hidden('Questionnaire.key'); ?>
-		<?php
-		echo $this->NetCommonsForm->hidden('Questionnaire.status', array('value' => WorkflowComponent::STATUS_IN_DRAFT));
-		?>
 		<?php echo $this->NetCommonsForm->hidden('Frame.id'); ?>
 		<?php echo $this->NetCommonsForm->hidden('Block.id'); ?>
 

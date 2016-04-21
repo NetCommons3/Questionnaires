@@ -118,6 +118,11 @@ class Questionnaire extends QuestionnairesAppModel {
  * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
  */
 	public function beforeValidate($options = array()) {
+		// ウィザード画面中はstatusチェックをしないでほしいので
+		// ここに来る前にWorkflowBehaviorでつけられたstatus-validateを削除しておく
+		if (Hash::check($options, 'validate') == QuestionnairesComponent::QUESTIONNAIRE_VALIDATE_TYPE) {
+			$this->validate = Hash::remove($this->validate, 'status');
+		}
 		$this->validate = Hash::merge($this->validate, array(
 			'block_id' => array(
 				'numeric' => array(

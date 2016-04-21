@@ -154,7 +154,8 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 			}
 			// バリデート
 			$this->Questionnaire->set($questionnaire);
-			if (! $this->Questionnaire->validates(array('validate' => 'duringSetup'))) {
+			if (! $this->Questionnaire->validates(
+				array('validate' => QuestionnairesComponent::QUESTIONNAIRE_VALIDATE_TYPE))) {
 				$this->__setupViewParameters($questionnaire, '');
 				return;
 			}
@@ -196,7 +197,8 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 			$questionnaire = Hash::merge($this->_questionnaire, $postQuestionnaire);
 			// バリデート
 			$this->Questionnaire->set($questionnaire);
-			if (! $this->Questionnaire->validates(array('validate' => 'duringSetup'))) {
+			if (! $this->Questionnaire->validates(
+				array('validate' => QuestionnairesComponent::QUESTIONNAIRE_VALIDATE_TYPE))) {
 				$this->__setupViewParameters($questionnaire, $this->_getActionUrl('edit_question'));
 				return;
 			}
@@ -257,6 +259,7 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 			$this->redirect(NetCommonsUrl::backToPageUrl());
 			return;
 		} else {
+			$this->log($this->_questionnaire, 'debug');
 			// 指定されて取り出したアンケートデータをセッションキャッシュに書く
 			$this->Session->write(
 				$this->_getQuestionnaireEditSessionIndex(),
@@ -352,9 +355,5 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 		$this->request->data = $questionnaire;
 		$this->request->data['Frame'] = Current::read('Frame');
 		$this->request->data['Block'] = Current::read('Block');
-
-		// ? FUJI いる？
-		//$this->set('contentStatus', $questionnaire['Questionnaire']['status']);
-		//$this->set('comments', $this->Questionnaire->getCommentsByContentKey($questionnaire['Questionnaire']['key']));
 	}
 }
