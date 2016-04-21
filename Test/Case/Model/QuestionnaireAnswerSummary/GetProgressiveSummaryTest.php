@@ -72,18 +72,19 @@ class GetProgressiveSummaryTest extends NetCommonsGetTest {
 /**
  * getProgressiveSummary
  *
+ * @param string $questionnaireKey questionnaire key
  * @param int $summaryId summary id
  * @param array $expected 期待値（取得したキー情報）
  * @dataProvider dataProviderGet
  *
  * @return void
  */
-	public function testGetProgressiveSummary($summaryId, $expected) {
+	public function testGetProgressiveSummary($questionnaireKey, $summaryId, $expected) {
 		$model = $this->_modelName;
 		$method = $this->_methodName;
 
 		//テスト実行
-		$result = $this->$model->$method($summaryId);
+		$result = $this->$model->$method($questionnaireKey, $summaryId);
 
 		//チェック
 		if ($result) {
@@ -103,9 +104,9 @@ class GetProgressiveSummaryTest extends NetCommonsGetTest {
  */
 	public function dataProviderGet() {
 		return array(
-			array(3, 3),
-			array(1, array()),
-			array(2, array())
+			array('questionnaire_2', 3, 3),
+			array('questionnaire_12', 1, array()),
+			array('questionnaire_12', 2, array())
 		);
 	}
 }
