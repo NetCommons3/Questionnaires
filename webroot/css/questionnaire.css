@@ -72,11 +72,23 @@
 .questionnaire-matrix-table {
     margin-bottom:10px;
 }
+.questionnaire-matrix-table td {
+    vertical-align:bottom;
+}
+.questionnaire-matrix-table td .radio label.control-label {
+    display: block;
+    padding: 3px 0px;
+}
+.questionnaire-matrix-table td .checkbox {
+    margin:0.2em 0;
+}
 .questionnaire-matrix-table td input[type="radio"],
 .questionnaire-matrix-table td input[type="checkbox"] {
     display:block;
     width:100%;
-    height:1em;
+    min-height:1em;
+    margin:5px 0px;
+    cursor: pointer;
 }
 .questionnaire-matrix-table td input[type="checkbox"] {
     margin-left: 0px;

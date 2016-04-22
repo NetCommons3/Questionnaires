@@ -84,8 +84,11 @@ class GetAnswerSummaryCsvTest extends NetCommonsGetTest {
 			array('questionnaire_12', ''),
 			array('questionnaire_12', 1),
 			array('questionnaire_22', ''),
+			array('questionnaire_22', ''),
+			array('questionnaire_22', ''),
 		);
-		for ($i = 0; $i < 6; $i++) {
+		$loopCt = count($summaryData);
+		for ($i = 0; $i < $loopCt; $i++) {
 			$questionnaireKey = $summaryData[$i][0];
 			$id = $this->_insertAnswerSummary($questionnaireKey, $summaryData[$i][1]);
 
@@ -116,8 +119,17 @@ class GetAnswerSummaryCsvTest extends NetCommonsGetTest {
 			} elseif ($questionnaireKey == 'questionnaire_12') {
 				$this->_insertAnswer($id, 'qKey_27', '|choice_27:choice label27');
 			} elseif ($questionnaireKey == 'questionnaire_22') {
-				$this->_insertAnswer($id, 'qKey_41', '|choice_35:choice label35', 'choice_33');
-				$this->_insertAnswer($id, 'qKey_41', '|choice_36:choice label36', 'choice_34');
+				// マトリクスで回答蟻の場合と i=6のときは回答がなかったことにしたい
+				if ($i == 5) {
+					$this->_insertAnswer($id, 'qKey_41', '|choice_35:choice label35', 'choice_33');
+					$this->_insertAnswer($id, 'qKey_41', '|choice_36:choice label36', 'choice_34');
+				} elseif ($i == 6) {
+					$this->_insertAnswer($id, 'qKey_41', '', 'choice_33');
+					$this->_insertAnswer($id, 'qKey_41', '', 'choice_34');
+				} else {
+					$this->_insertAnswer($id, 'qKey_99', '', 'choice_33');
+					$this->_insertAnswer($id, 'qKey_99', '', 'choice_34');
+				}
 			}
 		}
 		$this->QuestionnaireAnswer->Behaviors->load('QuestionnaireAnswerSingleChoice');
@@ -239,8 +251,7 @@ class GetAnswerSummaryCsvTest extends NetCommonsGetTest {
  * @return array
  */
 	public function dataProviderGet() {
-		$expect = array(
-			array(
+		$expect = array(array(
 				__d('questionnaires', 'Respondent'), __d('questionnaires', 'Answer Date'), __d('questionnaires', 'Number'),
 				'1-1. Question_1',
 				'2-1. Question_2',
@@ -287,16 +298,12 @@ class GetAnswerSummaryCsvTest extends NetCommonsGetTest {
 				'choice label15',
 				'2016-03-01',
 				''
-			),	// data3
-		);
-		$expect2 = array(
-			array(
+		));
+		$expect2 = array(array(
 				__d('questionnaires', 'Respondent'), __d('questionnaires', 'Answer Date'), __d('questionnaires', 'Number'),
 				'1-1. Question_1',
-			),	// header
-		);
-		$expect3 = array(
-			array(
+		));
+		$expect3 = array(array(
 				__d('questionnaires', 'Respondent'), __d('questionnaires', 'Answer Date'), __d('questionnaires', 'Number'),
 				'1-1. Question_1',
 				'2-1. Question_1',
@@ -313,10 +320,8 @@ class GetAnswerSummaryCsvTest extends NetCommonsGetTest {
 				'choice label27',
 				'',
 				'',
-			),	// data2
-		);
-		$expect4 = array(
-			array(
+		));
+		$expect4 = array(array(
 				__d('questionnaires', 'Respondent'), __d('questionnaires', 'Answer Date'), __d('questionnaires', 'Number'),
 				'1-1-1. Question_1:choice label33',
 				'1-1-2. Question_1:choice label34',
@@ -326,7 +331,16 @@ class GetAnswerSummaryCsvTest extends NetCommonsGetTest {
 				'choice label35',
 				'その他の回答:choice label36',
 			),	// data2
-		);
+			array(
+				'Guest', '2016-03-01 01:01:01', '1',
+				'', //回答なし
+				'その他の回答:',
+			),	// data3 空回答
+			array(// data4 異常回答
+				'Guest', '2016-03-01 01:01:01', '1',
+				'',
+				'',
+		));
 		return array(
 			array('4', $expect),
 			array('2', $expect2),

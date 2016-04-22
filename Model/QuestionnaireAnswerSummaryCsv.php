@@ -298,6 +298,11 @@ class QuestionnaireAnswerSummaryCsv extends QuestionnairesAppModel {
 			'{n}.QuestionnaireAnswer[questionnaire_question_key=' . $question['key'] . ']');
 		// 回答が存在するとき処理
 		if (! $ans) {
+			// 通常の処理ではこのような場面はありえない
+			// アンケートは空回答であっても回答レコードを作成するからです
+			// データレコード異常があった場合のみです
+			// ただ、この回答を異常データだからといってオミットすると、サマリの合計数と
+			// 合わなくなって集計データが狂ってしまうので空回答だったように装って処理します
 			return $retAns;
 		}
 
@@ -346,6 +351,11 @@ class QuestionnaireAnswerSummaryCsv extends QuestionnairesAppModel {
 			$answers,
 			'{n}.QuestionnaireAnswer[questionnaire_question_key=' . $question['key'] . ']');
 		if (empty($anss)) {
+			// 通常の処理ではこのような場面はありえない
+			// アンケートは空回答であっても回答レコードを作成するからです
+			// データレコード異常があった場合のみです
+			// ただ、この回答を異常データだからといってオミットすると、サマリの合計数と
+			// 合わなくなって集計データが狂ってしまうので空回答だったように装って処理します
 			return $retAns;
 		}
 		// その中かから現在指定された選択肢行に該当するものを取り出す
