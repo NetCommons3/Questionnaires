@@ -383,7 +383,7 @@ msgstr "集計結果"
 #: /View/QuestionnaireAnswers/test_mode.ctp:28;41
 #: /View/QuestionnaireEdit/edit.ctp:81 /View/Questionnaires/index.ctp:36
 msgid " - "
-msgstr "～"
+msgstr "　～　"
 
 #: /View/Elements/FrameSettings/edit_display_questionnaire.ctp:90
 msgid "On"
@@ -860,7 +860,7 @@ msgstr "設定しない場合、回答者が回答した後すぐに表示され
 
 #: /View/QuestionnaireEdit/edit.ctp:108
 msgid "Result will display at this time."
-msgstr "から集計結果を表示する"
+msgstr "ここで指定された日から集計結果を閲覧できるようになります。"
 
 #: /View/QuestionnaireEdit/edit.ctp:144
 msgid "Questionnaire answer mail"

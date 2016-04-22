@@ -107,6 +107,7 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 		));
 		if (! $this->__questionnaire) {
 			$this->setAction('throwBadRequest');	// returnをつけるとテストコードが通らない
+			return;
 		}
 
 		// 現在の表示形態を調べておく

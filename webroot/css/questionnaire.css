@@ -99,15 +99,7 @@
 .questionnaire-chart-wrapper {
     margin:1em;
 }
-.questionnaire-chart {
-    width: 480px;
-    height: 240px;
-}
 /*------------------------------------------------------------------*/
-td.q-btn .questionnaire-listbtn {
-	margin-top: 0.2em;
-	margin-bottom: 0.2em;
-}
 table.table.questionnaire-table-vcenter tbody td {
    vertical-align: middle;
 }

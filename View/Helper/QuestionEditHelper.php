@@ -70,7 +70,7 @@ class QuestionEditHelper extends AppHelper {
 			$ngModel = $options['ng-model'];
 			$modelNames = explode('.', $ngModel);
 			$errorMsgModelName = $modelNames[0] . '.errorMessages.' . $modelNames[1];
-			$ret .= '<div class="has-error" ng-if="' . $errorMsgModelName . '">';
+			$ret .= '<div class="" ng-if="' . $errorMsgModelName . '">';
 			$ret .= '<div class="help-block" ng-repeat="errorMessage in ' . $errorMsgModelName . '">';
 				$ret .= '{{errorMessage}}</div></div>';
 			$ret .= '</div></div>';
@@ -124,10 +124,12 @@ class QuestionEditHelper extends AppHelper {
  * @param string $fieldName フィールド名
  * @param string $label checkboxの時のラベル
  * @param array $minMax 日時指定の範囲がある場合のmin, max
+ * @param string $divClass div class
  * @param string $help 追加説明文
  * @return string HTML
  */
-	public function questionnaireAttributeDatetime($fieldName, $label, $minMax = array(), $help = '') {
+	public function questionnaireAttributeDatetime(
+		$fieldName, $label, $minMax = array(), $divClass = 'form-inline', $help = '') {
 		$ngModel = 'questionnaires.questionnaire.' . Inflector::variable($fieldName);
 
 		$options = array('type' => 'text',
@@ -140,7 +142,7 @@ class QuestionEditHelper extends AppHelper {
 				'datetimepicker-options' => "{format:'YYYY-MM-DD HH:mm'}",
 				'show-meridian' => 'false',
 				'label' => $label,
-				'div' => false);
+				'div' => $divClass);
 		if (! empty($minMax)) {
 			$min = $minMax['min'];
 			$max = $minMax['max'];
@@ -151,12 +153,17 @@ class QuestionEditHelper extends AppHelper {
 			));
 		}
 
-		$ret = '<div class="form-group ">';
+		$ret = '';
+		if ($divClass) {
+			$ret .= '<div class="form-group ">';
+		}
 		$ret .= $this->NetCommonsForm->input($fieldName, $options);
 		if (!empty($help)) {
 			$ret .= '<span class="help-block">' . $help . '</span>';
 		}
-		$ret .= '</div>';
+		if ($divClass) {
+			$ret .= '</div>';
+		}
 		return $ret;
 	}
 

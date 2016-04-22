@@ -62,20 +62,26 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 						__d('questionnaires', 'After approval will be immediately published . Stop of the questionnaire to select the stop from the questionnaire data list .'));
 				?>
 				<div class="row" ng-show="questionnaires.questionnaire.answerTiming == '<?php echo QuestionnairesComponent::USES_USE; ?>'">
-					<div class="col-sm-5">
-						<?php
+					<div class="col-sm-11 col-sm-offset-1">
+						<div class="form-inline">
+							<div class="form-group">
+								<div class="pull-left">
+									<?php
 							echo $this->QuestionEdit->questionnaireAttributeDatetime('answer_start_period', false,
-								array('min' => '', 'max' => 'answer_end_period'));
-						?>
-					</div>
-					<div class="col-sm-1">
-						<?php echo __d('questionnaires', ' - '); ?>
-					</div>
-					<div class="col-sm-5">
-						<?php
+									array('min' => '', 'max' => 'answer_end_period'), false);
+									?>
+								</div>
+								<div class="pull-left">
+									<?php echo __d('questionnaires', ' - '); ?>
+								</div>
+								<div class="pull-left">
+								<?php
 							echo $this->QuestionEdit->questionnaireAttributeDatetime('answer_end_period', false,
-								array('min' => 'answer_start_period', 'max' => ''));
-						?>
+								array('min' => 'answer_start_period', 'max' => ''), false);
+								?>
+									</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -91,13 +97,16 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 						__d('questionnaires', 'If not set , it will be displayed after the respondent answers.'));
 				?>
 				<div class="row" ng-show="questionnaires.questionnaire.totalShowTiming != 0">
-					<div class="col-sm-5">
+					<div class="col-sm-11 col-sm-offset-1">
 						<?php
-							echo $this->QuestionEdit->questionnaireAttributeDatetime('total_show_start_period', false);
+							echo $this->QuestionEdit->questionnaireAttributeDatetime(
+								'total_show_start_period',
+								false,
+								false,
+								'form-inline',
+								__d('questionnaires', 'Result will display at this time.')
+						);
 						?>
-					</div>
-					<div class="col-sm-6">
-						<?php echo __d('questionnaires', 'Result will display at this time.'); ?>
 					</div>
 				</div>
 			</div>
