@@ -107,7 +107,6 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 		));
 		if (! $this->__questionnaire) {
 			$this->setAction('throwBadRequest');	// returnをつけるとテストコードが通らない
-			return;
 		}
 
 		// 現在の表示形態を調べておく
@@ -150,13 +149,7 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 		// テストモード確認画面からのPOSTや、現在のアンケートデータのステータスが公開状態の時
 		// 次へリダイレクト
 		if ($this->request->is('post') || $status == WorkflowComponent::STATUS_PUBLISHED) {
-			$this->redirect(NetCommonsUrl::actionUrl(array(
-				'controller' => 'questionnaire_answers',
-				'action' => 'view',
-				Current::read('Block.id'),
-				$this->_getQuestionnaireKey($this->__questionnaire),
-				'frame_id' => Current::read('Frame.id')
-			)));
+			$this->_redirectAnswerPage();
 			return;
 		}
 		$this->request->data['Frame'] = Current::read('Frame');
@@ -209,6 +202,11 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
  * @return void
  */
 	public function key_auth() {
+		$isKeyPassUse = $this->__questionnaire['Questionnaire']['is_key_pass_use'];
+		if ($isKeyPassUse != QuestionnairesComponent::USES_USE) {
+			$this->_redirectAnswerPage();
+			return;
+		}
 		$qKey = $this->_getQuestionnaireKey($this->__questionnaire);
 		if ($this->request->is('post')) {
 			if ($this->AuthorizationKey->check()) {
@@ -246,19 +244,17 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
  * @return void
  */
 	public function img_auth() {
+		$isImgUse = $this->__questionnaire['Questionnaire']['is_image_authentication'];
+		if ($isImgUse != QuestionnairesComponent::USES_USE) {
+			$this->_redirectAnswerPage();
+			return;
+		}
 		$qKey = $this->_getQuestionnaireKey($this->__questionnaire);
 		if ($this->request->is('post')) {
 			if ($this->VisualCaptcha->check()) {
 				$this->Session->write('Questionnaire.auth_ok.' . $qKey, 'OK');
 				// 画面へ行く
-				$url = NetCommonsUrl::actionUrl(array(
-					'controller' => 'questionnaire_answers',
-					'action' => 'view',
-					Current::read('Block.id'),
-					$qKey,
-					'frame_id' => Current::read('Frame.id'),
-				));
-				$this->redirect($url);
+				$this->_redirectAnswerPage();
 				return;
 			}
 		}
@@ -478,4 +474,19 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 			}
 		}
 	}
+/**
+ * _redirectAnswerPage
+ *
+ * @return void
+ */
+	protected function _redirectAnswerPage() {
+		$this->redirect(NetCommonsUrl::actionUrl(array(
+			'controller' => 'questionnaire_answers',
+			'action' => 'view',
+			Current::read('Block.id'),
+			$this->_getQuestionnaireKey($this->__questionnaire),
+			'frame_id' => Current::read('Frame.id')
+		)));
+	}
+
 }

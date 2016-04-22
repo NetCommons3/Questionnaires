@@ -104,6 +104,47 @@ class QuestionnaireAnswersControllerPostTest extends NetCommonsControllerTestCas
 
 /**
  * アクションのPOSTテスト
+ * KeyAuthへPost
+ *
+ * @return void
+ */
+	public function testKeyAuthPostNG() {
+		$controller = $this->generate('Questionnaires.QuestionnaireAnswers', array(
+			'components' => array(
+				'Auth' => array('user'),
+				'Session',
+				'Security',
+				'NetCommons.Permission',
+				'Questionnaires.Questionnaires',
+				'Questionnaires.QuestionnairesOwnAnswer',
+				'AuthorizationKeys.AuthorizationKey'
+			)
+		));
+		$data = array(
+			'data' => array(
+				'Frame' => array('id' => 6),
+				'Block' => array('id' => 2),
+				'AuthorizationKeys' => array('key' => 'test')
+			)
+		);
+		$controller->AuthorizationKey->expects($this->any())
+			->method('check')
+			->will(
+				$this->returnValue(false));
+
+		TestAuthGeneral::login($this, Role::ROOM_ROLE_KEY_GENERAL_USER);
+
+		$result = $this->_testPostAction('post', $data, array('action' => 'key_auth', 'frame_id' => 6, 'block_id' => 2, 'key' => 'questionnaire_6'));
+
+		// 認証キーcomponentをMockにしてるからエラーメッセージが入らない
+		// 同じ画面を表示していることでエラー画面になっていると判断する
+		$this->assertTextContains('/questionnaires/questionnaire_answers/key_auth/', $result);
+
+		TestAuthGeneral::logout($this);
+	}
+
+/**
+ * アクションのPOSTテスト
  * ImgAuthへPost
  *
  * @return void
@@ -139,6 +180,48 @@ class QuestionnaireAnswersControllerPostTest extends NetCommonsControllerTestCas
 		$result = $this->headers['Location'];
 
 		$this->assertTextContains('questionnaire_8', $result);
+
+		TestAuthGeneral::logout($this);
+	}
+
+/**
+ * アクションのPOSTテスト
+ * ImgAuthへPost
+ *
+ * @return void
+ */
+	public function testImgAuthPostNG() {
+		$controller = $this->generate('Questionnaires.QuestionnaireAnswers', array(
+			'components' => array(
+				'Auth' => array('user'),
+				'Session',
+				'Security',
+				'NetCommons.Permission',
+				'Questionnaires.Questionnaires',
+				'Questionnaires.QuestionnairesOwnAnswer',
+				'AuthorizationKeys.AuthorizationKey',
+				'VisualCaptcha.VisualCaptcha'
+			)
+		));
+		$data = array(
+			'data' => array(
+				'Frame' => array('id' => 6),
+				'Block' => array('id' => 2),
+				'VisualCaptcha' => array('test' => 'test')	// Mock使うんでなんでもよい
+			)
+		);
+		$controller->VisualCaptcha->expects($this->any())
+			->method('check')
+			->will(
+				$this->returnValue(false));
+
+		TestAuthGeneral::login($this, Role::ROOM_ROLE_KEY_GENERAL_USER);
+
+		$result = $this->_testPostAction('post', $data, array('action' => 'img_auth', 'frame_id' => 6, 'block_id' => 2, 'key' => 'questionnaire_8'));
+
+		// componentをMockにしてるからエラーメッセージが入らない
+		// 同じ画面を表示していることでエラー画面になっていると判断する
+		$this->assertTextContains('/questionnaires/questionnaire_answers/img_auth/', $result);
 
 		TestAuthGeneral::logout($this);
 	}
