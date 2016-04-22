@@ -300,10 +300,10 @@ class QuestionnairesControllerIndexTest extends WorkflowControllerIndexTest {
 			'urlOptions' => array('action' => 'index', 'limit' => 50),
 			'assert' => array('method' => 'assertActionLink', 'action' => 'test_mode', 'linkExist' => false, 'url' => array('controller' => 'questionnaire_answers', 'key' => 'questionnaire_36', 'limit' => null))
 		)));
-		// 他人の未来 発行済みで集計表示ありなので見える
+		// 他人の未来 集計表示ありだが未来なので見えない
 		array_push($results, Hash::merge($results[$base], array(
 			'urlOptions' => array('action' => 'index', 'limit' => 50),
-			'assert' => array('method' => 'assertActionLink', 'action' => 'view', 'linkExist' => true, 'url' => array('controller' => 'questionnaire_answers', 'key' => 'questionnaire_16', 'limit' => null))
+			'assert' => array('method' => 'assertActionLink', 'action' => 'view', 'linkExist' => false, 'url' => array('controller' => 'questionnaire_answers', 'key' => 'questionnaire_16', 'limit' => null))
 		)));
 		// 他人の過去 発行済みで集計表示ありなので見える
 		array_push($results, Hash::merge($results[$base], array(

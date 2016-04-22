@@ -139,7 +139,8 @@ class ActionQuestionnaireAdd extends QuestionnairesAppModel {
 			'Questionnaire.id' => $check['past_questionnaire_id']
 		));
 		$cnt = $this->Questionnaire->find('count', array(
-			'conditions' => $baseCondition
+			'conditions' => $baseCondition,
+			'recursive' => -1
 		));
 		if ($cnt == 0) {
 			return false;
@@ -240,6 +241,7 @@ class ActionQuestionnaireAdd extends QuestionnairesAppModel {
 		// この関数が呼ばれないので$questionnaireの判断は不要
 		$questionnaire = $this->Questionnaire->find('first', array(
 			'conditions' => array('Questionnaire.id' => $questionnaireId),
+			'recursive' => 1
 		));
 		// ID値のみクリア
 		$this->Questionnaire->clearQuestionnaireId($questionnaire);

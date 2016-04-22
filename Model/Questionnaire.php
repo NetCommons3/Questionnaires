@@ -442,8 +442,7 @@ class Questionnaire extends QuestionnairesAppModel {
 					'Questionnaire.answer_start_period <=' => $nowTime,
 					'Questionnaire.answer_start_period' => null,
 		));
-		$limitedConditions[] = array(
-			'OR' => array(
+		$limitedConditions[] = array('OR' => array(
 				'Questionnaire.answer_end_period >=' => $nowTime,
 				'Questionnaire.answer_end_period' => null,
 		));
@@ -451,17 +450,22 @@ class Questionnaire extends QuestionnairesAppModel {
 		$timingConditions = array(
 			'OR' => array(
 				'Questionnaire.answer_timing' => QuestionnairesComponent::USES_NOT_USE,
-				$limitedConditions,
+				'AND' => array(
+					'Questionnaire.answer_timing' => QuestionnairesComponent::USES_USE,
+					$limitedConditions,
+				)
 		));
 
 		// 集計結果の表示はアンケート回答が始まっていることが前提
 		$totalLimitPreCond = array(
-			'Questionnaire.answer_timing' => QuestionnairesComponent::USES_NOT_USE,
 			'OR' => array(
-				'Questionnaire.answer_timing' => QuestionnairesComponent::USES_USE,
-				'OR' => array(
-					'Questionnaire.answer_start_period <=' => $nowTime,
-					'Questionnaire.answer_start_period' => null,
+				'Questionnaire.answer_timing' => QuestionnairesComponent::USES_NOT_USE,
+				'AND' => array(
+					'Questionnaire.answer_timing' => QuestionnairesComponent::USES_USE,
+					'OR' => array(
+						'Questionnaire.answer_start_period <=' => $nowTime,
+						'Questionnaire.answer_start_period' => null,
+					)
 				)
 			)
 		);

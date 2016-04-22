@@ -103,6 +103,7 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 
 		$this->__questionnaire = $this->Questionnaire->find('first', array(
 			'conditions' => $conditions,
+			'recursive' => 1
 		));
 		if (! $this->__questionnaire) {
 			$this->setAction('throwBadRequest');	// returnをつけるとテストコードが通らない

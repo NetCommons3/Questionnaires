@@ -259,7 +259,6 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 			$this->redirect(NetCommonsUrl::backToPageUrl());
 			return;
 		} else {
-			$this->log($this->_questionnaire, 'debug');
 			// 指定されて取り出したアンケートデータをセッションキャッシュに書く
 			$this->Session->write(
 				$this->_getQuestionnaireEditSessionIndex(),
