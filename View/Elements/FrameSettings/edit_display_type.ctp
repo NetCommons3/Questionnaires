@@ -10,17 +10,15 @@
  */
 ?>
 <label><?php echo __d('questionnaires', 'Questionnaire display setting'); ?></label>
-<?php echo $this->NetCommonsForm->input('display_type', array(
-	'type' => 'radio',
-	'class' => '',
-	'options' => array(
+<?php echo $this->NetCommonsForm->radio('display_type',
+	array(
 		QuestionnairesComponent::DISPLAY_TYPE_SINGLE => __d('questionnaires', 'Show only one questionnaire'),
-		QuestionnairesComponent::DISPLAY_TYPE_LIST => __d('questionnaires', 'Show questionnaires list')),
-	'legend' => false,
-	'label' => false,
-	'before' => '<div class="radio-inline"><label>',
-	'separator' => '</label></div><div class="radio-inline"><label>',
-	'after' => '</label></div>',
-	'hiddenField' => false,
-	'ng-model' => 'questionnaireFrameSettings.displayType',
+		QuestionnairesComponent::DISPLAY_TYPE_LIST => __d('questionnaires', 'Show questionnaires list'),
+	),
+	array(
+		'div' => 'form-inline',
+		'hiddenField' => false,
+		'ng-model' => 'questionnaireFrameSettings.displayType',
+		'error' => true,
 	));
+

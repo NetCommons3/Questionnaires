@@ -100,14 +100,26 @@ class QuestionnaireFrameSettingsController extends QuestionnaireBlocksController
 				return;
 			}
 			$this->NetCommons->handleValidationError($this->QuestionnaireFrameSetting->validationErrors);
+		} else {
+			$frame = $this->QuestionnaireFrameSetting->find('first', array(
+				'conditions' => array(
+					'frame_key' => Current::read('Frame.key'),
+				),
+				'order' => 'QuestionnaireFrameSetting.id DESC'
+			));
+			if (!$frame) {
+				$frame = $this->QuestionnaireFrameSetting->getDefaultFrameSetting();
+			}
+			$this->request->data['QuestionnaireFrameSetting'] = $frame['QuestionnaireFrameSetting'];
+			$this->request->data['Frame'] = Current::read('Frame');
+			$this->request->data['Block'] = Current::read('Block');
 		}
 
-		$conditions = $this->Questionnaire->getBaseCondition();
-		$this->paginate = array(
+		$questionnaires = $this->Questionnaire->find('all', array(
 			'fields' => array('Questionnaire.*', 'QuestionnaireFrameDisplayQuestionnaire.*'),
-			'conditions' => $conditions,
-			'page' => 1,
+			'conditions' => $this->Questionnaire->getBaseCondition(),
 			'order' => array('Questionnaire.modified' => 'DESC'),
+			//'page' => 1,
 			//'limit' => 1000,
 			'recursive' => -1,
 			'joins' => array(
@@ -121,23 +133,8 @@ class QuestionnaireFrameSettingsController extends QuestionnaireBlocksController
 					),
 				)
 			)
-		);
-		$questionnaires = $this->paginate('Questionnaire');
-
-		$frame = $this->QuestionnaireFrameSetting->find('first', array(
-			'conditions' => array(
-				'frame_key' => Current::read('Frame.key'),
-			),
-			'order' => 'QuestionnaireFrameSetting.id DESC'
 		));
-		if (!$frame) {
-			$frame = $this->QuestionnaireFrameSetting->getDefaultFrameSetting();
-		}
-
+		//$questionnaires = $this->paginate('Questionnaire');
 		$this->set('questionnaires', $questionnaires);
-		$this->set('questionnaireFrameSettings', $frame['QuestionnaireFrameSetting']);
-		$this->request->data['QuestionnaireFrameSetting'] = $frame['QuestionnaireFrameSetting'];
-		$this->request->data['Frame'] = Current::read('Frame');
-		$this->request->data['Block'] = Current::read('Block');
 	}
 }

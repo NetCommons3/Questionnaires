@@ -11,13 +11,15 @@
 ?>
 <?php echo $this->NetCommonsForm->label(__d('questionnaires', 'select display questionnaires.')); ?>
 <?php $this->NetCommonsForm->unlockField('List'); ?>
+<?php echo $this->NetCommonsForm->hidden('Single.QuestionnaireFrameDisplayQuestionnaire.questionnaire_key', array('value' => '')); ?>
+
 
 <div class="questionnaire-list-wrapper">
 	<table class="table table-hover questionnaire-table-vcenter">
 		<tr>
 			<th>
 				<?php /* echo __d('questionnaires', 'Display'); */?>
-				<div class="text-center" ng-if="questionnaireFrameSettings.displayType == <?php echo QuestionnairesComponent::DISPLAY_TYPE_LIST; ?>">
+				<div class="text-center" ng-show="questionnaireFrameSettings.displayType == <?php echo QuestionnairesComponent::DISPLAY_TYPE_LIST; ?>">
 					<?php $this->NetCommonsForm->unlockField('all_check'); ?>
 					<?php echo $this->NetCommonsForm->checkbox('all_check', array(
 					'ng-model' => 'WinBuf.allCheck',
@@ -98,6 +100,4 @@
 		</tr>
 	</table>
 </div>
-
-<?php echo $this->element('NetCommons.paginator');
 

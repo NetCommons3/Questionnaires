@@ -152,6 +152,8 @@ class QuestionnaireFrameSetting extends QuestionnairesAppModel {
  */
 	public function saveFrameSettings($data) {
 		$this->loadModels([
+			'Questionnaire' =>
+				'Questionnaires.Questionnaire',
 			'QuestionnaireFrameDisplayQuestionnaire' =>
 				'Questionnaires.QuestionnaireFrameDisplayQuestionnaire',
 		]);
@@ -159,6 +161,10 @@ class QuestionnaireFrameSetting extends QuestionnairesAppModel {
 		//トランザクションBegin
 		$this->begin();
 		try {
+			// 現在のアンケート確認
+			$questionnaireCount = $this->Questionnaire->find('count', array(
+				'conditions' => $this->Questionnaire->getBaseCondition()
+			));
 			// フレーム設定のバリデート
 			$this->create();
 			$this->set($data);
@@ -166,13 +172,16 @@ class QuestionnaireFrameSetting extends QuestionnairesAppModel {
 				return false;
 			}
 
-			// フレームに表示するアンケート一覧設定のバリデート
-			// 一覧表示タイプと単独表示タイプ
-			$ret = $this->QuestionnaireFrameDisplayQuestionnaire->validateFrameDisplayQuestionnaire($data);
-			if ($ret === false) {
-				$this->validationErrors['QuestionnaireFrameDisplayQuestionnaire'] =
-					$this->QuestionnaireFrameDisplayQuestionnaire->validationErrors;
-				return false;
+			// アンケートが存在する場合は
+			if ($questionnaireCount > 0) {
+				// フレームに表示するアンケート一覧設定のバリデート
+				// 一覧表示タイプと単独表示タイプ
+				$ret = $this->QuestionnaireFrameDisplayQuestionnaire->validateFrameDisplayQuestionnaire($data);
+				if ($ret === false) {
+					$this->validationErrors['QuestionnaireFrameDisplayQuestionnaire'] =
+						$this->QuestionnaireFrameDisplayQuestionnaire->validationErrors;
+					return false;
+				}
 			}
 
 			// フレーム設定の登録
@@ -180,11 +189,14 @@ class QuestionnaireFrameSetting extends QuestionnairesAppModel {
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}
 
-			// フレームに表示するアンケート一覧設定の登録
-			// 一覧表示タイプと単独表示タイプ
-			$ret = $this->QuestionnaireFrameDisplayQuestionnaire->saveFrameDisplayQuestionnaire($data);
-			if ($ret === false) {
-				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+			// アンケートが存在する場合は
+			if ($questionnaireCount > 0) {
+				// フレームに表示するアンケート一覧設定の登録
+				// 一覧表示タイプと単独表示タイプ
+				$ret = $this->QuestionnaireFrameDisplayQuestionnaire->saveFrameDisplayQuestionnaire($data);
+				if ($ret === false) {
+					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+				}
 			}
 			//トランザクションCommit
 			$this->commit();

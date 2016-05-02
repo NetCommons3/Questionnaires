@@ -124,9 +124,12 @@ class QuestionnaireValidateFrameDisplayQuestionnaireTest extends NetCommonsModel
  * @return array
  */
 	public function dataProviderValidationError() {
+		$errData = Hash::remove($this->_getData(QuestionnairesComponent::DISPLAY_TYPE_SINGLE), 'Single.QuestionnaireFrameDisplayQuestionnaire');
+
 		return array(
 			array($this->_getData(QuestionnairesComponent::DISPLAY_TYPE_SINGLE), 'questionnaire_key', '',
 				__d('net_commons', 'Invalid request.')),
+			array($errData, 'questionnaire_key', '', ''),
 			array($this->_getData(QuestionnairesComponent::DISPLAY_TYPE_LIST), 'questionnaire_key', '',
 				__d('net_commons', 'Invalid request.')),
 		);

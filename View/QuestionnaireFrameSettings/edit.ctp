@@ -10,7 +10,7 @@
  */
 
 echo $this->element('Questionnaires.scripts');
-$jsQuestionnaireFrameSettings = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesAppController::changeBooleansToNumbers($questionnaireFrameSettings));
+$jsQuestionnaireFrameSettings = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesAppController::changeBooleansToNumbers($this->request->data['QuestionnaireFrameSetting']));
 $jsQuestionnaires = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesAppController::changeBooleansToNumbers($questionnaires));
 ?>
 

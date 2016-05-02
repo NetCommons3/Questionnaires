@@ -449,4 +449,21 @@ class SaveAnswerTest extends NetCommonsModelTestCase {
 				__d('questionnaires', 'please set at least one question.')),
 		);
 	}
+/**
+ * ターゲット質問取り出しのExceptionErrorテスト
+ *
+ * @return void
+ */
+	public function testSaveOnExceptionError2() {
+		//$data,  $questionnaireId, $summaryId
+		$model = $this->_modelName;
+		$method = $this->_methodName;
+		$data = $this->__getData(0, 'qKey_1', 3, '_getSingleSelect');
+		$questionnaire = $this->__getQuestionnaire(2);
+		$summary = $this->__getSummary(3);
+
+		$questionnaire = Hash::remove($questionnaire, 'QuestionnairePage.{n}.QuestionnaireQuestion');
+		$this->setExpectedException('InternalErrorException');
+		$this->$model->$method($data, $questionnaire, $summary);
+	}
 }

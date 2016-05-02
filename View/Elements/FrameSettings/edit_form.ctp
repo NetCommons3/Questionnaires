@@ -24,5 +24,5 @@
 </div>
 
 <div class="col-sm-12 form-group">
-	<?php echo $this->element('Questionnaires.FrameSettings/edit_display_questionnaire'); ?>
+    <?php echo $this->element('Questionnaires.FrameSettings/edit_display_questionnaire'); ?>
 </div>

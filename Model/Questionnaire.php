@@ -362,7 +362,7 @@ class Questionnaire extends QuestionnairesAppModel {
  * @throws InternalErrorException
  */
 	public function afterFrameSave($data) {
-		$frame = $data['Frame'];
+		$frame['Frame'] = $data['Frame'];
 
 		$this->begin();
 
@@ -609,7 +609,7 @@ class Questionnaire extends QuestionnairesAppModel {
 		try {
 			// アンケート質問データ削除
 			if (! $this->deleteAll(array(
-					'Questionnaire.key' => $data['Questionnaire']['key']), true, false)) {
+					'Questionnaire.key' => $data['Questionnaire']['key']), true, true)) {
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}
 
@@ -651,7 +651,9 @@ class Questionnaire extends QuestionnairesAppModel {
 		try {
 			$this->id = $questionnaireId;
 			$this->Behaviors->unload('Mails.MailQueue');
-			$this->saveField('export_key', $exportKey);
+			if (! $this->saveField('export_key', $exportKey)) {
+				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+			}
 			$this->commit();
 		} catch (Exception $ex) {
 			//トランザクションRollback

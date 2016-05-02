@@ -150,7 +150,71 @@ class SaveFrameSettingTest extends NetCommonsSaveTest {
 		$data = $this->_getData(QuestionnairesComponent::DISPLAY_TYPE_SINGLE);
 		return array(
 			array($data, 'Questionnaires.QuestionnaireFrameSetting'),
-			array($data, 'Questionnaires.QuestionnaireFrameDisplayQuestionnaire'),
 		);
+	}
+
+/**
+ * QuestionnaireFrameDisplayQuestionnaireのExceptionErrorテスト
+ *
+ * @return void
+ */
+	public function testQuestionnaireFrameDisplayQuestionnaireValidationError() {
+		$model = $this->_modelName;
+		$method = $this->_methodName;
+
+		$this->$model->Questionnaire = $this->getMockForModel(
+			'Questionnaires.Questionnaire', array('find'));
+		$this->$model->Questionnaire->expects($this->any())
+			->method('find')
+			->will($this->returnValue(10));
+
+		$this->$model->QuestionnaireFrameDisplayQuestionnaire = $this->getMockForModel(
+			'Questionnaires.QuestionnaireFrameDisplayQuestionnaire',
+			array(
+				'validateFrameDisplayQuestionnaire',
+			));
+		$this->$model->QuestionnaireFrameDisplayQuestionnaire->expects($this->once())
+			->method('validateFrameDisplayQuestionnaire')
+			->will($this->returnValue(false));
+
+		$data = $this->_getData(QuestionnairesComponent::DISPLAY_TYPE_LIST);
+		$data['List']['QuestionnaireFrameDisplayQuestionnaire'] = array();
+		$result = $this->$model->$method($data);
+		$this->assertFalse($result);
+	}
+
+/**
+ * QuestionnaireFrameDisplayQuestionnaireのExceptionErrorテスト
+ *
+ * @return void
+ */
+	public function testQuestionnaireFrameDisplayQuestionnaireSaveError() {
+		$model = $this->_modelName;
+		$method = $this->_methodName;
+
+		$this->$model->Questionnaire = $this->getMockForModel(
+			'Questionnaires.Questionnaire', array('find'));
+		$this->$model->Questionnaire->expects($this->any())
+			->method('find')
+			->will($this->returnValue(10));
+
+		$this->$model->QuestionnaireFrameDisplayQuestionnaire = $this->getMockForModel(
+			'Questionnaires.QuestionnaireFrameDisplayQuestionnaire',
+			array(
+				'validateFrameDisplayQuestionnaire',
+				'saveFrameDisplayQuestionnaire'
+			));
+		$this->$model->QuestionnaireFrameDisplayQuestionnaire->expects($this->once())
+			->method('validateFrameDisplayQuestionnaire')
+			->will($this->returnValue(true));
+		$this->$model->QuestionnaireFrameDisplayQuestionnaire->expects($this->once())
+			->method('saveFrameDisplayQuestionnaire')
+			->will($this->returnValue(false));
+
+		$this->setExpectedException('InternalErrorException');
+
+		$data = $this->_getData(QuestionnairesComponent::DISPLAY_TYPE_LIST);
+		$data['List']['QuestionnaireFrameDisplayQuestionnaire'] = array();
+		$this->$model->$method($data);
 	}
 }

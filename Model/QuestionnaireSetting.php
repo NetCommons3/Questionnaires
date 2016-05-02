@@ -127,7 +127,7 @@ class QuestionnaireSetting extends QuestionnairesAppModel {
 		}
 
 		try {
-			if (! $this->save(null, false)) {
+			if (! $this->save($data, false)) {
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}
 
@@ -136,7 +136,7 @@ class QuestionnaireSetting extends QuestionnairesAppModel {
 
 		} catch (Exception $ex) {
 			//トランザクションRollback
-			$this->rollback($ex);
+			$this->rollback();
 			throw $ex;
 		}
 		return true;
@@ -163,18 +163,18 @@ class QuestionnaireSetting extends QuestionnairesAppModel {
 			// ルームに存在するブロックを探す
 			$block = $this->Block->find('first', array(
 				'conditions' => array(
-					'Block.room_id' => $frame['room_id'],
-					'Block.plugin_key' => $frame['plugin_key'],
-					'Block.language_id' => $frame['language_id'],
+					'Block.room_id' => $frame['Frame']['room_id'],
+					'Block.plugin_key' => $frame['Frame']['plugin_key'],
+					'Block.language_id' => $frame['Frame']['language_id'],
 				)
 			));
 			// まだない場合
 			if (empty($block)) {
 				// 作成する
 				$block = $this->Block->save(array(
-					'room_id' => $frame['room_id'],
-					'language_id' => $frame['language_id'],
-					'plugin_key' => $frame['plugin_key'],
+					'room_id' => $frame['Frame']['room_id'],
+					'language_id' => $frame['Frame']['language_id'],
+					'plugin_key' => $frame['Frame']['plugin_key'],
 				));
 				if (!$block) {
 					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
@@ -191,7 +191,8 @@ class QuestionnaireSetting extends QuestionnairesAppModel {
 			$this->commit();
 		} catch (Exception $ex) {
 			//トランザクションRollback
-			$this->rollback($ex);
+			$this->rollback();
+			CakeLog::error($ex);
 			throw $ex;
 		}
 		return true;
@@ -213,7 +214,7 @@ class QuestionnaireSetting extends QuestionnairesAppModel {
 		// ないときは作る
 		$blockSetting = $this->create();
 		$blockSetting['QuestionnaireSetting']['block_key'] = Current::read('Block.key');
-		$this->saveQuestionnaireSetting($blockSetting);
-		return true;
+		$ret = $this->saveQuestionnaireSetting($blockSetting);
+		return $ret;
 	}
 }

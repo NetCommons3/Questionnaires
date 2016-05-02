@@ -24,7 +24,6 @@
 		'label' => __d('questionnaires', 'Visible row order'),
 		'type' => 'select',
 		'options' => QuestionnairesComponent::getSortOrders(),
-		'selected' => $questionnaireFrameSettings['sort_type'],
 		));
 	?>
 </div>

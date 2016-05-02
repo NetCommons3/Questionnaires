@@ -126,6 +126,16 @@ class QuestionnaireAnswerControllerViewTest extends WorkflowControllerViewTest {
 			'expected' => 'BadRequestException',
 			'return' => 'json'
 		));
+		// 認証キー 画面へ行こうとしてはじかれる
+		$results[9] = array(
+			'urlOptions' => array('frame_id' => '6', 'block_id' => '2', 'action' => 'key_auth', 'key' => 'questionnaire_2'),
+			'assert' => array('method' => 'assertTextNotContains', 'expected' => '/questionnaires/questionnaire_answers/key_auth/'),
+		);
+		// 画像認証 画面へ行こうとしてはじかれる
+		$results[10] = array(
+			'urlOptions' => array('frame_id' => '6', 'block_id' => '2', 'action' => 'img_auth', 'key' => 'questionnaire_2'),
+			'assert' => array('method' => 'assertTextNotContains', 'expected' => '/questionnaires/questionnaire_answers/img_auth/'),
+		);
 		// 繰り返しなしのテストは非会員では厳しいので省略
 		return $results;
 	}
