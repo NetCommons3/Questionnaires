@@ -182,7 +182,7 @@ class QuestionnaireSetting extends QuestionnairesAppModel {
 				Current::$current['Block'] = $block['Block'];
 			}
 
-			$frame['block_id'] = $block['Block']['id'];
+			$frame['Frame']['block_id'] = $block['Block']['id'];
 			if (!$this->Frame->save($frame)) {
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}
