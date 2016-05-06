@@ -10,6 +10,7 @@
  */
 
 App::uses('MailSettingsController', 'Mails.Controller');
+App::uses('MailSettingFixedPhrase', 'Mails.Model');
 
 /**
  * Questionnaire Mail Setting Controller
@@ -42,6 +43,22 @@ class QuestionnaireMailSettingsController extends MailSettingsController {
 				),
 			),
 		),
+		'Mails.MailsHtml',
+		'Mails.MailForm',
 	);
 
+/**
+ * beforeFilter
+ *
+ * @return void
+ * @see NetCommonsAppController::beforeFilter()
+ */
+	public function beforeFilter() {
+		parent::beforeFilter();
+
+		// メール設定 多段の場合にセット
+		$this->MailSettings->permission = array('mail_content_receivable', 'mail_answer_receivable');
+		$this->MailSettings->typeKeys =
+			array(MailSettingFixedPhrase::DEFAULT_TYPE, MailSettingFixedPhrase::ANSWER_TYPE);
+	}
 }
