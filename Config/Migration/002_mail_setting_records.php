@@ -81,6 +81,25 @@ class QuestionnaireMailSettingRecords extends MailsMigration {
 下記のリンクをクリックして下さい。
 {X-URL}',
 			),
+			//回答通知 - 定型文
+			// * 英語
+			array(
+				'language_id' => '1',
+				'plugin_key' => self::PLUGIN_KEY,
+				'block_key' => null,
+				'type_key' => 'contents',
+				'mail_fixed_phrase_subject' => '', //デフォルト(__d('mails', 'MailSetting.mail_fixed_phrase_subject.answer'))
+				'mail_fixed_phrase_body' => '', //デフォルト(__d('mails', 'MailSetting.mail_fixed_phrase_body.answer'))
+			),
+			// * 日本語
+			array(
+				'language_id' => '2',
+				'plugin_key' => self::PLUGIN_KEY,
+				'block_key' => null,
+				'type_key' => 'contents',
+				'mail_fixed_phrase_subject' => '', //デフォルト(__d('mails', 'MailSetting.mail_fixed_phrase_subject.answer'))
+				'mail_fixed_phrase_body' => '', //デフォルト(__d('mails', 'MailSetting.mail_fixed_phrase_body.answer'))
+			),
 	));
 
 /**
