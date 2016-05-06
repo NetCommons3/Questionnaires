@@ -12,11 +12,11 @@
 echo $this->element('Questionnaires.scripts');
 echo $this->NetCommonsHtml->script(array(
 	'/components/d3/d3.min.js',
-	'/components/nvd3/nv.d3.min.js',
+	'/components/nvd3/build/nv.d3.min.js',
 	'/components/angular-nvd3/dist/angular-nvd3.min.js',
 	'/questionnaires/js/questionnaires_graph.js'
 	));
-echo $this->NetCommonsHtml->css('/components/nvd3/nv.d3.css');
+echo $this->NetCommonsHtml->css('/components/nvd3/build/nv.d3.css');
 
 $jsQuestions = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesAppController::changeBooleansToNumbers($questions));
 ?>
