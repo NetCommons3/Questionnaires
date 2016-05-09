@@ -43,7 +43,6 @@ class QuestionnaireMailSettingsController extends MailSettingsController {
 				),
 			),
 		),
-		'Mails.MailsHtml',
 		'Mails.MailForm',
 	);
 
