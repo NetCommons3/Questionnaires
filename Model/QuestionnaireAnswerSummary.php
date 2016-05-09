@@ -21,6 +21,22 @@ App::uses('NetCommonsTime', 'NetCommons.Utility');
 class QuestionnaireAnswerSummary extends QuestionnairesAppModel {
 
 /**
+ * use behaviors
+ *
+ * @var array
+ */
+	public $actsAs = array(
+		// 自動でメールキューの登録, 削除。ワークフロー利用時はWorkflow.Workflowより下に記述する
+		'Mails.MailQueue' => array(
+			'embedTags' => array(
+				'X-SUBJECT' => 'Questionnaire.title',
+			),
+			'keyField' => 'id',
+		),
+		'Mails.MailQueueDelete',
+	);
+
+/**
  * Validation rules
  *
  * @var array
@@ -98,6 +114,17 @@ class QuestionnaireAnswerSummary extends QuestionnairesAppModel {
 		if ($status == QuestionnairesComponent::ACTION_ACT) {
 			// サマリの状態を完了にして確定する
 			$summary['QuestionnaireAnswerSummary']['answer_time'] = (new NetCommonsTime())->getNowDatetime();
+			// メールのembed のURL設定を行っておく
+			$url = NetCommonsUrl::actionUrl(array(
+				'controller' => 'questionnaire_blocks',
+				'action' => 'index',
+				Current::read('Block.id'),
+				'frame_id' => Current::read('Frame.id'),
+			));
+			$this->setAddEmbedTagValue('X-URL', $url);
+		} else {
+			// 完了時以外はメールBehaviorを外す
+			$this->Behaviors->unload('Mails.MailQueue');
 		}
 		$this->begin();
 		try {
