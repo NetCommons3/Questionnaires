@@ -14,6 +14,7 @@
 App::uses('QuestionnairesAppModel', 'Questionnaires.Model');
 App::uses('WorkflowComponent', 'Workflow.Controller/Component');
 App::uses('NetCommonsTime', 'NetCommons.Utility');
+App::uses('NetCommonsUrl', 'NetCommons.Utility');
 
 /**
  * Summary for QuestionnaireAnswerSummary Model
