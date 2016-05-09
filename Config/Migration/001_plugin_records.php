@@ -50,6 +50,8 @@ class PluginRecords extends NetCommonsMigration {
 				'default_setting_action' => 'questionnaire_blocks/index',
 				'name' => 'アンケート',
 				'type' => 1,
+				'display_topics' => 1,
+				'display_search' => 1,
 			),
 			//英語
 			array(
@@ -60,6 +62,8 @@ class PluginRecords extends NetCommonsMigration {
 				'default_setting_action' => 'questionnaire_blocks/index',
 				'name' => 'Questionnaires',
 				'type' => 1,
+				'display_topics' => 1,
+				'display_search' => 1,
 			),
 		),
 		'PluginsRole' => array(

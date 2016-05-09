@@ -22,9 +22,9 @@
 			<small>
 				<dl class="questionnaire-editor-dl">
 					<dt><?php echo __d('questionnaires', 'Author'); ?></dt>
-					<dd><?php echo $questionnaire['TrackableCreator']['username']; ?></dd>
+					<dd><?php echo $questionnaire['TrackableCreator']['handlename']; ?></dd>
 					<dt><?php echo __d('questionnaires', 'Modified by'); ?></dt>
-					<dd><?php echo $questionnaire['TrackableUpdater']['username']; ?>
+					<dd><?php echo $questionnaire['TrackableUpdater']['handlename']; ?>
 						(<?php echo $this->Date->dateFormat($questionnaire['Questionnaire']['modified']); ?>)
 					</dd>
 				</dl>
