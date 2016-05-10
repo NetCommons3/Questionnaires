@@ -97,6 +97,20 @@ class QuestionnaireSaveQuestionnaireTest extends WorkflowSaveTest {
 
 		// このloadではモックがロードされる
 		$this->$model->Behaviors->load('MailQueue');
+
+		//新着のビヘイビアをモックに差し替え
+		$this->$model->Behaviors->unload('Topics');
+		$topicsMock = $this->getMock('TopicsBehavior', ['setTopicValue', 'afterSave']);
+		$topicsMock->expects($this->any())
+			->method('setTopicValue')
+			->will($this->returnValue(true));
+		$topicsMock->expects($this->any())
+			->method('afterSave')
+			->will($this->returnValue(true));
+
+		ClassRegistry::removeObject('TopicsBehavior');
+		ClassRegistry::addObject('TopicsBehavior', $topicsMock);
+		$this->$model->Behaviors->load('Topics');
 	}
 
 /**

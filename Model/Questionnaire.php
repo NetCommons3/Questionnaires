@@ -34,6 +34,20 @@ class Questionnaire extends QuestionnairesAppModel {
 			),
 		),
 		'Mails.MailQueueDelete',
+		//新着情報
+		'Topics.Topics' => array(
+			'fields' => array(
+				//※アンケートの場合、'title'は$this->dataの値をセットしないので、
+				//　ここではセットせずに、save直前で新着タイトルをセットする
+				'publish_start' => 'answer_start_period',
+				'answer_period_start' => 'answer_start_period',
+				'answer_period_end' => 'answer_end_period',
+				'path' => '/:plugin_key/questionnaire_answers/view/:block_id/:content_key',
+			),
+			'search_contents' => array(
+				'title', 'sub_title'
+			),
+		),
 	);
 
 /**
@@ -531,6 +545,16 @@ class Questionnaire extends QuestionnairesAppModel {
 			}
 
 			$this->_sendMail($questionnaire);
+
+			//新着データセット
+			$this->setTopicValue(
+				'title', sprintf(__d('questionnaires', '%s started'), $questionnaire['Questionnaire']['title'])
+			);
+			if (! $questionnaire['Questionnaire']['answer_timing']) {
+				$this->setTopicValue('publish_start', null);
+				$this->setTopicValue('answer_period_start', null);
+				$this->setTopicValue('answer_period_end', null);
+			}
 
 			$saveQuestionnaire = $this->save($questionnaire, false);
 			if (! $saveQuestionnaire) {

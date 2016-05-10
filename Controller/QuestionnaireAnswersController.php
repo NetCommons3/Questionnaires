@@ -359,7 +359,11 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 		$this->set('questionPage', $questionnaire['QuestionnairePage'][$nextPageSeq]);
 		$this->set('displayType', $this->__displayType);
 		$this->NetCommons->handleValidationError($this->QuestionnaireAnswer->validationErrors);
+
+		//新着データを既読にする
+		$this->Questionnaire->saveTopicUserStatus($questionnaire);
 	}
+
 /**
  * confirm method
  *
@@ -434,6 +438,9 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 		$this->set('questionnaire', $this->__questionnaire);
 		$this->set('ownAnsweredKeys', $this->QuestionnairesOwnAnswer->getOwnAnsweredKeys());
 		$this->set('displayType', $this->__displayType);
+
+		//新着データを回答済みにする
+		$this->Questionnaire->saveTopicUserStatus($this->__questionnaire, true);
 	}
 
 /**
