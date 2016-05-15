@@ -73,6 +73,25 @@ class SaveAnswerStatusTest extends NetCommonsModelTestCase {
 	public function setUp() {
 		parent::setUp();
 		Current::$current['Frame']['key'] = 'frame_3';
+
+		$model = $this->_modelName;
+		$mailQueueMock = $this->getMock('MailQueueBehavior',
+			['setAddEmbedTagValue', 'afterSave']);
+		$mailQueueMock->expects($this->any())
+			->method('setAddEmbedTagValue')
+			->will($this->returnValue(true));
+		$mailQueueMock->expects($this->any())
+			->method('afterSave')
+			->will($this->returnValue(true));
+
+		// ClassRegistoryを使ってモックを登録。
+		// まずremoveObjectしないとaddObjectできないのでremoveObjectする
+		ClassRegistry::removeObject('MailQueueBehavior');
+		// addObjectでUploadBehaviorでMockが使われる
+		ClassRegistry::addObject('MailQueueBehavior', $mailQueueMock);
+
+		// このloadではモックがロードされる
+		$this->$model->Behaviors->load('MailQueue');
 	}
 
 /**

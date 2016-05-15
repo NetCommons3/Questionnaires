@@ -43,7 +43,6 @@ class QuestionnaireMailSettingsController extends MailSettingsController {
 				),
 			),
 		),
-		'Mails.MailsHtml',
 		'Mails.MailForm',
 	);
 
@@ -57,7 +56,8 @@ class QuestionnaireMailSettingsController extends MailSettingsController {
 		parent::beforeFilter();
 
 		// メール設定 多段の場合にセット
-		$this->MailSettings->permission = array('mail_content_receivable', 'mail_answer_receivable');
+		$this->MailSettings->permission =
+			array('mail_content_receivable', 'mail_answer_receivable');
 		$this->MailSettings->typeKeys =
 			array(MailSettingFixedPhrase::DEFAULT_TYPE, MailSettingFixedPhrase::ANSWER_TYPE);
 	}
