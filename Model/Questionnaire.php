@@ -632,13 +632,11 @@ class Questionnaire extends QuestionnairesAppModel {
 		$this->begin();
 		try {
 			// アンケート質問データ削除
+			$this->contentKey = $data['Questionnaire']['key'];
 			if (! $this->deleteAll(array(
 					'Questionnaire.key' => $data['Questionnaire']['key']), true, true)) {
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}
-
-			//コメントの削除
-			$this->deleteCommentsByContentKey($data['Questionnaire']['key']);
 
 			// アンケート表示設定削除
 			if (! $this->QuestionnaireFrameDisplayQuestionnaire->deleteAll(array(
