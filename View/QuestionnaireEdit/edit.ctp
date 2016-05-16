@@ -17,8 +17,6 @@ echo $this->NetCommonsHtml->script(array(
 $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesAppController::changeBooleansToNumbers($this->data));
 ?>
 
-<?php echo $this->QuestionEdit->getEditFlowChart(3); ?>
-
 <div
 	id="nc-questionnaires-setting-edit"
 	 ng-controller="Questionnaires.setting"
@@ -37,6 +35,9 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 		echo $this->NetCommonsForm->hidden('Questionnaire.export_key');
 	?>
 		<div class="modal-body">
+
+			<?php echo $this->Wizard->navibar('edit'); ?>
+
 			<div class="form-group">
 				<?php /* アンケートタイトル設定 */
 					echo $this->TitleIcon->inputWithTitleIcon('title', 'Questionnaire.title_icon',
@@ -129,12 +130,16 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 			</div>
 			<?php echo $this->Workflow->inputComment('Questionnaire.status'); ?>
 		</div>
-		<?php echo $this->Workflow->buttons('Questionnaire.status', $cancelUrl, true, $backUrl); ?>
+		<div class="modal-footer">
+			<div class="text-center">
+				<?php echo $this->Wizard->workflowButtons('Questionnaire.status'); ?>
+			</div>
+		</div>
 
 	<?php echo $this->NetCommonsForm->end(); ?>
 
 	<?php if ($this->request->params['action'] === 'edit' && !empty($this->data['Questionnaire']['key']) && $this->Workflow->canDelete('Questionnaire', $this->data)) : ?>
-		<div class="panel-footer text-right">
+		<div class="modal-footer">
 			<?php echo $this->element('Questionnaires.QuestionnaireEdit/Edit/delete_form'); ?>
 		</div>
 	<?php endif; ?>

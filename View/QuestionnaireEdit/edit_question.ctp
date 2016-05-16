@@ -46,7 +46,7 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 
 		<div class="modal-body">
 
-			<?php echo $this->QuestionEdit->getEditFlowChart(1); ?>
+			<?php echo $this->Wizard->navibar('edit_question'); ?>
 
 			<?php echo $this->element('Questionnaires.QuestionnaireEdit/questionnaire_title'); ?>
 
@@ -175,8 +175,7 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 	</div>
 	<div class="modal-footer">
 		<div class="text-center">
-			<?php echo $this->Button->cancel(__d('net_commons', 'Cancel'), $cancelUrl, array('icon' => 'remove')); ?>
-			<?php echo $this->Button->save(__d('net_commons', 'NEXT'), array('icon' => 'chevron-right')) ?>
+			<?php echo $this->Wizard->buttons('edit_question'); ?>
 		</div>
 	</div>
 	<?php echo $this->NetCommonsForm->end(); ?>

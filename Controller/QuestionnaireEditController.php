@@ -57,8 +57,34 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 	public $helpers = array(
 		'Workflow.Workflow',
 		'NetCommons.TitleIcon',
-		'Questionnaires.QuestionEdit'
-	);
+		'Questionnaires.QuestionEdit',
+		'NetCommons.Wizard' => array(
+			'navibar' => array(
+				'edit_question' => array(
+					'url' => array(
+						'controller' => 'questionnaire_edit',
+						'action' => 'edit_question',
+					),
+					'label' => array('questionnaires', 'Set questions'),
+				),
+				'edit_result' => array(
+					'url' => array(
+						'controller' => 'questionnaire_edit',
+						'action' => 'edit_result',
+					),
+					'label' => array('questionnaires', 'Set result display'),
+				),
+				'edit' => array(
+					'url' => array(
+						'controller' => 'questionnaire_edit',
+						'action' => 'edit',
+					),
+					'label' => array('questionnaires', 'Set questionnaire'),
+				),
+			),
+			'cancelUrl' => null
+		),
+		);
 
 /**
  * target questionnaire　
@@ -116,6 +142,27 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 					$this->_questionnaire = null;
 				}
 			}
+		}
+	}
+/**
+ * Before render callback. beforeRender is called before the view file is rendered.
+ *
+ * Overridden in subclasses.
+ *
+ * @param string $viewFile The view file that is going to be rendered
+ * @return void
+ */
+	public function beforeRender() {
+		parent::beforeRender();
+
+		//ウィザード
+		foreach ($this->helpers['NetCommons.Wizard']['navibar'] as &$actions) {
+			$urlParam = $actions['url'];
+			$urlParam = Hash::merge($urlParam, $this->request->params['named']);
+			foreach ($this->request->params['pass'] as $passParam) {
+				$urlParam[$passParam] = null;
+			}
+			$actions['url'] = $urlParam;
 		}
 	}
 
