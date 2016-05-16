@@ -9,13 +9,14 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 ?>
-<div class="form-group questionnaire-group">
+<div class="form-group">
 	<?php
 		echo $this->QuestionEdit->questionnaireAttributeCheckbox('is_no_member_allow',
 			__d('questionnaires', 'accept the non-members answer')
 		);
 	?>
-	<div class="questionnaire-sub-group" ng-show="questionnaires.questionnaire.isNoMemberAllow==<?php echo QuestionnairesComponent::USES_USE; ?>">
+	<div class="row" ng-show="questionnaires.questionnaire.isNoMemberAllow==<?php echo QuestionnairesComponent::USES_USE; ?>">
+		<div class="col-sm-11 col-sm-offset-1">
 		<?php
 			echo $this->QuestionEdit->questionnaireAttributeCheckbox('is_key_pass_use',
 				__d('questionnaires', 'use key phrase'), array(
@@ -34,6 +35,7 @@
 		<span class="help-block">
 			<?php echo __d('questionnaires', 'If you allowed to say also to non-members , the questionnaire will be possible to repeatedly answer.'); ?>
 		</span>
+		</div>
 	</div>
 	<?php
 		echo $this->QuestionEdit->questionnaireAttributeCheckbox('is_anonymity',

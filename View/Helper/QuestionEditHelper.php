@@ -133,41 +133,28 @@ class QuestionEditHelper extends AppHelper {
  * @param string $help 追加説明文
  * @return string HTML
  */
-	public function questionnaireAttributeDatetime(
-		$fieldName, $label, $minMax = array(), $divClass = 'form-inline', $help = '') {
+	public function questionnaireAttributeDatetime($fieldName, $options) {
+		/*$label, $minMax = array(), $divClass = 'form-inline', $help = '') {*/
 		$ngModel = 'questionnaires.questionnaire.' . Inflector::variable($fieldName);
 
-		$options = array('type' => 'text',
-				'id' => $fieldName,
-				'class' => 'form-control',
-				'placeholder' => 'yyyy-mm-dd',
-				'show-weeks' => 'false',
-				'ng-model' => $ngModel,
-				'datetimepicker',
-				'datetimepicker-options' => "{format:'YYYY-MM-DD HH:mm'}",
-				'show-meridian' => 'false',
-				'label' => $label,
-				'div' => $divClass);
-		if (! empty($minMax)) {
-			$min = $minMax['min'];
-			$max = $minMax['max'];
+		$defaultOptions = array(
+			'type' => 'datetime',
+			'id' => $fieldName,
+			'ng-model' => $ngModel,
+		);
+		$options = Hash::merge($defaultOptions, $options);
+		if (isset($options['min']) && isset($options['max'])) {
+			$min = $options['min'];
+			$max = $options['max'];
 			$options = Hash::merge($options, array(
-				'min' => $min,
-				'max' => $max,
 				'ng-focus' => 'setMinMaxDate($event, \'' . $min . '\', \'' . $max . '\')',
 			));
 		}
 
 		$ret = '';
-		if ($divClass) {
-			$ret .= '<div class="form-group ">';
-		}
 		$ret .= $this->NetCommonsForm->input($fieldName, $options);
 		if (!empty($help)) {
 			$ret .= '<span class="help-block">' . $help . '</span>';
-		}
-		if ($divClass) {
-			$ret .= '</div>';
 		}
 		return $ret;
 	}

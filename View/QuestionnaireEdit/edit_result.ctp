@@ -18,11 +18,15 @@ echo $this->NetCommonsHtml->script(array(
 $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesAppController::changeBooleansToNumbers($this->data));
 ?>
 
-<div id="nc-questionnaires-question-edit-result"
+<articel id="nc-questionnaires-question-edit-result"
 	 ng-controller="Questionnaires.edit.question"
 	 ng-init="initialize(<?php echo Current::read('Frame.id'); ?>,
 	 						<?php echo (int)$isPublished; ?>,
 							<?php echo h(json_encode($jsQuestionnaire)); ?>)">
+
+	<?php echo $this->Wizard->navibar('edit_result'); ?>
+
+	<div class="panel panel-default">
 
 	<?php echo $this->NetCommonsForm->create('QuestionnaireQuestion', $postUrl); ?>
 
@@ -32,39 +36,30 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 		<?php echo $this->NetCommonsForm->hidden('Frame.id'); ?>
 		<?php echo $this->NetCommonsForm->hidden('Block.id'); ?>
 
-		<div class="modal-body">
-
-			<?php echo $this->Wizard->navibar('edit_result'); ?>
+		<div class="panel-body">
 
 			<?php echo $this->element('Questionnaires.QuestionnaireEdit/questionnaire_title'); ?>
 
-			<div class="row form-group questionnaire-group">
-				<label ><?php echo __d('questionnaires', 'Published aggregate results'); ?></label>
-					<?php echo $this->NetCommonsForm->input('Questionnaire.is_total_show',
-							array('type' => 'radio',
-							'options' => array(QuestionnairesComponent::EXPRESSION_NOT_SHOW => __d('questionnaires', 'not disclose the total result'), QuestionnairesComponent::EXPRESSION_SHOW => __d('questionnaires', 'publish aggregate result')),
-							'legend' => false,
-							'class' => '',
-							'label' => false,
-							'before' => '<div class="radio"><label>',
-							'separator' => '</label></div><div class="radio"><label>',
-							'after' => '</label></div>',
-							'ng-model' => 'questionnaire.questionnaire.isTotalShow'
-					)); ?>
+			<div class="form-group">
+				<?php echo $this->NetCommonsForm->input('Questionnaire.is_total_show',
+						array('type' => 'radio',
+						'options' => array(QuestionnairesComponent::EXPRESSION_NOT_SHOW => __d('questionnaires', 'not disclose the total result'), QuestionnairesComponent::EXPRESSION_SHOW => __d('questionnaires', 'publish aggregate result')),
+						'label' => __d('questionnaires', 'Published aggregate results'),
+						'ng-model' => 'questionnaire.questionnaire.isTotalShow'
+				)); ?>
 			</div>
 
 			<div ng-show="questionnaire.questionnaire.isTotalShow == <?php echo QuestionnairesComponent::EXPRESSION_SHOW; ?>">
 
-				<div class="form-group questionnaire-group">
-					<label><?php echo __d('questionnaires', 'Text to be displayed in the aggregate results page'); ?></label>
-						<?php echo $this->NetCommonsForm->wysiwyg('Questionnaire.total_comment',
-						array(
-						'label' => false,
-						'ng-model' => 'questionnaire.questionnaire.totalComment',
-						)) ?>
+				<div class="form-group">
+					<?php echo $this->NetCommonsForm->wysiwyg('Questionnaire.total_comment',
+					array(
+					'label' => __d('questionnaires', 'Text to be displayed in the aggregate results page'),
+					'ng-model' => 'questionnaire.questionnaire.totalComment',
+					)) ?>
 				</div>
 
-				<div class="questionnaire-group">
+				<div class="">
 					<label><?php echo __d('questionnaires', 'Question you want to display the aggregate results'); ?></label>
 					<uib-accordion ng-repeat="(pageIndex, page) in questionnaire.questionnairePage">
 						<uib-accordion-group ng-repeat="(qIndex, question) in page.questionnaireQuestion" panel-class="{{getResultAccordionClass(question)}}">
@@ -90,10 +85,8 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 				</div>
 			</div>
 		</div>
-		<div class="modal-footer">
-			<div class="text-center">
-				<?php echo $this->Wizard->buttons('edit_result'); ?>
-			</div>
+		<div class="panel-footer text-center">
+			<?php echo $this->Wizard->buttons('edit_result'); ?>
 		</div>
 	<?php echo $this->NetCommonsForm->end(); ?>
-</div>
+</articel>

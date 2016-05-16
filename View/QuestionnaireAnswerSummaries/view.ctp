@@ -86,7 +86,7 @@ $jsQuestions = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesAppCo
 	<?php endforeach; ?>
 
 	<div class="text-center">
-		<?php echo $this->BackTo->pageLinkButton(__d('questionnaires', 'Back to Top'), array('icon' => 'menu-up', 'iconSize' => 'lg')); ?>
+		<?php echo $this->BackTo->indexLinkButton(	__d('questionnaires', 'Back to page')); ?>
 	</div>
 
 </article>

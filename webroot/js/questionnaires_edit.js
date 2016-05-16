@@ -85,11 +85,4 @@ NetCommonsApp.controller('Questionnaires.setting',
         e.stopPropagation();
         return false;
       };
-      $scope.Date = function(dateStr) {
-        if (Date.parse(dateStr)) {
-          return new Date(dateStr);
-        } else {
-          return new Date();
-        }
-      };
     });

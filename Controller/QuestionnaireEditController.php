@@ -48,6 +48,7 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 			),
 		),
 		'Questionnaires.Questionnaires',
+		'NetCommons.NetCommonsTime',
 	);
 
 /**
@@ -387,10 +388,15 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 			}
 		}
 		$questionnaire = Hash::merge($questionnaire, Hash::expand($newFlatError));
+		$questionnaire = $this->NetCommonsTime->toUserDatetimeArray(
+			$questionnaire,
+			array(
+				'Questionnaire.answer_start_period',
+				'Questionnaire.answer_end_period',
+				'Questionnaire.total_show_start_period',
+		));
 
-		$this->set('backUrl', $backUrl);
 		$this->set('postUrl', array('url' => $this->_getActionUrl($this->action)));
-		$this->set('cancelUrl', $this->_getActionUrl('cancel'));
 		$this->set('questionTypeOptions', $this->Questionnaires->getQuestionTypeOptionsWithLabel());
 		$this->set('newPageLabel', __d('questionnaires', 'page'));
 		$this->set('newQuestionLabel', __d('questionnaires', 'New Question'));

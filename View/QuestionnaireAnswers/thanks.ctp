@@ -24,15 +24,13 @@
 
 		<div class="text-center">
 			<?php if ($displayType == QuestionnairesComponent::DISPLAY_TYPE_LIST): ?>
-				<?php echo $this->BackTo->pageLinkButton(__d('questionnaires', 'Back to page'), array(
-					'icon' => 'remove',
-					'iconSize' => 'lg')); ?>
+				<?php echo $this->BackTo->indexLinkButton(__d('questionnaires', 'Back to page')); ?>
 			<?php endif; ?>
 			<?php
 				echo $this->QuestionnaireUtil->getAggregateButtons($questionnaire,
 					array('title' => __d('questionnaires', 'Aggregate'),
 							'class' => 'primary',
-							'size' => 'lg'));
+			));
 			?>
 		</div>
 </article>

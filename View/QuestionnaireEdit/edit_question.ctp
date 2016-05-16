@@ -26,7 +26,7 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 	}
 ?>
 
-<div id="nc-questionnaires-question-edit"
+<article id="nc-questionnaires-question-edit"
 	 ng-controller="Questionnaires.edit.question"
 	 ng-init="initialize(<?php echo Current::read('Frame.id'); ?>,
 	 						<?php echo (int)$isPublished; ?>,
@@ -37,16 +37,19 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 							'<?php echo h($newChoiceColumnLabel); ?>',
 							'<?php echo h($newChoiceOtherLabel); ?>')">
 
+	<?php echo $this->Wizard->navibar('edit_question'); ?>
+
+	<div class="panel panel-default">
+
 	<?php echo $this->NetCommonsForm->create('QuestionnaireQuestion', $postUrl); ?>
+
 		<?php echo $this->NetCommonsForm->hidden('Frame.id'); ?>
 		<?php echo $this->NetCommonsForm->hidden('Block.id'); ?>
 		<?php echo $this->NetCommonsForm->hidden('Questionnaire.key');?>
 
 		<?php $this->NetCommonsForm->unlockField('QuestionnairePage'); ?>
 
-		<div class="modal-body">
-
-			<?php echo $this->Wizard->navibar('edit_question'); ?>
+		<div class="panel-body">
 
 			<?php echo $this->element('Questionnaires.QuestionnaireEdit/questionnaire_title'); ?>
 
@@ -173,10 +176,11 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 		</uib-tabset>
 
 	</div>
-	<div class="modal-footer">
-		<div class="text-center">
+
+		<div class="panel-footer text-center">
 			<?php echo $this->Wizard->buttons('edit_question'); ?>
 		</div>
-	</div>
+
+
 	<?php echo $this->NetCommonsForm->end(); ?>
-</div>
+</article>

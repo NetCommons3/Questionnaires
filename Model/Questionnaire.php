@@ -32,6 +32,7 @@ class Questionnaire extends QuestionnairesAppModel {
 			'embedTags' => array(
 				'X-SUBJECT' => 'Questionnaire.title',
 			),
+			'publishStartField' => 'answer_start_period',
 		),
 		'Mails.MailQueueDelete',
 		//新着情報
@@ -544,8 +545,6 @@ class Questionnaire extends QuestionnairesAppModel {
 				return false;
 			}
 
-			$this->_sendMail($questionnaire);
-
 			//新着データセット
 			$this->setTopicValue(
 				'title', sprintf(__d('questionnaires', '%s started'), $questionnaire['Questionnaire']['title'])
@@ -590,34 +589,6 @@ class Questionnaire extends QuestionnairesAppModel {
 			throw $ex;
 		}
 		return $questionnaire;
-	}
-/**
- * _sendMail
- * Send Questionnaire mail
- *
- * @param array $questionnaire questionnaire
- * @return void
- */
-	protected function _sendMail($questionnaire) {
-		// メールのembed のURL設定を行っておく
-		$url = NetCommonsUrl::actionUrl(array(
-			'controller' => 'questionnaire_answers',
-			'action' => 'view',
-			Current::read('Block.id'),
-			$questionnaire['Questionnaire']['key'],
-			'frame_id' => Current::read('Frame.id'),
-		));
-		$this->setAddEmbedTagValue('X-URL', $url);
-		// 回答期間の設定があるときはリマインダ設定をする
-		$netCommonsTime = new NetCommonsTime();
-		if ($questionnaire['Questionnaire']['answer_timing'] == QuestionnairesComponent::USES_USE) {
-			$sendTimes = array(
-				$netCommonsTime->toServerDatetime($questionnaire['Questionnaire']['answer_start_period']),
-			);
-		} else {
-			$sendTimes = array($netCommonsTime->getNowDatetime());
-		}
-		$this->setSendTimeReminder($sendTimes);
 	}
 
 /**
