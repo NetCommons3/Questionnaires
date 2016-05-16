@@ -38,7 +38,15 @@ class QuestionEditHelper extends AppHelper {
  * @return string HTML
  */
 	public function questionInput($fieldName, $title, $options, $label = '') {
-		$ret = '<div class="row form-group"><label	class="col-sm-2 control-label">' . $title;
+		if (isset($options['ng-model'])) {
+			$ngModel = $options['ng-model'];
+			$modelNames = explode('.', $ngModel);
+			$errorMsgModelName = $modelNames[0] . '.errorMessages.' . $modelNames[1];
+			$ret = '<div class="row form-group" ng-class="\'has-error\':' . $errorMsgModelName . '">';
+		} else {
+			$ret = '<div class="row form-group">';
+		}
+		$ret .= '<label	class="col-sm-2 control-label">' . $title;
 		if (isset($options['required']) && $options['required'] == true) {
 			$ret .= $this->_View->element('NetCommons.required');
 		}
@@ -67,10 +75,7 @@ class QuestionEditHelper extends AppHelper {
 		}
 
 		if (isset($options['ng-model'])) {
-			$ngModel = $options['ng-model'];
-			$modelNames = explode('.', $ngModel);
-			$errorMsgModelName = $modelNames[0] . '.errorMessages.' . $modelNames[1];
-			$ret .= '<div class="" ng-if="' . $errorMsgModelName . '">';
+			$ret .= '<div class="has-error" ng-if="' . $errorMsgModelName . '">';
 			$ret .= '<div class="help-block" ng-repeat="errorMessage in ' . $errorMsgModelName . '">';
 				$ret .= '{{errorMessage}}</div></div>';
 			$ret .= '</div></div>';
