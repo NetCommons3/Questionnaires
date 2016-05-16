@@ -349,11 +349,11 @@ msgstr "割合"
 
 #: /View/Elements/Answers/answer_test_mode_header.ctp:31
 msgid "Test Mode"
-msgstr "一時保存（テストモード）"
+msgstr "（テストモード）"
 
 #: /View/Elements/Answers/answer_test_mode_header.ctp:34
 msgid "This questionnaire is being temporarily stored . You can questionnaire test before performed in this page . If you want to modify or change the questionnaire , you will be able to edit by pressing the [ Edit question ] button in the upper-right corner ."
-msgstr "このアンケートは一時保存中です。このページで実施前のアンケートテストをすることができます。<br />アンケートを修正・変更したい場合は、上部にある編集ボタンを押すと編集することができます。"
+msgstr "このアンケートはまだ公開されていません。このページで実施前のアンケートテストをすることができます。"
 
 #: /View/Elements/FrameSettings/edit_display_questionnaire.ctp:12
 msgid "select display questionnaires."

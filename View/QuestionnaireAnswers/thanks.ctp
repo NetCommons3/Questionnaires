@@ -13,11 +13,11 @@
 
 <article id="nc-questionnaires-answer-confirm-<?php Current::read('Frame.id'); ?>">
 
-	<?php echo $this->element('Questionnaires.Answers/answer_test_mode_header'); ?>
-
 	<?php echo $this->element('Questionnaires.Answers/answer_header'); ?>
 
-		<p>
+	<?php echo $this->element('Questionnaires.Answers/answer_test_mode_header'); ?>
+
+	<p>
 			<?php echo $questionnaire['Questionnaire']['thanks_content']; ?>
 		</p>
 		<hr>

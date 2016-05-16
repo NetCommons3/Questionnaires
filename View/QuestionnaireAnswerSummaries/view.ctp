@@ -27,9 +27,9 @@ $jsQuestions = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesAppCo
 	ng-init="initialize(<?php echo h(json_encode($jsQuestions)); ?>)">
 
 <article>
-	<?php echo $this->element('Questionnaires.Answers/answer_test_mode_header'); ?>
-
 	<?php echo $this->element('Questionnaires.Answers/answer_header'); ?>
+
+	<?php echo $this->element('Questionnaires.Answers/answer_test_mode_header'); ?>
 
 	<?php if (!empty($questionnaire['Questionnaire']['total_comment'])): ?>
 		<div class="row">

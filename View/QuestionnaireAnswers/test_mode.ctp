@@ -11,9 +11,9 @@
 ?>
 <article id="nc-questionnaires-answer-<?php Current::read('Frame.id'); ?>">
 
-	<?php echo $this->element('Questionnaires.Answers/answer_test_mode_header'); ?>
-
 	<?php echo $this->element('Questionnaires.Answers/answer_header'); ?>
+
+	<?php echo $this->element('Questionnaires.Answers/answer_test_mode_header'); ?>
 
 	<?php echo $this->NetCommonsForm->create('QuestionnaireAnswer'); ?>
 

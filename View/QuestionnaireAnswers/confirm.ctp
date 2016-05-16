@@ -14,9 +14,9 @@
 <article id="nc-questionnaires-confirm"
 		 ng-controller="QuestionnairesAnswer">
 
-	<?php echo $this->element('Questionnaires.Answers/answer_test_mode_header'); ?>
-
 	<?php echo $this->element('Questionnaires.Answers/answer_header'); ?>
+
+	<?php echo $this->element('Questionnaires.Answers/answer_test_mode_header'); ?>
 
 	<p>
 		<?php echo __d('questionnaires', 'Please confirm your answers.'); ?>

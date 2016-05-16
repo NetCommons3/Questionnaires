@@ -10,16 +10,20 @@
  */
 ?>
 <article>
-<?php
-	echo $this->NetCommonsForm->create(null, array('type' => 'post', 'url' => $postUrl));
-	echo $this->NetCommonsForm->hidden('Frame.id');
-	echo $this->NetCommonsForm->hidden('Block.id');
+	<?php echo $this->element('Questionnaires.Answers/answer_header'); ?>
 
-	echo $this->element(
-	'VisualCaptcha.visual_captcha', array(
-	'identifyKey' => 'Questionnaires_' . Current::read('Frame.id'),
-	));
-?>
+	<?php echo $this->element('Questionnaires.Answers/answer_test_mode_header'); ?>
+
+	<?php
+		echo $this->NetCommonsForm->create(null, array('type' => 'post', 'url' => $postUrl));
+		echo $this->NetCommonsForm->hidden('Frame.id');
+		echo $this->NetCommonsForm->hidden('Block.id');
+
+		echo $this->element(
+		'VisualCaptcha.visual_captcha', array(
+		'identifyKey' => 'Questionnaires_' . Current::read('Frame.id'),
+		));
+	?>
 
 	<div class="text-center">
 		<?php if ($displayType == QuestionnairesComponent::DISPLAY_TYPE_LIST): ?>
