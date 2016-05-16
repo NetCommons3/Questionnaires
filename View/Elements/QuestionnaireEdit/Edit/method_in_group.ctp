@@ -13,15 +13,15 @@
 	<?php
 		echo $this->NetCommonsForm->hidden('is_no_member_allow', array(
 			'value' => QuestionnairesComponent::USES_NOT_USE,
-			'ng-model' => 'questionnaires.questionnaire.isNoMemberAllow'
+			'ng-model' => 'questionnaire.questionnaire.isNoMemberAllow'
 		));
 		echo $this->NetCommonsForm->hidden('is_key_pass_use', array(
 			'value' => QuestionnairesComponent::USES_NOT_USE,
-			'ng-model' => 'questionnaires.questionnaire.isKeyPassUse'
+			'ng-model' => 'questionnaire.questionnaire.isKeyPassUse'
 		));
 		echo $this->NetCommonsForm->hidden('is_image_authentication', array(
 			'value' => QuestionnairesComponent::USES_NOT_USE,
-			'ng-model' => 'questionnaires.questionnaire.isImageAuthentication'
+			'ng-model' => 'questionnaire.questionnaire.isImageAuthentication'
 		));
 		echo $this->QuestionEdit->questionnaireAttributeCheckbox('is_anonymity',
 			__d('questionnaires', 'anonymous answer'

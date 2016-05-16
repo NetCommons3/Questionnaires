@@ -17,11 +17,13 @@ echo $this->NetCommonsHtml->script(array(
 $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesAppController::changeBooleansToNumbers($this->data));
 ?>
 
-<articel
+<article
 	id="nc-questionnaires-setting-edit"
 	 ng-controller="Questionnaires.setting"
 	 ng-init="initialize(<?php echo Current::read('Frame.id'); ?>,
 									<?php echo h(json_encode($jsQuestionnaire)); ?>)">
+
+	<?php echo $this->element('Questionnaires.QuestionnaireEdit/questionnaire_title'); ?>
 
 	<?php echo $this->Wizard->navibar('edit'); ?>
 
@@ -44,12 +46,12 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 				<?php /* アンケートタイトル設定 */
 					echo $this->TitleIcon->inputWithTitleIcon('title', 'Questionnaire.title_icon',
 					array('label' => __d('questionnaires', 'Title'),
-						'ng-model' => 'questionnaires.questionnaire.title'
+						'ng-model' => 'questionnaire.questionnaire.title'
 					));
 				?>
 				<?php echo $this->NetCommonsForm->input('sub_title',
 					array('label' => __d('questionnaires', 'Sub Title'),
-						'ng-model' => 'questionnaires.questionnaire.subTitle',
+						'ng-model' => 'questionnaire.questionnaire.subTitle',
 						'placeholder' => __d('questionnaires', 'Please enter if there is a sub title')
 					));
 				?>
@@ -64,7 +66,7 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 						array(),
 						__d('questionnaires', 'After approval will be immediately published . Stop of the questionnaire to select the stop from the questionnaire data list .'));
 				?>
-				<div class="row" ng-show="questionnaires.questionnaire.answerTiming == '<?php echo QuestionnairesComponent::USES_USE; ?>'">
+				<div class="row" ng-show="questionnaire.questionnaire.answerTiming == '<?php echo QuestionnairesComponent::USES_USE; ?>'">
 					<div class="col-sm-11 col-sm-offset-1">
 						<div class="form-inline">
 							<div class="input-group">
@@ -98,7 +100,7 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 				</div>
 			</div>
 
-			<div class="form-group" ng-show="questionnaires.questionnaire.isTotalShow == 1">
+			<div class="form-group" ng-show="questionnaire.questionnaire.isTotalShow == 1">
 				<?php echo $this->NetCommonsForm->label('', __d('questionnaires', 'Counting result display start date')); ?>
 
 				<?php /* 集計結果表示期間設定 */
@@ -107,7 +109,7 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 						array(),
 						__d('questionnaires', 'If not set , it will be displayed after the respondent answers.'));
 				?>
-				<div class="row" ng-show="questionnaires.questionnaire.totalShowTiming != 0">
+				<div class="row" ng-show="questionnaire.questionnaire.totalShowTiming != 0">
 					<div class="col-sm-11 col-sm-offset-1">
 						<?php
 							echo $this->QuestionEdit->questionnaireAttributeDatetime(
@@ -137,7 +139,7 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 				<?php
 					echo $this->NetCommonsForm->wysiwyg('thanks_content', array(
 						'label' => false,
-						'ng-model' => 'questionnaires.questionnaire.thanksContent'));
+						'ng-model' => 'questionnaire.questionnaire.thanksContent'));
 				?>
 			</div>
 			<hr />
@@ -157,4 +159,4 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 	<?php echo $this->Workflow->comments(); ?>
 
 	</div>
-</articel>
+</article>

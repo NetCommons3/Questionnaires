@@ -18,11 +18,13 @@ echo $this->NetCommonsHtml->script(array(
 $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesAppController::changeBooleansToNumbers($this->data));
 ?>
 
-<articel id="nc-questionnaires-question-edit-result"
+<article id="nc-questionnaires-question-edit-result"
 	 ng-controller="Questionnaires.edit.question"
 	 ng-init="initialize(<?php echo Current::read('Frame.id'); ?>,
 	 						<?php echo (int)$isPublished; ?>,
 							<?php echo h(json_encode($jsQuestionnaire)); ?>)">
+
+	<?php echo $this->element('Questionnaires.QuestionnaireEdit/questionnaire_title'); ?>
 
 	<?php echo $this->Wizard->navibar('edit_result'); ?>
 
@@ -37,8 +39,6 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 		<?php echo $this->NetCommonsForm->hidden('Block.id'); ?>
 
 		<div class="panel-body">
-
-			<?php echo $this->element('Questionnaires.QuestionnaireEdit/questionnaire_title'); ?>
 
 			<div class="form-group">
 				<?php echo $this->NetCommonsForm->input('Questionnaire.is_total_show',
@@ -89,4 +89,4 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 			<?php echo $this->Wizard->buttons('edit_result'); ?>
 		</div>
 	<?php echo $this->NetCommonsForm->end(); ?>
-</articel>
+</article>

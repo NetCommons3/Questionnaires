@@ -15,21 +15,21 @@
 			__d('questionnaires', 'accept the non-members answer')
 		);
 	?>
-	<div class="row" ng-show="questionnaires.questionnaire.isNoMemberAllow==<?php echo QuestionnairesComponent::USES_USE; ?>">
+	<div class="row" ng-show="questionnaire.questionnaire.isNoMemberAllow==<?php echo QuestionnairesComponent::USES_USE; ?>">
 		<div class="col-sm-11 col-sm-offset-1">
 		<?php
 			echo $this->QuestionEdit->questionnaireAttributeCheckbox('is_key_pass_use',
 				__d('questionnaires', 'use key phrase'), array(
-				'ng-disabled' => 'questionnaires.questionnaire.isImageAuthentication == ' . QuestionnairesComponent::USES_USE . ' || questionnaires.questionnaire.isNoMemberAllow != ' . QuestionnairesComponent::USES_USE
+				'ng-disabled' => 'questionnaire.questionnaire.isImageAuthentication == ' . QuestionnairesComponent::USES_USE . ' || questionnaire.questionnaire.isNoMemberAllow != ' . QuestionnairesComponent::USES_USE
 			));
 			echo $this->element('AuthorizationKeys.edit_form', [
 				'options' => array(
 					'div' => false,
-					'ng-show' => 'questionnaires.questionnaire.isKeyPassUse != 0',
+					'ng-show' => 'questionnaire.questionnaire.isKeyPassUse != 0',
 			)]);
 			echo $this->QuestionEdit->questionnaireAttributeCheckbox('is_image_authentication',
 				__d('questionnaires', 'do image authentication'), array(
-				'ng-disabled' => 'questionnaires.questionnaire.isKeyPassUse == ' . QuestionnairesComponent::USES_USE . ' || questionnaires.questionnaire.isNoMemberAllow != ' . QuestionnairesComponent::USES_USE
+				'ng-disabled' => 'questionnaire.questionnaire.isKeyPassUse == ' . QuestionnairesComponent::USES_USE . ' || questionnaire.questionnaire.isNoMemberAllow != ' . QuestionnairesComponent::USES_USE
 			));
 		?>
 		<span class="help-block">

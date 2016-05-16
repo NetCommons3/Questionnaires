@@ -28,7 +28,7 @@ if (isset($this->params['named']['answer_status']) && array_key_exists($this->pa
 }
 ?>
 
-<div class="form-group questionnaire-list-select">
+<div class="form-group">
 
 	<label><?php echo __d('questionnaires', 'Answer status'); ?></label>
 

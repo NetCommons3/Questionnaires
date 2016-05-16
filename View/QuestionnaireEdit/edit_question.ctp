@@ -37,11 +37,15 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 							'<?php echo h($newChoiceColumnLabel); ?>',
 							'<?php echo h($newChoiceOtherLabel); ?>')">
 
+	<?php echo $this->element('Questionnaires.QuestionnaireEdit/questionnaire_title'); ?>
+
 	<?php echo $this->Wizard->navibar('edit_question'); ?>
 
 	<div class="panel panel-default">
 
-	<?php echo $this->NetCommonsForm->create('QuestionnaireQuestion', $postUrl); ?>
+		<?php /* echo $this->element('Questionnaires.QuestionnaireEdit/questionnaire_description'); */ ?>
+
+		<?php echo $this->NetCommonsForm->create('QuestionnaireQuestion', $postUrl); ?>
 
 		<?php echo $this->NetCommonsForm->hidden('Frame.id'); ?>
 		<?php echo $this->NetCommonsForm->hidden('Block.id'); ?>
@@ -50,8 +54,6 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 		<?php $this->NetCommonsForm->unlockField('QuestionnairePage'); ?>
 
 		<div class="panel-body">
-
-			<?php echo $this->element('Questionnaires.QuestionnaireEdit/questionnaire_title'); ?>
 
 			<uib-tabset active="activeTabIndex">
 				<uib-tab ng-repeat="(pageIndex, page) in questionnaire.questionnairePage" index="$index">

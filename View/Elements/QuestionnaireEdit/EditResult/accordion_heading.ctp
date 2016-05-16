@@ -16,7 +16,9 @@
     'glyphicon-eye-close': question.isResultDisplay == <?php echo QuestionnairesComponent::EXPRESSION_NOT_SHOW; ?>}">
 </span>
 
-{{question.questionValue}}
+<span class="questionnaire-accordion-header-title">
+    {{question.questionValue}}
+</span>
 
 <span ng-if="question.hasError">
     <span class="glyphicon glyphicon-exclamation-sign text-danger"></span>

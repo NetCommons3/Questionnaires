@@ -108,6 +108,8 @@ class QuestionnaireEditControllerEditTest extends WorkflowControllerEditTest {
 				'sub_title' => 'EditTestSubTitle',
 				'is_total_show' => 0,
 				'answer_timing' => '0',
+				'answer_start_period' => '2016-08-01 00:00:00',
+				'answer_end_period' => '2017-08-01 00:00:00',
 				//'is_no_member_allow' => 0,
 				'is_key_pass_use' => 0,
 				'total_show_timing' => 0,
@@ -405,9 +407,19 @@ class QuestionnaireEditControllerEditTest extends WorkflowControllerEditTest {
  */
 	public function dataProviderEditValidationError() {
 		$data = $this->__getData();
+		$dataPeriodOn = Hash::merge($data, array('Questionnaire' => array('answer_timing' => '1')));
+		$dataPeriodOn2 = Hash::merge($data, array('Questionnaire' => array('total_show_timing' => '1')));
 
 		$result = array(
 			'data' => $data,
+			'urlOptions' => array('frame_id' => $data['Frame']['id'], 'block_id' => $data['Block']['id'], 'action' => $this->_myAction, 's_id' => 'testSession'),
+		);
+		$resultPeriodOn = array(
+			'data' => $dataPeriodOn,
+			'urlOptions' => array('frame_id' => $data['Frame']['id'], 'block_id' => $data['Block']['id'], 'action' => $this->_myAction, 's_id' => 'testSession'),
+		);
+		$resultPeriodOn2 = array(
+			'data' => $dataPeriodOn2,
 			'urlOptions' => array('frame_id' => $data['Frame']['id'], 'block_id' => $data['Block']['id'], 'action' => $this->_myAction, 's_id' => 'testSession'),
 		);
 
@@ -426,18 +438,18 @@ class QuestionnaireEditControllerEditTest extends WorkflowControllerEditTest {
 					'message' => __d('net_commons', 'Invalid request.'),
 				)
 			)),
-			Hash::merge($result, array(
+			Hash::merge($resultPeriodOn, array(
 				'validationError' => array(
 					'field' => 'Questionnaire.answer_start_period',
-					'value' => 'aa',
-					'message' => __d('questionnaires', 'Invalid datetime format.'),
+					'value' => '2019-08-01 00:00:00',
+					'message' => __d('questionnaires', 'start period must be smaller than end period'),
 				)
 			)),
-			Hash::merge($result, array(
+			Hash::merge($resultPeriodOn, array(
 				'validationError' => array(
 					'field' => 'Questionnaire.answer_end_period',
-					'value' => 'aa',
-					'message' => __d('questionnaires', 'Invalid datetime format.'),
+					'value' => '2015-08-01 00:00:00',
+					'message' => __d('questionnaires', 'start period must be smaller than end period'),
 				)
 			)),
 			Hash::merge($result, array(
@@ -448,11 +460,11 @@ class QuestionnaireEditControllerEditTest extends WorkflowControllerEditTest {
 				)
 			)),
 			//5
-			Hash::merge($result, array(
+			Hash::merge($resultPeriodOn2, array(
 				'validationError' => array(
 					'field' => 'Questionnaire.total_show_start_period',
-					'value' => 'aa',
-					'message' => __d('questionnaires', 'Invalid datetime format.'),
+					'value' => '',
+					'message' => __d('questionnaires', 'if you set the period, please set time.'),
 				)
 			)),
 			Hash::merge($result, array(

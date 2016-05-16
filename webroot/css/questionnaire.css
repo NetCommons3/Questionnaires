@@ -43,7 +43,14 @@
     float: left;
 }
 /*--アンケート編集画面の質問アコーディオンスタイル---*/
+#QuestionnaireQuestionEditQuestionForm .panel-title,
+#QuestionnaireQuestionEditResultForm .panel-title {
+    margin:0px;
+}
 .questionnaire-accordion-header-title {
+    font-size: 16px;
+}
+#QuestionnaireQuestionEditQuestionForm .questionnaire-accordion-header-title {
     line-height:2em;
     padding-left:0.5em;
 }

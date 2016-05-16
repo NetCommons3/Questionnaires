@@ -48,7 +48,7 @@ NetCommonsApp.controller('Questionnaires.setting',
        */
       $scope.initialize = function(frameId, questionnaires) {
         $scope.frameId = frameId;
-        $scope.questionnaires = questionnaires;
+        $scope.questionnaire = questionnaires;
       };
 
       /**

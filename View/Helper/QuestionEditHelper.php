@@ -42,7 +42,7 @@ class QuestionEditHelper extends AppHelper {
 			$ngModel = $options['ng-model'];
 			$modelNames = explode('.', $ngModel);
 			$errorMsgModelName = $modelNames[0] . '.errorMessages.' . $modelNames[1];
-			$ret = '<div class="row form-group" ng-class="\'has-error\':' . $errorMsgModelName . '">';
+			$ret = '<div class="row form-group" ng-class="{\'has-error\': ' . $errorMsgModelName . '}">';
 		} else {
 			$ret = '<div class="row form-group">';
 		}
@@ -94,7 +94,7 @@ class QuestionEditHelper extends AppHelper {
  */
 	public function questionnaireAttributeCheckbox(
 		$fieldName, $label, $options = array(), $help = '') {
-		$ngModel = 'questionnaires.questionnaire.' . Inflector::variable($fieldName);
+		$ngModel = 'questionnaire.questionnaire.' . Inflector::variable($fieldName);
 		$ret = '<div class=" checkbox"><label>';
 		$options = Hash::merge(array(
 			'type' => 'checkbox',
@@ -135,7 +135,7 @@ class QuestionEditHelper extends AppHelper {
  */
 	public function questionnaireAttributeDatetime($fieldName, $options) {
 		/*$label, $minMax = array(), $divClass = 'form-inline', $help = '') {*/
-		$ngModel = 'questionnaires.questionnaire.' . Inflector::variable($fieldName);
+		$ngModel = 'questionnaire.questionnaire.' . Inflector::variable($fieldName);
 
 		$defaultOptions = array(
 			'type' => 'datetime',
