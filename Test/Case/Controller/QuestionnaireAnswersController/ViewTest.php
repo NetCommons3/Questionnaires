@@ -281,7 +281,7 @@ class QuestionnaireAnswerControllerViewTest extends WorkflowControllerViewTest {
 		);
 		$results[1] = array(
 			'urlOptions' => array('frame_id' => '6', 'block_id' => '2', 'action' => 'test_mode', 'key' => 'questionnaire_2'),
-			'assert' => array('method' => 'assertTextContains', 'expected' => __d('questionnaires', 'Test Mode')),
+			'assert' => array('method' => 'assertTextContains', 'expected' => __d('questionnaires', 'This questionnaire is being temporarily stored . You can questionnaire test before performed in this page . If you want to modify or change the questionnaire , you will be able to edit by pressing the [ Edit question ] button in the upper-right corner .')),
 		);
 		// 確認前までの状態になっていたらconfirmアンケートは見られる
 		$results[2] = array(
@@ -291,7 +291,7 @@ class QuestionnaireAnswerControllerViewTest extends WorkflowControllerViewTest {
 		// shuffl
 		$results[3] = array(
 			'urlOptions' => array('frame_id' => '6', 'block_id' => '2', 'key' => 'questionnaire_4'),
-			'assert' => array('method' => 'assertTextContains', 'expected' => __d('questionnaires', 'Test Mode')),
+			'assert' => array('method' => 'assertTextContains', 'expected' => __d('questionnaires', 'This questionnaire is being temporarily stored . You can questionnaire test before performed in this page . If you want to modify or change the questionnaire , you will be able to edit by pressing the [ Edit question ] button in the upper-right corner .')),
 		);
 		return $results;
 	}
@@ -329,7 +329,7 @@ class QuestionnaireAnswerControllerViewTest extends WorkflowControllerViewTest {
 			'block_id' => 2,
 			'key' => 'questionnaire_4'
 		);
-		$assert = array('method' => 'assertTextContains', 'expected' => __d('questionnaires', 'Test Mode'));
+		$assert = array('method' => 'assertTextContains', 'expected' => __d('questionnaires', 'This questionnaire is being temporarily stored . You can questionnaire test before performed in this page . If you want to modify or change the questionnaire , you will be able to edit by pressing the [ Edit question ] button in the upper-right corner .'));
 
 		//ログイン
 		TestAuthGeneral::login($this, Role::ROOM_ROLE_KEY_ROOM_ADMINISTRATOR);

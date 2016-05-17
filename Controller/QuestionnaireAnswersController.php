@@ -230,6 +230,7 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 			$qKey,
 			'frame_id' => Current::read('Frame.id'),
 		));
+		$this->set('questionnaire', $this->__questionnaire);
 		$this->set('displayType', $this->__displayType);
 		$this->set('postUrl', $url);
 		$this->request->data['Frame'] = Current::read('Frame');
@@ -265,6 +266,7 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 			$qKey,
 			'frame_id' => Current::read('Frame.id'),
 		));
+		$this->set('questionnaire', $this->__questionnaire);
 		$this->set('displayType', $this->__displayType);
 		$this->set('postUrl', $url);
 		$this->request->data['Frame'] = Current::read('Frame');
