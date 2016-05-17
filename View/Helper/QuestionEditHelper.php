@@ -127,14 +127,10 @@ class QuestionEditHelper extends AppHelper {
  * アンケート期間設定作成
  *
  * @param string $fieldName フィールド名
- * @param string $label checkboxの時のラベル
- * @param array $minMax 日時指定の範囲がある場合のmin, max
- * @param string $divClass div class
- * @param string $help 追加説明文
+ * @param array $options オプション
  * @return string HTML
  */
 	public function questionnaireAttributeDatetime($fieldName, $options) {
-		/*$label, $minMax = array(), $divClass = 'form-inline', $help = '') {*/
 		$ngModel = 'questionnaire.questionnaire.' . Inflector::variable($fieldName);
 
 		$defaultOptions = array(

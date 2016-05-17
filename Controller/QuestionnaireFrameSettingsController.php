@@ -96,7 +96,7 @@ class QuestionnaireFrameSettingsController extends QuestionnaireBlocksController
 				$this->NetCommons->setFlashNotification(__d('net_commons', 'Successfully saved.'), array(
 					'class' => 'success',
 				));
-				$this->redirect(NetCommonsUrl::backToPageUrl());
+				$this->redirect(NetCommonsUrl::backToPageUrl(true));
 				return;
 			}
 			$this->NetCommons->handleValidationError($this->QuestionnaireFrameSetting->validationErrors);

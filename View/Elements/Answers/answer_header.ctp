@@ -12,19 +12,19 @@
 
 <?php if ($this->Workflow->canEdit('Questionnaire', $questionnaire)) : ?>
 
-<div class="pull-right">
-    <?php echo $this->Button->editLink('', array(
-    'plugin' => 'questionnaires',
-    'controller' => 'questionnaire_edit',
-    'action' => 'edit_question',
-    'key' => $questionnaire['Questionnaire']['key'])); ?>
-</div>
+	<div class="pull-right">
+		<?php echo $this->Button->editLink('', array(
+		'plugin' => 'questionnaires',
+		'controller' => 'questionnaire_edit',
+		'action' => 'edit_question',
+		'key' => $questionnaire['Questionnaire']['key'])); ?>
+	</div>
 <?php endif; ?>
 
 <h1>
-    <?php echo $this->Workflow->label($questionnaire['Questionnaire']['status']); ?>
+	<?php echo $this->Workflow->label($questionnaire['Questionnaire']['status']); ?>
 
-    <?php echo $this->TitleIcon->titleIcon($questionnaire['Questionnaire']['title_icon']); ?>
-    <?php echo $questionnaire['Questionnaire']['title']; ?>
-    <small><?php echo $questionnaire['Questionnaire']['sub_title'];?></small>
+	<?php echo $this->TitleIcon->titleIcon($questionnaire['Questionnaire']['title_icon']); ?>
+	<?php echo $questionnaire['Questionnaire']['title']; ?>
+	<small><?php echo $questionnaire['Questionnaire']['sub_title'];?></small>
 </h1>

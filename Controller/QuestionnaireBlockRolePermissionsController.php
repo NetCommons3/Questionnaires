@@ -101,7 +101,7 @@ class QuestionnaireBlockRolePermissionsController extends QuestionnaireBlocksCon
 						'class' => 'success',
 					)
 				);
-				$this->redirect(NetCommonsUrl::backToIndexUrl('default_action'));
+				$this->redirect(NetCommonsUrl::backToPageUrl(true));
 				return;
 			}
 			$this->NetCommons->handleValidationError($this->QuestionnaireSetting->validationErrors);
