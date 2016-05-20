@@ -78,7 +78,7 @@ class QuestionnaireMailSettingRecords extends MailsMigration {
 アンケート名:{X-SUBJECT}
 
 回答のご協力をお願いいたします。
-下記のリンクをクリックして下さい。
+下記のリンクをクリックしてください。
 {X-URL}',
 			),
 			//回答通知 - 定型文
