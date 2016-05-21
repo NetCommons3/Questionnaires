@@ -59,7 +59,8 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 			<uib-tabset active="activeTabIndex">
 				<uib-tab ng-repeat="(pageIndex, page) in questionnaire.questionnairePage" index="$index">
 					<uib-tab-heading>
-						{{pageIndex+1}}<span class="glyphicon glyphicon-exclamation-sign text-danger" ng-if="page.hasError"></span>
+						<span class="glyphicon glyphicon-exclamation-sign text-danger" ng-if="page.hasError"></span>
+						{{pageIndex+1}}
 					</uib-tab-heading>
 
 					<div class="tab-body">

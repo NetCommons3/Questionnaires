@@ -60,35 +60,45 @@
 
 
 <div class="row">
-	<div ng-show="question.isRange == <?php echo QuestionnairesComponent::USES_USE; ?>">
-		<div class="col-xs-4 col-xs-offset-1">
+	<div class="col-xs-12" ng-show="question.isRange == <?php echo QuestionnairesComponent::USES_USE; ?>">
+		<div class="form-inline">
+			<div class="input-group">
+				<?php
+				echo $this->element(
+				'Questionnaires.QuestionnaireEdit/EditQuestion/options_before_published/date_range_input', array(
+				'field' => 'QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.min',
+				'calOpenId' => 0,
+				'model' => 'question.min',
+				'min' => '',
+				'max' => 'question.max',
+				'limitTarget' => 'QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.max',
+				//'error' => 'question.errorMessages.min',
+				'error' => false,
+				));
+				?>
+				<span class="input-group-addon">
+					<span class="glyphicon glyphicon-minus"></span>
+				</span>
+				<?php
+				echo $this->element(
+				'Questionnaires.QuestionnaireEdit/EditQuestion/options_before_published/date_range_input', array(
+				'field' => 'QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.max',
+				'calOpenId' => 1,
+				'model' => 'question.max',
+				'min' => 'question.min',
+				'max' => '',
+				'limitTarget' => 'QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.min',
+				//'error' => 'question.errorMessages.max',
+				'error' => false,
+				));
+				?>
+			</div>
 			<?php
-			echo $this->element(
-			'Questionnaires.QuestionnaireEdit/EditQuestion/options_before_published/date_range_input', array(
-			'field' => 'QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.min',
-			'calOpenId' => 0,
-			'model' => 'question.min',
-			'min' => '',
-			'max' => 'question.max',
-			'limitTarget' => 'QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.max',
-			'error' => 'question.errorMessages.min',
+			echo $this->element('Questionnaires.QuestionnaireEdit/ng_errors', array(
+			'errorArrayName' => 'question.errorMessages.min',
 			));
-			?>
-		</div>
-
-		<div class="col-xs-3"><p class="form-control-static text-center"><?php echo __d('questionnaires', ' - '); ?></p></div>
-
-		<div class="col-xs-4">
-			<?php
-			echo $this->element(
-			'Questionnaires.QuestionnaireEdit/EditQuestion/options_before_published/date_range_input', array(
-			'field' => 'QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.max',
-			'calOpenId' => 1,
-			'model' => 'question.max',
-			'min' => 'question.min',
-			'max' => '',
-			'limitTarget' => 'QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.min',
-			'error' => 'question.errorMessages.max',
+			echo $this->element('Questionnaires.QuestionnaireEdit/ng_errors', array(
+			'errorArrayName' => 'question.errorMessages.max',
 			));
 			?>
 		</div>

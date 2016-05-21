@@ -66,7 +66,7 @@ echo $this->NetCommonsHtml->script(array(
 								'plugin' => 'questionnaires',
 								'controller' => 'questionnaire_edit',
 								'action' => 'edit_question',
-								Current::read('Block.id'),
+								//Current::read('Block.id'),
 								$questionnaire['Questionnaire']['key'],
 								'frame_id' => Current::read('Frame.id')
 							)
@@ -98,20 +98,25 @@ echo $this->NetCommonsHtml->script(array(
 						<?php else: ?>
 							<td></td>
 						<?php endif; ?>
-						<td>
-							<?php if ($questionnaire['Questionnaire']['status'] == WorkflowComponent::STATUS_PUBLISHED): ?>
-							<a class="btn btn-warning"
-							   href="<?php echo NetCommonsUrl::actionUrl(array(
-										'plugin' => 'questionnaires',
-										'controller' => 'questionnaire_blocks',
-										'action' => 'export',
-										Current::read('Block.id'),
-										$questionnaire['Questionnaire']['key'],
-										'frame_id' => Current::read('Frame.id'))); ?>">
-								<span class="glyphicon glyphicon-export" ></span>
-							</a>
-							<?php endif; ?>
-						</td>
+						<?php if ($questionnaire['Questionnaire']['status'] == WorkflowComponent::STATUS_PUBLISHED): ?>
+							<?php echo $this->BlockIndex->tableData(
+							'',
+							$this->BackTo->linkButton('',
+								NetCommonsUrl::actionUrl(array(
+									'plugin' => 'questionnaires',
+									'controller' => 'questionnaire_blocks',
+									'action' => 'export',
+									Current::read('Block.id'),
+									$questionnaire['Questionnaire']['key'],
+									'frame_id' => Current::read('Frame.id'))
+								),
+								array('class' => 'btn btn-warning', 'icon' => 'export')
+							),
+							array('escape' => false, 'type' => 'center')
+							); ?>
+						<?php else: ?>
+							<td></td>
+						<?php endif; ?>
 					<?php echo $this->BlockIndex->endTableRow(); ?>
 					<?php endforeach; ?>
 				</tbody>

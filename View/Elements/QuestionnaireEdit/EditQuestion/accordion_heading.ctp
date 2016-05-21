@@ -60,5 +60,3 @@
 		<?php echo __d('questionnaires', 'Skip'); ?>
 	</span>
 </span>
-
-<span class="glyphicon glyphicon-exclamation-sign text-danger" ng-if="question.hasError"></span>

@@ -110,22 +110,23 @@
 				)); ?>
 			</li>
 		</ul>
-		<label class="checkbox-inline" ng-if="question.questionType != <?php echo QuestionnairesComponent::TYPE_SINGLE_SELECT_BOX; ?>">
-			<input type="checkbox" ng-model="question.hasAnotherChoice" ng-change="changeAnotherChoice(pageIndex, qIndex, '<?php echo QuestionnairesComponent::OTHER_CHOICE_TYPE_OTHER_FIELD_WITH_TEXT ?>', '<?php echo QuestionnairesComponent::MATRIX_TYPE_ROW_OR_NO_MATRIX; ?>')">
-			<?php echo __d('questionnaires', 'add another choice'); ?>
-		</label>
-	</div>
-</div>
-<div class="row" ng-if="question.questionType != <?php echo QuestionnairesComponent::TYPE_SINGLE_SELECT_BOX; ?>">
-	<div class="col-xs-12 text-right">
-		<button type="button" class="btn btn-default"
-				ng-show="question.questionnaireChoice.length > 2"
-				ng-click="addChoice($event, pageIndex, qIndex, question.questionnaireChoice.length, '<?php echo QuestionnairesComponent::OTHER_CHOICE_TYPE_NO_OTHER_FILED ?>', '<?php echo QuestionnairesComponent::MATRIX_TYPE_ROW_OR_NO_MATRIX; ?>');">
-			<span class="glyphicon glyphicon-plus"></span><?php echo __d('questionnaires', 'add choices'); ?>
-		</button>
-		<p class="help-block small">
-			<?php echo __d('questionnaires', 'You can not use the character of |, : for choice text '); ?>
-		</p>
+
+		<div class="" ng-if="question.questionType != <?php echo QuestionnairesComponent::TYPE_SINGLE_SELECT_BOX; ?>">
+			<div class="pull-right text-right">
+				<button type="button" class="btn btn-default"
+						ng-show="question.questionnaireChoice.length > 2"
+						ng-click="addChoice($event, pageIndex, qIndex, question.questionnaireChoice.length, '<?php echo QuestionnairesComponent::OTHER_CHOICE_TYPE_NO_OTHER_FILED ?>', '<?php echo QuestionnairesComponent::MATRIX_TYPE_ROW_OR_NO_MATRIX; ?>');">
+					<span class="glyphicon glyphicon-plus"></span><?php echo __d('questionnaires', 'add choices'); ?>
+				</button>
+				<p class="help-block small">
+					<?php echo __d('questionnaires', 'You can not use the character of |, : for choice text '); ?>
+				</p>
+			</div>
+			<label class="checkbox-inline" ng-if="question.questionType != <?php echo QuestionnairesComponent::TYPE_SINGLE_SELECT_BOX; ?>">
+				<input type="checkbox" ng-model="question.hasAnotherChoice" ng-change="changeAnotherChoice(pageIndex, qIndex, '<?php echo QuestionnairesComponent::OTHER_CHOICE_TYPE_OTHER_FIELD_WITH_TEXT ?>', '<?php echo QuestionnairesComponent::MATRIX_TYPE_ROW_OR_NO_MATRIX; ?>')">
+				<?php echo __d('questionnaires', 'add another choice'); ?>
+			</label>
+		</div>
 	</div>
 </div>
 <?php
