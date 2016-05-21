@@ -89,6 +89,7 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
 				),
 			),
 		),
+		'Blocks.BlockIndex',
 		'NetCommons.NetCommonsForm',
 		'NetCommons.Date',
 		'NetCommons.TitleIcon',

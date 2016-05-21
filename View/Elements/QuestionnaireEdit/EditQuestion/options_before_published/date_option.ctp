@@ -11,6 +11,7 @@
  */
 ?>
 <div class="row">
+	<div class="col-xs-12">
 	<?php
 		echo $this->NetCommonsForm->hidden('QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.is_choice_random',
 			array('value' => QuestionnairesComponent::USES_NOT_USE,
@@ -21,56 +22,46 @@
 	?>
 
 	<?php
-		echo $this->NetCommonsForm->input('QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.question_type_option',
-			array(
-				'type' => 'radio',
-				'before' => '<div class="col-sm-3"><div class="radio"><label>',
-				'separator' => '</label></div></div><div class="col-sm-3"><div class="radio"><label>',
-				'after' => '</label></div></div>',
-				'options' => array(QuestionnairesComponent::TYPE_OPTION_DATE => __d('questionnaires', 'Date'),
-							QuestionnairesComponent::TYPE_OPTION_TIME => __d('questionnaires', 'Time'),
-							QuestionnairesComponent::TYPE_OPTION_DATE_TIME => __d('questionnaires', 'Date and Time')),
-				'legend' => false,
-				'div' => false,
+		echo $this->NetCommonsForm->radio('QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.question_type_option',
+				array(
+					QuestionnairesComponent::TYPE_OPTION_DATE => __d('questionnaires', 'Date'),
+					QuestionnairesComponent::TYPE_OPTION_TIME => __d('questionnaires', 'Time'),
+					QuestionnairesComponent::TYPE_OPTION_DATE_TIME => __d('questionnaires', 'Date and Time')),
+				array(
+				'div' => 'form-inline',
 				'label' => false,
-				'class' => '',
 				'ng-model' => 'question.questionTypeOption',
 				'ng-click' => 'changeDatetimepickerType(pageIndex, qIndex)'
 		));
 	?>
-	<div class="col-sm-3">
 	</div>
 </div>
 
 
 <div class="row">
-	<div class="col-sm-12">
-		<div class="checkbox">
-			<label>
-				<?php
-					echo $this->NetCommonsForm->checkbox('QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.is_range',
-						array(
-							'value' => QuestionnairesComponent::USES_USE,
-							'ng-model' => 'question.isRange',
-							'ng-checked' => 'question.isRange == ' . QuestionnairesComponent::USES_USE,
-							'error' => 'question.errorMessages.isRange',
-					));
-				?>
-				<?php echo __d('questionnaires', 'set range to answer date and time'); ?>
-			</label>
-			<?php
-				echo $this->element('Questionnaires.QuestionnaireEdit/ng_errors', array(
-					'errorArrayName' => 'question.errorMessages.isRange',
-				));
-			?>
-		</div>
+	<div class="col-xs-12">
+		<?php
+			echo $this->NetCommonsForm->checkbox('QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.is_range',
+				array(
+					'label' => __d('questionnaires', 'set range to answer date and time'),
+					'value' => QuestionnairesComponent::USES_USE,
+					'ng-model' => 'question.isRange',
+					'ng-checked' => 'question.isRange == ' . QuestionnairesComponent::USES_USE,
+					'error' => 'question.errorMessages.isRange',
+			));
+		?>
+		<?php
+			echo $this->element('Questionnaires.QuestionnaireEdit/ng_errors', array(
+				'errorArrayName' => 'question.errorMessages.isRange',
+			));
+		?>
 	</div>
 </div>
 
 
 <div class="row">
 	<div ng-show="question.isRange == <?php echo QuestionnairesComponent::USES_USE; ?>">
-		<div class="col-sm-5">
+		<div class="col-xs-4 col-xs-offset-1">
 			<?php
 			echo $this->element(
 			'Questionnaires.QuestionnaireEdit/EditQuestion/options_before_published/date_range_input', array(
@@ -85,9 +76,9 @@
 			?>
 		</div>
 
-		<div class="col-sm-2"><p class="form-control-static text-center"><?php echo __d('questionnaires', ' - '); ?></p></div>
+		<div class="col-xs-3"><p class="form-control-static text-center"><?php echo __d('questionnaires', ' - '); ?></p></div>
 
-		<div class="col-sm-5">
+		<div class="col-xs-4">
 			<?php
 			echo $this->element(
 			'Questionnaires.QuestionnaireEdit/EditQuestion/options_before_published/date_range_input', array(

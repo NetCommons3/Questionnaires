@@ -10,7 +10,7 @@
  */
 ?>
 <div class="row">
-	<div class="col-sm-12">
+	<div class="col-xs-12">
 		<div class="form-group">
 			<label class="checkbox-inline">
 				<?php echo $this->NetCommonsForm->checkbox('QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.question_type_option',
@@ -38,20 +38,16 @@
 			</label>
 		</div>
 	</div>
-	<div class="col-sm-6 form-inline" ng-if="question.isRange == <?php echo QuestionnairesComponent::USES_USE; ?>">
-		<?php echo $this->NetCommonsForm->label('', __d('questionnaires', 'Minimum'),
-		array(
-		'div' => array('class' => 'form-group'),
-		));
-		?>
+	<div class="col-xs-5 col-xs-offset-1 form-inline" ng-if="question.isRange == <?php echo QuestionnairesComponent::USES_USE; ?>">
+		<label>
+			<?php echo __d('questionnaires', 'Minimum'); ?>
+		</label>
 		{{question.min}}
 	</div>
-	<div class="col-sm-6 form-inline" ng-if="question.isRange == <?php echo QuestionnairesComponent::USES_USE; ?>">
-		<?php echo $this->NetCommonsForm->label('', __d('questionnaires', 'Maximum'),
-		array(
-		'div' => array('class' => 'form-group'),
-		));
-		?>
+	<div class="col-xs-6 form-inline" ng-if="question.isRange == <?php echo QuestionnairesComponent::USES_USE; ?>">
+		<label>
+		<?php echo __d('questionnaires', 'Maximum'); ?>
+			</label>
 		{{question.max}}
 	</div>
 </div>

@@ -12,7 +12,7 @@
 echo $this->element('Questionnaires.scripts');
 ?>
 
-<div id="nc-questionnaires-<?php echo Current::read('Frame.id'); ?>" ng-controller="Questionnaires">
+<article id="nc-questionnaires-<?php echo Current::read('Frame.id'); ?>" ng-controller="Questionnaires">
 
 	<?php echo $this->element('Questionnaires.Questionnaires/add_button'); ?>
 
@@ -25,7 +25,7 @@ echo $this->element('Questionnaires.scripts');
 	<table class="table nc-content-list">
 		<?php foreach($questionnaires as $questionnaire): ?>
 			<tr><td>
-				<article class="row">
+				<div class="row">
 					<div class="col-md-8 col-xs-12">
 
 						<?php echo $this->QuestionnaireStatusLabel->statusLabel($questionnaire);?>
@@ -55,7 +55,7 @@ echo $this->element('Questionnaires.scripts');
 							<div class="clearfix"></div>
 						</div>
 					</div>
-				</article>
+				</div>
 
 				<?php if ($this->Workflow->canEdit('Questionnaire', $questionnaire)) : ?>
 					<?php echo $this->element('Questionnaires.Questionnaires/detail_for_editor', array('questionnaire' => $questionnaire)); ?>
@@ -66,4 +66,4 @@ echo $this->element('Questionnaires.scripts');
 
 	<?php echo $this->element('NetCommons.paginator'); ?>
 
-</div>
+</article>

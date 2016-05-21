@@ -10,7 +10,7 @@
  */
 ?>
 <div class="row">
-	<div class="col-sm-12">
+	<div class="col-xs-12">
 		<?php
 			echo $this->NetCommonsForm->hidden('QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.is_choice_random',
 				array('value' => QuestionnairesComponent::USES_NOT_USE,
@@ -32,7 +32,7 @@
 	</div>
 </div>
 <div class="row">
-	<div class="col-sm-12">
+	<div class="col-xs-12">
 		<label class="checkbox-inline">
 			<?php echo $this->NetCommonsForm->checkbox('QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.is_range',
 				array(
@@ -50,7 +50,7 @@
 	</div>
 </div>
 <div class="row">
-	<div class="col-sm-6">
+	<div class="col-xs-5 col-xs-offset-1">
 		<div class="form-inline" ng-if="question.isRange == <?php echo QuestionnairesComponent::USES_USE; ?>">
 			<?php echo $this->NetCommonsForm->input('QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.min',
 			array(
@@ -66,7 +66,7 @@
 		)); ?>
 	</div>
 
-	<div class="col-sm-6">
+	<div class="col-xs-6">
 		<div class="form-inline" ng-if="question.isRange == <?php echo QuestionnairesComponent::USES_USE; ?>">
 			<?php echo $this->NetCommonsForm->input('QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.max',
 			array(

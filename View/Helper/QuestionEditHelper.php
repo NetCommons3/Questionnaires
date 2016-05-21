@@ -46,32 +46,29 @@ class QuestionEditHelper extends AppHelper {
 		} else {
 			$ret = '<div class="row form-group">';
 		}
-		$ret .= '<label	class="col-sm-2 control-label">' . $title;
+		$ret .= '<label	class="col-xs-2 control-label">' . $title;
 		if (isset($options['required']) && $options['required'] == true) {
 			$ret .= $this->_View->element('NetCommons.required');
 		}
-		$ret .= '</label><div class="col-sm-10">';
+		$ret .= '</label><div class="col-xs-10">';
 
 		$type = $options['type'];
 		if ($this->_View->viewVars['isPublished']) {
-			$disabled = 'disabled';
-			$options = Hash::remove($options, 'ui-tinymce');
-		} else {
-			$disabled = '';
+			$options = Hash::merge($options, array('disabled' => true));
 		}
 
-		if ($type == 'checkbox') {
-			$ret .= '<div class="checkbox ' . $disabled . '"><label>';
-		}
 		$options = Hash::merge($options, array('div' => false, 'label' => false));
 		if ($type == 'wysiwyg') {
-			$ret .= $this->NetCommonsForm->wysiwyg($fieldName, $options);
+			if ($this->_View->viewVars['isPublished']) {
+				$ret .= '<div class="well well-sm" ng-bind-html="' . $ngModel . ' | ncHtmlContent"></div>';
+			} else {
+				$ret .= $this->NetCommonsForm->wysiwyg($fieldName, $options);
+			}
+		} elseif ($type == 'checkbox') {
+			$options = Hash::merge($options, array('label' => $label));
+			$ret .= $this->NetCommonsForm->checkbox($fieldName, $options);
 		} else {
 			$ret .= $this->NetCommonsForm->input($fieldName, $options);
-		}
-
-		if ($type == 'checkbox') {
-			$ret .= $label . '</label></div>';
 		}
 
 		if (isset($options['ng-model'])) {

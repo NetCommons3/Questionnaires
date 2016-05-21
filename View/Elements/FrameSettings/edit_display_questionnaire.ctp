@@ -24,9 +24,6 @@
 					<?php echo $this->NetCommonsForm->checkbox('all_check', array(
 					'ng-model' => 'WinBuf.allCheck',
 					'ng-change' => 'allCheckClicked()',
-					'label' => false,
-					'div' => false,
-					'class' => '',
 					)); ?>
 				</div>
 			</th>
@@ -43,9 +40,10 @@
 				<a href="" ng-click="isTotalShow=!isTotalShow;sort('questionnaire.isTotalShow', isTotalShow)"><?php echo __d('questionnaires', 'Aggregates'); ?></a>
 			</th>
 			<th>
-				<a href="" ng-click="modified=!modified;sort('questionnaire.modified', modified)"><?php echo __d('questionnaires', 'Updated date'); ?></a>
+				<a href="" ng-click="modified=!modified;sort('questionnaire.modified', modified)"><?php echo __d('net_commons', 'Updated date'); ?></a>
 			</th>
 		</tr>
+		<?php $this->NetCommonsForm->unlockField('List.QuestionnaireFrameDisplayQuestionnaire'); ?>
 		<tr class="animate-repeat btn-default" ng-repeat="(index, quest) in questionnaires">
 			<td>
 				<div class="text-center" ng-show="questionnaireFrameSettings.displayType == <?php echo QuestionnairesComponent::DISPLAY_TYPE_LIST; ?>">
@@ -62,10 +60,8 @@
 				<div class="text-center"  ng-show="questionnaireFrameSettings.displayType == <?php echo QuestionnairesComponent::DISPLAY_TYPE_SINGLE; ?>">
 					<?php echo $this->NetCommonsForm->radio('Single.QuestionnaireFrameDisplayQuestionnaire.questionnaire_key',
 					array('{{quest.questionnaire.key}}' => ''), array(
-					'legend' => false,
 					'label' => false,
-					'div' => false,
-					'class' => false,
+					'div' => 'form-inline',
 					'hiddenField' => false,
 					'ng-model' => 'quest.questionnaireFrameDisplayQuestionnaire.questionnaireKey',
 					));

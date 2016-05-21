@@ -9,7 +9,7 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 ?>
-<div class="form-group questionnaire-group">
+<div class="form-group">
 	<?php
 		echo $this->NetCommonsForm->hidden('is_no_member_allow', array(
 			'value' => QuestionnairesComponent::USES_NOT_USE,

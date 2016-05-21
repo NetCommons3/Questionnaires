@@ -85,6 +85,7 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 			),
 			'cancelUrl' => null
 		),
+		'Wysiwyg.Wysiwyg',
 		);
 
 /**

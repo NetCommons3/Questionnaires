@@ -16,7 +16,7 @@
 		);
 	?>
 	<div class="row" ng-show="questionnaire.questionnaire.isNoMemberAllow==<?php echo QuestionnairesComponent::USES_USE; ?>">
-		<div class="col-sm-11 col-sm-offset-1">
+		<div class="col-xs-11 col-xs-offset-1">
 		<?php
 			echo $this->QuestionEdit->questionnaireAttributeCheckbox('is_key_pass_use',
 				__d('questionnaires', 'use key phrase'), array(

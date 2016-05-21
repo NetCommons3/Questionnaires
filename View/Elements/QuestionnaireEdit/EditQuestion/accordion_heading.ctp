@@ -54,7 +54,7 @@
 	{{question.questionValue}}
 
 	<strong ng-if="question.isRequire != 0" class="text-danger h4">
-		<?php echo __d('net_commons', 'Required'); ?>
+		<?php echo __d('net_commons', '*'); ?>
 	</strong>
 	<span ng-if="question.isSkip != 0" class="badge">
 		<?php echo __d('questionnaires', 'Skip'); ?>

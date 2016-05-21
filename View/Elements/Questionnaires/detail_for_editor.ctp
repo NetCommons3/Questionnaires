@@ -22,9 +22,20 @@
 			<small>
 				<dl class="questionnaire-editor-dl">
 					<dt><?php echo __d('questionnaires', 'Author'); ?></dt>
-					<dd><?php echo $questionnaire['TrackableCreator']['handlename']; ?></dd>
+					<dd>
+						<?php echo $this->NetCommonsHtml->handleLink(
+						$questionnaire,
+						array('avatar' => false),
+						array(),
+						'TrackableCreator'); ?>
+					</dd>
 					<dt><?php echo __d('questionnaires', 'Modified by'); ?></dt>
-					<dd><?php echo $questionnaire['TrackableUpdater']['handlename']; ?>
+					<dd>
+						<?php echo $this->NetCommonsHtml->handleLink(
+						$questionnaire,
+						array('avatar' => false),
+						array(),
+						'TrackableUpdater'); ?>
 						(<?php echo $this->Date->dateFormat($questionnaire['Questionnaire']['modified']); ?>)
 					</dd>
 				</dl>

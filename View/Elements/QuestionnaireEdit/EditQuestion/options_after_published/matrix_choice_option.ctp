@@ -12,7 +12,7 @@
 
 <div class="row">
 
-	<div class="col-sm-6">
+	<div class="col-xs-6">
 		<h5><?php echo __d('questionnaires', 'Line choices'); ?></h5>
 		<ul class="list-group ">
 			<li class="list-group-item" ng-repeat="(cIndex, choice) in matrixRows = (question.questionnaireChoice | filter: {matrixType:<?php echo QuestionnairesComponent::MATRIX_TYPE_ROW_OR_NO_MATRIX; ?>})" >
@@ -23,7 +23,7 @@
 		</ul>
 	</div>
 
-	<div class="col-sm-6">
+	<div class="col-xs-6">
 		<h5><?php echo __d('questionnaires', 'Column choices'); ?></h5>
 		<ul class="list-group">
 			<li class="list-group-item" ng-repeat="(cIndex, choice) in matrixColumns = (question.questionnaireChoice | filter: {matrixType:<?php echo QuestionnairesComponent::MATRIX_TYPE_COLUMN; ?>})" >
@@ -32,6 +32,6 @@
 				</div>
 			</li>
 		</ul>
-	</div><!-- col-sm-6 -->
+	</div>
 
 </div>

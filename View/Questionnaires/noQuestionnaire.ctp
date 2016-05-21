@@ -12,29 +12,24 @@
 
 <?php echo $this->element('Questionnaires.scripts'); ?>
 
-<div ng-controller="Questionnaires">
+<article ng-controller="Questionnaires">
 
-	<article>
+	<?php echo $this->element('Questionnaires.Questionnaires/add_button'); ?>
 
-		<?php echo $this->element('Questionnaires.Questionnaires/add_button'); ?>
+	<div class="pull-left">
+		<?php echo $this->element('Questionnaires.Questionnaires/answer_status'); ?>
+	</div>
 
-		<div class="pull-left">
-			<?php echo $this->element('Questionnaires.Questionnaires/answer_status'); ?>
-		</div>
+	<div class="clearfix"></div>
 
-		<div class="clearfix"></div>
+	<p>
+		<?php echo __d('questionnaires', 'no questionnaire'); ?>
+	</p>
 
+	<?php if (Current::permission('content_creatable')) : ?>
 		<p>
-			<?php echo __d('questionnaires', 'no questionnaire'); ?>
+			<?php echo __d('questionnaires', 'Please create new questionnaire by pressing the "+" button.'); ?>
 		</p>
+	<?php endif ?>
 
-		<?php if (Current::permission('content_creatable')) : ?>
-			<p>
-				<?php echo __d('questionnaires', 'Please create new questionnaire by pressing the "+" button.'); ?>
-			</p>
-		<?php endif ?>
-
-	</article>
-
-</div>
-
+</article>

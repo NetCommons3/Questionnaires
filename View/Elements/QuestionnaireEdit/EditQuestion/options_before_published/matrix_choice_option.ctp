@@ -20,13 +20,14 @@
 		));
 	?>
 
-    <div class="col-sm-6">
-        <h5><?php echo __d('questionnaires', 'Line choices'); ?></h5>
-        <button type="button" class="btn btn-default"
+    <div class="col-xs-6">
+        <button type="button" class="btn btn-default pull-right"
                 ng-click="addChoice($event, pageIndex, qIndex, matrixRows.length, '<?php echo QuestionnairesComponent::OTHER_CHOICE_TYPE_NO_OTHER_FILED ?>', '<?php echo QuestionnairesComponent::MATRIX_TYPE_ROW_OR_NO_MATRIX; ?>');">
             <span class="glyphicon glyphicon-plus"></span>
             <?php echo __d('questionnaires', 'Add line choices'); ?>
         </button>
+        <label><?php echo __d('questionnaires', 'Line choices'); ?></label>
+        <div class="clearfix"></div>
         <ul class="list-group questionnaire-edit-choice-list-group">
             <li class="list-group-item" ng-repeat="(cIndex, choice) in matrixRows =
             (question.questionnaireChoice |
@@ -42,20 +43,29 @@
                 </div>
             </li>
         </ul>
-        <button type="button" class="btn btn-default"
+        <button type="button" class="btn btn-default pull-right"
                 ng-show="matrixRows.length > 2"
                 ng-click="addChoice($event, pageIndex, qIndex, matrixRows.length, '<?php echo QuestionnairesComponent::OTHER_CHOICE_TYPE_NO_OTHER_FILED ?>', '<?php echo QuestionnairesComponent::MATRIX_TYPE_ROW_OR_NO_MATRIX; ?>');">
             <span class="glyphicon glyphicon-plus"></span>
             <?php echo __d('questionnaires', 'Add line choices'); ?>
         </button>
+        <div class="checkbox">
+            <label>
+                <input type="checkbox"
+                       ng-model="question.hasAnotherChoice"
+                       ng-change="changeAnotherChoice(pageIndex, qIndex, '<?php echo QuestionnairesComponent::OTHER_CHOICE_TYPE_OTHER_FIELD_WITH_TEXT ?>', '<?php echo QuestionnairesComponent::MATRIX_TYPE_ROW_OR_NO_MATRIX; ?>')">
+                <?php echo __d('questionnaires', 'add another choice'); ?>
+            </label>
+        </div>
     </div>
 
-    <div class="col-sm-6">
-        <h5><?php echo __d('questionnaires', 'Column choices'); ?></h5>
-        <button type="button" class="btn btn-default" ng-click="addChoice($event, pageIndex, qIndex, matrixColumns.length, '<?php echo QuestionnairesComponent::OTHER_CHOICE_TYPE_NO_OTHER_FILED ?>', '<?php echo QuestionnairesComponent::MATRIX_TYPE_COLUMN; ?>');">
+    <div class="col-xs-6">
+        <button type="button" class="btn btn-default pull-right" ng-click="addChoice($event, pageIndex, qIndex, matrixColumns.length, '<?php echo QuestionnairesComponent::OTHER_CHOICE_TYPE_NO_OTHER_FILED ?>', '<?php echo QuestionnairesComponent::MATRIX_TYPE_COLUMN; ?>');">
             <span class="glyphicon glyphicon-plus"></span>
             <?php echo __d('questionnaires', 'Add column choices'); ?>
         </button>
+        <label><?php echo __d('questionnaires', 'Column choices'); ?></label>
+        <div class="clearfix"></div>
 
         <ul class="list-group questionnaire-edit-choice-list-group">
             <li class="list-group-item" ng-repeat="(cIndex, choice) in matrixColumns = (question.questionnaireChoice | filter: {matrixType:<?php echo QuestionnairesComponent::MATRIX_TYPE_COLUMN; ?>})" >
@@ -69,29 +79,21 @@
                 </div>
             </li>
         </ul>
-        <p class="text-info small pull-right">
-            <?php echo __d('questionnaires', 'You can not use the character of |, : for choice text '); ?>
-        </p>
-
-        <button type="button" class="btn btn-default"
+        <button type="button" class="btn btn-default pull-right"
                 ng-show="matrixColumns.length > 2"
                 ng-click="addChoice($event, pageIndex, qIndex, matrixColumns.length, '<?php echo QuestionnairesComponent::OTHER_CHOICE_TYPE_NO_OTHER_FILED ?>', '<?php echo QuestionnairesComponent::MATRIX_TYPE_COLUMN; ?>');">
             <span class="glyphicon glyphicon-plus"></span>
             <?php echo __d('questionnaires', 'Add column choices'); ?>
         </button>
-    </div><!-- col-sm-6 -->
 
-</div>
-
-<div class="row">
-    <div class="col-sm-12">
-        <div class="checkbox">
-            <label>
-                <input type="checkbox"
-                       ng-model="question.hasAnotherChoice"
-                       ng-change="changeAnotherChoice(pageIndex, qIndex, '<?php echo QuestionnairesComponent::OTHER_CHOICE_TYPE_OTHER_FIELD_WITH_TEXT ?>', '<?php echo QuestionnairesComponent::MATRIX_TYPE_ROW_OR_NO_MATRIX; ?>')">
-                <?php echo __d('questionnaires', 'add another choice'); ?>
-            </label>
-        </div>
     </div>
 </div>
+<div class="row">
+    <div class="col-xs-12">
+        <p class="help-block small pull-right">
+            <?php echo __d('questionnaires', 'You can not use the character of |, : for choice text '); ?>
+        </p>
+    </div>
+
+</div>
+

@@ -2,6 +2,7 @@
  * Created by りか on 2015/02/18.
  */
 NetCommonsApp.constant('moment', moment);
+//NetCommonsApp.requires.push('ngSanitize');
 
 NetCommonsApp.controller('Questionnaires.edit.question',
     function($scope, NetCommonsWysiwyg, $timeout, moment) {

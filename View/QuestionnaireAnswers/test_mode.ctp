@@ -21,7 +21,7 @@
 		<?php echo $this->NetCommonsForm->hidden('Block.id'); ?>
 
 		<div class="row">
-			<div class="col-sm-12">
+			<div class="col-xs-12">
 				<h3><?php echo __d('questionnaires', 'Questionnaire answer period'); ?></h3>
 				<?php if ($questionnaire['Questionnaire']['answer_timing'] == QuestionnairesComponent::USES_USE): ?>
 					<?php echo date('Y/m/d H:i', strtotime($questionnaire['Questionnaire']['answer_start_period'])); ?>
@@ -34,7 +34,7 @@
 		</div>
 
 		<div class="row">
-			<div class="col-sm-12">
+			<div class="col-xs-12">
 				<h3><?php echo __d('questionnaires', 'Counting result display start date'); ?></h3>
 				<?php if ($questionnaire['Questionnaire']['total_show_timing'] == QuestionnairesComponent::USES_USE): ?>
 					<?php echo date('Y/m/d H:i', strtotime($questionnaire['Questionnaire']['total_show_start_period'])); ?>
@@ -46,7 +46,7 @@
 		</div>
 
 		<div class="row">
-			<div class="col-sm-12">
+			<div class="col-xs-12">
 				<h3><?php echo __d('questionnaires', 'Questionnaire method'); ?></h3>
 				<ul>
 					<li>

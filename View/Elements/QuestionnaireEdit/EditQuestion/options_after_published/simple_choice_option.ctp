@@ -13,7 +13,7 @@
  */
 ?>
 <div class="row">
-	<div class="col-sm-12">
+	<div class="col-xs-12">
 		<label class="checkbox-inline" ng-show="question.questionType != <?php echo QuestionnairesComponent::TYPE_SINGLE_SELECT_BOX; ?>">
 			<?php echo $this->NetCommonsForm->checkbox('QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.is_choice_horizon',
 			array(
@@ -50,7 +50,7 @@
 	</div>
 </div>
 <div class="row">
-	<div class="col-sm-12">
+	<div class="col-xs-12">
 		<ul class="list-group ">
 			<li class="list-group-item" ng-repeat="(cIndex, choice) in question.questionnaireChoice" >
 				<div class="form-inline">

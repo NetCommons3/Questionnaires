@@ -9,6 +9,7 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 
+echo $this->Wysiwyg->wysiwygScript();
 echo $this->element('Questionnaires.scripts');
 echo $this->NetCommonsHtml->script(array(
 	'/components/moment/min/moment.min.js',
@@ -82,33 +83,28 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 							<?php echo $this->element('Questionnaires.QuestionnaireEdit/EditQuestion/hidden_question_info_set'); ?>
 
 							<?php /* ここから質問本体設定 */
-								/* 必須? */
-								echo $this->QuestionEdit->questionInput('QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.is_require',
-									__d('questionnaires', 'Required'),
-									array(	'type' => 'checkbox',
-											'class' => '',
-											'ng-checked' => 'question.isRequire == ' . QuestionnairesComponent::USES_USE,
-											'ng-model' => 'question.isRequire',
-											'ng-disabled' => 'isPublished != 0',
-									),
-									__d('questionnaires', 'set answer to this question is required'));
 								/* 質問タイトル */
 								echo $this->QuestionEdit->questionInput('QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.question_value',
 									__d('questionnaires', 'question title'),
 									array('type' => 'text',
 										'ng-model' => 'question.questionValue',
 										'required' => 'required',
-										'ng-disabled' => 'isPublished != 0',
 									));
+								/* 必須 */
+								echo $this->QuestionEdit->questionInput('QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.is_require',
+								__d('questionnaires', 'Required'),
+								array(
+								'type' => 'checkbox',
+								'ng-checked' => 'question.isRequire == ' . QuestionnairesComponent::USES_USE,
+								'ng-model' => 'question.isRequire',
+								),
+								__d('questionnaires', 'set answer to this question is required'));
 								/* 質問文 */
 								echo $this->QuestionEdit->questionInput('QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.description',
 									__d('questionnaires', 'question sentence'),
 									array('type' => 'wysiwyg',
 										'id' => false,
 										'ng-model' => 'question.description',
-										'ui-tinymce' => 'tinymce.options',
-										'rows' => 5,
-										'ng-disabled' => 'isPublished != 0',
 									));
 								/* 質問種別 */
 								echo $this->QuestionEdit->questionInput('QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.question_type',
@@ -118,12 +114,11 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 										'options' => $questionTypeOptions,
 										'ng-model' => 'question.questionType',
 										'ng-change' => 'changeQuestionType($event, {{pageIndex}}, {{qIndex}})',
-										'ng-disabled' => 'isPublished != 0',
 										'empty' => null
 									));
 							?>
 							<div class="row form-group">
-								<div class="col-sm-12">
+								<div class="col-xs-12">
 									<div class="well">
 										<div ng-if="question.questionType == <?php echo QuestionnairesComponent::TYPE_SELECTION; ?>">
 											<?php echo $this->element($elementFolder . 'simple_choice_option'); ?>

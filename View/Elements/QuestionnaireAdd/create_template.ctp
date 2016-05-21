@@ -16,7 +16,7 @@
 	));
 ?>
 <div  uib-collapse="createOption != '<?php echo QuestionnairesComponent::QUESTIONNAIRE_CREATE_OPT_TEMPLATE; ?>'">
-	<div class="col-lg-11 col-lg-offset-1">
+	<div class="col-xs-11 col-xs-offset-1">
 		<?php echo $this->NetCommonsForm->input('template_file', array(
 			'type' => 'file',
 			'accept' => "text/comma-separated-values",

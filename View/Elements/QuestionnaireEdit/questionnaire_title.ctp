@@ -9,9 +9,16 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 ?>
-	<h1 class="questionnaire-setting-ttl">
+	<h1 class="">
 		<?php if (isset($this->data['Questionnaire']['title_icon'])) {
 			echo $this->TitleIcon->titleIcon($this->data['Questionnaire']['title_icon']);
 								}?>
 		{{questionnaire.questionnaire.title}}
+		<?php if ($this->action != 'edit'): ?>
+		<small>
+			<div class="help-block small">
+				<?php echo __d('questionnaires', 'If you want to change the questionnaire title, please edit in "Set questionnaire" step.'); ?>
+			</div>
+		</small>
+		<?php endif; ?>
 	</h1>

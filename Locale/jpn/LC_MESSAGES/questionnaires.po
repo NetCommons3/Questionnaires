@@ -419,7 +419,7 @@ msgstr "アンケートタイトル"
 
 #: /View/Elements/QuestionnaireAdd/create_new.ctp:23
 msgid "Please input questionnaire title"
-msgstr "アンケートタイトルを入力して下さい"
+msgstr "アンケートタイトルを入力してください"
 
 #: /View/Elements/QuestionnaireAdd/create_reuse.ctp:14
 msgid "Re-use past questionnaire"
@@ -523,14 +523,14 @@ msgstr "列の選択肢"
 #: /View/Elements/QuestionnaireEdit/EditQuestion/options_after_published/simple_choice_option.ctp:26
 #: /View/Elements/QuestionnaireEdit/EditQuestion/options_before_published/simple_choice_option.ctp:30
 msgid "horizontal choices"
-msgstr "選択肢を横並びにする"
+msgstr "横並び表示"
 msgid "randomaize choices"
-msgstr "選択肢をランダムに表示する"
+msgstr "ランダム表示"
 
 #: /View/Elements/QuestionnaireEdit/EditQuestion/options_after_published/simple_choice_option.ctp:37
 #: /View/Elements/QuestionnaireEdit/EditQuestion/options_before_published/simple_choice_option.ctp:41
 msgid "set page skip"
-msgstr "スキップロジックを設定する"
+msgstr "スキップページ設定"
 
 #: /View/Elements/QuestionnaireEdit/EditQuestion/options_after_published/text_option.ctp:24
 #: /View/Elements/QuestionnaireEdit/EditQuestion/options_before_published/text_option.ctp:32
@@ -567,7 +567,7 @@ msgstr "この選択肢を削除してもよろしいですか？"
 #: /View/Elements/QuestionnaireEdit/EditQuestion/options_before_published/matrix_choice_option.ctp:91
 #: /View/Elements/QuestionnaireEdit/EditQuestion/options_before_published/simple_choice_option.ctp:103
 msgid "add another choice"
-msgstr "その他の選択肢を追加する"
+msgstr "その他の選択肢を追加"
 
 #: /View/Elements/QuestionnaireEdit/EditQuestion/options_before_published/simple_choice_option.ctp:20;98
 msgid "add choices"
