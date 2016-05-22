@@ -142,7 +142,7 @@ msgstr "開始日時は終了日時より前の日時を指定する必要があ
 
 #: /Model/Questionnaire.php:164
 msgid "if you set the use key phrase period, please set key phrase text."
-msgstr "認証キーを使う場合、キーフレーズを設定してください"
+msgstr "認証キーを使う場合、キーフレーズを設定してください。"
 
 #: /Model/Questionnaire.php:168;184
 msgid "Authentication key setting , image authentication , either only one can not be selected."
@@ -184,7 +184,7 @@ msgstr "選択肢内容を入力してください。"
 #: /View/Elements/QuestionnaireEdit/EditQuestion/options_before_published/matrix_choice_option.ctp:71
 #: /View/Elements/QuestionnaireEdit/EditQuestion/options_before_published/simple_choice_option.ctp:89
 msgid "You can not use the character of |, : for choice text "
-msgstr "選択肢に「|」、「:」を使ってはいけません"
+msgstr "選択肢に「|」、「:」を使ってはいけません。"
 
 #: /Model/QuestionnaireChoice.php:103
 msgid "choice sequence is illegal."
@@ -262,7 +262,7 @@ msgstr "回答は%sから%sの範囲で入力してください。"
 #: /Model/Behavior/QuestionnaireAnswerMatrixSingleChoiceBehavior.php:113;119
 #: /Model/Behavior/QuestionnaireAnswerSingleListBehavior.php:90
 msgid "Invalid choice"
-msgstr "不正な選択です"
+msgstr "不正な選択です。"
 
 #: /Model/Behavior/QuestionnaireAnswerMatrixSingleChoiceBehavior.php:143
 msgid "Please enter something in other item"
@@ -419,7 +419,7 @@ msgstr "アンケートタイトル"
 
 #: /View/Elements/QuestionnaireAdd/create_new.ctp:23
 msgid "Please input questionnaire title"
-msgstr "アンケートタイトルを入力してください"
+msgstr "アンケートタイトルを入力してください。"
 
 #: /View/Elements/QuestionnaireAdd/create_reuse.ctp:14
 msgid "Re-use past questionnaire"
@@ -431,7 +431,7 @@ msgstr "過去のアンケート"
 
 #: /View/Elements/QuestionnaireAdd/create_reuse.ctp:34
 msgid "Refine by entering the part of the questionnaire name"
-msgstr "ここにアンケート名の一部を入力すると、下のリストの内容を絞り込むことができます"
+msgstr "ここにアンケート名の一部を入力すると、下のリストの内容を絞り込むことができます。"
 
 #: /View/Elements/QuestionnaireAdd/create_reuse.ctp:52
 msgid "Implementation"
@@ -668,19 +668,19 @@ msgstr "回答数"
 
 #: /View/Helper/QuestionnaireAnswerHelper.php:181
 msgid "Please enter a number between %s and %s"
-msgstr "%s から %s の間の数値を入力してください"
+msgstr "%s から %s の間の数値を入力してください。"
 
 #: /View/Helper/QuestionnaireAnswerHelper.php:183
 msgid "Please enter between %s letters and %s letters"
-msgstr "%s文字から%s文字の入力をしてください"
+msgstr "%s文字から%s文字の入力をしてください。"
 
 #: /View/Helper/QuestionnaireAnswerHelper.php:235
 msgid "Please choose one"
-msgstr "一つ選択してください"
+msgstr "一つ選択してください。"
 
 #: /View/Helper/QuestionnaireAnswerHelper.php:314;323;331
 msgid "Please enter at %s to %s"
-msgstr "%s から %sまでの間で入力してください"
+msgstr "%s から %sまでの間で入力してください。"
 
 #: /View/Helper/QuestionnaireStatusLabelHelper.php:31
 msgid "Undefined"
@@ -840,7 +840,7 @@ msgstr "サブタイトル"
 
 #: /View/QuestionnaireEdit/edit.ctp:53
 msgid "Please enter if there is a sub title"
-msgstr "サブタイトルを入力してください"
+msgstr "サブタイトルを入力してください。"
 
 #: /View/QuestionnaireEdit/edit.ctp:63
 msgid "set the answer period"
@@ -865,18 +865,6 @@ msgstr "ここで指定された日から集計結果を閲覧できるように
 #: /View/QuestionnaireEdit/edit.ctp:144
 msgid "Questionnaire answer mail"
 msgstr "アンケートの回答通知メール"
-
-#: /View/QuestionnaireEdit/edit.ctp:148
-msgid "Deliver e-mail when questionnaire has answered"
-msgstr "アンケートに回答されたらアンケート作成者にメールで通知する"
-
-#: /View/QuestionnaireEdit/edit.ctp:153
-msgid "answer mail subject"
-msgstr "回答通知メールタイトル"
-
-#: /View/QuestionnaireEdit/edit.ctp:156
-msgid "answer mail text"
-msgstr "回答通知メール本文"
 
 msgid "questionnaire.answer.mail.subject"
 msgstr "[{X-SITE_NAME}-{X-PLUGIN_NAME}]{X-SUBJECT}({X-ROOM})回答通知"
