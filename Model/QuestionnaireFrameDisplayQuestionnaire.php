@@ -67,6 +67,15 @@ class QuestionnaireFrameDisplayQuestionnaire extends QuestionnairesAppModel {
  * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
  */
 	public function beforeValidate($options = array()) {
+		// チェック用のアンケートリストを確保しておく
+		$Questionnaire = ClassRegistry::init('Questionnaires.Questionnaire');
+		$questionnaires = $Questionnaire->find('all', array(
+			'conditions' => $Questionnaire->getBaseCondition(),
+			'recursive' => -1
+		));
+		$this->chkQuestionnaireList = Hash::combine(
+			$questionnaires, '{n}.Questionnaire.id', '{n}.Questionnaire.key');
+
 		$this->validate = Hash::merge($this->validate, array(
 			'questionnaire_key' => array(
 				'notBlank' => array(
@@ -96,15 +105,6 @@ class QuestionnaireFrameDisplayQuestionnaire extends QuestionnairesAppModel {
  */
 	public function validateFrameDisplayQuestionnaire($data) {
 		$frameSetting = $data['QuestionnaireFrameSetting'];
-
-		// チェック用のアンケートリストを確保しておく
-		$Questionnaire = ClassRegistry::init('Questionnaires.Questionnaire');
-		$questionnaires = $Questionnaire->find('all', array(
-			'conditions' => $Questionnaire->getBaseCondition(),
-			'recursive' => -1
-		));
-		$this->chkQuestionnaireList = Hash::combine(
-			$questionnaires, '{n}.Questionnaire.id', '{n}.Questionnaire.key');
 
 		if ($frameSetting['display_type'] == QuestionnairesComponent::DISPLAY_TYPE_SINGLE) {
 			$saveData = Hash::extract($data, 'Single.QuestionnaireFrameDisplayQuestionnaire');

@@ -866,20 +866,12 @@ msgstr ""
 #: /View/QuestionnaireEdit/edit.ctp:144
 msgid "Questionnaire answer mail"
 msgstr ""
-msgid "answer mail subject"
-msgstr ""
-msgid "answer mail body"
-msgstr ""
 msgid "questionnaire.answer.mail.subject"
 msgstr ""
 msgid "questionnaire.answer.mail.body"
 msgstr ""
 msgid "questionnaire.answer.mail.body.help"
 msgstr ""
-
-#: /View/QuestionnaireEdit/edit.ctp:148
-msgid "Deliver e-mail when questionnaire has answered"
-msgstr "アンケートに回答されたらアンケート作成者にメールで通知する"
 
 #: /View/QuestionnaireEdit/edit.ctp:162
 msgid "Thanks page message settings"
