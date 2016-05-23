@@ -68,7 +68,37 @@ class QuestionnaireSaveFrameDisplayQuestionnaireTest extends NetCommonsSaveTest 
 	public function setUp() {
 		parent::setUp();
 		Current::$current['Frame']['key'] = 'frame_3';
-		$this->_mockForReturn($this->_modelName, 'Questionnaires.Questionnaire', 'getBaseCondition', array());
+		$this->_mockForAny(
+			$this->_modelName,
+			'Questionnaires.Questionnaire',
+			'getBaseCondition', array());
+	}
+/**
+ * Mockセット
+ *
+ * @param string $model モデル名
+ * @param string $mockModel Mockのモデル
+ * @param string $mockMethod Mockのメソッド
+ * @param mixed $return 戻り値
+ * @return void
+ */
+	protected function _mockForAny($model, $mockModel, $mockMethod, $return) {
+		list($mockPlugin, $mockModel) = pluginSplit($mockModel);
+
+		if (is_string($mockMethod)) {
+			$mockMethod = array($mockMethod);
+		}
+		$mockClassName = get_class($this->$model->$mockModel);
+		if (substr($mockClassName, 0, strlen('Mock_')) !== 'Mock_') {
+			$this->$model->$mockModel = $this->getMockForModel(
+				$mockPlugin . '.' . $mockModel, $mockMethod, array('plugin' => $mockPlugin)
+			);
+		}
+		foreach ($mockMethod as $method) {
+			$this->$model->$mockModel->expects($this->any())
+				->method($method)
+				->will($this->returnValue($return));
+		}
 	}
 /**
  * テストDataの取得
