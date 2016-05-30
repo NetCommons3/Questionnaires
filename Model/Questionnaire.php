@@ -49,6 +49,9 @@ class Questionnaire extends QuestionnairesAppModel {
 				'title', 'sub_title'
 			),
 		),
+		'Wysiwyg.Wysiwyg' //=> array(
+			//'fields' => array('total_comment', 'thanks_content')
+		//),
 	);
 
 /**
@@ -644,6 +647,7 @@ class Questionnaire extends QuestionnairesAppModel {
 		try {
 			$this->id = $questionnaireId;
 			$this->Behaviors->unload('Mails.MailQueue');
+			$this->Behaviors->unload('Wysiwyg.Wysiwyg');
 			if (! $this->saveField('export_key', $exportKey)) {
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}

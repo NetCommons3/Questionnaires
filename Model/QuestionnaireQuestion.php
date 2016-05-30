@@ -25,6 +25,9 @@ class QuestionnaireQuestion extends QuestionnairesAppModel {
  */
 	public $actsAs = array(
 		'NetCommons.OriginalKey',
+		'Wysiwyg.Wysiwyg'// => array(
+			//'fields' => array('question_value')
+		//),
 	);
 
 /**
