@@ -75,7 +75,7 @@ class QuestionnaireSettingSaveQuestionnaireSettingTest extends NetCommonsSaveTes
  *
  * @param int $id id
  * @param string $blockKey block key
- * @param bool $useWorkFlow use work flow
+ * @param bool $useWorkflow use work flow
  * @return array
  */
 	protected function _getData($id, $blockKey, $useWorkflow) {

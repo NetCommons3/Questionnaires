@@ -117,7 +117,7 @@ class QuestionnaireSaveQuestionnaireTest extends WorkflowSaveTest {
  * テストDataの取得
  *
  * @param string $id questionnaireId
- * @param string $questionType
+ * @param string $status
  * @return array
  */
 	private function __getData($id = 2, $status = '1') {

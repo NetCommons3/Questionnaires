@@ -79,7 +79,7 @@ class QuestionnaireGetNextPageTest extends NetCommonsGetTest {
  * テストDataの取得
  *
  * @param string $id questionnaireId
- * @param string $questionType
+ * @param string $status
  * @return array
  */
 	private function __getData($id = 3, $status = '1') {

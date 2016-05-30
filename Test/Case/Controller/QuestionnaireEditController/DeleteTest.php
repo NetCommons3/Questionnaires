@@ -74,7 +74,7 @@ class QuestionnaireEditControllerDeleteTest extends WorkflowControllerDeleteTest
 /**
  * テストDataの取得
  *
- * @param string $faqQuestionKey 質問ID
+ * @param string $questionnaireKey 質問ID
  * @return array
  */
 	private function __getData($questionnaireKey = 'questionnaire_2') {

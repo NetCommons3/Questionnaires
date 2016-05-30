@@ -77,7 +77,7 @@ class SaveFrameSettingTest extends NetCommonsSaveTest {
 /**
  * テストDataの取得
  *
- * @param string $key pageKey
+ * @param int $displayType display type
  * @return array
  */
 	protected function _getData($displayType = QuestionnairesComponent::DISPLAY_TYPE_SINGLE) {
