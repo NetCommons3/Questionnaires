@@ -14,6 +14,9 @@ echo $this->NetCommonsHtml->script(array(
 ?>
 <article class="block-setting-body">
 	<?php echo $this->BlockTabs->main(BlockTabsHelper::MAIN_TAB_BLOCK_INDEX); ?>
+
+	<?php echo $this->BlockIndex->description(); ?>
+
 	<div class="tab-content">
 		<?php echo $this->BlockIndex->addLink('',
 		array(

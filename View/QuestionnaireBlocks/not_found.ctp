@@ -13,6 +13,8 @@
 <article class="block-setting-body">
 	<?php echo $this->BlockTabs->main(BlockTabsHelper::MAIN_TAB_BLOCK_INDEX); ?>
 
+	<?php echo $this->BlockIndex->notFoundDescription(); ?>
+
 	<div class="tab-content">
 		<div class="pull-right">
 			<?php echo $this->element('Questionnaires.Questionnaires/add_button'); ?>
