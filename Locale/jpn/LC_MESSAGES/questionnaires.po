@@ -947,3 +947,6 @@ msgstr "非会員にも回答することを許した場合は、アンケート
 # 新着関連
 msgid "%s started"
 msgstr "「%s」が公開されました。"
+
+msgid "Content creatable roles"
+msgstr "アンケートを作成できる権限"

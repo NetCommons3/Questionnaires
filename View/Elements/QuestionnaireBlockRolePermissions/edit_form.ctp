@@ -17,7 +17,7 @@
 
 <?php echo $this->element('Blocks.block_creatable_setting', array(
 		'settingPermissions' => array(
-			'content_creatable' => __d('blocks', 'Content creatable roles'),
+			'content_creatable' => __d('questionnaires', 'Content creatable roles'),
 		),
 	)); ?>
 

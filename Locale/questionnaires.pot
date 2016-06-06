@@ -943,3 +943,6 @@ msgstr "{X-SITE_NAME} : サイト名<br />{X-PLUGIN_NAME} : プラグイン名<b
 
 msgid "If you allowed to say also to non-members , the questionnaire will be possible to repeatedly answer."
 msgstr ""
+
+msgid "Content creatable roles"
+msgstr ""
