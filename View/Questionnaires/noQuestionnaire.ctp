@@ -26,10 +26,4 @@
 		<?php echo __d('questionnaires', 'no questionnaire'); ?>
 	</p>
 
-	<?php if (Current::permission('content_creatable')) : ?>
-		<p>
-			<?php echo __d('questionnaires', 'Please create new questionnaire by pressing the "+" button.'); ?>
-		</p>
-	<?php endif ?>
-
 </article>
