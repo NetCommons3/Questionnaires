@@ -591,7 +591,7 @@ class Questionnaire extends QuestionnairesAppModel {
 			CakeLog::error($ex);
 			throw $ex;
 		}
-		return $questionnaire;
+		return $saveQuestionnaire;
 	}
 
 /**

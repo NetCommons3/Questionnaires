@@ -145,7 +145,6 @@ class WysIsWygDownloader {
 			foreach ($matches[3] as $uploadId) {
 				// ファイル情報を取得してくる
 				$uploadFile = $this->UploadFiles->findById($uploadId);
-				CakeLog::debug(print_r($uploadFile, true));
 				if ($uploadFile) {
 					$uploadFile = $uploadFile['UploadFiles'];
 					// ルームチェック

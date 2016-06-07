@@ -49,7 +49,8 @@ $jsPastQuestionnaires = NetCommonsAppController::camelizeKeyRecursive($pastQuest
 			</div>
 
 			<div class="text-center">
-				<?php echo $this->BackTo->pageLinkButton(__d('net_commons', 'Cancel'), array('icon' => 'remove')); ?>
+				<?php echo $this->BackTo->linkButton(__d('net_commons', 'Cancel'), $cancelUrl);
+				?>
 				<?php echo $this->Button->save(__d('net_commons', 'NEXT'), array('icon' => 'chevron-right')) ?>
 			</div>
 

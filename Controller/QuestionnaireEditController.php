@@ -28,6 +28,13 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 	const	QUESTIONNAIRE_EDIT_SESSION_INDEX = 'Questionnaires.questionnaireEdit.';
 
 /**
+ * layout
+ *
+ * @var array
+ */
+	public $layout = '';
+
+/**
  * use model
  *
  * @var array
@@ -145,6 +152,8 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 				}
 			}
 		}
+		// ここへは設定画面の一覧から来たのか、一般画面の一覧から来たのか
+		$this->_decideSettingLayout();
 	}
 /**
  * Before render callback. beforeRender is called before the view file is rendered.
@@ -303,8 +312,24 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 			$this->Session->delete(
 				self::QUESTIONNAIRE_EDIT_SESSION_INDEX . $this->_getQuestionnaireEditSessionIndex());
 
-			// ページトップへリダイレクト
-			$this->redirect(NetCommonsUrl::backToPageUrl());
+			if ($this->layout == 'NetCommons.setting') {
+				$this->redirect(NetCommonsUrl::backToIndexUrl('default_setting_action'));
+			} else {
+				// 回答画面（詳細）へリダイレクト
+				if ($saveQuestionnaire['Questionnaire']['status'] == WorkflowComponent::STATUS_PUBLISHED) {
+					$action = 'view';
+				} else {
+					$action = 'test_mode';
+				}
+				$urlArray = array(
+					'controller' => 'questionnaire_answers',
+					'action' => $action,
+					Current::read('Block.id'),
+					$this->_getQuestionnaireKey($saveQuestionnaire),
+					'frame_id' => Current::read('Frame.id'),
+				);
+				$this->redirect(NetCommonsUrl::actionUrl($urlArray));
+			}
 			return;
 		} else {
 			// 指定されて取り出したアンケートデータをセッションキャッシュに書く
@@ -340,7 +365,11 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 
 		$this->Session->delete(self::QUESTIONNAIRE_EDIT_SESSION_INDEX . $this->_sessionIndex);
 
-		$this->redirect(NetCommonsUrl::backToPageUrl());
+		if ($this->layout == 'NetCommons.setting') {
+			$this->redirect(NetCommonsUrl::backToIndexUrl('default_setting_action'));
+		} else {
+			$this->redirect(NetCommonsUrl::backToPageUrl());
+		}
 	}
 
 /**
@@ -359,14 +388,18 @@ class QuestionnaireEditController extends QuestionnairesAppController {
  * @return void
  */
 	protected function _getActionUrl($method) {
-		return NetCommonsUrl::actionUrl(array(
+		$urlArray = array(
 			'controller' => Inflector::underscore($this->name),
 			'action' => $method,
 			Current::read('Block.id'),
 			$this->_getQuestionnaireKey($this->_questionnaire),
 			'frame_id' => Current::read('Frame.id'),
 			's_id' => $this->_getQuestionnaireEditSessionIndex()
-		));
+		);
+		if ($this->layout == 'NetCommons.setting') {
+			$urlArray['q_mode'] = 'setting';
+		}
+		return NetCommonsUrl::actionUrl($urlArray);
 	}
 /**
  * __setupViewParameters method
@@ -397,6 +430,13 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 		));
 
 		$this->set('postUrl', array('url' => $this->_getActionUrl($this->action)));
+		if ($this->layout == 'NetCommons.setting') {
+			$this->set('cancelUrl', array('url' => NetCommonsUrl::backToIndexUrl('default_setting_action')));
+		} else {
+			$this->set('cancelUrl', array('url' => NetCommonsUrl::backToPageUrl()));
+		}
+		$this->set('deleteUrl', array('url' => $this->_getActionUrl('delete')));
+
 		$this->set('questionTypeOptions', $this->Questionnaires->getQuestionTypeOptionsWithLabel());
 		$this->set('newPageLabel', __d('questionnaires', 'page'));
 		$this->set('newQuestionLabel', __d('questionnaires', 'New Question'));
@@ -404,6 +444,7 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 		$this->set('newChoiceColumnLabel', __d('questionnaires', 'new column choice'));
 		$this->set('newChoiceOtherLabel', __d('questionnaires', 'other choice'));
 		$this->set('isPublished', $isPublished);
+
 		$this->request->data = $questionnaire;
 		$this->request->data['Frame'] = Current::read('Frame');
 		$this->request->data['Block'] = Current::read('Block');

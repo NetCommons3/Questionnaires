@@ -84,7 +84,7 @@ class QuestionnaireBlocksControllerIndexTest extends BlocksControllerTest {
 			'plugin' => $this->plugin,
 			'controller' => $this->_controller,
 			'action' => 'index',
-			'frame_id' => $frameId
+			'frame_id' => $frameId,
 		);
 		$result = $this->_testNcAction($url, array('method' => 'get'));
 
@@ -94,6 +94,7 @@ class QuestionnaireBlocksControllerIndexTest extends BlocksControllerTest {
 		$addLink['controller'] = 'questionnaire_add';
 		$addLink['action'] = 'add';
 		$addLink['block_id'] = $blockId;
+		$addLink['q_mode'] = 'setting';
 		$this->assertRegExp(
 			'/<a href=".*?' . preg_quote(NetCommonsUrl::actionUrl($addLink), '/') . '.*?".*?>/', $result
 		);
@@ -105,6 +106,7 @@ class QuestionnaireBlocksControllerIndexTest extends BlocksControllerTest {
 		$editLink['action'] = 'edit_question';
 		$editLink['block_id'] = $blockId;
 		$editLink['key'] = 'questionnaire_4';
+		$editLink['q_mode'] = 'setting';
 		$this->assertRegExp(
 			'/<a href=".*?' . preg_quote(NetCommonsUrl::actionUrl($editLink), '/') . '.*?".*?>/', $result
 		);
@@ -162,6 +164,7 @@ class QuestionnaireBlocksControllerIndexTest extends BlocksControllerTest {
 			'controller' => $this->_controller,
 			'action' => 'index',
 			'frame_id' => $frameId,
+			'limit' => 10,
 		);
 		if (! $isFirst) {
 			$url[] = 'page:' . $page;

@@ -86,7 +86,7 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 			</div>
 		</div>
 		<div class="panel-footer text-center">
-			<?php echo $this->Wizard->buttons('edit_result'); ?>
+			<?php echo $this->Wizard->buttons('edit_result', $cancelUrl); ?>
 		</div>
 	<?php echo $this->NetCommonsForm->end(); ?>
 </article>

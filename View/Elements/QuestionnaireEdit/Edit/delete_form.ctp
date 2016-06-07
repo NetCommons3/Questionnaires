@@ -10,15 +10,10 @@
  */
 ?>
 
-<?php echo $this->NetCommonsForm->create('Questionnaire', array(
+<?php
+	echo $this->NetCommonsForm->create('Questionnaire', array(
 			'type' => 'delete',
-			'url' => NetCommonsUrl::actionUrl(array(
-				'controller' => 'questionnaire_edit',
-				'action' => 'delete',
-				'block_id' => Current::read('Block.id'),
-				'frame_id' => Current::read('Frame.id'),
-				'key' => h($this->data['Questionnaire']['key'])
-			))
+			'url' => $deleteUrl['url']
 		)); ?>
 
 	<?php echo $this->NetCommonsForm->hidden('Frame.id'); ?>

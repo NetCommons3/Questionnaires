@@ -76,6 +76,7 @@ class GetAnswerSummaryCsvTest extends NetCommonsGetTest {
 		$this->QuestionnaireAnswer->Behaviors->unload('QuestionnaireAnswerSingleList');
 		$this->QuestionnaireAnswer->Behaviors->unload('QuestionnaireAnswerMatrixSingleChoice');
 		$this->QuestionnaireAnswer->Behaviors->unload('QuestionnaireAnswerMatrixMultipleChoice');
+		$this->QuestionnaireAnswerSummary->Behaviors->unload('Mails.MailQueue');
 		// ダミーデータを入れます
 		$summaryData = array(
 			array('questionnaire_4', ''),

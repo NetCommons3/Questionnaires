@@ -24,6 +24,7 @@ echo $this->NetCommonsHtml->script(array(
 			'action' => 'add',
 			'frame_id' => Current::read('Frame.id'),
 			'block_id' => Current::read('Block.id'),
+			'q_mode' => 'setting'
 		)); ?>
 
 		<div id="nc-questionnaire-setting-<?php echo Current::read('Frame.id'); ?>">
@@ -71,7 +72,8 @@ echo $this->NetCommonsHtml->script(array(
 								'action' => 'edit_question',
 								//Current::read('Block.id'),
 								$questionnaire['Questionnaire']['key'],
-								'frame_id' => Current::read('Frame.id')
+								'frame_id' => Current::read('Frame.id'),
+								'q_mode' => 'setting'
 							)
 						)); ?>
 						<?php echo $this->BlockIndex->tableData(

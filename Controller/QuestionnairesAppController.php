@@ -101,6 +101,22 @@ class QuestionnairesAppController extends AppController {
 	}
 
 /**
+ * _decideSettingLayout
+ *
+ * セッティング系の画面からの流れなのかどうかを判断し、レイアウトを決める
+ * 
+ * @return void
+ */
+	protected function _decideSettingLayout() {
+		$isSetting = Hash::get($this->request->params, 'named.q_mode');
+		if ($isSetting == 'setting') {
+			if (Current::permission('block_editable')) {
+				$this->layout = 'NetCommons.setting';
+			}
+			return;
+		}
+	}
+/**
  * isAbleTo
  * Whether access to survey of the specified ID
  * Forced URL hack guard
