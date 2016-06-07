@@ -705,7 +705,7 @@ msgstr "新しいアンケートを作成します。作成方法を選んでく
 #: /View/QuestionnaireAnswerSummaries/view.ctp:86
 #: /View/QuestionnaireAnswers/no_more_answer.ctp:14
 msgid "Back to Top"
-msgstr "Topに戻る"
+msgstr "戻る"
 
 #: /View/QuestionnaireAnswers/confirm.ctp:22
 msgid "Please confirm your answers."
@@ -816,7 +816,7 @@ msgstr "このアンケートのテスト回答を始める"
 
 #: /View/QuestionnaireAnswers/thanks.ctp:32
 msgid "Back to page"
-msgstr "アンケート一覧に戻る"
+msgstr "アンケート一覧へ"
 
 #: /View/QuestionnaireAnswers/thanks.ctp:37
 msgid "Aggregate"
