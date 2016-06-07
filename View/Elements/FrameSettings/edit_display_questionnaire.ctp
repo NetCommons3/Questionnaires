@@ -50,8 +50,7 @@
 					<?php echo $this->NetCommonsForm->checkbox('List.QuestionnaireFrameDisplayQuestionnaire.{{index}}.is_display', array(
 					'options' => array(true => ''),
 					'label' => false,
-					'div' => false,
-					'class' => '',
+					'div' => 'form-inline',
 					'ng-model' => 'isDisplay[index]'
 					));
 					?>
