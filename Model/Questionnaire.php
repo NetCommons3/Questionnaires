@@ -49,9 +49,9 @@ class Questionnaire extends QuestionnairesAppModel {
 				'title', 'sub_title'
 			),
 		),
-		'Wysiwyg.Wysiwyg' //=> array(
-			//'fields' => array('total_comment', 'thanks_content')
-		//),
+		'Wysiwyg.Wysiwyg' => array(
+			'fields' => array('total_comment', 'thanks_content')
+		),
 	);
 
 /**

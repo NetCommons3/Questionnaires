@@ -11,7 +11,7 @@
 App::uses('QuestionnairesAppModel', 'Questionnaires.Model');
 App::uses('TemporaryUploadFile', 'Files.Utility');
 App::uses('UnZip', 'Files.Utility');
-App::uses('WysIsWygDownloader', 'Questionnaires.Utility');
+App::uses('WysiwygZip', 'Wysiwyg.Utility');
 
 /**
  * Summary for ActionQuestionnaireAdd Model
@@ -332,7 +332,7 @@ class ActionQuestionnaireAdd extends QuestionnairesAppModel {
  * @return array QuestionnaireData
  */
 	protected function _getQuestionnaires($folderPath, $questionnaires, $importKey) {
-		$wysiswyg = new WysIsWygDownloader();
+		$wysiswyg = new WysiwygZip();
 
 		foreach ($questionnaires as &$q) {
 			// WysIsWygのデータを入れなおす
@@ -356,7 +356,7 @@ class ActionQuestionnaireAdd extends QuestionnairesAppModel {
 						// keyと同じ名前のフォルダの下にあるkeyの名前のZIPファイルを渡して
 						// その返ってきた値をこのカラムに設定
 						$value =
-							$wysiswyg->getFromWysIsWygZIP(
+							$wysiswyg->getFromWysiwygZip(
 								$folderPath . DS . $value, $model->alias . '.' . $columnName);
 					}
 				}

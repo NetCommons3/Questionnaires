@@ -9,7 +9,7 @@
  */
 
 App::uses('QuestionnairesAppModel', 'Questionnaires.Model');
-App::uses('WysIsWygDownloader', 'Questionnaires.Utility');
+App::uses('WysiwygZip', 'Wysiwyg.Utility');
 
 /**
  * Summary for Questionnaire Model
@@ -117,7 +117,7 @@ class QuestionnaireExport extends QuestionnairesAppModel {
  * @return void
  */
 	public function putToZip($zipFile, $zipData) {
-		$wysiswyg = new WysIsWygDownloader();
+		$wysiswyg = new WysiwygZip();
 
 		// アンケートデータの中でもWYSISWYGデータのものについては
 		// フォルダ別に確保(フォルダの中にZIPがある）
@@ -137,7 +137,7 @@ class QuestionnaireExport extends QuestionnairesAppModel {
 			$columnName = substr($key, strrpos($key, '.') + 1);
 			if ($model->hasField($columnName)) {
 				if ($model->getColumnType($columnName) == 'text') {
-					$wysiswygZipFile = $wysiswyg->createWysIsWygZIP($model->alias . '.' . $columnName, $value);
+					$wysiswygZipFile = $wysiswyg->createWysiwygZip($value, $model->alias . '.' . $columnName);
 					$wysiswygFileName = $key . '.zip';
 					$zipFile->addFile($wysiswygZipFile, $wysiswygFileName);
 					$value = $wysiswygFileName;
