@@ -686,17 +686,25 @@ class Questionnaire extends QuestionnairesAppModel {
  * clearQuestionnaireId アンケートデータからＩＤのみをクリアする
  *
  * @param array &$questionnaire アンケートデータ
+ * @param bool $isIdOnly 純粋にIDフィールドのみをクリアするのか
  * @return void
  */
-	public function clearQuestionnaireId(&$questionnaire) {
+	public function clearQuestionnaireId(&$questionnaire, $isIdOnly = false) {
 		foreach ($questionnaire as $qKey => $q) {
 			if (is_array($q)) {
 				$this->clearQuestionnaireId($questionnaire[$qKey]);
-			} elseif (preg_match('/^id$/', $qKey) ||
-				preg_match('/^key$/', $qKey) ||
-				preg_match('/^created(.*?)/', $qKey) ||
-				preg_match('/^modified(.*?)/', $qKey)) {
-				unset($questionnaire[$qKey]);
+			} else {
+				if ($isIdOnly) {
+					$judge = preg_match('/^id$/', $qKey);
+				} else {
+					$judge = preg_match('/^id$/', $qKey) ||
+						preg_match('/^key$/', $qKey) ||
+						preg_match('/^created(.*?)/', $qKey) ||
+						preg_match('/^modified(.*?)/', $qKey);
+				}
+				if ($judge) {
+					unset($questionnaire[$qKey]);
+				}
 			}
 		}
 	}

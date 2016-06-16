@@ -204,6 +204,7 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 			if ($this->Questionnaire->hasPublished($questionnaire) == 0) {
 				$questionnaire['QuestionnairePage'] = $postQuestionnaire['QuestionnairePage'];
 			} else {
+				$this->Questionnaire->clearQuestionnaireId($questionnaire, true);
 				// booleanの値がPOST時と同じようになるように調整
 				$questionnaire['QuestionnairePage'] =
 					QuestionnairesAppController::changeBooleansToNumbers(
