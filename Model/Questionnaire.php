@@ -688,12 +688,14 @@ class Questionnaire extends QuestionnairesAppModel {
  * @param array &$questionnaire アンケートデータ
  * @param bool $isIdOnly 純粋にIDフィールドのみをクリアするのか
  * @return void
+ * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
  */
 	public function clearQuestionnaireId(&$questionnaire, $isIdOnly = false) {
 		foreach ($questionnaire as $qKey => $q) {
 			if (is_array($q)) {
-				$this->clearQuestionnaireId($questionnaire[$qKey]);
+				$this->clearQuestionnaireId($questionnaire[$qKey], $isIdOnly);
 			} else {
+				$judge = false;
 				if ($isIdOnly) {
 					$judge = preg_match('/^id$/', $qKey);
 				} else {
