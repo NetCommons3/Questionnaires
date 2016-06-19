@@ -37,7 +37,7 @@ echo $this->NetCommonsHtml->script(array(
 					); ?>
 					<?php echo $this->BlockIndex->tableHeader(
 						'Questionnaire.title', __d('questionnaires', 'Title'),
-						array('sort' => true)
+						array('sort' => true, 'editUrl' => true)
 					); ?>
 					<?php echo $this->BlockIndex->tableHeader(
 						'Questionnaire.modified', __d('net_commons', 'Updated date'),
