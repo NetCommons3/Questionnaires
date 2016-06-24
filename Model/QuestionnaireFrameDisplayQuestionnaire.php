@@ -185,7 +185,13 @@ class QuestionnaireFrameDisplayQuestionnaire extends QuestionnairesAppModel {
 
 		foreach ($data['List']['QuestionnaireFrameDisplayQuestionnaire'] as $value) {
 			$questionnaireKey = $value['questionnaire_key'];
-			$isDisplay = $value['is_display'];
+			// 何かinputの実現時にどのメソッド呼ぶかで配列で来たり値で来たりするんだ..
+			// 仕方ないのでくる値のタイプによって見るところを変更する
+			if (is_array($value['is_display'])) {
+				$isDisplay = $value['is_display'][0];
+			} else {
+				$isDisplay = $value['is_display'];
+			}
 			$saveQs = array(
 				'frame_key' => $frameKey,
 				'questionnaire_key' => $questionnaireKey
