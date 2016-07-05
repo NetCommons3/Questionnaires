@@ -33,6 +33,7 @@ class QuestionnaireAnswerSummary extends QuestionnairesAppModel {
 				'X-SUBJECT' => 'Questionnaire.title',
 			),
 			'keyField' => 'id',
+			'typeKey' => MailSettingFixedPhrase::ANSWER_TYPE,
 		),
 		'Mails.MailQueueDelete',
 	);
