@@ -116,11 +116,20 @@ class QuestionnaireFrameSettingsController extends QuestionnaireBlocksController
 		}
 
 		$questionnaires = $this->Questionnaire->find('all', array(
-			'fields' => array('Questionnaire.*', 'QuestionnaireFrameDisplayQuestionnaire.*'),
+			'fields' => array(
+				'Questionnaire.id',
+				'Questionnaire.key',
+				'Questionnaire.status',
+				'Questionnaire.title',
+				'Questionnaire.answer_start_period',
+				'Questionnaire.answer_end_period',
+				'Questionnaire.is_total_show',
+				'Questionnaire.modified',
+				'QuestionnaireFrameDisplayQuestionnaire.id',
+				'QuestionnaireFrameDisplayQuestionnaire.frame_key',
+				'QuestionnaireFrameDisplayQuestionnaire.questionnaire_key'),
 			'conditions' => $this->Questionnaire->getBaseCondition(),
 			'order' => array('Questionnaire.modified' => 'DESC'),
-			//'page' => 1,
-			//'limit' => 1000,
 			'recursive' => -1,
 			'joins' => array(
 				array(
@@ -134,7 +143,6 @@ class QuestionnaireFrameSettingsController extends QuestionnaireBlocksController
 				)
 			)
 		));
-		//$questionnaires = $this->paginate('Questionnaire');
 		$this->set('questionnaires', $questionnaires);
 	}
 }

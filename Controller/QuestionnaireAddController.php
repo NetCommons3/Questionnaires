@@ -108,6 +108,9 @@ class QuestionnaireAddController extends QuestionnairesAppController {
 		// 過去データ 取り出し
 		$pastQuestionnaires = $this->Questionnaire->find('all',
 			array(
+				'fields' => array(
+					'id', 'title', 'status', 'answer_timing', 'answer_start_period', 'answer_end_period',
+				),
 				'conditions' => $this->Questionnaire->getBaseCondition(),
 				'offset' => 0,
 				'limit' => 1000,
