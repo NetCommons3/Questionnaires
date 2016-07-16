@@ -154,8 +154,8 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 				<?php echo $this->element('Questionnaires.QuestionnaireEdit/Edit/delete_form'); ?>
 			</div>
 		<?php endif; ?>
+	</div>
 
 	<?php echo $this->Workflow->comments(); ?>
 
-	</div>
 </article>
