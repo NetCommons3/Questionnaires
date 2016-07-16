@@ -339,7 +339,8 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 				$this->_questionnaire);
 			$this->__setupViewParameters($this->_questionnaire, $this->_getActionUrl('edit_result'));
 		}
-		$comments = $this->Questionnaire->getCommentsByContentKey($this->_questionnaire['Questionnaire']['key']);
+		$comments = $this->Questionnaire->getCommentsByContentKey(
+			$this->_questionnaire['Questionnaire']['key']);
 		$this->set('comments', $comments);
 	}
 
