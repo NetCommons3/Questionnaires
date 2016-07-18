@@ -330,6 +330,11 @@ class QuestionnaireEditControllerEditTest extends WorkflowControllerEditTest {
 			'assert' => array('method' => 'assertInput', 'type' => 'input', 'name' => '_method', 'value' => 'DELETE'),
 		)));
 
+		// セッティングモードからの
+		array_push($results, Hash::merge($results[0], array(
+			'urlOptions' => array('frame_id' => null, 'q_mode' => 'setting'),
+			'assert' => array('method' => 'assertInput', 'type' => 'input', 'name' => '_method', 'value' => 'DELETE'),
+		)));
 		return $results;
 	}
 
