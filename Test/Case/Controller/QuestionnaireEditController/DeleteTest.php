@@ -249,7 +249,7 @@ class QuestionnaireEditControllerDeleteTest extends WorkflowControllerDeleteTest
 			//フレームID指定なしテスト
 			array(
 				'data' => $data, 'role' => Role::ROOM_ROLE_KEY_ROOM_ADMINISTRATOR,
-				'urlOptions' => array('frame_id' => null, 'block_id' => $data['Block']['id'], 'key' => $data['Questionnaire']['key']),
+				'urlOptions' => array('frame_id' => null, 'block_id' => $data['Block']['id'], 'key' => $data['Questionnaire']['key'], 'q_mode' => 'setting'),
 			),
 		);
 	}

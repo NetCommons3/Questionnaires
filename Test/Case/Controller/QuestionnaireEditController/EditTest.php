@@ -392,6 +392,17 @@ class QuestionnaireEditControllerEditTest extends WorkflowControllerEditTest {
 				'data' => $this->__getData('questionnaire_4'), 'role' => Role::ROOM_ROLE_KEY_ROOM_ADMINISTRATOR,
 				'urlOptions' => array('frame_id' => $data['Frame']['id'], 'block_id' => $data['Block']['id'], 'action' => $this->_myAction, 's_id' => 'testSession'),
 			),
+			//--自分の記事(公開)セッティング画面から
+			array(
+				'data' => $this->__getData('questionnaire_4'), 'role' => Role::ROOM_ROLE_KEY_ROOM_ADMINISTRATOR,
+				'urlOptions' => array(
+					'frame_id' => $data['Frame']['id'],
+					'block_id' => $data['Block']['id'],
+					'action' => $this->_myAction,
+					'q_mode' => 'setting',
+					's_id' => 'testSession'
+				),
+			),
 		);
 	}
 
