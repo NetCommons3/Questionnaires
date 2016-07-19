@@ -210,6 +210,59 @@ class QuestionnaireAddControllerAddTest extends WorkflowControllerAddTest {
 
 		return $results;
 	}
+/**
+ * addアクションのGETテスト(編集権限)
+ *
+ * @param array $urlOptions URLオプション
+ * @param array $assert テストの期待値
+ * @param string|null $exception Exception
+ * @param string $return testActionの実行後の結果
+ * @dataProvider dataProviderAddGetByPublishable
+ * @return void
+ */
+	public function testAddGetByPublishable($urlOptions, $assert, $exception = null, $return = 'view') {
+		//ログイン
+		TestAuthGeneral::login($this, Role::ROOM_ROLE_KEY_ROOM_ADMINISTRATOR);
+
+		//テスト実施
+		$url = Hash::merge(array(
+			'plugin' => $this->plugin,
+			'controller' => $this->_controller,
+			'action' => 'add',
+		), $urlOptions);
+
+		$this->_testGetAction($url, $assert, $exception, $return);
+
+		//ログアウト
+		TestAuthGeneral::logout($this);
+	}
+/**
+ * addアクションのGETテスト(編集権限)用DataProvider
+ *
+ * ### 戻り値
+ *  - urlOptions: URLオプション
+ *  - assert: テストの期待値
+ *  - exception: Exception
+ *  - return: testActionの実行後の結果
+ *
+ * @return array
+ */
+	public function dataProviderAddGetByPublishable() {
+		$data = $this->__getData();
+		$results = array();
+
+		//作成権限あり
+		$base = 0;
+		// 正しいフレームIDとブロックID
+		$results[0] = array(
+			'urlOptions' => array(
+				'frame_id' => $data['Frame']['id'],
+				'block_id' => $data['Block']['id'],
+				'q_mode' => 'setting'),
+			'assert' => array('method' => 'assertNotEmpty'),
+		);
+		return $results;
+	}
 
 /**
  * addアクションのPOSTテスト用DataProvider
@@ -246,6 +299,14 @@ class QuestionnaireAddControllerAddTest extends WorkflowControllerAddTest {
 			array(
 				'data' => $data, 'role' => Role::ROOM_ROLE_KEY_ROOM_ADMINISTRATOR,
 				'urlOptions' => array('frame_id' => null, 'block_id' => $data['Block']['id']),
+			),
+			//セッティングモードからの
+			array(
+				'data' => $data, 'role' => Role::ROOM_ROLE_KEY_ROOM_ADMINISTRATOR,
+				'urlOptions' => array(
+					'frame_id' => $data['Frame']['id'],
+					'block_id' => $data['Block']['id'],
+					'q_mode' => 'setting'),
 			),
 		);
 	}

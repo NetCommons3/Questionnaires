@@ -352,6 +352,12 @@ class QuestionnaireEditControllerEditTest extends WorkflowControllerEditTest {
  */
 	public function dataProviderEditPost() {
 		$data = $this->__getData();
+		$publishData = $this->__getData('questionnaire_4');
+		$publishData = Hash::remove($publishData, 'save_' . WorkflowComponent::STATUS_IN_DRAFT);
+		$publishData = Hash::insert($publishData, 'save_' . WorkflowComponent::STATUS_PUBLISHED);
+		$publishData = Hash::merge($publishData, array(
+			'Questionnaire' => array('status' => WorkflowComponent::STATUS_PUBLISHED)));
+
 		return array(
 			//ログインなし
 			array(
@@ -396,6 +402,16 @@ class QuestionnaireEditControllerEditTest extends WorkflowControllerEditTest {
 			array(
 				'data' => $this->__getData('questionnaire_4'), 'role' => Role::ROOM_ROLE_KEY_ROOM_ADMINISTRATOR,
 				'urlOptions' => array('frame_id' => $data['Frame']['id'], 'block_id' => $data['Block']['id'], 'action' => $this->_myAction, 's_id' => 'testSession'),
+			),
+			//--自分の記事(公開)
+			array(
+				'data' => $publishData,
+				'role' => Role::ROOM_ROLE_KEY_ROOM_ADMINISTRATOR,
+				'urlOptions' => array(
+					'frame_id' => $data['Frame']['id'],
+					'block_id' => $data['Block']['id'],
+					'action' => $this->_myAction,
+					's_id' => 'testSession'),
 			),
 			//--自分の記事(公開)セッティング画面から
 			array(
