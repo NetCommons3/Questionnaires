@@ -207,9 +207,10 @@ class QuestionnaireUtilHelper extends AppHelper {
 		if (isset($options['class'])) {
 			$btnClass = 'btn btn-' . $options['class'];
 		}
-		if (isset($options['size'])) {
-			$btnClass .= ' btn-' . $options['size'];
-		}
+		// ボタンのサイズを指定することはないのでカット
+		//if (isset($options['size'])) {
+		//	$btnClass .= ' btn-' . $options['size'];
+		//}
 
 		$title = '';
 		if (isset($options['title'])) {
