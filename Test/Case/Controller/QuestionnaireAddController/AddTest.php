@@ -252,7 +252,6 @@ class QuestionnaireAddControllerAddTest extends WorkflowControllerAddTest {
 		$results = array();
 
 		//作成権限あり
-		$base = 0;
 		// 正しいフレームIDとブロックID
 		$results[0] = array(
 			'urlOptions' => array(
