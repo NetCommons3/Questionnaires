@@ -104,7 +104,7 @@ class QuestionnairesAppController extends AppController {
  * _decideSettingLayout
  *
  * セッティング系の画面からの流れなのかどうかを判断し、レイアウトを決める
- * 
+ *
  * @return void
  */
 	protected function _decideSettingLayout() {
@@ -260,8 +260,8 @@ class QuestionnairesAppController extends AppController {
  * @return string
  */
 	protected function _getQuestionnaireKeyFromPass() {
-		if (isset($this->params['pass'][QuestionnairesComponent::QUESTIONNAIRE_KEY_PASS_INDEX])) {
-			$key = $this->params['pass'][QuestionnairesComponent::QUESTIONNAIRE_KEY_PASS_INDEX];
+		if (isset($this->params['key'])) {
+			$key = $this->params['key'];
 			if (strpos($key, 's_id:') === 0) {
 				return '';
 			}
