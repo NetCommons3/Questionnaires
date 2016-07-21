@@ -123,7 +123,7 @@ class QuestionnaireAnswerSummary extends QuestionnairesAppModel {
 				'action' => 'index',
 				Current::read('Block.id'),
 				'frame_id' => Current::read('Frame.id'),
-			));
+			), true);
 			$this->setAddEmbedTagValue('X-URL', $url);
 		} else {
 			// 完了時以外はメールBehaviorを外す
