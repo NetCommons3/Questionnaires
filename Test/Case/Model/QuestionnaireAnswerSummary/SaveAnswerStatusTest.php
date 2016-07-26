@@ -41,7 +41,7 @@ class SaveAnswerStatusTest extends NetCommonsModelTestCase {
  */
 	public $fixtures = array(
 		'plugin.questionnaires.questionnaire',
-		'plugin.questionnaires.questionnaire_setting',
+		'plugin.questionnaires.block_setting_for_questionnaire',
 		'plugin.questionnaires.questionnaire_frame_setting',
 		'plugin.questionnaires.questionnaire_frame_display_questionnaire',
 		'plugin.questionnaires.questionnaire_page',

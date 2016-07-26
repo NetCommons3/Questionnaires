@@ -41,10 +41,9 @@ class QuestionnaireAfterFrameSaveTest extends NetCommonsModelTestCase {
 		'plugin.questionnaires.questionnaire_choice',
 		'plugin.questionnaires.questionnaire_answer_summary',
 		'plugin.questionnaires.questionnaire_answer',
-		'plugin.questionnaires.questionnaire_setting',
 		'plugin.questionnaires.questionnaire_frame_setting',
 		'plugin.questionnaires.questionnaire_frame_display_questionnaire',
-		'plugin.questionnaires.questionnaire_setting',
+		'plugin.questionnaires.block_setting_for_questionnaire',
 	);
 
 /**
@@ -73,6 +72,8 @@ class QuestionnaireAfterFrameSaveTest extends NetCommonsModelTestCase {
 		$this->Block = ClassRegistry::init('Blocks' . '.' . 'Block');
 		$this->QuestionnaireSetting = ClassRegistry::init('Questionnaires' . '.' . 'QuestionnaireSetting');
 		$this->QuestionnaireFrameSetting = ClassRegistry::init('Questionnaires' . '.' . 'QuestionnaireFrameSetting');
+
+		Current::write('Plugin.key', $this->plugin);
 	}
 
 /**
@@ -129,10 +130,7 @@ class QuestionnaireAfterFrameSaveTest extends NetCommonsModelTestCase {
 
 		$actualBlockKey = $block['Block']['key'];
 		// アンケートのフレーム設定情報もできていること
-		$setting = $this->QuestionnaireSetting->find('first', array(
-			'recursive' => -1,
-			'conditions' => array('block_key' => $actualBlockKey),
-		));
+		$setting = $this->QuestionnaireSetting->getBlockSetting($actualBlockKey);
 		$this->assertNotEmpty($setting);
 	}
 
@@ -142,7 +140,7 @@ class QuestionnaireAfterFrameSaveTest extends NetCommonsModelTestCase {
  * ### 戻り値
  *  - data 登録データ
  *
- * @return void
+ * @return array
  */
 	public function dataProviderSave() {
 		return array(

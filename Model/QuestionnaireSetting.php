@@ -10,30 +10,20 @@
  * @license http://www.netcommons.org/license.txt NetCommons License
  */
 
-App::uses('QuestionnairesAppModel', 'Questionnaires.Model');
+App::uses('BlockSettingBehavior', 'Blocks.Model/Behavior');
+App::uses('BlockBaseModel', 'Blocks.Model');
 
 /**
  * Summary for QuestionnaireBlocksSetting Model
  */
-class QuestionnaireSetting extends QuestionnairesAppModel {
+class QuestionnaireSetting extends BlockBaseModel {
 
 /**
- * Validation rules
+ * Custom database table name
  *
- * @var array
+ * @var string
  */
-	public $validate = array(
-		'block_key' => array(
-			'notBlank' => array(
-				'rule' => array('notBlank'),
-				//'message' => 'Your custom message here',
-				'allowEmpty' => false,
-				'required' => true,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
-	);
+	public $useTable = false;
 
 /**
  * use behaviors
@@ -42,6 +32,9 @@ class QuestionnaireSetting extends QuestionnairesAppModel {
  */
 	public $actsAs = array(
 		'Blocks.BlockRolePermission',
+		'Blocks.BlockSetting' => array(
+			BlockSettingBehavior::FIELD_USE_WORKFLOW,
+		),
 	);
 
 /**
@@ -66,25 +59,11 @@ class QuestionnaireSetting extends QuestionnairesAppModel {
 /**
  * getSetting
  *
- * @return mix QuestionnaireBlockSetting data
+ * @return array QuestionnaireBlockSetting data
  */
 	public function getSetting() {
 		$blockSetting = $this->Block->find('all', array(
 			'recursive' => -1,
-			'fields' => array(
-				$this->Block->alias . '.*',
-				$this->alias . '.*',
-			),
-			'joins' => array(
-				array(
-					'table' => $this->table,
-					'alias' => $this->alias,
-					'type' => 'INNER',
-					'conditions' => array(
-						$this->Block->alias . '.key' . ' = ' . $this->alias . ' .block_key',
-					),
-				),
-			),
 			'conditions' => array(
 				'Block.id' => Current::read('Block.id')
 			),
@@ -92,8 +71,9 @@ class QuestionnaireSetting extends QuestionnairesAppModel {
 		if (! $blockSetting) {
 			return $blockSetting;
 		}
-		return $blockSetting[0];
+		return Hash::merge($blockSetting[0], $this->getBlockSetting());
 	}
+
 /**
  * Save questionnaire settings
  *
@@ -105,20 +85,6 @@ class QuestionnaireSetting extends QuestionnairesAppModel {
 		//トランザクションBegin
 		$this->begin();
 
-		// idが未設定の場合は、指定されたblock_keyを頼りに既存レコードがないか調査
-		$existRecord = $this->find('first', array(
-			'recursive' => -1,
-			'fields' => 'id',
-			'conditions' => array(
-				'block_key' => $data['QuestionnaireSetting']['block_key'],
-			)
-		));
-		$data = Hash::merge($existRecord, $data);
-		$data = Hash::remove($data, 'QuestionnaireSetting.created_user');
-		$data = Hash::remove($data, 'QuestionnaireSetting.created');
-		$data = Hash::remove($data, 'QuestionnaireSetting.modified_user');
-		$data = Hash::remove($data, 'QuestionnaireSetting.modified');
-
 		//バリデーション
 		$this->set($data);
 		if (! $this->validates()) {
@@ -127,9 +93,8 @@ class QuestionnaireSetting extends QuestionnairesAppModel {
 		}
 
 		try {
-			if (! $this->save($data, false)) {
-				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
-			}
+			// useTable = falseでsaveすると必ずfalseになるので、throwしない
+			$this->save(null, false);
 
 			//トランザクションCommit
 			$this->commit();
@@ -197,6 +162,7 @@ class QuestionnaireSetting extends QuestionnairesAppModel {
 		}
 		return true;
 	}
+
 /**
  * save setting
  *
@@ -207,13 +173,11 @@ class QuestionnaireSetting extends QuestionnairesAppModel {
  */
 	public function saveSetting() {
 		// block settingはあるか
-		$setting = $this->getSetting();
-		if (! empty($setting)) {
+		if ($this->isExsistBlockSetting()) {
 			return true;
 		}
 		// ないときは作る
-		$blockSetting = $this->create();
-		$blockSetting['QuestionnaireSetting']['block_key'] = Current::read('Block.key');
+		$blockSetting = $this->createBlockSetting();
 		$ret = $this->saveQuestionnaireSetting($blockSetting);
 		return $ret;
 	}

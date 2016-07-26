@@ -12,8 +12,6 @@
 
 <?php echo $this->NetCommonsForm->hidden('Block.id'); ?>
 <?php echo $this->NetCommonsForm->hidden('Block.key'); ?>
-<?php echo $this->NetCommonsForm->hidden('QuestionnaireSetting.block_key'); ?>
-<?php echo $this->NetCommonsForm->hidden('QuestionnaireSetting.id'); ?>
 
 <?php echo $this->element('Blocks.block_creatable_setting', array(
 		'settingPermissions' => array(
