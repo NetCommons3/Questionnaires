@@ -59,7 +59,7 @@ class QuestionnaireSetting extends BlockBaseModel {
 /**
  * getSetting
  *
- * @return mix QuestionnaireBlockSetting data
+ * @return array QuestionnaireBlockSetting data
  */
 	public function getSetting() {
 		$blockSetting = $this->Block->find('all', array(
