@@ -9,6 +9,7 @@
  */
 
 App::uses('QuestionnairesAppModel', 'Questionnaires.Model');
+App::uses('QuestionnairesComponent', 'Questionnaires.Controller/Component');
 App::uses('TemporaryUploadFile', 'Files.Utility');
 App::uses('UnZip', 'Files.Utility');
 App::uses('WysiwygZip', 'Wysiwyg.Utility');
