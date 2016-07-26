@@ -67,6 +67,8 @@ class QuestionnaireSettingSaveSettingTest extends NetCommonsModelTestCase {
  */
 	public function setUp() {
 		parent::setUp();
+
+		Current::write('Plugin.key', $this->plugin);
 	}
 /**
  * Saveのテスト 通常の登録
@@ -97,7 +99,10 @@ class QuestionnaireSettingSaveSettingTest extends NetCommonsModelTestCase {
 		//Current::$current['Block']['key'] = 'block_1';
 
 		$result = $this->$model->$method();
-		$this->assertFalse($result);
+
+		// Current::$current['Block']['id'] = null のため、検索結果=空によりtrue
+		//$this->assertFalse($result);
+		$this->assertTrue($result);
 	}
 /**
  * Saveのテスト 既に登録済み

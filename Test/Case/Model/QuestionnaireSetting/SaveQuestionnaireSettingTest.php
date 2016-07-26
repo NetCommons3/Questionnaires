@@ -68,21 +68,20 @@ class QuestionnaireSettingSaveQuestionnaireSettingTest extends NetCommonsSaveTes
 	public function setUp() {
 		parent::setUp();
 		Current::$current['Frame']['key'] = 'frame_3';
+		Current::write('Plugin.key', $this->plugin);
 	}
 
 /**
  * テストDataの取得
  *
- * @param int $id id
  * @param string $blockKey block key
  * @param bool $useWorkflow use work flow
  * @return array
  */
-	protected function _getData($id, $blockKey, $useWorkflow) {
+	protected function _getData($blockKey, $useWorkflow) {
+		Current::write('Block.key', $blockKey);
 		$data = array(
 			'QuestionnaireSetting' => array(
-				'id' => $id,
-				'block_key' => $blockKey,
 				'use_workflow' => $useWorkflow,
 			),
 		);
@@ -110,12 +109,12 @@ class QuestionnaireSettingSaveQuestionnaireSettingTest extends NetCommonsSaveTes
  * ### 戻り値
  *  - data 登録データ
  *
- * @return void
+ * @return array
  */
 	public function dataProviderSave() {
 		return array(
-			array($this->_getData(1, 'block_1', 1)),
-			array($this->_getData(2, 'block_2', 0)),
+			array($this->_getData('block_1', 1)),
+			array($this->_getData('block_2', 0)),
 		);
 	}
 /**
@@ -126,11 +125,11 @@ class QuestionnaireSettingSaveQuestionnaireSettingTest extends NetCommonsSaveTes
  *  - mockModel Mockのモデル
  *  - mockMethod Mockのメソッド
  *
- * @return void
+ * @return array
  */
 	public function dataProviderSaveOnExceptionError() {
 		return array(
-			array($this->_getData(1, 'block_1', 1), 'Questionnaires.QuestionnaireSetting', 'save'),
+			array($this->_getData('block_1', 1), 'Blocks.BlockSetting', 'saveMany'),
 		);
 	}
 /**
@@ -140,11 +139,11 @@ class QuestionnaireSettingSaveQuestionnaireSettingTest extends NetCommonsSaveTes
  *  - data 登録データ
  *  - mockModel Mockのモデル
  *
- * @return void
+ * @return array
  */
 	public function dataProviderSaveOnValidationError() {
 		return array(
-			array($this->_getData(1, 'block_1', 1), 'Questionnaires.QuestionnaireSetting'),
+			array($this->_getData('block_1', 1), 'Questionnaires.QuestionnaireSetting'),
 		);
 	}
 }
