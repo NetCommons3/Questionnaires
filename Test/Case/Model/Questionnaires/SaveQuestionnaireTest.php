@@ -80,6 +80,7 @@ class QuestionnaireSaveQuestionnaireTest extends WorkflowSaveTest {
 		Current::$current['Frame']['room_id'] = '1';
 		Current::$current['Frame']['plugin_key'] = 'questionnaires';
 		Current::$current['Frame']['language_id'] = '2';
+		Current::$current['Plugin']['key'] = 'questionnaires';
 		$mailQueueMock = $this->getMock('MailQueueBehavior',
 			['setAddEmbedTagValue', 'afterSave']);
 		$mailQueueMock->expects($this->any())
