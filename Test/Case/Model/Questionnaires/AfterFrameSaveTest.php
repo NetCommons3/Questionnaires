@@ -41,10 +41,9 @@ class QuestionnaireAfterFrameSaveTest extends NetCommonsModelTestCase {
 		'plugin.questionnaires.questionnaire_choice',
 		'plugin.questionnaires.questionnaire_answer_summary',
 		'plugin.questionnaires.questionnaire_answer',
-		'plugin.questionnaires.questionnaire_setting',
 		'plugin.questionnaires.questionnaire_frame_setting',
 		'plugin.questionnaires.questionnaire_frame_display_questionnaire',
-		'plugin.questionnaires.questionnaire_setting',
+		'plugin.questionnaires.block_setting_for_questionnaire',
 	);
 
 /**
