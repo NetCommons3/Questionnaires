@@ -173,8 +173,7 @@ class QuestionnaireSetting extends BlockBaseModel {
  */
 	public function saveSetting() {
 		// block settingはあるか
-		$setting = $this->getSetting();
-		if (! empty($setting)) {
+		if ($this->isExsistBlockSetting()) {
 			return true;
 		}
 		// ないときは作る
