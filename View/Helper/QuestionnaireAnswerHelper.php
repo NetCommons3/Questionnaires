@@ -387,6 +387,7 @@ class QuestionnaireAnswerHelper extends AppHelper {
 							array('type' => 'text',
 								'div' => false,
 								'class' => 'form-control',
+								'data-toggle' => 'dropdown',
 								'datetimepicker',
 								'datetimepicker-options' => $options,
 								'ng-model' => 'dateAnswer[' . "'" . $question['key'] . "'" . ']',
