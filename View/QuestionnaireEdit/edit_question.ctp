@@ -69,17 +69,17 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 
 						<?php echo $this->element('Questionnaires.QuestionnaireEdit/EditQuestion/hidden_page_info_set'); ?>
 
-					<uib-accordion close-others="true">
-						<uib-accordion-group
-								class="form-horizontal"
+					<div uib-accordion close-others="true">
+						<div uib-accordion-group
+								class="form-horizontal panel-default"
 								ng-repeat="(qIndex, question) in page.questionnaireQuestion"
 								is-open="question.isOpen">
 
-							<uib-accordion-heading>
+							<div uib-accordion-heading>
 								<?php /* 質問ヘッダーセット（移動ボタン、削除ボタンなどの集合体 */
 									echo $this->element('Questionnaires.QuestionnaireEdit/EditQuestion/accordion_heading', array('isPublished' => $isPublished)); ?>
 								<div class="clearfix"></div>
-							</uib-accordion-heading>
+							</div>
 
 							<?php echo $this->element('Questionnaires.QuestionnaireEdit/EditQuestion/hidden_question_info_set'); ?>
 
@@ -149,8 +149,8 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 								</div>
 							</div >
 
-						</uib-accordion-group>
-					</uib-accordion>
+						</div>
+					</div>
 
 					<?php echo $this->element('Questionnaires.QuestionnaireEdit/EditQuestion/add_question_button'); ?>
 
