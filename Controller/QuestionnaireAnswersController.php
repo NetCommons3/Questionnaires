@@ -322,6 +322,7 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 			if ($nextPageSeq === false) {
 				// 確認画面へいってもよい状態ですと書きこむ
 				$this->QuestionnaireAnswerSummary->saveAnswerStatus(
+					$questionnaire,
 					$summary,
 					QuestionnairesComponent::ACTION_BEFORE_ACT
 				);
@@ -387,6 +388,7 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 		if ($this->request->is('post')) {
 			// サマリの状態を完了にして確定する
 			$this->QuestionnaireAnswerSummary->saveAnswerStatus(
+				$this->__questionnaire,
 				$summary,
 				QuestionnairesComponent::ACTION_ACT);
 			$this->QuestionnairesOwnAnswer->saveOwnAnsweredKeys(

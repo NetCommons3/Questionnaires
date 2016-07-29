@@ -119,9 +119,14 @@ class SaveAnswerStatusTest extends NetCommonsModelTestCase {
 	public function testSave($data, $status) {
 		$model = $this->_modelName;
 		$method = $this->_methodName;
+		$questionnaire = array(
+			'Questionnaire' => array(
+				'title' => 'test Questionnaire'
+			)
+		);
 
 		//テスト実行
-		$result = $this->$model->$method($data, $status);
+		$result = $this->$model->$method($questionnaire, $data, $status);
 		$this->assertNotEmpty($result);
 
 		//idのチェック
@@ -188,8 +193,13 @@ class SaveAnswerStatusTest extends NetCommonsModelTestCase {
 	public function testSaveOnValidationError($data, $status, $mockModel, $mockMethod = 'validates') {
 		$model = $this->_modelName;
 		$method = $this->_methodName;
+		$questionnaire = array(
+			'Questionnaire' => array(
+				'title' => 'test Questionnaire'
+			)
+		);
 		$this->_mockForReturnFalse($model, $mockModel, $mockMethod);
-		$result = $this->$model->$method($data, $status);
+		$result = $this->$model->$method($questionnaire, $data, $status);
 		$this->assertFalse($result);
 	}
 /**
@@ -219,11 +229,16 @@ class SaveAnswerStatusTest extends NetCommonsModelTestCase {
 	public function testSaveOnExceptionError($data, $status, $mockModel, $mockMethod) {
 		$model = $this->_modelName;
 		$method = $this->_methodName;
+		$questionnaire = array(
+			'Questionnaire' => array(
+				'title' => 'test Questionnaire'
+			)
+		);
 
 		$this->_mockForReturnFalse($model, $mockModel, $mockMethod);
 
 		$this->setExpectedException('InternalErrorException');
-		$this->$model->$method($data, $status);
+		$this->$model->$method($questionnaire, $data, $status);
 	}
 /**
  * SaveのValidationErrorのDataProvider

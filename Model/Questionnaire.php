@@ -31,6 +31,9 @@ class Questionnaire extends QuestionnairesAppModel {
 		'Mails.MailQueue' => array(
 			'embedTags' => array(
 				'X-SUBJECT' => 'Questionnaire.title',
+				'X-URL' => array(
+					'controller' => 'questionnaire_answers'
+				)
 			),
 			'publishStartField' => 'answer_start_period',
 		),

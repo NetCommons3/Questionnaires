@@ -31,7 +31,6 @@ class QuestionnaireAnswerSummary extends QuestionnairesAppModel {
 		// 自動でメールキューの登録, 削除。ワークフロー利用時はWorkflow.Workflowより下に記述する
 		'Mails.MailQueue' => array(
 			'embedTags' => array(
-				'X-SUBJECT' => 'Questionnaire.title',
 			),
 			'keyField' => 'id',
 			'typeKey' => MailSettingFixedPhrase::ANSWER_TYPE,
@@ -106,12 +105,13 @@ class QuestionnaireAnswerSummary extends QuestionnairesAppModel {
  * saveAnswerStatus
  * 回答状態を書き換える
  *
+ * @param array $questionnaire questionnaire data
  * @param array $summary summary data
  * @param int $status status
  * @throws InternalErrorException
  * @return bool
  */
-	public function saveAnswerStatus($summary, $status) {
+	public function saveAnswerStatus($questionnaire, $summary, $status) {
 		$summary['QuestionnaireAnswerSummary']['answer_status'] = $status;
 
 		if ($status == QuestionnairesComponent::ACTION_ACT) {
@@ -125,6 +125,7 @@ class QuestionnaireAnswerSummary extends QuestionnairesAppModel {
 				'frame_id' => Current::read('Frame.id'),
 			), true);
 			$this->setAddEmbedTagValue('X-URL', $url);
+			$this->setAddEmbedTagValue('X-SUBJECT', $questionnaire['Questionnaire']['title']);
 		} else {
 			// 完了時以外はメールBehaviorを外す
 			$this->Behaviors->unload('Mails.MailQueue');
