@@ -1,46 +1,47 @@
 <?php
 /**
- * Pages routes configuration
+ * Questionnaires routes configuration
  *
- * @copyright Copyright 2014, NetCommons Project
- * @author Kohei Teraguchi <kteraguchi@commonsnet.org>
+ * @author Noriko Arai <arai@nii.ac.jp>
+ * @author Shohei Nakajima <nakajimashouhei@gmail.com>
  * @link http://www.netcommons.org NetCommons Project
  * @license http://www.netcommons.org/license.txt NetCommons License
+ * @copyright Copyright 2014, NetCommons Project
  */
 
 App::uses('Current', 'NetCommons.Utility');
 
 $params = array(
+	'plugin' => 'questionnaires',
 	'controller' => 'questionnaire_edit'
 );
-if (! Current::isSettingMode()) {
-	$params[Current::SETTING_MODE_WORD] = false;
-}
-
 $options = array(
-	'plugin' => 'questionnaires',
 	'block_id' => '[0-9]+',
 	'key' => '[a-zA-Z0-9_]+', //_は、UnitTestで使用するため
 );
 
-Router::connect(
-	'/' . Current::SETTING_MODE_WORD . '/:plugin/' . $params['controller'] . '/:action/:block_id/:key/*',
-	$params,
-	$options
-);
-Router::connect(
-	'/' . Current::SETTING_MODE_WORD . '/:plugin/' . $params['controller'] . '/:action/:block_id/*',
-	$params,
-	$options
-);
+if (Current::isSettingMode()) {
+	Router::connect(
+		'/' . Current::SETTING_MODE_WORD .
+			'/' . $params['plugin'] . '/' . $params['controller'] . '/:action/:block_id/:key/*',
+		$params,
+		$options
+	);
+	Router::connect(
+		'/' . Current::SETTING_MODE_WORD .
+			'/' . $params['plugin'] . '/' . $params['controller'] . '/:action/:block_id/*',
+		$params,
+		$options
+	);
+}
 
 Router::connect(
-	'/:plugin/' . $params['controller'] . '/:action/:block_id/:key/*',
+	'/' . $params['plugin'] . '/' . $params['controller'] . '/:action/:block_id/:key/*',
 	$params,
 	$options
 );
 Router::connect(
-	'/:plugin/' . $params['controller'] . '/:action/:block_id/*',
+	'/' . $params['plugin'] . '/' . $params['controller'] . '/:action/:block_id/*',
 	$params,
 	$options
 );
