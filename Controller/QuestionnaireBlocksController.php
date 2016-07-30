@@ -108,6 +108,10 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
 		// 万が一、まだ存在しない場合には作成しておく
 		// afterFrameSaveが呼ばれないような状況の想定
 		$frame['Frame'] = Current::read('Frame');
+		// 設定系画面でフレームが存在しないということはない、ということを前提にする
+		if (! $frame['Frame']) {
+			throw new NotFoundException();
+		}
 		$this->Questionnaire->afterFrameSave($frame);
 	}
 
