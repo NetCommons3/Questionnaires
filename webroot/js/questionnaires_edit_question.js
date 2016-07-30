@@ -53,6 +53,7 @@ NetCommonsApp.controller('Questionnaires.edit.question',
           TYPE_SINGLE_SELECT_BOX: '8',
 
           MATRIX_TYPE_ROW_OR_NO_MATRIX: '0',
+          MATRIX_TYPE_COLUMN: '1',
 
           SKIP_GO_TO_END: '99999'
         };
@@ -660,13 +661,53 @@ NetCommonsApp.controller('Questionnaires.edit.question',
               questionnaireQuestion[qIdx].questionnaireChoice ||
               $scope.questionnaire.questionnairePage[pIdx].
               questionnaireQuestion[qIdx].questionnaireChoice.length == 0) {
-            $scope.addChoice($event,
-                pIdx,
-                $scope.questionnaire.questionnairePage[pIdx].
-                    questionnaireQuestion.length - 1,
-                0,
+            $scope.addChoice($event, pIdx, qIdx, 0,
                 variables.OTHER_CHOICE_TYPE_NO_OTHER_FILED,
                 variables.MATRIX_TYPE_ROW_OR_NO_MATRIX);
+          }
+          // マトリクス系に変更されたときは、少なくとも１つは列選択肢を作ること
+          // 択一選択、複数選択、リスト選択のときは列選択をなくしておくこと
+          if (questionType == variables.TYPE_MATRIX_SELECTION_LIST ||
+             questionType == variables.TYPE_MATRIX_MULTIPLE) {
+            $scope.checkMatrixColumn($event, 'add', pIdx, qIdx);
+          } else {
+            if (questionType == variables.TYPE_SELECTION ||
+               questionType == variables.TYPE_SINGLE_SELECT_BOX ||
+               questionType == variables.TYPE_MULTIPLE_SELECTION) {
+              $scope.checkMatrixColumn($event, 'del', pIdx, qIdx);
+            }
+
+          }
+        };
+        /**
+         * マトリクスの切り替えをしたときの列選択肢を足したり引いたりの処理
+         *
+         * @return {void}
+         */
+        $scope.checkMatrixColumn = function($event, ope, pIdx, qIdx) {
+          // カラムタイプの選択肢を調べる
+          // 指定されたオペレーションに従って消したり、追加したりする
+          var question = $scope.questionnaire.questionnairePage[pIdx].
+             questionnaireQuestion[qIdx];
+          var cols = new Array();
+          for (var i = 0; i < question.questionnaireChoice.length; i++) {
+            var choice = question.questionnaireChoice[i];
+            // カラムタイプ
+            if (choice.matrixType != variables.MATRIX_TYPE_ROW_OR_NO_MATRIX) {
+              cols.push(i);
+            }
+          }
+          if (ope == 'add') {
+            if (cols.length == 0) {
+              $scope.addChoice($event, pIdx, qIdx,
+                 question.questionnaireChoice.length - 1,
+                 variables.OTHER_CHOICE_TYPE_NO_OTHER_FILED,
+                 variables.MATRIX_TYPE_COLUMN);
+            }
+          } else {
+            for (var delI = cols.length; delI > 0; delI--) {
+              $scope.deleteChoice($event, pIdx, qIdx, cols[delI - 1]);
+            }
           }
         };
         /**
