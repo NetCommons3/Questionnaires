@@ -9,6 +9,8 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 ?>
+<article>
+<?php echo $this->element('Questionnaires.Answers/answer_header'); ?>
 <?php echo __d('questionnaires', 'you will not be able to answer this questionnaire.'); ?>
 <?php echo $this->QuestionnaireUtil->getAggregateButtons($questionnaire, array(
 	'title' => '&nbsp;' . __d('questionnaires', 'Aggregate'),
@@ -18,4 +20,5 @@
 	<div class="text-center">
 		<?php echo $this->BackTo->pageLinkButton(__d('questionnaires', 'Back to Top'), array('icon' => 'chevron-left')); ?>
 	</div>
-<?php endif;
+<?php endif; ?>
+</article>

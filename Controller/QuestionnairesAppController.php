@@ -197,8 +197,17 @@ class QuestionnairesAppController extends AppController {
  */
 	public function isAbleToAnswer($questionnaire) {
 		$quest = $questionnaire['Questionnaire'];
+		// 未公開のものは編集権限がる人にはAll-OKだが、それ以外の人にはAll-NG
 		if ($quest['status'] != WorkflowComponent::STATUS_PUBLISHED) {
-			return true;
+			if ($this->Questionnaire->canEditWorkflowContent($questionnaire)) {
+				return true;
+			}
+			return false;
+		}
+		// 期間外
+		if ($quest['answer_timing'] == QuestionnairesComponent::USES_USE
+			&& $quest['period_range_stat'] != QuestionnairesComponent::QUESTIONNAIRE_PERIOD_STAT_IN) {
+			return false;
 		}
 		// 繰り返し回答を許していないのにすでに回答済みか
 		if ($quest['is_repeat_allow'] == QuestionnairesComponent::PERMISSION_NOT_PERMIT) {
