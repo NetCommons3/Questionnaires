@@ -290,7 +290,7 @@ class QuestionnaireAnswerHelper extends AppHelper {
 		}
 		$errorMessage = '';
 
-		$ret = '<table class="table ';
+		$ret = '<div class="questionnaire-matrix-table-responsive"><table class="table ';
 		$ret .= $addClass;
 		$ret .= 'table-bordered text-center questionnaire-matrix-table">';
 		$ret .= '<thead><tr><th></th>';
@@ -325,7 +325,7 @@ class QuestionnaireAnswerHelper extends AppHelper {
 			$ret .= '</tr>';
 			$errorMessage .= $this->_error($baseFieldName . '.answer_value');
 		}
-		$ret .= '</tbody></table>';
+		$ret .= '</tbody></table></div>';
 		$ret .= $errorMessage;
 		return $ret;
 	}
