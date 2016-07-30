@@ -145,11 +145,13 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 						$this->Questionnaire->alias . '.key' => $questionnaireKey
 					)
 				));
-				// NetCommonsお約束：編集の場合には改めて編集権限をチェックする必要がある
-				// getWorkflowContentsはとりあえず自分が「見られる」コンテンツデータを取ってきてしまうので
-				if (! $this->Questionnaire->canEditWorkflowContent($this->_questionnaire)) {
-					$this->_questionnaire = null;
-				}
+			}
+		}
+		if ($questionnaireKey) {
+			// NetCommonsお約束：編集の場合には改めて編集権限をチェックする必要がある
+			// getWorkflowContentsはとりあえず自分が「見られる」コンテンツデータを取ってきてしまうので
+			if (! $this->Questionnaire->canEditWorkflowContent($this->_questionnaire)) {
+				$this->_questionnaire = null;
 			}
 		}
 		// ここへは設定画面の一覧から来たのか、一般画面の一覧から来たのか
