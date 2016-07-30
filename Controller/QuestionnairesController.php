@@ -132,10 +132,12 @@ class QuestionnairesController extends QuestionnairesAppController {
 		);
 		if ($answerStat == QuestionnairesComponent::QUESTIONNAIRE_ANSWER_UNANSWERED) {
 			$filter = array(
+				'Questionnaire.status' => WorkflowComponent::STATUS_PUBLISHED,
 				'NOT' => $filterCondition
 			);
 		} elseif ($answerStat == QuestionnairesComponent::QUESTIONNAIRE_ANSWER_ANSWERED) {
 			$filter = array(
+				'Questionnaire.status' => WorkflowComponent::STATUS_PUBLISHED,
 				$filterCondition
 			);
 		}
