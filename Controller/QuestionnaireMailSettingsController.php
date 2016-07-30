@@ -50,6 +50,7 @@ class QuestionnaireMailSettingsController extends MailSettingsController {
  * beforeFilter
  *
  * @return void
+ * @throws NotFoundException
  * @see NetCommonsAppController::beforeFilter()
  */
 	public function beforeFilter() {

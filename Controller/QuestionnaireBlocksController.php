@@ -100,6 +100,7 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
  * beforeFilter
  *
  * @return void
+ * @throws NotFoundException
  */
 	public function beforeFilter() {
 		parent::beforeFilter();
