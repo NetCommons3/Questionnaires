@@ -138,7 +138,7 @@ class QuestionnaireBlocksControllerDownloadTest extends NetCommonsControllerTest
 			'AuthorizationKey' => array(
 				'authorization_key' => 'ABC'
 			)
-		), $url, 'InternalErrorException');
+		), $url, 'NotFoundException');
 	}
 
 /**

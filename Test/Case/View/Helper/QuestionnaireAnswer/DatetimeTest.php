@@ -73,7 +73,7 @@ EOT;
 	<div class="col-sm-4">
 		<div class="date">
 			<input name="data[QuestionnaireAnswer][qKey1][0][answer_value]" class="form-control"
-			datetimepicker="datetimepicker" datetimepicker-options="%s"
+			data-toggle="dropdown" datetimepicker="datetimepicker" datetimepicker-options="%s"
 			ng-model="dateAnswer[&#039;qKey1&#039;]"
 			type="text" id="QuestionnaireAnswerQKey10AnswerValue"/>
 		</div>

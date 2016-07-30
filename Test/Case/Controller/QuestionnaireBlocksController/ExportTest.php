@@ -130,7 +130,7 @@ class QuestionnaireBlocksControllerExportTest extends NetCommonsControllerTestCa
 			'key' => 'questionnaire_6',
 		);
 
-		$this->_testNcAction($url, array(), 'InternalErrorException');
+		$this->_testNcAction($url, array(), 'NotFoundException');
 	}
 
 /**
