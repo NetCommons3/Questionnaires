@@ -17,7 +17,7 @@
 	'ng-disabled' => 'questionnaires.length == 0',
 	));
 ?>
-<div class="form-horizontal" uib-collapse="createOption != '<?php echo QuestionnairesComponent::QUESTIONNAIRE_CREATE_OPT_REUSE; ?>'">
+<div ng-cloak class="form-horizontal" uib-collapse="createOption != '<?php echo QuestionnairesComponent::QUESTIONNAIRE_CREATE_OPT_REUSE; ?>'">
 	<div class="col-xs-11 col-xs-offset-1">
 		<div class="form-group">
 			<div class="col-xs-3">

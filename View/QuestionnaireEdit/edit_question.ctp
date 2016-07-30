@@ -58,7 +58,7 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 
 			<uib-tabset active="activeTabIndex">
 				<uib-tab ng-repeat="(pageIndex, page) in questionnaire.questionnairePage" index="$index">
-					<uib-tab-heading>
+					<uib-tab-heading ng-cloak>
 						<span class="glyphicon glyphicon-exclamation-sign text-danger" ng-if="page.hasError"></span>
 						{{pageIndex+1}}
 					</uib-tab-heading>
@@ -69,7 +69,7 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 
 						<?php echo $this->element('Questionnaires.QuestionnaireEdit/EditQuestion/hidden_page_info_set'); ?>
 
-					<div uib-accordion close-others="true">
+					<div ng-cloak uib-accordion close-others="true">
 						<div uib-accordion-group
 								class="form-horizontal panel-default"
 								ng-repeat="(qIndex, question) in page.questionnaireQuestion"

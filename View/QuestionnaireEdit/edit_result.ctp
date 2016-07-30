@@ -61,7 +61,7 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 
 				<div class="">
 					<label><?php echo __d('questionnaires', 'Question you want to display the aggregate results'); ?></label>
-					<div uib-accordion ng-repeat="(pageIndex, page) in questionnaire.questionnairePage">
+					<div ng-cloak uib-accordion ng-repeat="(pageIndex, page) in questionnaire.questionnairePage">
 						<div uib-accordion-group ng-repeat="(qIndex, question) in page.questionnaireQuestion" class="{{getResultAccordionClass(question)}}">
 
 							<div uib-accordion-heading>

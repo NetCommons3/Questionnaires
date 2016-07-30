@@ -15,7 +15,7 @@
 	'hiddenField' => false,
 	));
 ?>
-<div  uib-collapse="createOption != '<?php echo QuestionnairesComponent::QUESTIONNAIRE_CREATE_OPT_TEMPLATE; ?>'">
+<div ng-cloak uib-collapse="createOption != '<?php echo QuestionnairesComponent::QUESTIONNAIRE_CREATE_OPT_TEMPLATE; ?>'">
 	<div class="col-xs-11 col-xs-offset-1">
 		<?php echo $this->NetCommonsForm->input('template_file', array(
 			'type' => 'file',

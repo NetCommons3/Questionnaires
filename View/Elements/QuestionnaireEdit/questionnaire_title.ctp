@@ -9,7 +9,7 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 ?>
-	<h1 class="">
+	<h1 ng-cloak class="">
 		<?php if (isset($this->data['Questionnaire']['title_icon'])) {
 			echo $this->TitleIcon->titleIcon($this->data['Questionnaire']['title_icon']);
 								}?>
