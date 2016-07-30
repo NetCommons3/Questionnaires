@@ -337,7 +337,7 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 		} else {
 			// 指定されて取り出したアンケートデータをセッションキャッシュに書く
 			$this->Session->write(
-				$this->_getQuestionnaireEditSessionIndex(),
+				self::QUESTIONNAIRE_EDIT_SESSION_INDEX . $this->_getQuestionnaireEditSessionIndex(),
 				$this->_questionnaire);
 			$this->__setupViewParameters($this->_questionnaire, $this->_getActionUrl('edit_result'));
 		}
