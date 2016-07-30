@@ -206,6 +206,9 @@ class QuestionnaireAnswerSummary extends QuestionnairesAppModel {
 				$testStatus = QuestionnairesComponent::TEST_ANSWER_STATUS_TEST;
 			}
 
+			// 完了時以外はメールBehaviorを外す
+			$this->Behaviors->unload('Mails.MailQueue');
+
 			if (! $this->save(array(
 				'answer_status' => QuestionnairesComponent::ACTION_NOT_ACT,
 				'test_status' => $testStatus,
