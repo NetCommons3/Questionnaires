@@ -15,25 +15,26 @@
  */
 
 NetCommonsApp.controller('Questionnaires',
-    function($scope, $sce, $timeout, $log, $attrs) {
+    ['$scope', '$sce', '$timeout', '$log', '$attrs',
+      function($scope, $sce, $timeout, $log, $attrs) {
 
-      //$attrsと$evalを使い、ng-initディレクティブの評価をcontrollerの最初に行う.
-      $scope.$eval($attrs.ngInit);
+        //$attrsと$evalを使い、ng-initディレクティブの評価をcontrollerの最初に行う.
+        $scope.$eval($attrs.ngInit);
 
-      /**
-       * Initialize
-       *
-       * @return {void}
-       */
-      $scope.initialize = function(frameId, questionnaire) {
-        $scope.frameId = frameId;
-        $scope.questionnaire = questionnaire;
-      };
-    }
+        /**
+         * Initialize
+         *
+         * @return {void}
+         */
+        $scope.initialize = function(frameId, questionnaire) {
+          $scope.frameId = frameId;
+          $scope.questionnaire = questionnaire;
+        };
+     }]
 );
 
 NetCommonsApp.controller('QuestionnairesAnswer',
-    function($scope, $sce, $timeout, $log) {
+    ['$scope', '$sce', '$timeout', '$log', function($scope, $sce, $timeout, $log) {
       /**
        * variables
        *
@@ -68,55 +69,56 @@ NetCommonsApp.controller('QuestionnairesAnswer',
           }
         }
       };
-    }
+    }]
 );
 NetCommonsApp.controller('QuestionnairesFrame',
-    function($scope, $filter, $sce, $log, $attrs, $timeout) {
-      /**
-       * Initialize
-       *
-       * @return {void}
-       */
-      $scope.initialize = function(questionnaires, questionnaireFrameSettings) {
-        $scope.questionnaires = questionnaires;
-        $scope.questionnaireFrameSettings = questionnaireFrameSettings;
-        $scope.WinBuf = {allCheck: false};
-        $scope.isDisplay = new Array();
-        for (var i = 0; i < $scope.questionnaires.length; i++) {
-          if ($scope.questionnaires[i].questionnaireFrameDisplayQuestionnaire.id) {
-            $scope.isDisplay[i] = true;
-          } else {
-            $scope.isDisplay[i] = false;
+    ['$scope', '$filter', '$sce', '$log', '$attrs', '$timeout',
+      function($scope, $filter, $sce, $log, $attrs, $timeout) {
+        /**
+         * Initialize
+         *
+         * @return {void}
+         */
+        $scope.initialize = function(questionnaires, questionnaireFrameSettings) {
+          $scope.questionnaires = questionnaires;
+          $scope.questionnaireFrameSettings = questionnaireFrameSettings;
+          $scope.WinBuf = {allCheck: false};
+          $scope.isDisplay = new Array();
+          for (var i = 0; i < $scope.questionnaires.length; i++) {
+            if ($scope.questionnaires[i].questionnaireFrameDisplayQuestionnaire.id) {
+              $scope.isDisplay[i] = true;
+            } else {
+              $scope.isDisplay[i] = false;
+            }
           }
-        }
-        $scope.status = false;
-        $scope.title = false;
-        $scope.answerStartPeriod = false;
-        $scope.isTotalShow = false;
-        $scope.modified = false;
-      };
-      /**
-       * Questionnaire Frame Setting AllCheckbox clicked
-       *
-       * @return {void}
-       */
-      $scope.allCheckClicked = function() {
-        for (var i = 0; i < $scope.questionnaires.length; i++) {
-          if ($scope.WinBuf.allCheck == true) {
-            $scope.isDisplay[i] = true;
-          } else {
-            $scope.isDisplay[i] = false;
+          $scope.status = false;
+          $scope.title = false;
+          $scope.answerStartPeriod = false;
+          $scope.isTotalShow = false;
+          $scope.modified = false;
+        };
+        /**
+         * Questionnaire Frame Setting AllCheckbox clicked
+         *
+         * @return {void}
+         */
+        $scope.allCheckClicked = function() {
+          for (var i = 0; i < $scope.questionnaires.length; i++) {
+            if ($scope.WinBuf.allCheck == true) {
+              $scope.isDisplay[i] = true;
+            } else {
+              $scope.isDisplay[i] = false;
+            }
           }
-        }
-      };
-      /**
-       * Questionnaire Frame Setting questionnaire list sort
-       *
-       * @return {void}
-       */
-      $scope.sort = function(fieldName, direction) {
-        $scope.questionnaires =
-            $filter('orderBy')($scope.questionnaires, fieldName, direction);
-      };
-    }
+        };
+        /**
+         * Questionnaire Frame Setting questionnaire list sort
+         *
+         * @return {void}
+         */
+        $scope.sort = function(fieldName, direction) {
+          $scope.questionnaires =
+              $filter('orderBy')($scope.questionnaires, fieldName, direction);
+        };
+     }]
 );

@@ -8,7 +8,7 @@
  */
 
 NetCommonsApp.controller('Questionnaires.add',
-    function($scope) {
+    ['$scope', function($scope) {
       /**
        * Initialize
        *
@@ -29,10 +29,10 @@ NetCommonsApp.controller('Questionnaires.add',
         var el = jQuery('#templateFile');
         $scope.templateFile = el[0].value;
       };
-    });
+    }]);
 
 NetCommonsApp.controller('Questionnaires.setting',
-    function($scope, NetCommonsWysiwyg) {
+    ['$scope', 'NetCommonsWysiwyg', function($scope, NetCommonsWysiwyg) {
 
       /**
        * tinymce
@@ -85,4 +85,4 @@ NetCommonsApp.controller('Questionnaires.setting',
         e.stopPropagation();
         return false;
       };
-    });
+    }]);
