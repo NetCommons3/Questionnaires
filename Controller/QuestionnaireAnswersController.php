@@ -454,6 +454,8 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
  * @return void
  */
 	public function no_more_answer() {
+		$this->set('questionnaire', $this->__questionnaire);
+		$this->set('ownAnsweredKeys', $this->QuestionnairesOwnAnswer->getOwnAnsweredKeys());
 		$this->set('displayType', $this->__displayType);
 	}
 

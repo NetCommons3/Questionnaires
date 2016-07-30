@@ -10,8 +10,12 @@
  */
 ?>
 <?php echo __d('questionnaires', 'you will not be able to answer this questionnaire.'); ?>
+<?php echo $this->QuestionnaireUtil->getAggregateButtons($questionnaire, array(
+	'title' => '&nbsp;' . __d('questionnaires', 'Aggregate'),
+	'icon' => 'stats'
+)); ?>
 <?php if ($displayType == QuestionnairesComponent::DISPLAY_TYPE_LIST): ?>
 	<div class="text-center">
-	    <?php echo $this->BackTo->pageLinkButton(__d('questionnaires', 'Back to Top'), array('icon' => 'chevron-left')); ?>
+		<?php echo $this->BackTo->pageLinkButton(__d('questionnaires', 'Back to Top'), array('icon' => 'chevron-left')); ?>
 	</div>
 <?php endif;
