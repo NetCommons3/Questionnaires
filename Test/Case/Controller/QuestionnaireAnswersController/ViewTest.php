@@ -179,10 +179,11 @@ class QuestionnaireAnswerControllerViewTest extends WorkflowControllerViewTest {
 			'urlOptions' => array('key' => 'questionnaire_14'),
 			'assert' => array('method' => 'assertTextContains', 'expected' => __d('questionnaires', 'you will not be able to answer this questionnaire.')),
 		));
-		// 自分が書いた未来
+		// 自分が書いた未来でも発行後は見れません
 		$results[6] = Hash::merge($results[0], array( // 未来
 			'urlOptions' => array('key' => 'questionnaire_18'),
-			'assert' => array('method' => 'assertInput', 'type' => 'button', 'name' => 'next_', 'value' => null),
+			//'assert' => array('method' => 'assertInput', 'type' => 'button', 'name' => 'next_', 'value' => null),
+			'assert' => array('method' => 'assertTextContains', 'expected' => __d('questionnaires', 'you will not be able to answer this questionnaire.')),
 		));
 		// 繰り返し回答NGで未回答
 		$results[7] = Hash::merge($results[0], array(
