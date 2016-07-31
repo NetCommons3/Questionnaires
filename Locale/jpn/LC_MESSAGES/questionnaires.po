@@ -796,7 +796,7 @@ msgstr "画像認証は行わない"
 #: /View/QuestionnaireAnswers/test_mode.ctp:98
 #: /View/QuestionnaireEdit/edit.ctp:140
 msgid "Deliver e-mail when submitted"
-msgstr "提出されたらメールで通知する"
+msgstr "回答通知メールを送る"
 
 #: /View/QuestionnaireAnswers/test_mode.ctp:100
 msgid "do not deliver e-mail when submitted"

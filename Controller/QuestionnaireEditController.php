@@ -40,6 +40,7 @@ class QuestionnaireEditController extends QuestionnairesAppController {
  * @var array
  */
 	public $uses = array(
+		'Mails.MailSetting'
 	);
 
 /**
@@ -450,6 +451,15 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 		$this->set('newChoiceColumnLabel', __d('questionnaires', 'new column choice'));
 		$this->set('newChoiceOtherLabel', __d('questionnaires', 'other choice'));
 		$this->set('isPublished', $isPublished);
+
+		$isMailSetting = $this->MailSetting->getMailSetting(
+			array(
+				'plugin_key' => 'questionnaires',
+				'block_key' => Current::read('Block.key')
+			)
+		);
+		$isMailSetting = Hash::get($isMailSetting, 'MailSetting.is_mail_send');
+		$this->set('isMailSetting', $isMailSetting);
 
 		$this->request->data = $questionnaire;
 		$this->request->data['Frame'] = Current::read('Frame');

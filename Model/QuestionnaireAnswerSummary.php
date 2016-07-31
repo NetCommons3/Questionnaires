@@ -114,7 +114,8 @@ class QuestionnaireAnswerSummary extends QuestionnairesAppModel {
 	public function saveAnswerStatus($questionnaire, $summary, $status) {
 		$summary['QuestionnaireAnswerSummary']['answer_status'] = $status;
 
-		if ($status == QuestionnairesComponent::ACTION_ACT) {
+		if ($status == QuestionnairesComponent::ACTION_ACT &&
+			$questionnaire['Questionnaire']['is_answer_mail_send']) {
 			// サマリの状態を完了にして確定する
 			$summary['QuestionnaireAnswerSummary']['answer_time'] = (new NetCommonsTime())->getNowDatetime();
 			// メールのembed のURL設定を行っておく
@@ -127,7 +128,7 @@ class QuestionnaireAnswerSummary extends QuestionnairesAppModel {
 			$this->setAddEmbedTagValue('X-URL', $url);
 			$this->setAddEmbedTagValue('X-SUBJECT', $questionnaire['Questionnaire']['title']);
 		} else {
-			// 完了時以外はメールBehaviorを外す
+			// 完了時以外はメールBehaviorを外す 回答通知メールを送らないときも
 			$this->Behaviors->unload('Mails.MailQueue');
 		}
 		$this->begin();

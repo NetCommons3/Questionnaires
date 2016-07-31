@@ -126,6 +126,12 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 
 			<div class="form-group">
 				<?php echo $this->NetCommonsForm->label('', __d('questionnaires', 'Questionnaire method')); ?>
+				<?php /* 回答通知メール設定 */
+					if ($isMailSetting) {
+					echo $this->QuestionEdit->questionnaireAttributeCheckbox('is_answer_mail_send',
+					__d('questionnaires', 'Deliver e-mail when submitted'));
+					}
+				?>
 				<?php if (Current::read('Room.space_id') == Space::PUBLIC_SPACE_ID): ?>
 				<?php echo $this->element('Questionnaires.QuestionnaireEdit/Edit/method_in_public'); ?>
 				<?php else: ?>

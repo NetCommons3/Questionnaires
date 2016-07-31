@@ -121,7 +121,8 @@ class SaveAnswerStatusTest extends NetCommonsModelTestCase {
 		$method = $this->_methodName;
 		$questionnaire = array(
 			'Questionnaire' => array(
-				'title' => 'test Questionnaire'
+				'title' => 'test Questionnaire',
+				'is_answer_mail_send' => true
 			)
 		);
 
@@ -195,7 +196,8 @@ class SaveAnswerStatusTest extends NetCommonsModelTestCase {
 		$method = $this->_methodName;
 		$questionnaire = array(
 			'Questionnaire' => array(
-				'title' => 'test Questionnaire'
+				'title' => 'test Questionnaire',
+				'is_answer_mail_send' => true
 			)
 		);
 		$this->_mockForReturnFalse($model, $mockModel, $mockMethod);
@@ -231,7 +233,8 @@ class SaveAnswerStatusTest extends NetCommonsModelTestCase {
 		$method = $this->_methodName;
 		$questionnaire = array(
 			'Questionnaire' => array(
-				'title' => 'test Questionnaire'
+				'title' => 'test Questionnaire',
+				'is_answer_mail_send' => true
 			)
 		);
 
