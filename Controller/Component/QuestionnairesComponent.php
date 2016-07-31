@@ -379,7 +379,7 @@ class QuestionnairesComponent extends Component {
  *
  * @var integer
  */
-	const SKIP_GO_TO_END = 99999;
+	const SKIP_GO_TO_END = '99999';
 /**
  * first page sequence
  *

@@ -320,7 +320,7 @@ NetCommonsApp.controller('Questionnaires.edit.question',
           }
           if (confirm(message)) {
             $scope.questionnaire.questionnairePage.splice(idx, 1);
-            $scope._resetQuestionnairePageSequence();
+            $scope._resetQuestionnairePageSequence(idx);
             // 削除された場合は１枚目のタブを選択するようにする
             $scope.questionnaire.questionnairePage[0].tabActive = true;
           }
@@ -331,9 +331,27 @@ NetCommonsApp.controller('Questionnaires.edit.question',
            *
            * @return {void}
            */
-        $scope._resetQuestionnairePageSequence = function() {
+        $scope._resetQuestionnairePageSequence = function(delPageIdx) {
           for (var i = 0; i < $scope.questionnaire.questionnairePage.length; i++) {
             $scope.questionnaire.questionnairePage[i].pageSequence = i;
+            // skipページの調整
+            var questions = $scope.questionnaire.questionnairePage[i].questionnaireQuestion;
+            for (var qIdx = 0; qIdx < questions.length; qIdx++) {
+              var choices = questions[qIdx].questionnaireChoice;
+              for (var cIdx = 0; cIdx < choices.length; cIdx++) {
+                if (choices[cIdx].skipPageSequence == variables.SKIP_GO_TO_END) {
+                  continue;
+                } else if (choices[cIdx].skipPageSequence == delPageIdx) {
+                  // 削除ページが対象だったら
+                  // 最後へ行くようにしておく
+                  choices[cIdx].skipPageSequence = variables.SKIP_GO_TO_END;
+                } else if (choices[cIdx].skipPageSequence > delPageIdx) {
+                  // 削除ページより後ろの場合はー１しておく
+                  var newSkipPage = parseInt(choices[cIdx].skipPageSequence) - 1;
+                  choices[cIdx].skipPageSequence = newSkipPage.toString(10);
+                }
+              }
+            }
           }
         };
 
@@ -478,6 +496,7 @@ NetCommonsApp.controller('Questionnaires.edit.question',
           var question = page.questionnaireQuestion[qIdx];
           var choice = new Object();
           var choiceColorIdx = choiceCount % $scope.colorPickerPalette.length;
+          var skipPage = parseInt(page['pageSequence']) + 1;
 
           if (!question.questionnaireChoice) {
             $scope.questionnaire.questionnairePage[pIdx].
@@ -498,7 +517,7 @@ NetCommonsApp.controller('Questionnaires.edit.question',
           if (pIdx == $scope.questionnaire.questionnairePage.length - 1) {
             choice['skipPageSequence'] = variables.SKIP_GO_TO_END;
           } else {
-            choice['skipPageSequence'] = parseInt(page['pageSequence']) + 1;
+            choice['skipPageSequence'] = skipPage.toString(10);
           }
 
           // その他選択肢は必ず最後にするためにいったん取りのけておく
