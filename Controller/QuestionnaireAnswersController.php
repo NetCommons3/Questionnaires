@@ -58,7 +58,7 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 		'NetCommons.Date',
 		'NetCommons.TitleIcon',
 		'Workflow.Workflow',
-		'Questionnaires.QuestionnaireAnswer'
+		'Questionnaires.QuestionnaireAnswer',
 	];
 
 /**
@@ -106,7 +106,8 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 			'recursive' => 1
 		));
 		if (! $this->__questionnaire) {
-			$this->setAction('throwBadRequest');	// returnをつけるとテストコードが通らない
+			//$this->setAction('throwBadRequest');	// returnをつけるとテストコードが通らない
+			$this->setAction('not_found_answer');
 		}
 
 		// 現在の表示形態を調べておく
@@ -456,6 +457,15 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 	public function no_more_answer() {
 		$this->set('questionnaire', $this->__questionnaire);
 		$this->set('ownAnsweredKeys', $this->QuestionnairesOwnAnswer->getOwnAnsweredKeys());
+		$this->set('displayType', $this->__displayType);
+	}
+/**
+ * not_found_answer method
+ * アンケートがみつからないときに表示
+ *
+ * @return void
+ */
+	public function not_found_answer() {
 		$this->set('displayType', $this->__displayType);
 	}
 

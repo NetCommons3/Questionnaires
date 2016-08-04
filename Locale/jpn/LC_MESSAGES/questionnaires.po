@@ -950,3 +950,6 @@ msgstr "「%s」が公開されました。"
 
 msgid "Content creatable roles"
 msgstr "アンケートを作成できる権限"
+
+msgid "not found this questionnaire."
+msgstr "指定されたアンケートはありません。"
