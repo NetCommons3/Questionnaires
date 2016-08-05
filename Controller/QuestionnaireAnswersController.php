@@ -106,8 +106,8 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 			'recursive' => 1
 		));
 		if (! $this->__questionnaire) {
-			//$this->setAction('throwBadRequest');	// returnをつけるとテストコードが通らない
 			$this->setAction('not_found_answer');
+			return;
 		}
 
 		// 現在の表示形態を調べておく
