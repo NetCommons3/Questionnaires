@@ -93,13 +93,11 @@ class QuestionnaireAnswerControllerViewTest extends WorkflowControllerViewTest {
 		));
 		$results[2] = Hash::merge($results[0], array( // 存在しない
 			'urlOptions' => array('key' => 'questionnaire_999'),
-			'assert' => null,
-			'exception' => 'BadRequestException',
+			'assert' => array('method' => 'assertTextContains', 'expected' => __d('questionnaires', 'not found this questionnaire.')),
 		));
 		$results[3] = Hash::merge($results[0], array( // 未公開
 			'urlOptions' => array('key' => 'questionnaire_36'),
-			'assert' => null,
-			'exception' => 'BadRequestException',
+			'assert' => array('method' => 'assertTextContains', 'expected' => __d('questionnaires', 'not found this questionnaire.')),
 		));
 		$results[4] = Hash::merge($results[0], array( // 非会員NG
 			'urlOptions' => array('key' => 'questionnaire_6'),
