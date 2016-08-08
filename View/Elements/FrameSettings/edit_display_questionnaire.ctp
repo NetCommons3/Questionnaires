@@ -20,11 +20,14 @@
 			<th>
 				<?php /* echo __d('questionnaires', 'Display'); */?>
 				<div class="text-center" ng-show="questionnaireFrameSettings.displayType == <?php echo QuestionnairesComponent::DISPLAY_TYPE_LIST; ?>">
-					<?php $this->NetCommonsForm->unlockField('all_check'); ?>
 					<?php echo $this->NetCommonsForm->checkbox('all_check', array(
+					'options' => array(true => ''),
 					'ng-model' => 'WinBuf.allCheck',
+					'label' => false,
 					'ng-change' => 'allCheckClicked()',
+					'div' => 'form-inline',
 					)); ?>
+					<?php $this->NetCommonsForm->unlockField('all_check'); ?>
 				</div>
 			</th>
 			<th>
