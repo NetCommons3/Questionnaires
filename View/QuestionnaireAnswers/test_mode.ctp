@@ -24,9 +24,9 @@
 			<div class="col-xs-12">
 				<h3><?php echo __d('questionnaires', 'Questionnaire answer period'); ?></h3>
 				<?php if ($questionnaire['Questionnaire']['answer_timing'] == QuestionnairesComponent::USES_USE): ?>
-					<?php echo date('Y/m/d H:i', strtotime($questionnaire['Questionnaire']['answer_start_period'])); ?>
+					<?php echo $this->Date->dateFormat($questionnaire['Questionnaire']['answer_start_period'], 'Y/m/d H:i'); ?>
 					<?php echo __d('questionnaires', ' - '); ?>
-					<?php echo date('Y/m/d H:i', strtotime($questionnaire['Questionnaire']['answer_end_period'])); ?>
+					<?php echo $this->Date->dateFormat($questionnaire['Questionnaire']['answer_end_period'], 'Y/m/d H:i'); ?>
 				<?php else: ?>
 					<?php echo __d('questionnaires', 'do not set the answer period'); ?>
 				<?php endif; ?>
@@ -37,7 +37,7 @@
 			<div class="col-xs-12">
 				<h3><?php echo __d('questionnaires', 'Counting result display start date'); ?></h3>
 				<?php if ($questionnaire['Questionnaire']['total_show_timing'] == QuestionnairesComponent::USES_USE): ?>
-					<?php echo date('Y/m/d H:i', strtotime($questionnaire['Questionnaire']['total_show_start_period'])); ?>
+					<?php echo $this->Date->dateFormat($questionnaire['Questionnaire']['total_show_start_period'], 'Y/m/d H:i'); ?>
 					<?php echo __d('questionnaires', ' - '); ?>
 				<?php else: ?>
 					<?php echo __d('questionnaires', 'do not set the aggregate display period'); ?>

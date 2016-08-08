@@ -5,8 +5,8 @@ NetCommonsApp.constant('moment', moment);
 //NetCommonsApp.requires.push('ngSanitize');
 
 NetCommonsApp.controller('Questionnaires.edit.question',
-    ['$scope', 'NetCommonsWysiwyg', '$timeout', 'moment',
-      function($scope, NetCommonsWysiwyg, $timeout, moment) {
+    ['$scope', 'NetCommonsWysiwyg', '$timeout', 'moment', 'questionnairesMessages',
+      function($scope, NetCommonsWysiwyg, $timeout, moment, questionnairesMessages) {
 
         /**
          * tinymce
@@ -55,7 +55,10 @@ NetCommonsApp.controller('Questionnaires.edit.question',
           MATRIX_TYPE_ROW_OR_NO_MATRIX: '0',
           MATRIX_TYPE_COLUMN: '1',
 
-          SKIP_GO_TO_END: '99999'
+          SKIP_GO_TO_END: '99999',
+
+          MAX_QUESTION_COUNT: 50,
+          MAX_CHOICE_COUNT: 50
         };
 
         $scope.colorPickerPalette =
@@ -69,10 +72,7 @@ NetCommonsApp.controller('Questionnaires.edit.question',
            * @return {void}
            */
         $scope.initialize =
-            function(frameId, isPublished, questionnaire,
-            newPageLabel, newQuestionLabel, newChoiceLabel,
-            newChoiceColumnLabel, newChoiceOtherLabel) {
-
+            function(frameId, isPublished, questionnaire) {
           $scope.frameId = frameId;
           $scope.isPublished = isPublished;
           $scope.questionnaire = questionnaire;
@@ -141,12 +141,6 @@ NetCommonsApp.controller('Questionnaires.edit.question',
 
             }
           }
-
-          $scope.newPageLabel = newPageLabel;
-          $scope.newQuestionLabel = newQuestionLabel;
-          $scope.newChoiceLabel = newChoiceLabel;
-          $scope.newChoiceColumnLabel = newChoiceColumnLabel;
-          $scope.newChoiceOtherLabel = newChoiceOtherLabel;
         };
         /**
          * toArray
@@ -286,9 +280,12 @@ NetCommonsApp.controller('Questionnaires.edit.question',
            * @return {void}
            */
         $scope.addPage = function($event) {
+          if ($scope.checkMaxQuestion() == false) {
+            alert(questionnairesMessages.maxQuestionWarningMsg);
+            return;
+          }
           var page = new Object();
-          page['pageTitle'] =
-              $scope.newPageLabel +
+          page['pageTitle'] = questionnairesMessages.newPageLabel +
               ($scope.questionnaire.questionnairePage.length + 1);
           page['pageSequence'] =
               $scope.questionnaire.questionnairePage.length;
@@ -361,6 +358,10 @@ NetCommonsApp.controller('Questionnaires.edit.question',
            * @return {void}
            */
         $scope.addQuestion = function($event, pageIndex) {
+          if ($scope.checkMaxQuestion() == false) {
+            alert(questionnairesMessages.maxQuestionWarningMsg);
+            return;
+          }
           var question = new Object();
           if (!$scope.questionnaire.questionnairePage[pageIndex].questionnaireQuestion) {
             $scope.questionnaire.questionnairePage[pageIndex].
@@ -369,7 +370,7 @@ NetCommonsApp.controller('Questionnaires.edit.question',
           var newIndex =
               $scope.questionnaire.questionnairePage[pageIndex].
                   questionnaireQuestion.length;
-          question['questionValue'] = $scope.newQuestionLabel + (newIndex + 1);
+          question['questionValue'] = questionnairesMessages.newQuestionLabel + (newIndex + 1);
           question['questionSequence'] = newIndex;
           question['questionType'] = variables.TYPE_SELECTION;
           question['key'] = '';
@@ -444,6 +445,10 @@ NetCommonsApp.controller('Questionnaires.edit.question',
            */
         $scope.copyQuestionToAnotherPage =
             function($event, pageIndex, qIndex, copyPageIndex) {
+          if ($scope.checkMaxQuestion() == false) {
+            alert(questionnairesMessages.maxQuestionWarningMsg);
+            return;
+          }
           var tmpQ = angular.copy(
               $scope.questionnaire.questionnairePage[pageIndex].questionnaireQuestion[qIndex]);
           $scope.questionnaire.questionnairePage[copyPageIndex].
@@ -492,6 +497,11 @@ NetCommonsApp.controller('Questionnaires.edit.question',
            */
         $scope.addChoice =
             function($event, pIdx, qIdx, choiceCount, otherType, matrixType) {
+          if (choiceCount == variables.MAX_CHOICE_COUNT) {
+            alert(questionnairesMessages.maxChoiceWarningMsg);
+            return;
+          }
+
           var page = $scope.questionnaire.questionnairePage[pIdx];
           var question = page.questionnaireQuestion[qIdx];
           var choice = new Object();
@@ -505,12 +515,13 @@ NetCommonsApp.controller('Questionnaires.edit.question',
           var newIndex = question.questionnaireChoice.length;
 
           if (otherType != variables.OTHER_CHOICE_TYPE_NO_OTHER_FILED) {
-            choice['choiceLabel'] = $scope.newChoiceOtherLabel;
+            choice['choiceLabel'] = questionnairesMessages.newChoiceOtherLabel;
           } else {
             if (matrixType == variables.MATRIX_TYPE_ROW_OR_NO_MATRIX) {
-              choice['choiceLabel'] = $scope.newChoiceLabel + (choiceCount + 1);
+              choice['choiceLabel'] = questionnairesMessages.newChoiceLabel + (choiceCount + 1);
             } else {
-              choice['choiceLabel'] = $scope.newChoiceColumnLabel + (choiceCount + 1);
+              choice['choiceLabel'] =
+                 questionnairesMessages.newChoiceColumnLabel + (choiceCount + 1);
             }
           }
           // skipPageIndex仮設定
@@ -784,5 +795,21 @@ NetCommonsApp.controller('Questionnaires.edit.question',
           } else {
             return 'panel-default';
           }
+        };
+        /**
+         * 現在の質問数に＋１したらMAXを超えてしまうかどうかのガード
+         *
+         * @return {bool}
+         */
+        $scope.checkMaxQuestion = function() {
+          var ct = 0;
+          var pageArr = $scope.questionnaire.questionnairePage;
+          for (var i = 0; i < pageArr.length; i++) {
+            ct += pageArr[i].questionnaireQuestion.length;
+          }
+          if (ct + 1 > variables.MAX_QUESTION_COUNT) {
+            return false;
+          }
+          return true;
         };
      }]);

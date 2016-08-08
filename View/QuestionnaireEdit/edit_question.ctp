@@ -31,12 +31,7 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 	 ng-controller="Questionnaires.edit.question"
 	 ng-init="initialize(<?php echo Current::read('Frame.id'); ?>,
 	 						<?php echo (int)$isPublished; ?>,
-							<?php echo h(json_encode($jsQuestionnaire)); ?>,
-							'<?php echo h($newPageLabel); ?>',
-							'<?php echo h($newQuestionLabel); ?>',
-							'<?php echo h($newChoiceLabel); ?>',
-							'<?php echo h($newChoiceColumnLabel); ?>',
-							'<?php echo h($newChoiceOtherLabel); ?>')">
+							<?php echo h(json_encode($jsQuestionnaire)); ?>)">
 
 	<?php echo $this->element('Questionnaires.QuestionnaireEdit/questionnaire_title'); ?>
 

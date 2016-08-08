@@ -115,6 +115,7 @@ class QuestionnaireEditController extends QuestionnairesAppController {
  */
 	public function beforeFilter() {
 		parent::beforeFilter();
+		ini_set('max_input_vars', 10000);
 		// NetCommonsお約束：編集画面へのURLに編集対象のコンテンツキーが含まれている
 		// まずは、そのキーを取り出す
 		// アンケートキー
@@ -443,6 +444,8 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 			$this->set('cancelUrl', array('url' => NetCommonsUrl::backToPageUrl()));
 		}
 		$this->set('deleteUrl', array('url' => $this->_getActionUrl('delete')));
+		// これを使うのは集計結果編集画面だけなので固定体に書いています
+		$this->set('prevUrl', array('url' => $this->_getActionUrl('edit_question')));
 
 		$this->set('questionTypeOptions', $this->Questionnaires->getQuestionTypeOptionsWithLabel());
 		$this->set('newPageLabel', __d('questionnaires', 'page'));

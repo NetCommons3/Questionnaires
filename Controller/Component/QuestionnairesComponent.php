@@ -131,59 +131,25 @@ class QuestionnairesComponent extends Component {
 	const ACTION_ACT = '2';
 
 /**
- * type. selection
+ * question, choice max count
+ *
+ * @var integer
+ */
+	const MAX_QUESTION_COUNT = 50;
+	const MAX_CHOICE_COUNT = 50;
+
+/**
+ * type. question
  *
  * @var string
  */
 	const TYPE_SELECTION = '1';
-
-/**
- * type. multiple selection
- *
- * @var string
- */
 	const TYPE_MULTIPLE_SELECTION = '2';
-
-/**
- * type. text
- *
- * @var string
- */
 	const TYPE_TEXT = '3';
-
-/**
- * type. text area
- *
- * @var string
- */
 	const TYPE_TEXT_AREA = '4';
-
-/**
- * type. Matrix (selection list)
- *
- * @var string
- */
 	const TYPE_MATRIX_SELECTION_LIST = '5';
-
-/**
- * type. Matrix (multiple)
- *
- * @var string
- */
 	const TYPE_MATRIX_MULTIPLE = '6';
-
-/**
- * type. date and time
- *
- * @var string
- */
 	const TYPE_DATE_AND_TIME = '7';
-
-/**
- * type. single select box
- *
- * @var string
- */
 	const TYPE_SINGLE_SELECT_BOX = '8';
 
 /**
