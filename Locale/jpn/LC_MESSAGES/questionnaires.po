@@ -953,3 +953,8 @@ msgstr "アンケートを作成できる権限"
 
 msgid "not found this questionnaire."
 msgstr "指定されたアンケートはありません。"
+
+msgid "Number of questions that can be created is up %d . Already it has become %d ."
+msgstr "作成できる質問の数は１アンケートにつき%dまでです。%d個を超えようとしています。"
+msgid "Number of choices that can be created is up %d per question. Already it has become %d ."
+msgstr "作成できる選択肢の数は１質問につき%dまでです。%d個を超えようとしています。"

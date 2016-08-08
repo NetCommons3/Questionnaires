@@ -115,6 +115,7 @@ class QuestionnaireEditController extends QuestionnairesAppController {
  */
 	public function beforeFilter() {
 		parent::beforeFilter();
+		ini_set('max_input_vars', 10000);
 		// NetCommonsお約束：編集画面へのURLに編集対象のコンテンツキーが含まれている
 		// まずは、そのキーを取り出す
 		// アンケートキー

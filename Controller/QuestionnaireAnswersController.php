@@ -91,6 +91,11 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 		// 親クラスのbeforeFilterを済ませる
 		parent::beforeFilter();
 
+		// 現在の表示形態を調べておく
+		list($this->__displayType) = $this->QuestionnaireFrameSetting->getQuestionnaireFrameSetting(
+			Current::read('Frame.key')
+		);
+
 		// NetCommonsお約束：編集画面へのURLに編集対象のコンテンツキーが含まれている
 		// まずは、そのキーを取り出す
 		// アンケートキー
@@ -109,11 +114,6 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 			$this->setAction('not_found_answer');
 			return;
 		}
-
-		// 現在の表示形態を調べておく
-		list($this->__displayType) = $this->QuestionnaireFrameSetting->getQuestionnaireFrameSetting(
-			Current::read('Frame.key')
-		);
 
 		// 以下のisAbleto..の内部関数にてNetCommonsお約束である編集権限、参照権限チェックを済ませています
 		// 閲覧可能か
