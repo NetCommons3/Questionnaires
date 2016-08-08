@@ -76,22 +76,22 @@ class QuestionnaireUtilHelper extends AppHelper {
 		if ($questionnaire['Questionnaire']['status'] != WorkflowComponent::STATUS_PUBLISHED) {
 			$answerButtonClass = 'info';
 			$answerButtonLabel = __d('questionnaires', 'Test');
-			$url = NetCommonsUrl::actionUrl(array(
+			$url = Router::url(NetCommonsUrl::actionUrl(array(
 				'controller' => 'questionnaire_answers',
 				'action' => 'test_mode',
 				Current::read('Block.id'),
 				$key,
 				'frame_id' => Current::read('Frame.id'),
-			));
+			)));
 			return sprintf($buttonStr, $answerButtonClass, '', '', $url, $answerButtonLabel);
 		} else {
-			$url = NetCommonsUrl::actionUrl(array(
+			$url = Router::url(NetCommonsUrl::actionUrl(array(
 				'controller' => 'questionnaire_answers',
 				'action' => 'view',
 				Current::read('Block.id'),
 				$key,
 				'frame_id' => Current::read('Frame.id'),
-			));
+			)));
 		}
 
 		// 何事もなければ回答可能のボタン
