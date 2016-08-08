@@ -443,6 +443,8 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 			$this->set('cancelUrl', array('url' => NetCommonsUrl::backToPageUrl()));
 		}
 		$this->set('deleteUrl', array('url' => $this->_getActionUrl('delete')));
+		// これを使うのは集計結果編集画面だけなので固定体に書いています
+		$this->set('prevUrl', array('url' => $this->_getActionUrl('edit_question')));
 
 		$this->set('questionTypeOptions', $this->Questionnaires->getQuestionTypeOptionsWithLabel());
 		$this->set('newPageLabel', __d('questionnaires', 'page'));
