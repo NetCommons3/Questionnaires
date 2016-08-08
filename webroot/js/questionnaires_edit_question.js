@@ -791,9 +791,9 @@ NetCommonsApp.controller('Questionnaires.edit.question',
          */
         $scope.getResultAccordionClass = function(question) {
           if (question.isResultDisplay != variables.EXPRESSION_NOT_SHOW) {
-            return 'panel-success';
+            return 'panel panel-success';
           } else {
-            return 'panel-default';
+            return 'panel panel-default';
           }
         };
         /**
