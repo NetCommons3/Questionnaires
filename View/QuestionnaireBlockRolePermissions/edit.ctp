@@ -16,7 +16,7 @@
 		<?php echo $this->element('Blocks.edit_form', array(
 				'model' => 'QuestionnaireBlockRolePermission',
 				'callback' => 'Questionnaires.QuestionnaireBlockRolePermissions/edit_form',
-				'cancelUrl' => NetCommonsUrl::backToIndexUrl('default_setting_action'),
+				'cancelUrl' => NetCommonsUrl::backToPageUrl(true),
 			)); ?>
 	</div>
 </div>
