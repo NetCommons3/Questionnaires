@@ -285,8 +285,7 @@ NetCommonsApp.controller('Questionnaires.edit.question',
             return;
           }
           var page = new Object();
-          page['pageTitle'] =
-            questionnairesMessages.newPageLabel +
+          page['pageTitle'] = questionnairesMessages.newPageLabel +
               ($scope.questionnaire.questionnairePage.length + 1);
           page['pageSequence'] =
               $scope.questionnaire.questionnairePage.length;
@@ -521,7 +520,8 @@ NetCommonsApp.controller('Questionnaires.edit.question',
             if (matrixType == variables.MATRIX_TYPE_ROW_OR_NO_MATRIX) {
               choice['choiceLabel'] = questionnairesMessages.newChoiceLabel + (choiceCount + 1);
             } else {
-              choice['choiceLabel'] = questionnairesMessages.newChoiceColumnLabel + (choiceCount + 1);
+              choice['choiceLabel'] =
+                 questionnairesMessages.newChoiceColumnLabel + (choiceCount + 1);
             }
           }
           // skipPageIndex仮設定
