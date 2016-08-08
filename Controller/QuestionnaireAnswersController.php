@@ -86,7 +86,9 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
  */
 	public function beforeFilter() {
 		// ゲストアクセスOKのアクションを設定
-		$this->Auth->allow('view', 'confirm', 'thanks', 'no_more_answer', 'key_auth', 'img_auth');
+		$this->Auth->allow(
+			'view', 'confirm', 'thanks', 'not_found_answer', 'no_more_answer', 'key_auth', 'img_auth'
+		);
 
 		// 親クラスのbeforeFilterを済ませる
 		parent::beforeFilter();

@@ -164,8 +164,7 @@ class QuestionnaireAnswerControllerViewTest extends WorkflowControllerViewTest {
 		// 人が書いた＆未公開
 		$results[2] = Hash::merge($results[0], array( // 未公開
 			'urlOptions' => array('key' => 'questionnaire_36'),
-			'assert' => null,
-			'expected' => 'BadRequestException',
+			'assert' => array('method' => 'assertTextContains', 'expected' => __d('questionnaires', 'not found this questionnaire.')),
 		));
 		// 非会員NG みれる
 		$results[4] = Hash::merge($results[0], array( // 非会員NG
