@@ -107,7 +107,7 @@ echo $this->NetCommonsHtml->script(array(
 							<?php echo $this->BlockIndex->tableData(
 							'',
 							$this->BackTo->linkButton('',
-								NetCommonsUrl::actionUrl(array(
+								NetCommonsUrl::actionUrlAsArray(array(
 									'plugin' => 'questionnaires',
 									'controller' => 'questionnaire_blocks',
 									'action' => 'export',

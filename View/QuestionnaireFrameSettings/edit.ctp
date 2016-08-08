@@ -26,7 +26,7 @@ $jsQuestionnaires = NetCommonsAppController::camelizeKeyRecursive(Questionnaires
 		<?php echo $this->element('Blocks.edit_form', array(
 				'model' => 'QuestionnaireFrameSetting',
 				'callback' => 'Questionnaires.FrameSettings/edit_form',
-				'cancelUrl' => NetCommonsUrl::backToPageUrl(),
+				'cancelUrl' => NetCommonsUrl::backToPageUrl(true),
 			)); ?>
 
 	</div>

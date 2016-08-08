@@ -26,7 +26,7 @@
 					'mailBodyPopoverMessage' => __d('mails', 'MailSetting.mail_fixed_phrase_body.popover.answer'),
 				),
 			),
-			NetCommonsUrl::backToIndexUrl('default_setting_action'),
+			NetCommonsUrl::backToPageUrl(true),
 			0 // 問合せ先メールアドレス なし
 		); ?>
 	</div>

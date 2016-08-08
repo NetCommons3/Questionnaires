@@ -171,7 +171,7 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 	</div>
 
 		<div class="panel-footer text-center">
-			<?php echo $this->Wizard->buttons('edit_question', $cancelUrl); ?>
+			<?php echo $this->Wizard->buttons('edit_question', $cancelUrl, [], [], true); ?>
 		</div>
 
 
