@@ -319,20 +319,21 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 			if ($this->layout == 'NetCommons.setting') {
 				$this->redirect(NetCommonsUrl::backToIndexUrl('default_setting_action'));
 			} else {
-				// 回答画面（詳細）へリダイレクト
+				// 回答画面（詳細）へリダイレクト×
+				// 発行したときはページの最初に戻るべきとの指摘アリ
 				if ($saveQuestionnaire['Questionnaire']['status'] == WorkflowComponent::STATUS_PUBLISHED) {
-					$action = 'view';
+					$this->redirect(NetCommonsUrl::backToPageUrl());
 				} else {
 					$action = 'test_mode';
+					$urlArray = array(
+						'controller' => 'questionnaire_answers',
+						'action' => $action,
+						Current::read('Block.id'),
+						$this->_getQuestionnaireKey($saveQuestionnaire),
+						'frame_id' => Current::read('Frame.id'),
+					);
+					$this->redirect(NetCommonsUrl::actionUrl($urlArray));
 				}
-				$urlArray = array(
-					'controller' => 'questionnaire_answers',
-					'action' => $action,
-					Current::read('Block.id'),
-					$this->_getQuestionnaireKey($saveQuestionnaire),
-					'frame_id' => Current::read('Frame.id'),
-				);
-				$this->redirect(NetCommonsUrl::actionUrl($urlArray));
 			}
 			return;
 		} else {
