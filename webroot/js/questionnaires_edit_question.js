@@ -454,6 +454,13 @@ NetCommonsApp.controller('Questionnaires.edit.question',
           $scope.questionnaire.questionnairePage[copyPageIndex].
               questionnaireQuestion.push(tmpQ);
 
+          tmpQ.key = '';
+          tmpQ.id = '';
+          for (var i = 0; i < tmpQ.questionnaireChoice.length; i++) {
+            tmpQ.questionnaireChoice[i].key = '';
+            tmpQ.questionnaireChoice[i].id = '';
+          }
+
           $scope._resetQuestionnaireQuestionSequence(copyPageIndex);
           //$event.stopPropagation();
         };
