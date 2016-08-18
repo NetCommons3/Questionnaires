@@ -26,5 +26,6 @@
 
 	<?php echo $this->TitleIcon->titleIcon($questionnaire['Questionnaire']['title_icon']); ?>
 	<?php echo $questionnaire['Questionnaire']['title']; ?>
+	<br />
 	<small><?php echo $questionnaire['Questionnaire']['sub_title'];?></small>
 </h1>
