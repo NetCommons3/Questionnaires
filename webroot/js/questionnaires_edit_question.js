@@ -754,7 +754,7 @@ NetCommonsApp.controller('Questionnaires.edit.question',
          */
         $scope.greaterThan = function(prop, tgt2) {
           return function(item) {
-            return item[prop] > tgt2[prop];
+            return parseInt(item[prop]) > parseInt(tgt2[prop]);
           }
         };
         /**
