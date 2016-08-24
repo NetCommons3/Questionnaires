@@ -74,38 +74,6 @@ msgstr "タイトル"
 msgid "End period"
 msgstr "期限順"
 
-#: /Controller/Component/QuestionnairesComponent.php:541
-msgid "Single choice"
-msgstr "択一選択"
-
-#: /Controller/Component/QuestionnairesComponent.php:542
-msgid "Multiple choice"
-msgstr "複数選択"
-
-#: /Controller/Component/QuestionnairesComponent.php:543
-msgid "Single text"
-msgstr "１行テキスト"
-
-#: /Controller/Component/QuestionnairesComponent.php:544
-msgid "Multiple text"
-msgstr "複数行テキスト"
-
-#: /Controller/Component/QuestionnairesComponent.php:545
-msgid "Single choice matrix"
-msgstr "択一選択マトリクス"
-
-#: /Controller/Component/QuestionnairesComponent.php:546
-msgid "Multiple choice matrix"
-msgstr "複数選択マトリクス"
-
-#: /Controller/Component/QuestionnairesComponent.php:547
-msgid "Date and time"
-msgstr "日付と時間"
-
-#: /Controller/Component/QuestionnairesComponent.php:548
-msgid "List select"
-msgstr "リスト選択"
-
 #: /Model/ActionQuestionnaireAdd.php:54
 msgid "Please choose create option."
 msgstr "作成方法を選択してください。"
@@ -309,26 +277,6 @@ msgstr ": 複数選択式の場合、合計が100%を超える場合がありま
 #: /View/Elements/AnswerSummaries/aggregate_common_header.ctp:21
 msgid "The total number of answers: "
 msgstr "全回答数:"
-
-#: /View/Elements/AnswerSummaries/aggregate_common_header.ctp:29
-msgid "Select one"
-msgstr "択一選択"
-
-#: /View/Elements/AnswerSummaries/aggregate_common_header.ctp:32
-msgid "Select more than one"
-msgstr "複数選択"
-
-#: /View/Elements/AnswerSummaries/aggregate_common_header.ctp:35
-msgid "Matrix (selection list)"
-msgstr "マトリクス（択一選択）"
-
-#: /View/Elements/AnswerSummaries/aggregate_common_header.ctp:38
-msgid "Matrix (multiple)"
-msgstr "マトリクス（複数選択）"
-
-#: /View/Elements/AnswerSummaries/aggregate_common_header.ctp:41
-msgid "List selection"
-msgstr "リスト選択"
 
 #: /View/Elements/AnswerSummaries/aggregate_common_header.ctp:44
 msgid "Not selection"

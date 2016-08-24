@@ -112,6 +112,7 @@ class QuestionnaireAnswerSummariesController extends QuestionnairesAppController
 		$questions = $this->QuestionnaireAnswerSummary->getAggregate($questionnaire);
 
 		//画面用データをセットする。
+		$this->set('questionTypeOptions', $this->Questionnaires->getQuestionTypeOptionsWithLabel());
 		$this->set('questionnaire', $questionnaire);
 		$this->set('questions', $questions);
 	}

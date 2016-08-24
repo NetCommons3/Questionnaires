@@ -74,38 +74,6 @@ msgstr ""
 msgid "End period"
 msgstr ""
 
-#: /Controller/Component/QuestionnairesComponent.php:541
-msgid "Single choice"
-msgstr ""
-
-#: /Controller/Component/QuestionnairesComponent.php:542
-msgid "Multiple choice"
-msgstr ""
-
-#: /Controller/Component/QuestionnairesComponent.php:543
-msgid "Single text"
-msgstr ""
-
-#: /Controller/Component/QuestionnairesComponent.php:544
-msgid "Multiple text"
-msgstr ""
-
-#: /Controller/Component/QuestionnairesComponent.php:545
-msgid "Single choice matrix"
-msgstr ""
-
-#: /Controller/Component/QuestionnairesComponent.php:546
-msgid "Multiple choice matrix"
-msgstr ""
-
-#: /Controller/Component/QuestionnairesComponent.php:547
-msgid "Date and time"
-msgstr ""
-
-#: /Controller/Component/QuestionnairesComponent.php:548
-msgid "List select"
-msgstr ""
-
 #: /Model/ActionQuestionnaireAdd.php:54
 msgid "Please choose create option."
 msgstr ""
@@ -308,26 +276,6 @@ msgstr ""
 
 #: /View/Elements/AnswerSummaries/aggregate_common_header.ctp:21
 msgid "The total number of answers: "
-msgstr ""
-
-#: /View/Elements/AnswerSummaries/aggregate_common_header.ctp:29
-msgid "Select one"
-msgstr ""
-
-#: /View/Elements/AnswerSummaries/aggregate_common_header.ctp:32
-msgid "Select more than one"
-msgstr ""
-
-#: /View/Elements/AnswerSummaries/aggregate_common_header.ctp:35
-msgid "Matrix (selection list)"
-msgstr ""
-
-#: /View/Elements/AnswerSummaries/aggregate_common_header.ctp:38
-msgid "Matrix (multiple)"
-msgstr ""
-
-#: /View/Elements/AnswerSummaries/aggregate_common_header.ctp:41
-msgid "List selection"
 msgstr ""
 
 #: /View/Elements/AnswerSummaries/aggregate_common_header.ctp:44

@@ -427,14 +427,14 @@ class QuestionnairesComponent extends Component {
  */
 	public function getQuestionTypeOptionsWithLabel() {
 		return array(
-			self::TYPE_SELECTION => __d('questionnaires', 'Single choice'),
-			self::TYPE_MULTIPLE_SELECTION => __d('questionnaires', 'Multiple choice'),
-			self::TYPE_TEXT => __d('questionnaires', 'Single text'),
-			self::TYPE_TEXT_AREA => __d('questionnaires', 'Multiple text'),
-			self::TYPE_MATRIX_SELECTION_LIST => __d('questionnaires', 'Single choice matrix'),
-			self::TYPE_MATRIX_MULTIPLE => __d('questionnaires', 'Multiple choice matrix'),
-			self::TYPE_DATE_AND_TIME => __d('questionnaires', 'Date and time'),
-			self::TYPE_SINGLE_SELECT_BOX => __d('questionnaires', 'List select')
+			self::TYPE_SELECTION => __d('net_commons', 'Single choice'),
+			self::TYPE_MULTIPLE_SELECTION => __d('net_commons', 'Multiple choice'),
+			self::TYPE_TEXT => __d('net_commons', 'Text'),
+			self::TYPE_TEXT_AREA => __d('net_commons', 'Free style'),
+			self::TYPE_MATRIX_SELECTION_LIST => __d('net_commons', 'Single choice matrix'),
+			self::TYPE_MATRIX_MULTIPLE => __d('net_commons', 'Multiple choice matrix'),
+			self::TYPE_DATE_AND_TIME => __d('net_commons', 'Date and time'),
+			self::TYPE_SINGLE_SELECT_BOX => __d('net_commons', 'List select')
 		);
 	}
 
