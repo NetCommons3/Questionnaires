@@ -49,6 +49,7 @@
             <span class="glyphicon glyphicon-plus"></span>
             <?php echo __d('questionnaires', 'Add line choices'); ?>
         </button>
+        <div class="clearfix"></div>
         <div class="checkbox">
             <label>
                 <input type="checkbox"
