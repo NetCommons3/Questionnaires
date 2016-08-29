@@ -63,7 +63,7 @@ echo $this->NetCommonsHtml->script(array(
 						); ?>
 						<?php echo $this->BlockIndex->tableData(
 						'',
-						$this->TitleIcon->titleIcon($questionnaire['Questionnaire']['title_icon']) . $questionnaire['Questionnaire']['title'],
+						$this->TitleIcon->titleIcon($questionnaire['Questionnaire']['title_icon']) . h($questionnaire['Questionnaire']['title']),
 						array(
 							'escape' => false,
 							'editUrl' => array(
