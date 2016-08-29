@@ -39,7 +39,7 @@
 				<?php endif ?>
 
 				<label>
-					<?php echo $question['question_value']; ?>
+					<?php echo h($question['question_value']); ?>
 				</label>
 
 				<div class="well form-control-static">

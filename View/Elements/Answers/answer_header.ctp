@@ -25,7 +25,7 @@
 	<?php echo $this->Workflow->label($questionnaire['Questionnaire']['status']); ?>
 
 	<?php echo $this->TitleIcon->titleIcon($questionnaire['Questionnaire']['title_icon']); ?>
-	<?php echo $questionnaire['Questionnaire']['title']; ?>
+	<?php echo h($questionnaire['Questionnaire']['title']); ?>
 	<br />
-	<small><?php echo $questionnaire['Questionnaire']['sub_title'];?></small>
+	<small><?php echo h($questionnaire['Questionnaire']['sub_title']);?></small>
 </h1>

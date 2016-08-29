@@ -189,7 +189,7 @@ class QuestionnaireAnswerHelper extends AppHelper {
  */
 	public function singleText($index, $fieldName, $question, $readonly) {
 		if ($readonly) {
-			$ret = $this->value($fieldName);
+			$ret = h($this->value($fieldName));
 			return $ret;
 		}
 		$ret = $this->NetCommonsForm->input($fieldName, array(
@@ -226,7 +226,7 @@ class QuestionnaireAnswerHelper extends AppHelper {
  */
 	public function textArea($index, $fieldName, $question, $readonly) {
 		if ($readonly) {
-			$ret = nl2br($this->value($fieldName));
+			$ret = h(nl2br($this->value($fieldName)));
 			return $ret;
 		}
 		$ret = $this->NetCommonsForm->textarea($fieldName, array(
@@ -249,7 +249,7 @@ class QuestionnaireAnswerHelper extends AppHelper {
  */
 	public function singleList($index, $fieldName, $question, $readonly) {
 		if ($readonly) {
-			$answer = $this->value($fieldName);
+			$answer = h($this->value($fieldName));
 			$ret = substr($answer, strrpos($answer, QuestionnairesComponent::ANSWER_VALUE_DELIMITER) + 1);
 			return $ret;
 		}
@@ -301,7 +301,7 @@ class QuestionnaireAnswerHelper extends AppHelper {
 
 		foreach ($rowChoices as $rowIndex => $row) {
 			$baseFieldName = 'QuestionnaireAnswer.' . $index . '.' . $rowIndex;
-			$ret .= '<tr><th>' . $row['choice_label'];
+			$ret .= '<tr><th>' . h($row['choice_label']);
 			$ret .= $this->NetCommonsForm->hidden(	$baseFieldName . '.questionnaire_answer_summary_id');
 			$ret .= $this->NetCommonsForm->hidden(	$baseFieldName . '.questionnaire_question_key',
 				array('value' => $index));
@@ -340,7 +340,7 @@ class QuestionnaireAnswerHelper extends AppHelper {
  */
 	public function dateTimeInput($index, $fieldName, $question, $readonly) {
 		if ($readonly) {
-			$ret = $this->value($fieldName);
+			$ret = h($this->value($fieldName));
 			return $ret;
 		}
 
@@ -424,8 +424,8 @@ class QuestionnaireAnswerHelper extends AppHelper {
 				QuestionnairesComponent::ANSWER_DELIMITER,
 				$choice['key'],
 				QuestionnairesComponent::ANSWER_VALUE_DELIMITER,
-				$choice['choice_label']);
-			$ret[$choiceIndex] = $choice['choice_label'];
+				h($choice['choice_label']));
+			$ret[$choiceIndex] = h($choice['choice_label']);
 		}
 		return $ret;
 	}
