@@ -264,6 +264,7 @@ class QuestionnaireAnswerHelper extends AppHelper {
 				'disabled' => $readonly,
 				'empty' => __d('questionnaires', 'Please choose one'),
 				'error' => false,
+				'escape' => false,
 			));
 		}
 		return $ret;
