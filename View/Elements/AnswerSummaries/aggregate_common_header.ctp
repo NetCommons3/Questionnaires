@@ -13,7 +13,7 @@
 
 	<?php if (!empty($question['question_value'])): ?>
 		<h2>
-			<?php echo $question['question_value']; ?>
+			<?php echo h($question['question_value']); ?>
 		</h2>
 	<?php endif; ?>
 	<p>
