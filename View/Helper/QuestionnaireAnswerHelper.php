@@ -426,7 +426,7 @@ class QuestionnaireAnswerHelper extends AppHelper {
 				QuestionnairesComponent::ANSWER_DELIMITER,
 				$choice['key'],
 				QuestionnairesComponent::ANSWER_VALUE_DELIMITER,
-				h($choice['choice_label']));
+				$choice['choice_label']);
 			$ret[$choiceIndex] = h($choice['choice_label']);
 		}
 		return $ret;
