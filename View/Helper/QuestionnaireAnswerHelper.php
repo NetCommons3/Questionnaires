@@ -172,6 +172,7 @@ class QuestionnaireAnswerHelper extends AppHelper {
 				'disabled' => $readonly,
 				'hiddenField' => !$readonly,
 				'error' => false,
+				'escape' => false,
 			));
 
 			$ret .= $afterLabel;
