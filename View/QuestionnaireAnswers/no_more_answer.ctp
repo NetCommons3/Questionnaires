@@ -18,7 +18,7 @@
 )); ?>
 <?php if ($displayType == QuestionnairesComponent::DISPLAY_TYPE_LIST): ?>
 	<div class="text-center">
-		<?php echo $this->BackTo->pageLinkButton(__d('questionnaires', 'Back to Top'), array('icon' => 'chevron-left')); ?>
+        <?php echo $this->LinkButton->toList(); ?>
 	</div>
 <?php endif; ?>
 </article>

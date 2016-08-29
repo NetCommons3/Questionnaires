@@ -70,6 +70,11 @@ class QuestionnaireAnswerSummariesController extends QuestionnairesAppController
 		// ゲストアクセスOKのアクションを設定
 		$this->Auth->allow('view', 'no_summaries');
 
+		// 現在の表示形態を調べておく
+		list($this->__displayType) =
+			$this->QuestionnaireFrameSetting->getQuestionnaireFrameSetting(Current::read('Frame.key'));
+		$this->set('displayType', $this->__displayType);
+
 		// NetCommonsお約束：編集画面へのURLに編集対象のコンテンツキーが含まれている
 		// まずは、そのキーを取り出す
 		// アンケートキー
@@ -85,12 +90,9 @@ class QuestionnaireAnswerSummariesController extends QuestionnairesAppController
 			'recursive' => 1
 		));
 		if (! $this->__questionnaire) {
-			$this->setAction('throwBadRequest');
+			$this->setAction('no_summaries');
+			return;
 		}
-
-		// 現在の表示形態を調べておく
-		list($this->__displayType) =
-			$this->QuestionnaireFrameSetting->getQuestionnaireFrameSetting(Current::read('Frame.key'));
 
 		//集計表示していいかどうかの判断
 
@@ -124,7 +126,6 @@ class QuestionnaireAnswerSummariesController extends QuestionnairesAppController
  * @return void
  */
 	public function no_summaries() {
-		$this->set('displayType', $this->__displayType);
 	}
 
 }
