@@ -201,7 +201,7 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
 		$this->autoRender = false;
 		// ダウンロードファイル名決定 アンケート名称をつける
 		$zipFileName = $questionnaire['Questionnaire']['title'] . '.zip';
-		$downloadFileName = $questionnaire['Questionnaire']['title'] . '.csv';
+		$downloadFileName = trim($questionnaire['Questionnaire']['title']) . '.csv';
 		// 出力
 		return $csvFile->zipDownload(rawurlencode($zipFileName), $downloadFileName, $zipPassword);
 	}
