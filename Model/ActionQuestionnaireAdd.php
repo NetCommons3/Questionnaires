@@ -384,6 +384,9 @@ class ActionQuestionnaireAdd extends QuestionnairesAppModel {
 		// 同一であれば正当性が保証されたと判断する（フォーマットチェックなどは行わない）
 		$questionnaireZipFile =
 			$folderPath . DS . QuestionnairesComponent::QUESTIONNAIRE_TEMPLATE_FILENAME;
+		if (! file_exists($questionnaireZipFile)) {
+			return false;
+		}
 		if (sha1_file($questionnaireZipFile, false) != $fingerPrint) {
 			return false;
 		}
