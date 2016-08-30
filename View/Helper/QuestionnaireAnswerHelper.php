@@ -112,7 +112,7 @@ class QuestionnaireAnswerHelper extends AppHelper {
 			// 下のような形でradioをつくるとHiddenが自動的には付随されなかった！
 			// 仕方ないので意図的に作成している
 			$ret = $this->NetCommonsForm->hidden($fieldName, array('value' => ''));
-			$ret .= $this->Form->input($fieldName, array(
+			$ret .= $this->NetCommonsForm->input($fieldName, array(
 				'type' => 'radio',
 				'options' => $options,
 				'legend' => false,
@@ -172,7 +172,7 @@ class QuestionnaireAnswerHelper extends AppHelper {
 				'disabled' => $readonly,
 				'hiddenField' => !$readonly,
 				'error' => false,
-				'escape' => false,
+				//'escape' => false,
 			));
 
 			$ret .= $afterLabel;
@@ -264,7 +264,7 @@ class QuestionnaireAnswerHelper extends AppHelper {
 				'disabled' => $readonly,
 				'empty' => __d('questionnaires', 'Please choose one'),
 				'error' => false,
-				'escape' => false,
+				//'escape' => false,
 			));
 		}
 		return $ret;
@@ -297,7 +297,7 @@ class QuestionnaireAnswerHelper extends AppHelper {
 		$ret .= 'table-bordered text-center questionnaire-matrix-table">';
 		$ret .= '<thead><tr><th></th>';
 		foreach ($options as $opt) {
-			$ret .= '<th class="text-center">' . $opt . '</th>';
+			$ret .= '<th class="text-center">' . h($opt) . '</th>';
 		}
 		$ret .= '</thead><tbody>';
 
@@ -427,7 +427,7 @@ class QuestionnaireAnswerHelper extends AppHelper {
 				$choice['key'],
 				QuestionnairesComponent::ANSWER_VALUE_DELIMITER,
 				$choice['choice_label']);
-			$ret[$choiceIndex] = h($choice['choice_label']);
+			$ret[$choiceIndex] = $choice['choice_label'];
 		}
 		return $ret;
 	}
