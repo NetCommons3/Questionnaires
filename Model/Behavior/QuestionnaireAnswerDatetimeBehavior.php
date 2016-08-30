@@ -62,11 +62,13 @@ class QuestionnaireAnswerDatetimeBehavior extends QuestionnaireAnswerBehavior {
 
 		$answer = $data['answer_value'];
 		$ret = true;
-		if (! $this->_validateDatetime($model, $question['question_type_option'], $answer)) {
-			$ret = false;
-		}
-		if (! $this->_validateTimeRange($model, $question, $answer)) {
-			$ret = false;
+		if ($question['is_require'] === true || $data['answer_value']) {
+			if (!$this->_validateDatetime($model, $question['question_type_option'], $answer)) {
+				$ret = false;
+			}
+			if (!$this->_validateTimeRange($model, $question, $answer)) {
+				$ret = false;
+			}
 		}
 		return $ret;
 	}
