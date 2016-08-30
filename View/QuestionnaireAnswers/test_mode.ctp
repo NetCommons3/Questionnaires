@@ -33,17 +33,33 @@
 			</div>
 		</div>
 
-		<div class="row">
-			<div class="col-xs-12">
-				<h3><?php echo __d('questionnaires', 'Counting result display start date'); ?></h3>
-				<?php if ($questionnaire['Questionnaire']['total_show_timing'] == QuestionnairesComponent::USES_USE): ?>
+		<?php if ($questionnaire['Questionnaire']['is_total_show'] == QuestionnairesComponent::USES_USE): ?>
+			<div class="row">
+				<div class="col-xs-12">
+					<h3><?php echo __d('questionnaires', 'Aggregates'); ?></h3>
+					<?php echo __d('questionnaires', 'publish aggregate result'); ?>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<h3><?php echo __d('questionnaires', 'Counting result display start date'); ?></h3>
+					<?php if ($questionnaire['Questionnaire']['total_show_timing'] == QuestionnairesComponent::USES_USE): ?>
 					<?php echo $this->Date->dateFormat($questionnaire['Questionnaire']['total_show_start_period'], 'Y/m/d H:i'); ?>
 					<?php echo __d('questionnaires', ' - '); ?>
-				<?php else: ?>
+					<?php else: ?>
 					<?php echo __d('questionnaires', 'do not set the aggregate display period'); ?>
-				<?php endif; ?>
+					<?php endif; ?>
+				</div>
 			</div>
-		</div>
+		<?php else: ?>
+			<div class="row">
+				<div class="col-xs-12">
+					<h3><?php echo __d('questionnaires', 'Aggregates'); ?></h3>
+					<?php echo __d('questionnaires', 'not disclose the total result'); ?>
+				</div>
+			</div>
+		<?php endif; ?>
+
 
 		<div class="row">
 			<div class="col-xs-12">
