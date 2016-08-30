@@ -21,7 +21,8 @@
 		<?php echo $this->NetCommonsForm->input('title', array(
 		'label' => __d('questionnaires', 'Questionnaire title'),
 		'required' => true,
-		'placeholder' => __d('questionnaires', 'Please input questionnaire title')
+		'placeholder' => __d('questionnaires', 'Please input questionnaire title'),
+		'nc-focus' => '{{createOption == \'' . QuestionnairesComponent::QUESTIONNAIRE_CREATE_OPT_NEW . '\'}}'
 		)); ?>
 	</div>
 </div>
