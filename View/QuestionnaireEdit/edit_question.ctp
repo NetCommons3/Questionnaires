@@ -17,8 +17,9 @@ echo $this->NetCommonsHtml->script(array(
 	'/questionnaires/js/questionnaires_edit_question.js',
 ));
 $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesAppController::changeBooleansToNumbers($this->data));
+$jsPostData = $this->QuestionEdit->getJsPostData($questionnaireKey, $ajaxPostUrl);
 ?>
-
+<?php echo $this->element('NetCommons.javascript_alert'); ?>
 <?php
 	if ($isPublished) {
 		$elementFolder = 'Questionnaires.QuestionnaireEdit/EditQuestion/options_after_published/';
@@ -29,8 +30,7 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 
 <article id="nc-questionnaires-question-edit"
 	 ng-controller="Questionnaires.edit.question"
-	 ng-init="initialize(<?php echo Current::read('Frame.id'); ?>,
-	 						<?php echo (int)$isPublished; ?>,
+	 ng-init="initialize(<?php echo h(json_encode($jsPostData)); ?>,
 							<?php echo h(json_encode($jsQuestionnaire)); ?>)">
 
 	<?php echo $this->element('Questionnaires.QuestionnaireEdit/questionnaire_title'); ?>
@@ -38,8 +38,6 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 	<?php echo $this->Wizard->navibar('edit_question'); ?>
 
 	<div class="panel panel-default">
-
-		<?php /* echo $this->element('Questionnaires.QuestionnaireEdit/questionnaire_description'); */ ?>
 
 		<?php echo $this->NetCommonsForm->create('QuestionnaireQuestion', $postUrl); ?>
 
@@ -171,9 +169,17 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 	</div>
 
 		<div class="panel-footer text-center">
-			<?php echo $this->Wizard->buttons('edit_question', $cancelUrl, [], [], true); ?>
+			<?php echo $this->Wizard->buttons(
+			'edit_question',
+			$cancelUrl,
+			[],
+			['type' => 'button', 'ng-click' => 'post(\'edit_question\')'],
+			true); ?>
 		</div>
 
 
 	<?php echo $this->NetCommonsForm->end(); ?>
+
+	<?php echo $this->QuestionEdit->questionnaireGetFinallySubmit(); ?>
+
 </article>

@@ -16,12 +16,12 @@ echo $this->NetCommonsHtml->script(array(
 	'/questionnaires/js/questionnaires_edit_question.js',
 ));
 $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesAppController::changeBooleansToNumbers($this->data));
+$jsPostData = $this->QuestionEdit->getJsPostData($questionnaireKey, $ajaxPostUrl);
 ?>
-
+<?php echo $this->element('NetCommons.javascript_alert'); ?>
 <article id="nc-questionnaires-question-edit-result"
 	 ng-controller="Questionnaires.edit.question"
-	 ng-init="initialize(<?php echo Current::read('Frame.id'); ?>,
-	 						<?php echo (int)$isPublished; ?>,
+	 ng-init="initialize(<?php echo h(json_encode($jsPostData)); ?>,
 							<?php echo h(json_encode($jsQuestionnaire)); ?>)">
 
 	<?php echo $this->element('Questionnaires.QuestionnaireEdit/questionnaire_title'); ?>
@@ -86,7 +86,12 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 			</div>
 		</div>
 		<div class="panel-footer text-center">
-			<?php echo $this->Wizard->buttons('edit_result', $cancelUrl, $prevUrl); ?>
+			<?php echo $this->Wizard->buttons(
+				'edit_result',
+				$cancelUrl,
+				$prevUrl,
+				['type' => 'button', 'ng-click' => 'post(\'edit_result\')']); ?>
 		</div>
 	<?php echo $this->NetCommonsForm->end(); ?>
+	<?php echo $this->QuestionEdit->questionnaireGetFinallySubmit(); ?>
 </article>

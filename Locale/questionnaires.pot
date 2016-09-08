@@ -902,3 +902,6 @@ msgid "Number of questions that can be created is up %d . Already it has become 
 msgstr ""
 msgid "Number of choices that can be created is up %d per question. Already it has become %d ."
 msgstr ""
+
+msgid "Failed to send data."
+msgstr ""

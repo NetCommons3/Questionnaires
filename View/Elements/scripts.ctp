@@ -22,6 +22,7 @@ echo $this->NetCommonsHtml->scriptBlock(
 		'"newChoiceOtherLabel": "' . __d('questionnaires', 'other choice') . '",' .
 		'"maxQuestionWarningMsg": "' . $maxQuestionWarningMsg . '",' .
 		'"maxChoiceWarningMsg": "' . $maxChoiceWarningMsg . '",' .
+		'"sendingErrorMsg": "' . __d('questionnaires', 'Failed to send data.') . '",' .
 	'});'
 );
 echo $this->NetCommonsHtml->css('/questionnaires/css/questionnaire.css');
