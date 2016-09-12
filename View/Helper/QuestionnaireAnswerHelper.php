@@ -89,7 +89,7 @@ class QuestionnaireAnswerHelper extends AppHelper {
 		$otherAnswerFieldName = 'QuestionnaireAnswer.' . $index . '.0.other_answer_value';
 
 		if (isset($question['QuestionnaireChoice'])) {
-			$afterLabel = '</label></div>';
+			$afterLabel = false;
 			$choices = Hash::sort($question['QuestionnaireChoice'], '{n}.other_choice_type', 'asc');
 			$options = $this->_getChoiceOptionElement($choices);
 			$otherChoice = Hash::extract($question['QuestionnaireChoice'],
@@ -102,10 +102,9 @@ class QuestionnaireAnswerHelper extends AppHelper {
 					'disabled' => $readonly,
 					'error' => false,
 				));
-				$afterLabel = $otherInput;//. $afterLabel;
+				$afterLabel = $otherInput;
 			}
 
-			//$radioClass = 'radio';
 			$inline = false;
 			if ($question['is_choice_horizon'] == QuestionnairesComponent::USES_USE) {
 				$inline = true;
@@ -120,8 +119,6 @@ class QuestionnaireAnswerHelper extends AppHelper {
 				'label' => false,
 				'div' => false,
 				'inline' => $inline,
-				//'before' => '<div class="' . $radioClass . '"><label>',
-				//'separator' => '</label></div><div class="' . $radioClass . '"><label>',
 				'after' => $afterLabel,
 				'disabled' => $readonly,
 				'error' => false,
