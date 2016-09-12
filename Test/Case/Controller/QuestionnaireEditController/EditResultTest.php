@@ -69,12 +69,53 @@ class QuestionnaireEditControllerEditResultTest extends WorkflowControllerEditTe
 		$this->Questionnaire = ClassRegistry::init('Questionnaires.Questionnaire');
 		$this->Questionnaire->Behaviors->unload('AuthorizationKey');
 
+		$errs = array(
+			array(
+				'field' => 'Questionnaire.is_total_show',
+				'value' => 'aa',
+			),
+			array(
+				'field' => 'QuestionnairePage.0.QuestionnaireQuestion.0.is_result_display',
+				'value' => 'aa',
+			),
+			array(
+				'field' => 'QuestionnairePage.0.QuestionnaireQuestion.0.result_display_type',
+				'value' => 'aa',
+			),
+			array(
+				'field' => 'QuestionnairePage.0.QuestionnaireQuestion.0.QuestionnaireChoice.0.graph_color',
+				'value' => 'aa',
+			),
+		);
+
 		$this->controller->Session->expects($this->any())
 			->method('check')
-			->will($this->returnValueMap([['Questionnaires.questionnaireEdit.' . 'testSession', true]]));
+			->will($this->returnValueMap([
+				['Questionnaires.questionnaireEdit.' . 'testSession', true],
+				['Questionnaires.questionnaireEdit.' . 'testSession_44', true],
+				['Questionnaires.questionnaireEdit.' . 'testSession_12', true],
+				['Questionnaires.questionnaireEdit.' . 'testSession_4', true],
+				['Questionnaires.questionnaireEdit.' . 'testSession_err0', true],
+				['Questionnaires.questionnaireEdit.' . 'testSession_err1', true],
+				['Questionnaires.questionnaireEdit.' . 'testSession_err2', true],
+				['Questionnaires.questionnaireEdit.' . 'testSession_err3', true],
+			]));
 		$this->controller->Session->expects($this->any())
 			->method('read')
-			->will($this->returnValueMap([['Questionnaires.questionnaireEdit.' . 'testSession', $this->__getData()]]));
+			->will($this->returnValueMap([
+				['Questionnaires.questionnaireEdit.' . 'testSession', $this->__getData('')],
+				['Questionnaires.questionnaireEdit.' . 'testSession_44', $this->__getData('questionnaire_44')],
+				['Questionnaires.questionnaireEdit.' . 'testSession_12', $this->__getData('questionnaire_12')],
+				['Questionnaires.questionnaireEdit.' . 'testSession_4', $this->__getData('questionnaire_4')],
+				['Questionnaires.questionnaireEdit.' . 'testSession_err0',
+					Hash::insert($this->__getData(), $errs[0]['field'], $errs[0]['value'])],
+				['Questionnaires.questionnaireEdit.' . 'testSession_err1',
+					Hash::insert($this->__getData(), $errs[1]['field'], $errs[1]['value'])],
+				['Questionnaires.questionnaireEdit.' . 'testSession_err2',
+					Hash::insert($this->__getData(), $errs[2]['field'], $errs[2]['value'])],
+				['Questionnaires.questionnaireEdit.' . 'testSession_err3',
+					Hash::insert($this->__getData(), $errs[3]['field'], $errs[3]['value'])],
+			]));
 	}
 
 /**
@@ -301,7 +342,44 @@ class QuestionnaireEditControllerEditResultTest extends WorkflowControllerEditTe
 
 		return $results;
 	}
+/**
+ * editアクションのPOSTテスト
+ *
+ * @param array $data POSTデータ
+ * @param string $role ロール
+ * @param array $urlOptions URLオプション
+ * @param string|null $exception Exception
+ * @param string $return testActionの実行後の結果
+ * @dataProvider dataProviderEditPost
+ * @return void
+ */
+	public function testEditPost($data, $role, $urlOptions, $exception = null, $return = 'view') {
+		//ログイン
+		if (isset($role)) {
+			TestAuthGeneral::login($this, $role);
+		}
 
+		//テスト実施
+		$this->_testPostAction(
+			'put', $data, Hash::merge(array('action' => 'edit'), $urlOptions), $exception, $return
+		);
+
+		//正常の場合、リダイレクト
+		if (! $exception) {
+			if ($return != 'json') {
+				$header = $this->controller->response->header();
+				$this->assertNotEmpty($header['Location']);
+			} else {
+				$result = json_decode($this->contents, true);
+				$this->assertArrayHasKey('code', $result);
+			}
+		}
+
+		//ログアウト
+		if (isset($role)) {
+			TestAuthGeneral::logout($this);
+		}
+	}
 /**
  * editアクションのPOSTテスト用DataProvider
  *
@@ -316,6 +394,8 @@ class QuestionnaireEditControllerEditResultTest extends WorkflowControllerEditTe
  */
 	public function dataProviderEditPost() {
 		$data = $this->__getData();
+		$midstreamData = $data;
+		$data['QuestionnairePage'] = array();
 		return array(
 			//ログインなし
 			array(
@@ -337,13 +417,13 @@ class QuestionnaireEditControllerEditResultTest extends WorkflowControllerEditTe
 			),
 			//--自分の記事(一度も公開していない)
 			array(
-				'data' => $this->__getData('questionnaire_44'), 'role' => Role::ROOM_ROLE_KEY_GENERAL_USER,
-				'urlOptions' => array('frame_id' => $data['Frame']['id'], 'block_id' => $data['Block']['id'], 'action' => $this->_myAction, 's_id' => 'testSession'),
+				'data' => $data, 'role' => Role::ROOM_ROLE_KEY_GENERAL_USER,
+				'urlOptions' => array('frame_id' => $data['Frame']['id'], 'block_id' => $data['Block']['id'], 'action' => $this->_myAction, 's_id' => 'testSession_44'),
 			),
 			//--自分の記事(公開)
 			array(
-				'data' => $this->__getData('questionnaire_12'), 'role' => Role::ROOM_ROLE_KEY_GENERAL_USER,
-				'urlOptions' => array('frame_id' => $data['Frame']['id'], 'block_id' => $data['Block']['id'], 'action' => $this->_myAction, 's_id' => 'testSession'),
+				'data' => $data, 'role' => Role::ROOM_ROLE_KEY_GENERAL_USER,
+				'urlOptions' => array('frame_id' => $data['Frame']['id'], 'block_id' => $data['Block']['id'], 'action' => $this->_myAction, 's_id' => 'testSession_12'),
 			),
 			//編集権限あり
 			//--新規作成
@@ -358,8 +438,14 @@ class QuestionnaireEditControllerEditResultTest extends WorkflowControllerEditTe
 			),
 			//--自分の記事(公開)
 			array(
-				'data' => $this->__getData('questionnaire_4'), 'role' => Role::ROOM_ROLE_KEY_ROOM_ADMINISTRATOR,
+				'data' => $data, 'role' => Role::ROOM_ROLE_KEY_ROOM_ADMINISTRATOR,
+				'urlOptions' => array('frame_id' => $data['Frame']['id'], 'block_id' => $data['Block']['id'], 'action' => $this->_myAction, 's_id' => 'testSession_4'),
+			),
+			//途中投稿
+			array(
+				'data' => $midstreamData, 'role' => Role::ROOM_ROLE_KEY_ROOM_ADMINISTRATOR,
 				'urlOptions' => array('frame_id' => $data['Frame']['id'], 'block_id' => $data['Block']['id'], 'action' => $this->_myAction, 's_id' => 'testSession'),
+				'exception' => null, 'return' => 'json'
 			),
 		);
 	}
@@ -376,38 +462,46 @@ class QuestionnaireEditControllerEditResultTest extends WorkflowControllerEditTe
  */
 	public function dataProviderEditValidationError() {
 		$data = $this->__getData();
+		$data['QuestionnairePage'] = array();
 
-		$result = array(
-			'data' => $data,
-			'urlOptions' => array('frame_id' => $data['Frame']['id'], 'block_id' => $data['Block']['id'], 'action' => $this->_myAction, 's_id' => 'testSession'),
-		);
+		$result = array();
+		for ($i = 0; $i < 4; $i++) {
+			$result[$i] = array(
+				'data' => $data,
+				'urlOptions' => array(
+					'frame_id' => $data['Frame']['id'],
+					'block_id' => $data['Block']['id'],
+					'action' => $this->_myAction,
+					's_id' => 'testSession_err' . $i),
+			);
+		}
 
 		return array(
-			Hash::merge($result, array(
+			Hash::merge($result[0], array(
 				'validationError' => array(
 					'field' => 'Questionnaire.is_total_show',
 					'value' => 'aa',
 					'message' => __d('net_commons', 'Invalid request.'),
 				)
 			)),
-			Hash::merge($result, array(
+			Hash::merge($result[1], array(
 				'validationError' => array(
-					'field' => 'QuestionnairePage.0.QuestionnaireQuestion.0.is_result_display',
-					'value' => 'aa',
+					'field' => '',
+					'value' => '',
 					'message' => 'question.errorMessages.isResultDisplay',
 				)
 			)),
-			Hash::merge($result, array(
+			Hash::merge($result[2], array(
 				'validationError' => array(
-					'field' => 'QuestionnairePage.0.QuestionnaireQuestion.0.result_display_type',
-					'value' => 'aa',
+					'field' => '',
+					'value' => '',
 					'message' => 'question.errorMessages.resultDisplayType',
 				)
 			)),
-			Hash::merge($result, array(
+			Hash::merge($result[3], array(
 				'validationError' => array(
-					'field' => 'QuestionnairePage.0.QuestionnaireQuestion.0.QuestionnaireChoice.0.graph_color',
-					'value' => 'aa',
+					'field' => '',
+					'value' => '',
 					'message' => 'choice.errorMessages.graphColor',
 				)
 			)),

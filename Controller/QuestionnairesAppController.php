@@ -20,6 +20,12 @@ App::uses('AppController', 'Controller');
 class QuestionnairesAppController extends AppController {
 
 /**
+ * session index
+ *
+ */
+	protected $_sessionIndex = null;
+
+/**
  * use model
  *
  * @var array

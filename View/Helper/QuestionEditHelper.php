@@ -158,14 +158,13 @@ class QuestionEditHelper extends AppHelper {
  * アンケートは質問編集画面、集計結果編集画面では分割送信をする
  * 分割送信後、最終POSTをする時に使用するFormを作成する
  *
+ * @param array $postUrl POST先URL情報
  * @return string HTML
  */
-	public function questionnaireGetFinallySubmit() {
+	public function questionnaireGetFinallySubmit($postUrl) {
 		$html = '';
 		$html .= $this->NetCommonsForm->create('QuestionnaireQuestion',
-			array(
-				'id' => 'finallySubmitForm'
-			)
+			Hash::merge(array('id' => 'finallySubmitForm'), $postUrl)
 		);
 		$html .= $this->NetCommonsForm->hidden('Frame.id');
 		$html .= $this->NetCommonsForm->hidden('Block.id');
@@ -190,12 +189,10 @@ class QuestionEditHelper extends AppHelper {
 			'Frame' => array('id' => Current::read('Frame.id')),
 			'Block' => array('id' => Current::read('Block.id')),
 			'Questionnaire' => array('key' => $questionnaireKey),
-			'QuestionnairePage' => array()
 		);
 		$tokenFields = Hash::flatten($postData);
 		$hiddenFields = $tokenFields;
 		$hiddenFields = array_keys($hiddenFields);
-
 		$this->Token->unlockField('QuestionnairePage');
 
 		$tokens = $this->Token->getToken('Questionnaire', $ajaxPostUrl, $tokenFields, $hiddenFields);

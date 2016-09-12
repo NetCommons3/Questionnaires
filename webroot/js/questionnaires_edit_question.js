@@ -74,7 +74,8 @@ NetCommonsApp.controller('Questionnaires.edit.question',
            * @return {void}
            */
         $scope.initialize =
-            function(postData, questionnaire) {
+            function(postUrl, postData, questionnaire) {
+          $scope.postUrl = postUrl;
           $scope.postData = postData;
           $scope.questionnaire = questionnaire;
           $scope.questionnaire.questionnairePage =
@@ -913,7 +914,6 @@ NetCommonsApp.controller('Questionnaires.edit.question',
         $scope.postQuestionnaireElm = function(ajaxPost) {
           var deferred = $q.defer();
           var promise = deferred.promise;
-          var postUrl = location.href;
 
           $http.get(NC3_URL + '/net_commons/net_commons/csrfToken.json')
             .success(function(token) {
@@ -925,7 +925,7 @@ NetCommonsApp.controller('Questionnaires.edit.question',
                 } else {
                   postData.QuestionnairePage = new Object();
                 }
-                $http.post(postUrl,
+                $http.post(NC3_URL + $scope.postUrl,
                     $.param({_method: 'POST', data: postData}),
                     {cache: false,
                       headers: {'Content-Type': 'application/x-www-form-urlencoded'}

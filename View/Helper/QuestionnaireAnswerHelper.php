@@ -102,12 +102,13 @@ class QuestionnaireAnswerHelper extends AppHelper {
 					'disabled' => $readonly,
 					'error' => false,
 				));
-				$afterLabel = $otherInput . $afterLabel;
+				$afterLabel = $otherInput;//. $afterLabel;
 			}
 
-			$radioClass = 'radio';
+			//$radioClass = 'radio';
+			$inline = false;
 			if ($question['is_choice_horizon'] == QuestionnairesComponent::USES_USE) {
-				$radioClass = 'radio-inline';
+				$inline = true;
 			}
 			// 下のような形でradioをつくるとHiddenが自動的には付随されなかった！
 			// 仕方ないので意図的に作成している
@@ -117,8 +118,10 @@ class QuestionnaireAnswerHelper extends AppHelper {
 				'options' => $options,
 				'legend' => false,
 				'label' => false,
-				'before' => '<div class="' . $radioClass . '"><label>',
-				'separator' => '</label></div><div class="' . $radioClass . '"><label>',
+				'div' => false,
+				'inline' => $inline,
+				//'before' => '<div class="' . $radioClass . '"><label>',
+				//'separator' => '</label></div><div class="' . $radioClass . '"><label>',
 				'after' => $afterLabel,
 				'disabled' => $readonly,
 				'error' => false,

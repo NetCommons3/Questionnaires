@@ -21,7 +21,8 @@ $jsPostData = $this->QuestionEdit->getJsPostData($questionnaireKey, $ajaxPostUrl
 <?php echo $this->element('NetCommons.javascript_alert'); ?>
 <article id="nc-questionnaires-question-edit-result"
 	 ng-controller="Questionnaires.edit.question"
-	 ng-init="initialize(<?php echo h(json_encode($jsPostData)); ?>,
+	 ng-init="initialize('<?php echo $ajaxPostUrl; ?>',
+	 						<?php echo h(json_encode($jsPostData)); ?>,
 							<?php echo h(json_encode($jsQuestionnaire)); ?>)">
 
 	<?php echo $this->element('Questionnaires.QuestionnaireEdit/questionnaire_title'); ?>
@@ -93,5 +94,5 @@ $jsPostData = $this->QuestionEdit->getJsPostData($questionnaireKey, $ajaxPostUrl
 				['type' => 'button', 'ng-click' => 'post(\'edit_result\')']); ?>
 		</div>
 	<?php echo $this->NetCommonsForm->end(); ?>
-	<?php echo $this->QuestionEdit->questionnaireGetFinallySubmit(); ?>
+	<?php echo $this->QuestionEdit->questionnaireGetFinallySubmit($postUrl); ?>
 </article>

@@ -69,27 +69,25 @@ EOT;
 	public function testSingleChoice() {
 		$expected = <<< EOT
 <input type="hidden" name="data[QuestionnaireAnswer][qKey1][0][answer_value]" value="" id="QuestionnaireAnswerQKey10AnswerValue" />
-<div class="input radio">
-	<div class="radio">
-		<label>
-			<input type="hidden" name="data[QuestionnaireAnswer][qKey1][0][answer_value]" id="QuestionnaireAnswerQKey10AnswerValue_" value=""/>
-			<input type="radio" name="data[QuestionnaireAnswer][qKey1][0][answer_value]" id="QuestionnaireAnswerQKey10AnswerValueCKey1選択肢1" value="|cKey1:選択肢1"/>
+<div class="radio">
+	<label class="control-label">
+		<input type="hidden" name="data[QuestionnaireAnswer][qKey1][0][answer_value]" id="QuestionnaireAnswerQKey10AnswerValue_" value="" />
+		<input type="radio" name="data[QuestionnaireAnswer][qKey1][0][answer_value]" id="QuestionnaireAnswerQKey10AnswerValueCKey1選択肢1" value="cKey1:選択肢1" after="&lt;inputname=&quot;data[QuestionnaireAnswer][qKey1][0][other_answer_value]&quot;class=&quot;form-control&quot;type=&quot;text&quot;id=&quot;QuestionnaireAnswerQKey10OtherAnswerValue&quot;/&gt;" />
 			選択肢1
-		</label>
-	</div>
-	<div class="radio">
-		<label>
-			<input type="radio" name="data[QuestionnaireAnswer][qKey1][0][answer_value]" id="QuestionnaireAnswerQKey10AnswerValueCKey2選択肢2" value="|cKey2:選択肢2"/>
+	</label>
+</div>
+<div class="radio">
+	<label class="control-label">
+		<input type="radio" name="data[QuestionnaireAnswer][qKey1][0][answer_value]" id="QuestionnaireAnswerQKey10AnswerValueCKey2選択肢2" value="cKey2:選択肢2" after="&lt;inputname=&quot;data[QuestionnaireAnswer][qKey1][0][other_answer_value]&quot;class=&quot;form-control&quot;type=&quot;text&quot;id=&quot;QuestionnaireAnswerQKey10OtherAnswerValue&quot;/&gt;" />
 			選択肢2
-		</label>
-	</div>
-	<div class="radio">
-		<label>
-			<input type="radio" name="data[QuestionnaireAnswer][qKey1][0][answer_value]" id="QuestionnaireAnswerQKey10AnswerValueCKey3その他" value="|cKey3:その他"/>
-			その他
-			<input name="data[QuestionnaireAnswer][qKey1][0][other_answer_value]" class="form-control" type="text" id="QuestionnaireAnswerQKey10OtherAnswerValue"/>
-		</label>
-	</div>
+	</label>
+</div>
+<div class="radio">
+	<label class="control-label">
+		<input type="radio" name="data[QuestionnaireAnswer][qKey1][0][answer_value]" id="QuestionnaireAnswerQKey10AnswerValueCKey3その他" value="cKey3:その他" after="&lt;inputname=&quot;data[QuestionnaireAnswer][qKey1][0][other_answer_value]&quot;class=&quot;form-control&quot;type=&quot;text&quot;id=&quot;QuestionnaireAnswerQKey10OtherAnswerValue&quot;/&gt;"/>
+		その他
+		<input name="data[QuestionnaireAnswer][qKey1][0][other_answer_value]" class="form-control" type="text" id="QuestionnaireAnswerQKey10OtherAnswerValue" />
+	</label>
 </div>
 EOT;
 		$expected = preg_replace('/[\n|\r|\t|\s]/', '', $expected . $this->_getComElement());
@@ -129,7 +127,7 @@ EOT;
 		$actual = preg_replace('/[\n|\r|\t|\s]/', '', $actual);
 		$this->assertTextEquals($expected, $actual);
 
-		$expected = preg_replace('/class="radio/', 'class="radio-inline', $expected);
+		$expected = preg_replace('/class="radio/', 'class="radioradio-inline', $expected);
 		$question['is_choice_horizon'] = true;
 		$actual = $this->QuestionnaireAnswer->answer($question);
 		$actual = preg_replace('/[\n|\r|\t|\s]/', '', $actual);
