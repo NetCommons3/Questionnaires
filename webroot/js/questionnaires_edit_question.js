@@ -916,7 +916,7 @@ NetCommonsApp.controller('Questionnaires.edit.question',
           var promise = deferred.promise;
 
           $http.get(NC3_URL + '/net_commons/net_commons/csrfToken.json')
-            .success(function(token) {
+             .success(function(token) {
                 var postData;
                 postData = $scope.postData;
                 postData._Token.key = token.data._Token.key;
