@@ -52,7 +52,7 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 		'NetCommons.Permission' => array(
 			//アクセスの権限
 			'allow' => array(
-				'edit,edit_question,edit_result,delete' => 'content_creatable',
+				'edit,edit_question,edit_result,delete,post_page,post_question' => 'content_creatable',
 			),
 		),
 		'Questionnaires.Questionnaires',
@@ -64,6 +64,7 @@ class QuestionnaireEditController extends QuestionnairesAppController {
  *
  */
 	public $helpers = array(
+		'NetCommons.Token',
 		'Workflow.Workflow',
 		'NetCommons.TitleIcon',
 		'Questionnaires.QuestionEdit',
@@ -103,12 +104,6 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 	protected $_questionnaire = null;
 
 /**
- * session index
- *
- */
-	protected $_sessionIndex = null;
-
-/**
  * beforeFilter
  *
  * @return void
@@ -119,7 +114,6 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 		// まずは、そのキーを取り出す
 		// アンケートキー
 		$questionnaireKey = $this->_getQuestionnaireKeyFromPass();
-
 		// セッションインデックスパラメータ
 		$sessionName =
 			self::QUESTIONNAIRE_EDIT_SESSION_INDEX . $this->_getQuestionnaireEditSessionIndex();
@@ -182,69 +176,29 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 /**
  * edit question method
  *
- * @throws BadRequestException
  * @return void
  */
 	public function edit_question() {
-		// 処理対象のアンケートデータが見つかっていない場合、エラー
-		if (empty($this->_questionnaire)) {
-			$this->throwBadRequest();
-			return false;
-		}
-
-		// Postの場合
-		if ($this->request->is('post') || $this->request->is('put')) {
-			$postQuestionnaire = $this->request->data;
-			// アンケートデータに作成されたPost質問データをかぶせる
-			// （質問作成画面では質問データ属性全てをPOSTしているのですり替えでOK）
-			$questionnaire = $this->_questionnaire;
-			$questionnaire['Questionnaire'] = Hash::merge(
-				$this->_questionnaire['Questionnaire'],
-				$postQuestionnaire['Questionnaire']);
-
-			// 発行後のアンケートは質問情報は書き換えない
-			// 未発行の場合はPostデータを上書き設定して
-			if ($this->Questionnaire->hasPublished($questionnaire) == 0) {
-				$questionnaire['QuestionnairePage'] = $postQuestionnaire['QuestionnairePage'];
-			} else {
-				$this->Questionnaire->clearQuestionnaireId($questionnaire, true);
-				// booleanの値がPOST時と同じようになるように調整
-				$questionnaire['QuestionnairePage'] =
-					QuestionnairesAppController::changeBooleansToNumbers(
-						$questionnaire['QuestionnairePage']);
-			}
-			// バリデート
-			$this->Questionnaire->set($questionnaire);
-			if (! $this->Questionnaire->validates(
-				array('validate' => QuestionnairesComponent::QUESTIONNAIRE_VALIDATE_TYPE))) {
-				$this->__setupViewParameters($questionnaire, '');
-				return;
-			}
-
-			// バリデートがOKであればPOSTで出来上がったデータをセッションキャッシュに書く
-			$this->Session->write(
-				self::QUESTIONNAIRE_EDIT_SESSION_INDEX . $this->_sessionIndex,
-				$questionnaire);
-
-			// 次の画面へリダイレクト
-			$this->redirect($this->_getActionUrl('edit_result'));
-		} else {
-			// アンケートデータが取り出せている場合、それをキャッシュに書く
-			$this->Session->write(
-				self::QUESTIONNAIRE_EDIT_SESSION_INDEX . $this->_getQuestionnaireEditSessionIndex(),
-				$this->_sorted($this->_questionnaire));
-			$this->__setupViewParameters($this->_questionnaire, '');
-		}
+		$this->_editMidstream('', 'edit_result');
 	}
 
 /**
  * edit_result
  *
- * @throws BadRequestException
  * @return void
  */
 	public function edit_result() {
-		// 処理対象のアンケートデータが見つかっていない場合、エラー
+		$this->_editMidstream('edit_question', 'edit');
+	}
+/**
+ * _edit_midstream
+ *
+ * @param string $prevAction 前のアクション名
+ * @param string $redirectAction 次に遷移するアクション名
+ * @throws BadRequestException
+ * @return void
+ */
+	protected function _editMidstream($prevAction, $redirectAction) {
 		if (empty($this->_questionnaire)) {
 			$this->throwBadRequest();
 			return false;
@@ -253,29 +207,37 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 		if ($this->request->is('post') || $this->request->is('put')) {
 
 			$postQuestionnaire = $this->request->data;
+			if (! empty($postQuestionnaire['QuestionnairePage'])) {
+				if ($this->request->is('ajax')) {
+					$this->_postPage($postQuestionnaire);
+					$this->view = 'edit_json';
+					return;
+				}
+			} else {
+				// バリデート
+				$questionnaire = $this->_questionnaire;
+				$questionnaire['QuestionnairePage'] =
+					QuestionnairesAppController::changeBooleansToNumbers($questionnaire['QuestionnairePage']);
+				$this->Questionnaire->set($questionnaire);
+				if (! $this->Questionnaire->validates(
+					array('validate' => QuestionnairesComponent::QUESTIONNAIRE_VALIDATE_TYPE))) {
+					$this->__setupViewParameters($questionnaire, $this->_getActionUrl($prevAction));
+					return;
+				}
+				// それをキャッシュに書く
+				$this->Session->write(
+					self::QUESTIONNAIRE_EDIT_SESSION_INDEX . $this->_getQuestionnaireEditSessionIndex(),
+					$questionnaire);
 
-			// 集計設定画面では集計に纏わる情報のみがPOSTされるので安心してマージ
-			$questionnaire = Hash::merge($this->_questionnaire, $postQuestionnaire);
-			// バリデート
-			$this->Questionnaire->set($questionnaire);
-			if (! $this->Questionnaire->validates(
-				array('validate' => QuestionnairesComponent::QUESTIONNAIRE_VALIDATE_TYPE))) {
-				$this->__setupViewParameters($questionnaire, $this->_getActionUrl('edit_question'));
-				return;
+				// 次の画面へリダイレクト
+				$this->redirect($this->_getActionUrl($redirectAction));
 			}
-			// それをキャッシュに書く
-			$this->Session->write(
-				self::QUESTIONNAIRE_EDIT_SESSION_INDEX . $this->_getQuestionnaireEditSessionIndex(),
-				$questionnaire);
-
-			// 次の画面へリダイレクト
-			$this->redirect($this->_getActionUrl('edit'));
 
 		} else {
 			$this->Session->write(
 				self::QUESTIONNAIRE_EDIT_SESSION_INDEX . $this->_getQuestionnaireEditSessionIndex(),
 				$this->_questionnaire);
-			$this->__setupViewParameters($this->_questionnaire, $this->_getActionUrl('edit_question'));
+			$this->__setupViewParameters($this->_questionnaire, $this->_getActionUrl($prevAction));
 		}
 	}
 
@@ -379,7 +341,6 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 			$this->redirect(NetCommonsUrl::backToPageUrl());
 		}
 	}
-
 /**
  * cancel method
  *
@@ -388,6 +349,61 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 	public function cancel() {
 		$this->Session->delete(self::QUESTIONNAIRE_EDIT_SESSION_INDEX . $this->_sessionIndex);
 		$this->redirect(NetCommonsUrl::backToPageUrl());
+	}
+
+/**
+ * _postPage
+ *
+ * 分割送信されている編集された質問情報をまとめ上げる
+ *
+ * @param array $postPage 分割送信された質問情報（１質問ずつ送信）
+ * @return void
+ */
+	protected function _postPage($postPage) {
+		// アンケートデータに作成されたPost質問データをかぶせる
+		// （質問作成画面では質問データ属性全てをPOSTしているのですり替えでOK）
+		$questionnaire = $this->_questionnaire;
+
+		// 集計結果編集画面からのPOSTの場合は無条件で上書き
+		// 質問編集画面からのPOSTは、発行後は書き換えない 未発行の場合はPostデータを上書き設定
+		if ($this->action == 'edit_result' || $this->Questionnaire->hasPublished($questionnaire) == 0) {
+			// JSからPOSTされたデータは属性名がキャメライズされているのでスネーク方式に変換
+			$postPage = $this->_changeBoolean($postPage);
+			// マージ
+			$questionnaire = Hash::merge($questionnaire, $postPage);
+		}
+		// マージ結果をセッションに記録
+		$this->Session->write(
+			self::QUESTIONNAIRE_EDIT_SESSION_INDEX . $this->_sessionIndex,
+			$questionnaire);
+	}
+
+/**
+ * _changeBoolean
+ *
+ * JSから送られるデータはbooleanの値のものがtrueとかfalseの文字列データで来てしまうので
+ * 正式なbool値に変換しておく
+ *
+ * @param array $orig 元データ
+ * @return array 変換後の配列データ
+ */
+	protected function _changeBoolean($orig) {
+		$new = [];
+
+		foreach ($orig as $key => $value) {
+			if (is_array($value)) {
+				$new[$key] = $this->_changeBoolean($value);
+			} else {
+				if ($value === 'true') {
+					$value = true;
+				}
+				if ($value === 'false') {
+					$value = false;
+				}
+				$new[$key] = $value;
+			}
+		}
+		return $new;
 	}
 /**
  * _getActionUrl method
@@ -437,7 +453,9 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 				'Questionnaire.total_show_start_period',
 		));
 
-		$this->set('postUrl', array('url' => $this->_getActionUrl($this->action)));
+		$ajaxPostUrl = $this->_getActionUrl($this->action);
+		$this->set('ajaxPostUrl', $ajaxPostUrl);
+		$this->set('postUrl', array('url' => $ajaxPostUrl));
 		if ($this->layout == 'NetCommons.setting') {
 			$this->set('cancelUrl', array('url' => NetCommonsUrl::backToIndexUrl('default_setting_action')));
 		} else {
@@ -448,12 +466,8 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 		$this->set('prevUrl', array('url' => $this->_getActionUrl('edit_question')));
 
 		$this->set('questionTypeOptions', $this->Questionnaires->getQuestionTypeOptionsWithLabel());
-		$this->set('newPageLabel', __d('questionnaires', 'page'));
-		$this->set('newQuestionLabel', __d('questionnaires', 'New Question'));
-		$this->set('newChoiceLabel', __d('questionnaires', 'new choice'));
-		$this->set('newChoiceColumnLabel', __d('questionnaires', 'new column choice'));
-		$this->set('newChoiceOtherLabel', __d('questionnaires', 'other choice'));
 		$this->set('isPublished', $isPublished);
+		$this->set('questionnaireKey', Hash::get($questionnaire, 'Questionnaire.key'));
 
 		$isMailSetting = $this->MailSetting->getMailSetting(
 			array(

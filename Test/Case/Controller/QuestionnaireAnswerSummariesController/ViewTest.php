@@ -84,7 +84,7 @@ class QuestionnaireAnswerSummariesControllerViewTest extends WorkflowControllerV
 		$results[] = Hash::merge($results[0], array( // 存在しない
 			'urlOptions' => array('key' => 'questionnaire_999'),
 			'assert' => null,
-			'exception' => 'BadRequestException',
+			'assert' => array('method' => 'assertTextContains', 'expected' => __d('questionnaires', 'you will not be able to see this result.')),
 		));
 		/*
 		$results[1] = Hash::merge($results[0], array(

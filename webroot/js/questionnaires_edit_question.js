@@ -5,8 +5,10 @@ NetCommonsApp.constant('moment', moment);
 //NetCommonsApp.requires.push('ngSanitize');
 
 NetCommonsApp.controller('Questionnaires.edit.question',
-    ['$scope', 'NetCommonsWysiwyg', '$timeout', 'moment', 'questionnairesMessages',
-      function($scope, NetCommonsWysiwyg, $timeout, moment, questionnairesMessages) {
+    ['$scope', '$http', '$q', '$timeout', 'NetCommonsWysiwyg', 'moment',
+      'questionnairesMessages', 'NC3_URL',
+      function($scope, $http, $q, $timeout, NetCommonsWysiwyg, moment,
+               questionnairesMessages, NC3_URL) {
 
         /**
          * tinymce
@@ -72,9 +74,9 @@ NetCommonsApp.controller('Questionnaires.edit.question',
            * @return {void}
            */
         $scope.initialize =
-            function(frameId, isPublished, questionnaire) {
-          $scope.frameId = frameId;
-          $scope.isPublished = isPublished;
+            function(postUrl, postData, questionnaire) {
+          $scope.postUrl = postUrl;
+          $scope.postData = postData;
           $scope.questionnaire = questionnaire;
           $scope.questionnaire.questionnairePage =
               $scope.toArray(questionnaire.questionnairePage);
@@ -818,5 +820,134 @@ NetCommonsApp.controller('Questionnaires.edit.question',
             return false;
           }
           return true;
+        };
+        /**
+         * １質問ずつの分割送信
+         * JSで保持しているquestionnaireをそのまま送ると、
+         * Angularが付け加えているハッシュ属性まで送ってしまうので明示的に送信データにコピーしている
+         * 属性名はCakeで処理しやすいようにスネーク記法にしておく
+         *
+         * @return {void}
+         */
+        $scope.post = function(action) {
+          var promises = new Array();
+          var pageIndex = 0;
+
+          $scope.$parent.sending = true;
+
+          angular.forEach($scope.questionnaire.questionnairePage, function(page) {
+            var qIndex = 0;
+            angular.forEach(page.questionnaireQuestion, function(question) {
+              var postPage = new Object();
+              postPage.QuestionnairePage = new Object();
+              postPage.QuestionnairePage[pageIndex] = new Object();
+              postPage.QuestionnairePage[pageIndex].key = page.key;
+              postPage.QuestionnairePage[pageIndex].page_sequence = pageIndex;
+
+              postPage.QuestionnairePage[pageIndex].QuestionnaireQuestion = new Object();
+              postPage.QuestionnairePage[pageIndex].QuestionnaireQuestion[qIndex] = new Object();
+              var postQ = postPage.QuestionnairePage[pageIndex].QuestionnaireQuestion[qIndex];
+
+              postQ.key = question.key;
+              postQ.question_sequence = qIndex;
+              postQ.question_value = question.questionValue;
+              postQ.question_type = question.questionType;
+              postQ.description = question.description;
+              postQ.is_require = question.isRequire;
+              postQ.question_type_option = question.questionTypeOption;
+
+              postQ.is_choice_random = question.isChoiceRandom;
+              postQ.is_choice_horizon = question.isChoiceHorizon;
+              postQ.is_skip = question.isSkip;
+              postQ.is_range = question.isRange;
+              postQ.min = question.min;
+              postQ.max = question.max;
+              postQ.is_result_display = question.isResultDisplay;
+              postQ.result_display_type = question.resultDisplayType;
+
+              if (question.questionnaireChoice) {
+                postQ.QuestionnaireChoice = new Object();
+                var cIndex = 0;
+                angular.forEach(question.questionnaireChoice, function(choice) {
+                  postQ.QuestionnaireChoice[cIndex] = new Object();
+                  postQ.QuestionnaireChoice[cIndex].key = choice.key;
+                  postQ.QuestionnaireChoice[cIndex].matrix_type = choice.matrixType;
+                  postQ.QuestionnaireChoice[cIndex].other_choice_type = choice.otherChoiceType;
+                  postQ.QuestionnaireChoice[cIndex].choice_sequence = cIndex;
+                  postQ.QuestionnaireChoice[cIndex].choice_label = choice.choiceLabel;
+                  postQ.QuestionnaireChoice[cIndex].choice_value = choice.choiceValue;
+                  postQ.QuestionnaireChoice[cIndex].skip_page_sequence = choice.skipPageSequence;
+                  postQ.QuestionnaireChoice[cIndex].graph_color = choice.graphColor;
+                  cIndex++;
+                });
+              }
+
+              promises.push($scope.postQuestionnaireElm(postPage));
+
+              qIndex++;
+
+            }, $scope);
+
+            pageIndex++;
+
+          }, $scope);
+
+          $q.all(promises).then(
+              function() {
+                //$scope.postQuestionnaireElm(null);
+                var fm = angular.element('#finallySubmitForm');
+                fm[0].submit();
+                // 送信に全て成功したときは画面がリダイレクトされるから何もしない
+              },
+              function() {
+                // 送信が１回でも失敗したら送信中状態（sending）をfalseにしてエラー表示する
+                $scope.$parent.sending = false;
+                $scope.$parent.flashMessage(questionnairesMessages.sendingErrorMsg, 'danger', 5000);
+              }
+          );
+        };
+        /**
+         * 送信処理実体
+         *
+         * @return {void}
+         */
+        $scope.postQuestionnaireElm = function(ajaxPost) {
+          var deferred = $q.defer();
+          var promise = deferred.promise;
+
+          $http.get(NC3_URL + '/net_commons/net_commons/csrfToken.json')
+             .success(function(token) {
+                var postData;
+                postData = $scope.postData;
+                postData._Token.key = token.data._Token.key;
+                if (ajaxPost) {
+                  postData.QuestionnairePage = ajaxPost.QuestionnairePage;
+                } else {
+                  postData.QuestionnairePage = new Object();
+                }
+                $http.post(NC3_URL + $scope.postUrl,
+                    $.param({_method: 'POST', data: postData}),
+                    {cache: false,
+                      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                    }
+                ).success(function(data) {
+                  deferred.resolve(data);
+                }).error(function(data, status) {
+                  deferred.reject(data, status);
+                });
+              })
+              .error(function(data, status) {
+                deferred.reject(data, status);
+              });
+
+          promise.success = function(fn) {
+            promise.then(fn);
+            return promise;
+          };
+          promise.error = function(fn) {
+            promise.then(null, fn);
+            return promise;
+          };
+          return promise;
         };
      }]);
