@@ -71,7 +71,6 @@ EOT;
 <input type="hidden" name="data[QuestionnaireAnswer][qKey1][0][answer_value]" value="" id="QuestionnaireAnswerQKey10AnswerValue" />
 <div class="radio">
 	<label class="control-label">
-		<input type="hidden" name="data[QuestionnaireAnswer][qKey1][0][answer_value]" id="QuestionnaireAnswerQKey10AnswerValue_" value="" />
 		<input type="radio" name="data[QuestionnaireAnswer][qKey1][0][answer_value]" id="QuestionnaireAnswerQKey10AnswerValueCKey1選択肢1" value="cKey1:選択肢1" after="&lt;inputname=&quot;data[QuestionnaireAnswer][qKey1][0][other_answer_value]&quot;class=&quot;form-control&quot;type=&quot;text&quot;id=&quot;QuestionnaireAnswerQKey10OtherAnswerValue&quot;/&gt;" />
 			選択肢1
 	</label>
