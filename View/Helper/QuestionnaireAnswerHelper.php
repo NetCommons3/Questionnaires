@@ -109,8 +109,6 @@ class QuestionnaireAnswerHelper extends AppHelper {
 			if ($question['is_choice_horizon'] == QuestionnairesComponent::USES_USE) {
 				$inline = true;
 			}
-			// 下のような形でradioをつくるとHiddenが自動的には付随されなかった！
-			// 仕方ないので意図的に作成している
 			$ret = $this->NetCommonsForm->hidden($fieldName, array('value' => ''));
 			$ret .= $this->NetCommonsForm->input($fieldName, array(
 				'type' => 'radio',
@@ -122,6 +120,7 @@ class QuestionnaireAnswerHelper extends AppHelper {
 				'after' => $afterLabel,
 				'disabled' => $readonly,
 				'error' => false,
+				'hiddenField' => false,
 			));
 		}
 		return $ret;
