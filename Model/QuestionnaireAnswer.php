@@ -122,9 +122,9 @@ class QuestionnaireAnswer extends QuestionnairesAppModel {
 						'answerMaxLength',
 						$question, QuestionnairesComponent::QUESTIONNAIRE_MAX_ANSWER_LENGTH
 					),
-					'message' => sprintf(
-						__d('questionnaires', 'the answer is too long. Please enter under %d letters.',
-							QuestionnairesComponent::QUESTIONNAIRE_MAX_ANSWER_LENGTH)),
+					'message' => __d('questionnaires',
+						'the answer is too long. Please enter under %d letters.',
+							QuestionnairesComponent::QUESTIONNAIRE_MAX_ANSWER_LENGTH),
 				),
 				'answerChoiceValidation' => array(
 					'rule' => array('answerChoiceValidation', $question, $allAnswers),

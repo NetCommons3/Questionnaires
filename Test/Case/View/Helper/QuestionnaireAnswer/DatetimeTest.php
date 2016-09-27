@@ -130,7 +130,7 @@ EOT;
 				)
 			)
 		);
-		$help = sprintf(__d('questionnaires', 'Please enter at %s to %s'), date('Y-m-d', strtotime($question['min'])), date('Y-m-d', strtotime($question['max'])));
+		$help = __d('questionnaires', 'Please enter at %s to %s', date('Y-m-d', strtotime($question['min'])), date('Y-m-d', strtotime($question['max'])));
 		$expected = preg_replace('/[\n|\r|\t|\s]/', '', sprintf($this->_getDatetimeBaseElement(), $datetimePickerOpt, $help) . $this->_getComElement());
 
 		$actual = $this->QuestionnaireAnswer->answer($question);
@@ -182,7 +182,7 @@ EOT;
 			'minDate' => $today . ' 00:00',
 			'maxDate' => $today . ' 15:15',
 		)));
-		$help = sprintf(__d('questionnaires', 'Please enter at %s to %s'), date('H:i', strtotime($question['min'])), date('H:i', strtotime($question['max'])));
+		$help = __d('questionnaires', 'Please enter at %s to %s', date('H:i', strtotime($question['min'])), date('H:i', strtotime($question['max'])));
 		$expected = sprintf($this->_getDatetimeBaseElement(), $datetimePickerOpt, $help);
 		$expected = str_replace('calendar', 'time', $expected);
 		$expected = preg_replace('/[\n|\r|\t|\s]/', '', $expected . $this->_getComElement());
@@ -238,7 +238,7 @@ EOT;
 				)
 			)
 		);
-		$help = sprintf(__d('questionnaires', 'Please enter at %s to %s'), date('Y-m-d H:i', strtotime($question['min'])), date('Y-m-d H:i', strtotime($question['max'])));
+		$help = __d('questionnaires', 'Please enter at %s to %s', date('Y-m-d H:i', strtotime($question['min'])), date('Y-m-d H:i', strtotime($question['max'])));
 		$expected = preg_replace('/[\n|\r|\t|\s]/', '', sprintf($this->_getDatetimeBaseElement(), $datetimePickerOpt, $help) . $this->_getComElement());
 
 		$actual = $this->QuestionnaireAnswer->answer($question);

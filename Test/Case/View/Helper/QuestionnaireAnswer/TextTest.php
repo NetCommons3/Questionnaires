@@ -104,7 +104,7 @@ EOT;
 		</div>
 		<span class="help-block">
 EOT;
-		$expected .= sprintf(__d('questionnaires', 'Please enter between %s letters and %s letters'), $question['min'], $question['max']) . '</span>';
+		$expected .= __d('questionnaires', 'Please enter between %s letters and %s letters', $question['min'], $question['max']) . '</span>';
 		$expected = preg_replace('/[\n|\r|\t|\s]/', '', $expected . $this->_getComElement());
 
 		$actual = $this->QuestionnaireAnswer->answer($question);
@@ -132,7 +132,7 @@ EOT;
 		</div>
 		<span class="help-block">
 EOT;
-		$expected .= sprintf(__d('questionnaires', 'Please enter a number between %s and %s'), $question['min'], $question['max']) . '</span>';
+		$expected .= __d('questionnaires', 'Please enter a number between %s and %s', $question['min'], $question['max']) . '</span>';
 		$expected = preg_replace('/[\n|\r|\t|\s]/', '', $expected . $this->_getComElement());
 
 		$actual = $this->QuestionnaireAnswer->answer($question);

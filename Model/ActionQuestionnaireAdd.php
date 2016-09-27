@@ -60,7 +60,7 @@ class ActionQuestionnaireAdd extends QuestionnairesAppModel {
 					'requireWhen',
 					'create_option',
 					QuestionnairesComponent::QUESTIONNAIRE_CREATE_OPT_NEW),
-				'message' => sprintf(__d('net_commons', 'Please input %s.'), __d('questionnaires', 'Title')),
+				'message' => __d('net_commons', 'Please input %s.', __d('questionnaires', 'Title')),
 				'required' => false,
 			),
 			'past_questionnaire_id' => array(

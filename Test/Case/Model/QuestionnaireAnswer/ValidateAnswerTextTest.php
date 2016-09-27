@@ -66,19 +66,19 @@ class ValidateAnswerTextTest extends QuestionnaireAnswerValidateTest {
 		$numberRangeQuestion = Hash::merge($numberQuestion, array('is_range' => 1, 'min' => 5, 'max' => 10));
 		return array(
 			array($data, 3, $normalQuestion, 'answer_value', str_repeat('MaxLength', QuestionnairesComponent::QUESTIONNAIRE_MAX_ANSWER_LENGTH),
-				sprintf(__d('questionnaires', 'the answer is too long. Please enter under %d letters.'), QuestionnairesComponent::QUESTIONNAIRE_MAX_ANSWER_LENGTH)),
+				__d('questionnaires', 'the answer is too long. Please enter under %d letters.', QuestionnairesComponent::QUESTIONNAIRE_MAX_ANSWER_LENGTH)),
 			array($data, 3, $requireQuestion, 'answer_value', '',
 				__d('questionnaires', 'Input required')),
 			array($data, 3, $lengthQuestion, 'answer_value', '012',
-				sprintf(__d('questionnaires', 'Please enter the answer between %s letters and %s letters.'), 5, 10)),
+				__d('questionnaires', 'Please enter the answer between %s letters and %s letters.', 5, 10)),
 			array($data, 3, $lengthQuestion, 'answer_value', '01234567890',
-				sprintf(__d('questionnaires', 'Please enter the answer between %s letters and %s letters.'), 5, 10)),
+				__d('questionnaires', 'Please enter the answer between %s letters and %s letters.', 5, 10)),
 			array($data, 3, $numberQuestion, 'answer_value', 'aaa',
 				__d('questionnaires', 'Number required')),
 			array($data, 3, $numberRangeQuestion, 'answer_value', '3',
-				sprintf(__d('questionnaires', 'Please enter the answer between %s and %s.'), 5, 10)),
+				__d('questionnaires', 'Please enter the answer between %s and %s.', 5, 10)),
 			array($data, 3, $numberRangeQuestion, 'answer_value', '13',
-				sprintf(__d('questionnaires', 'Please enter the answer between %s and %s.'), 5, 10)),
+				__d('questionnaires', 'Please enter the answer between %s and %s.', 5, 10)),
 		);
 	}
 }

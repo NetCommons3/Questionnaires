@@ -201,13 +201,11 @@ class QuestionnaireAnswerHelper extends AppHelper {
 		if ($question['is_range'] == QuestionnairesComponent::USES_USE) {
 			$ret .= '<span class="help-block">';
 			if ($question['question_type_option'] == QuestionnairesComponent::TYPE_OPTION_NUMERIC) {
-				$ret .= sprintf(
-					__d('questionnaires', 'Please enter a number between %s and %s'),
+				$ret .= __d('questionnaires', 'Please enter a number between %s and %s',
 					$question['min'],
 					$question['max']);
 			} else {
-				$ret .= sprintf(
-					__d('questionnaires', 'Please enter between %s letters and %s letters'),
+				$ret .= __d('questionnaires', 'Please enter between %s letters and %s letters',
 					$question['min'],
 					$question['max']);
 			}
@@ -353,7 +351,7 @@ class QuestionnaireAnswerHelper extends AppHelper {
 			if ($question['is_range'] == QuestionnairesComponent::USES_USE) {
 				$options['minDate'] = $question['min'];
 				$options['maxDate'] = $question['max'];
-				$rangeMessage .= sprintf(__d('questionnaires', 'Please enter at %s to %s'),
+				$rangeMessage .= __d('questionnaires', 'Please enter at %s to %s',
 					date('Y-m-d', strtotime($question['min'])),
 					date('Y-m-d', strtotime($question['max'])));
 			}
@@ -364,7 +362,7 @@ class QuestionnaireAnswerHelper extends AppHelper {
 				$tm = new NetCommonsTime();
 				$options['minDate'] = date('Y-m-d ', strtotime($tm->getNowDatetime())) . $question['min'];
 				$options['maxDate'] = date('Y-m-d ', strtotime($tm->getNowDatetime())) . $question['max'];
-				$rangeMessage .= sprintf(__d('questionnaires', 'Please enter at %s to %s'),
+				$rangeMessage .= __d('questionnaires', 'Please enter at %s to %s',
 					date('H:i', strtotime($question['min'])),
 					date('H:i', strtotime($question['max'])));
 			}
@@ -374,7 +372,7 @@ class QuestionnaireAnswerHelper extends AppHelper {
 			if ($question['is_range'] == QuestionnairesComponent::USES_USE) {
 				$options['minDate'] = $question['min'];
 				$options['maxDate'] = $question['max'];
-				$rangeMessage .= sprintf(__d('questionnaires', 'Please enter at %s to %s'),
+				$rangeMessage .= __d('questionnaires', 'Please enter at %s to %s',
 					date('Y-m-d H:i', strtotime($question['min'])),
 					date('Y-m-d H:i', strtotime($question['max'])));
 			}

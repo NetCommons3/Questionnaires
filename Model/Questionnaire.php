@@ -155,7 +155,7 @@ class Questionnaire extends QuestionnairesAppModel {
 			),
 			'title' => array(
 					'rule' => 'notBlank',
-					'message' => sprintf(__d('net_commons', 'Please input %s.'), __d('questionnaires', 'Title')),
+					'message' => __d('net_commons', 'Please input %s.', __d('questionnaires', 'Title')),
 					'required' => true,
 					'allowEmpty' => false,
 					'required' => true,
@@ -553,7 +553,7 @@ class Questionnaire extends QuestionnairesAppModel {
 
 			//新着データセット
 			$this->setTopicValue(
-				'title', sprintf(__d('questionnaires', '%s started'), $questionnaire['Questionnaire']['title'])
+				'title', __d('questionnaires', '%s started', $questionnaire['Questionnaire']['title'])
 			);
 			if (! $questionnaire['Questionnaire']['answer_timing']) {
 				$this->setTopicValue('publish_start', null);

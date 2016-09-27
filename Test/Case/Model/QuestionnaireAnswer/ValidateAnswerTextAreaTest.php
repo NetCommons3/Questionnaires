@@ -60,7 +60,7 @@ class ValidateAnswerTextAreaTest extends QuestionnaireAnswerValidateTest {
 		$requireQuestion = Hash::merge($normalQuestion, array('is_require' => QuestionnairesComponent::REQUIRES_REQUIRE));
 		return array(
 			array($data, 3, $normalQuestion, 'answer_value', str_repeat('MaxLength', QuestionnairesComponent::QUESTIONNAIRE_MAX_ANSWER_LENGTH),
-				sprintf(__d('questionnaires', 'the answer is too long. Please enter under %d letters.'), QuestionnairesComponent::QUESTIONNAIRE_MAX_ANSWER_LENGTH)),
+				__d('questionnaires', 'the answer is too long. Please enter under %d letters.', QuestionnairesComponent::QUESTIONNAIRE_MAX_ANSWER_LENGTH)),
 			array($data, 3, $requireQuestion, 'answer_value', '',
 				__d('questionnaires', 'Input required')),
 		);

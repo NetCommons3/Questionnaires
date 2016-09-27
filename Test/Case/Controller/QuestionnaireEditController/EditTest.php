@@ -460,7 +460,7 @@ class QuestionnaireEditControllerEditTest extends WorkflowControllerEditTest {
 				'validationError' => array(
 					'field' => 'Questionnaire.title',
 					'value' => '',
-					'message' => sprintf(__d('net_commons', 'Please input %s.'), __d('questionnaires', 'Title')),
+					'message' => __d('net_commons', 'Please input %s.', __d('questionnaires', 'Title')),
 				)
 			)),
 			Hash::merge($result, array(
