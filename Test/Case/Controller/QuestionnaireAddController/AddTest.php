@@ -343,35 +343,35 @@ class QuestionnaireAddControllerAddTest extends WorkflowControllerAddTest {
 				'validationError' => array(
 					'field' => 'ActionQuestionnaireAdd.create_option',
 					'value' => null,
-					'message' => sprintf(__d('questionnaires', 'Please choose create option.'))
+					'message' => __d('questionnaires', 'Please choose create option.')
 				)
 			)),
 			Hash::merge($result, array(
 				'validationError' => array(
 					'field' => 'ActionQuestionnaireAdd.title',
 					'value' => '',
-					'message' => sprintf(__d('net_commons', 'Please input %s.'), __d('questionnaires', 'Title'))
+					'message' => __d('net_commons', 'Please input %s.', __d('questionnaires', 'Title'))
 				)
 			)),
 			Hash::merge($resultPastReuse, array(
 				'validationError' => array(
 					'field' => 'ActionQuestionnaireAdd.past_questionnaire_id',
 					'value' => '',
-					'message' => sprintf(__d('questionnaires', 'Please select past questionnaire.'))
+					'message' => __d('questionnaires', 'Please select past questionnaire.')
 				)
 			)),
 			Hash::merge($resultPastReuse, array(
 				'validationError' => array(
 					'field' => 'ActionQuestionnaireAdd.past_questionnaire_id',
 					'value' => '9999999',
-					'message' => sprintf(__d('questionnaires', 'Please select past questionnaire.'))
+					'message' => __d('questionnaires', 'Please select past questionnaire.')
 				)
 			)),
 			//Hash::merge($resultTemplate, array(
 			//	'validationError' => array(
 			//		'field' => 'ActionQuestionnaireAdd.template_file',
 			//		'value' => null,
-			//		'message' => sprintf(__d('questionnaires', 'file upload error.'))
+			//		'message' => __d('questionnaires', 'file upload error.')
 			//	)
 			//)),
 		);

@@ -88,8 +88,8 @@ class QuestionnaireAnswerTextBehavior extends QuestionnaireAnswerBehavior {
 					intval($question['max']));
 				if (!$rangeRes) {
 					$ret = false;
-					$model->validationErrors['answer_value'][] = sprintf(
-						__d('questionnaires', 'Please enter the answer between %s and %s.'),
+					$model->validationErrors['answer_value'][] = __d('questionnaires',
+						'Please enter the answer between %s and %s.',
 						$question['min'],
 						$question['max']);
 				}
@@ -99,8 +99,8 @@ class QuestionnaireAnswerTextBehavior extends QuestionnaireAnswerBehavior {
 				if (! Validation::minLength($data['answer_value'], intval($question['min'])) ||
 					! Validation::maxLength($data['answer_value'], intval($question['max']))) {
 					$ret = false;
-					$model->validationErrors['answer_value'][] = sprintf(
-						__d('questionnaires', 'Please enter the answer between %s letters and %s letters.'),
+					$model->validationErrors['answer_value'][] = __d('questionnaires',
+						'Please enter the answer between %s letters and %s letters.',
 						$question['min'],
 						$question['max']);
 				}

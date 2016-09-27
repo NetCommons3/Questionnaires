@@ -2,13 +2,13 @@
 echo $this->NetCommonsHtml->script(array(
 	'/questionnaires/js/questionnaires.js'
 ));
-$maxQuestionWarningMsg = sprintf(
-	__d('questionnaires', 'Number of questions that can be created is up %d . Already it has become %d .'),
+$maxQuestionWarningMsg = __d('questionnaires',
+	'Number of questions that can be created is up %d . Already it has become %d .',
 	QuestionnairesComponent::MAX_QUESTION_COUNT,
 	QuestionnairesComponent::MAX_QUESTION_COUNT
 );
-$maxChoiceWarningMsg = sprintf(
-	__d('questionnaires', 'Number of choices that can be created is up %d per question. Already it has become %d .'),
+$maxChoiceWarningMsg = __d('questionnaires',
+	'Number of choices that can be created is up %d per question. Already it has become %d .',
 	QuestionnairesComponent::MAX_CHOICE_COUNT,
 	QuestionnairesComponent::MAX_CHOICE_COUNT
 );

@@ -125,8 +125,8 @@ class QuestionnaireAnswerDatetimeBehavior extends QuestionnaireAnswerBehavior {
 		if ($rangeResult) {
 			return true;
 		}
-		$model->validationErrors['answer_value'][] = sprintf(
-			__d('questionnaires', 'Please enter the answer between %s and %s.'),
+		$model->validationErrors['answer_value'][] = __d('questionnaires',
+			'Please enter the answer between %s and %s.',
 			date($this->_datetimeFormat[$question['question_type_option']], strtotime($question['min'])),
 			date($this->_datetimeFormat[$question['question_type_option']], strtotime($question['max'])));
 		return false;

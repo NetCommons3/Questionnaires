@@ -28,6 +28,13 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 	const	QUESTIONNAIRE_EDIT_SESSION_INDEX = 'Questionnaires.questionnaireEdit.';
 
 /**
+ * post QuestionnaireQuestions session key
+ *
+ * @var int
+ */
+	const	QUESTIONNAIRE_POST_QUESTION_SESSION_INDEX = 'Questionnaires.postQuestionnaireQuestion.';
+
+/**
  * layout
  *
  * @var array
@@ -52,7 +59,7 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 		'NetCommons.Permission' => array(
 			//アクセスの権限
 			'allow' => array(
-				'edit,edit_question,edit_result,delete,post_page,post_question' => 'content_creatable',
+				'edit,edit_question,edit_result,delete' => 'content_creatable',
 			),
 		),
 		'Questionnaires.Questionnaires',
@@ -216,8 +223,21 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 			} else {
 				// バリデート
 				$questionnaire = $this->_questionnaire;
-				$questionnaire['QuestionnairePage'] =
-					QuestionnairesAppController::changeBooleansToNumbers($questionnaire['QuestionnairePage']);
+
+				// 蓄積データを取り出す
+				$accumSessName =
+					self::QUESTIONNAIRE_POST_QUESTION_SESSION_INDEX . $this->_getQuestionnaireEditSessionIndex();
+				$accumulationPost = $this->Session->read($accumSessName);
+
+				// 取り出し後、蓄積データは消す
+				$this->Session->delete($accumSessName);
+
+				// 集計結果編集画面からのPOSTの場合は無条件で上書き
+				// 質問編集画面からのPOSTは、発行後は書き換えない 未発行の場合はPostデータを上書き設定
+				if ($this->action == 'edit_result' || $this->Questionnaire->hasPublished($questionnaire) == 0) {
+					$questionnaire['QuestionnairePage'] = $accumulationPost['QuestionnairePage'];
+				}
+
 				$this->Questionnaire->set($questionnaire);
 				if (! $this->Questionnaire->validates(
 					array('validate' => QuestionnairesComponent::QUESTIONNAIRE_VALIDATE_TYPE))) {
@@ -238,6 +258,11 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 				self::QUESTIONNAIRE_EDIT_SESSION_INDEX . $this->_getQuestionnaireEditSessionIndex(),
 				$this->_questionnaire);
 			$this->__setupViewParameters($this->_questionnaire, $this->_getActionUrl($prevAction));
+
+			// Getの場合、蓄積データは消す
+			$accumSessName =
+				self::QUESTIONNAIRE_POST_QUESTION_SESSION_INDEX . $this->_getQuestionnaireEditSessionIndex();
+			$this->Session->delete($accumSessName);
 		}
 	}
 
@@ -360,22 +385,22 @@ class QuestionnaireEditController extends QuestionnairesAppController {
  * @return void
  */
 	protected function _postPage($postPage) {
-		// アンケートデータに作成されたPost質問データをかぶせる
-		// （質問作成画面では質問データ属性全てをPOSTしているのですり替えでOK）
-		$questionnaire = $this->_questionnaire;
-
-		// 集計結果編集画面からのPOSTの場合は無条件で上書き
-		// 質問編集画面からのPOSTは、発行後は書き換えない 未発行の場合はPostデータを上書き設定
-		if ($this->action == 'edit_result' || $this->Questionnaire->hasPublished($questionnaire) == 0) {
-			// JSからPOSTされたデータは属性名がキャメライズされているのでスネーク方式に変換
-			$postPage = $this->_changeBoolean($postPage);
-			// マージ
-			$questionnaire = Hash::merge($questionnaire, $postPage);
+		// 分割されて送られてくるデータをひたすら蓄積する
+		$accumSessName =
+			self::QUESTIONNAIRE_POST_QUESTION_SESSION_INDEX . $this->_getQuestionnaireEditSessionIndex();
+		$accumulationPost = $this->Session->read($accumSessName);
+		if (! $accumulationPost) {
+			$accumulationPost = array();
 		}
+
+		// JSからPOSTされたデータはtrue, false画文字列で来てしまうので
+		$postPage = $this->_changeBoolean($postPage);
+
+		// マージ
+		$accumulationPost = Hash::merge($accumulationPost, $postPage);
+
 		// マージ結果をセッションに記録
-		$this->Session->write(
-			self::QUESTIONNAIRE_EDIT_SESSION_INDEX . $this->_sessionIndex,
-			$questionnaire);
+		$this->Session->write($accumSessName, $accumulationPost);
 	}
 
 /**
