@@ -31,9 +31,9 @@ echo $this->element('Questionnaires.scripts');
 
 					<?php if ($questionnaire['Questionnaire']['answer_timing'] == QuestionnairesComponent::USES_USE): ?>
 						<strong>
-							<?php echo $this->Date->dateFormat($questionnaire['Questionnaire']['answer_start_period']); ?>
+							<?php echo $this->Date->dateFormat($questionnaire['Questionnaire']['answer_start_period'], 'Y/m/d H:i'); ?>
 							<?php echo __d('questionnaires', ' - '); ?>
-							<?php echo $this->Date->dateFormat($questionnaire['Questionnaire']['answer_end_period']); ?>
+							<?php echo $this->Date->dateFormat($questionnaire['Questionnaire']['answer_end_period'], 'Y/m/d H:i'); ?>
 						</strong>
 					<?php endif ?>
 
