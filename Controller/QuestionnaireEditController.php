@@ -181,6 +181,21 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 	}
 
 /**
+ * edit_not_found method
+ *
+ * @throws BadRequestException
+ * @return void
+ */
+	public function edit_not_found() {
+		if ($this->request->is('post') || $this->request->is('put')) {
+			$this->throwBadRequest();
+			return;
+		}
+		$url = $this->_getCancelBackUrl();
+		$this->set('cancelUrl', $url);
+	}
+
+/**
  * edit question method
  *
  * @return void
@@ -207,7 +222,7 @@ class QuestionnaireEditController extends QuestionnairesAppController {
  */
 	protected function _editMidstream($prevAction, $redirectAction) {
 		if (empty($this->_questionnaire)) {
-			$this->throwBadRequest();
+			$this->setAction('edit_not_found');
 			return false;
 		}
 
@@ -275,7 +290,7 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 	public function edit() {
 		// 処理対象のアンケートデータが見つかっていない場合、エラー
 		if (empty($this->_questionnaire)) {
-			$this->throwBadRequest();
+			$this->setAction('edit_not_found');
 			return;
 		}
 
@@ -360,11 +375,7 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 
 		$this->Session->delete(self::QUESTIONNAIRE_EDIT_SESSION_INDEX . $this->_sessionIndex);
 
-		if ($this->layout == 'NetCommons.setting') {
-			$this->redirect(NetCommonsUrl::backToIndexUrl('default_setting_action'));
-		} else {
-			$this->redirect(NetCommonsUrl::backToPageUrl());
-		}
+		$this->redirect($this->_getCancelBackUrl());
 	}
 /**
  * cancel method
@@ -403,33 +414,6 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 		$this->Session->write($accumSessName, $accumulationPost);
 	}
 
-/**
- * _changeBoolean
- *
- * JSから送られるデータはbooleanの値のものがtrueとかfalseの文字列データで来てしまうので
- * 正式なbool値に変換しておく
- *
- * @param array $orig 元データ
- * @return array 変換後の配列データ
- */
-	protected function _changeBoolean($orig) {
-		$new = [];
-
-		foreach ($orig as $key => $value) {
-			if (is_array($value)) {
-				$new[$key] = $this->_changeBoolean($value);
-			} else {
-				if ($value === 'true') {
-					$value = true;
-				}
-				if ($value === 'false') {
-					$value = false;
-				}
-				$new[$key] = $value;
-			}
-		}
-		return $new;
-	}
 /**
  * _getActionUrl method
  *
@@ -481,11 +465,7 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 		$ajaxPostUrl = $this->_getActionUrl($this->action);
 		$this->set('ajaxPostUrl', $ajaxPostUrl);
 		$this->set('postUrl', array('url' => $ajaxPostUrl));
-		if ($this->layout == 'NetCommons.setting') {
-			$this->set('cancelUrl', array('url' => NetCommonsUrl::backToIndexUrl('default_setting_action')));
-		} else {
-			$this->set('cancelUrl', array('url' => NetCommonsUrl::backToPageUrl()));
-		}
+		$this->set('cancelUrl', array('url' => $this->_getCancelBackUrl()));
 		$this->set('deleteUrl', array('url' => $this->_getActionUrl('delete')));
 		// これを使うのは集計結果編集画面だけなので固定体に書いています
 		$this->set('prevUrl', array('url' => $this->_getActionUrl('edit_question')));
@@ -506,5 +486,21 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 		$this->request->data = $questionnaire;
 		$this->request->data['Frame'] = Current::read('Frame');
 		$this->request->data['Block'] = Current::read('Block');
+	}
+
+/**
+ * _getCancelBackUrl
+ *
+ * セッティングモードか通常モードからかで編集画面からの戻りＵＲＬを分ける
+ *
+ * @return array
+ */
+	protected function _getCancelBackUrl() {
+		if ($this->layout == 'NetCommons.setting') {
+			$retArr = NetCommonsUrl::backToIndexUrl('default_setting_action');
+		} else {
+			$retArr = NetCommonsUrl::backToPageUrl();
+		}
+		return $retArr;
 	}
 }

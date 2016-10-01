@@ -196,8 +196,9 @@ class QuestionnaireEditControllerEditTest extends WorkflowControllerEditTest {
 		//--他人の記事の編集
 		$results[0] = array(
 			'urlOptions' => array('frame_id' => $data['Frame']['id'], 'block_id' => $data['Block']['id'], 'action' => $this->_myAction, 'key' => 'questionnaire_42'),
-			'assert' => null,
-			'exception' => 'BadRequestException'
+			//'assert' => null,
+			//'exception' => 'BadRequestException'
+			'assert' => array('method' => 'assertContains', 'expected' => __d('questionnaires', 'not found this questionnaire.')),
 		);
 		//--自分の記事の編集(一度も公開していない)
 		$results[1] = array(
@@ -207,7 +208,8 @@ class QuestionnaireEditControllerEditTest extends WorkflowControllerEditTest {
 		// 存在してないアンケートを指定
 		$results[2] = array(
 			'urlOptions' => array('frame_id' => $data['Frame']['id'], 'block_id' => $data['Block']['id'], 'action' => $this->_myAction, 'key' => 'questionnaire_99999'),
-			'assert' => null, 'exception' => 'BadRequestException', 'return' => 'json'
+			//'assert' => null, 'exception' => 'BadRequestException', 'return' => 'json'
+			'assert' => array('method' => 'assertContains', 'expected' => __d('questionnaires', 'not found this questionnaire.')),
 		);
 		//新規作成
 		$results[3] = array(
@@ -292,8 +294,9 @@ class QuestionnaireEditControllerEditTest extends WorkflowControllerEditTest {
 		//--コンテンツなし...編集対象データを指定せずに編集画面へ行くと不正リクエストエラー
 		$results[count($results)] = array(
 			'urlOptions' => array('frame_id' => '14', 'block_id' => null, 'action' => $this->_myAction, 'key' => null),
-			'assert' => null,
-			'exception' => 'BadRequestException'
+			//'assert' => null,
+			//'exception' => 'BadRequestException'
+			'assert' => array('method' => 'assertContains', 'expected' => __d('questionnaires', 'not found this questionnaire.')),
 		);
 
 		return $results;
