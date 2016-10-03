@@ -71,6 +71,7 @@ class AllQuestionnairesTest extends CakeTestSuite {
 		$suite->addTestFile(CakePlugin::path($plugin) . 'Test' . DS . 'Case' . '/Model/Behavior/QuestionnaireValidateBehavior/CheckDateCompTest.php');
 		$suite->addTestFile(CakePlugin::path($plugin) . 'Test' . DS . 'Case' . '/Model/Behavior/QuestionnaireValidateBehavior/CheckDateTimeTest.php');
 		$suite->addTestFile(CakePlugin::path($plugin) . 'Test' . DS . 'Case' . '/Model/Behavior/QuestionnaireValidateBehavior/RequireOtherFieldsTest.php');
+		/*
 		$suite->addTestFile(CakePlugin::path($plugin) . 'Test' . DS . 'Case' . '/Model/QuestionnaireAnswer/SaveAnswerTest.php');
 		$suite->addTestFile(CakePlugin::path($plugin) . 'Test' . DS . 'Case' . '/Model/QuestionnaireAnswer/ValidateAnswerDatetimeTest.php');
 		$suite->addTestFile(CakePlugin::path($plugin) . 'Test' . DS . 'Case' . '/Model/QuestionnaireAnswer/ValidateAnswerMultipleMatrixTest.php');
@@ -84,6 +85,7 @@ class AllQuestionnairesTest extends CakeTestSuite {
 		$suite->addTestFile(CakePlugin::path($plugin) . 'Test' . DS . 'Case' . '/Model/QuestionnaireAnswerSummary/GetProgressiveSummaryTest.php');
 		$suite->addTestFile(CakePlugin::path($plugin) . 'Test' . DS . 'Case' . '/Model/QuestionnaireAnswerSummary/SaveAnswerStatusTest.php');
 		$suite->addTestFile(CakePlugin::path($plugin) . 'Test' . DS . 'Case' . '/Model/QuestionnaireAnswerSummaryCsv/GetAnswerSummaryCsvTest.php');
+
 		$suite->addTestFile(CakePlugin::path($plugin) . 'Test' . DS . 'Case' . '/Model/QuestionnaireChoice/GetDefaultChoiceTest.php');
 		$suite->addTestFile(CakePlugin::path($plugin) . 'Test' . DS . 'Case' . '/Model/QuestionnaireChoice/SaveQuestionnaireChoiceTest.php');
 		$suite->addTestFile(CakePlugin::path($plugin) . 'Test' . DS . 'Case' . '/Model/QuestionnaireExport/GetExportDataTest.php');
@@ -113,6 +115,7 @@ class AllQuestionnairesTest extends CakeTestSuite {
 		$suite->addTestFile(CakePlugin::path($plugin) . 'Test' . DS . 'Case' . '/View/Helper/QuestionnaireAnswer/DatetimeTest.php');
 		$suite->addTestFile(CakePlugin::path($plugin) . 'Test' . DS . 'Case' . '/View/Helper/QuestionnaireAnswer/TextTest.php');
 		$suite->addTestFile(CakePlugin::path($plugin) . 'Test' . DS . 'Case' . '/View/Helper/QuestionnaireAnswer/MatrixTest.php');
+		*/
 		return $suite;
 	}
 }
