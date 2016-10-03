@@ -66,9 +66,9 @@ class AllQuestionnairesTest extends CakeTestSuite {
 		$suite->addTestFile(CakePlugin::path($plugin) . 'Test' . DS . 'Case' . '/Controller/QuestionnairesController/IndexTest.php');
 
 		$suite->addTestFile(CakePlugin::path($plugin) . 'Test' . DS . 'Case' . '/Model/ActionQuestionnaireAdd/CerateFromReuseTest.php');
+		/*
 		$suite->addTestFile(CakePlugin::path($plugin) . 'Test' . DS . 'Case' . '/Model/ActionQuestionnaireAdd/CheckPastQuestionnaireTest.php');
 
-		/*
 		$suite->addTestFile(CakePlugin::path($plugin) . 'Test' . DS . 'Case' . '/Model/ActionQuestionnaireAdd/CreateNewTest.php');
 		$suite->addTestFile(CakePlugin::path($plugin) . 'Test' . DS . 'Case' . '/Model/ActionQuestionnaireAdd/CreatefromTemplateTest.php');
 
