@@ -67,10 +67,11 @@ class AllQuestionnairesTest extends CakeTestSuite {
 
 		$suite->addTestFile(CakePlugin::path($plugin) . 'Test' . DS . 'Case' . '/Model/ActionQuestionnaireAdd/CerateFromReuseTest.php');
 		$suite->addTestFile(CakePlugin::path($plugin) . 'Test' . DS . 'Case' . '/Model/ActionQuestionnaireAdd/CheckPastQuestionnaireTest.php');
+
+		/*
 		$suite->addTestFile(CakePlugin::path($plugin) . 'Test' . DS . 'Case' . '/Model/ActionQuestionnaireAdd/CreateNewTest.php');
 		$suite->addTestFile(CakePlugin::path($plugin) . 'Test' . DS . 'Case' . '/Model/ActionQuestionnaireAdd/CreatefromTemplateTest.php');
 
-		/*
 		$suite->addTestFile(CakePlugin::path($plugin) . 'Test' . DS . 'Case' . '/Model/Behavior/QuestionnaireValidateBehavior/CheckDateCompTest.php');
 		$suite->addTestFile(CakePlugin::path($plugin) . 'Test' . DS . 'Case' . '/Model/Behavior/QuestionnaireValidateBehavior/CheckDateTimeTest.php');
 		$suite->addTestFile(CakePlugin::path($plugin) . 'Test' . DS . 'Case' . '/Model/Behavior/QuestionnaireValidateBehavior/RequireOtherFieldsTest.php');
