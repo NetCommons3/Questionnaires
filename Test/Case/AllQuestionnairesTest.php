@@ -7,6 +7,7 @@
  * @license http://www.netcommons.org/license.txt NetCommons License
  * @copyright Copyright 2014, NetCommons Project
  */
+App::uses('NetCommonsTestSuite', 'NetCommons.TestSuite');
 
 /**
  * Questionnaires All Test Suite
@@ -15,6 +16,7 @@
  * @package NetCommons\Announcements\Test\Case
  * @codeCoverageIgnore
  */
+
 class AllQuestionnairesTest extends CakeTestSuite {
 
 /**
