@@ -64,6 +64,7 @@ class AllQuestionnairesTest extends CakeTestSuite {
 		$suite->addTestFile(CakePlugin::path($plugin) . 'Test' . DS . 'Case' . '/Controller/QuestionnaireFrameSettingsController/EditTest.php');
 		$suite->addTestFile(CakePlugin::path($plugin) . 'Test' . DS . 'Case' . '/Controller/QuestionnaireMailSettingCntroller/EditTest.php');
 		$suite->addTestFile(CakePlugin::path($plugin) . 'Test' . DS . 'Case' . '/Controller/QuestionnairesController/IndexTest.php');
+		/*
 		$suite->addTestFile(CakePlugin::path($plugin) . 'Test' . DS . 'Case' . '/Model/ActionQuestionnaireAdd/CerateFromReuseTest.php');
 		$suite->addTestFile(CakePlugin::path($plugin) . 'Test' . DS . 'Case' . '/Model/ActionQuestionnaireAdd/CheckPastQuestionnaireTest.php');
 		$suite->addTestFile(CakePlugin::path($plugin) . 'Test' . DS . 'Case' . '/Model/ActionQuestionnaireAdd/CreateNewTest.php');
@@ -71,7 +72,7 @@ class AllQuestionnairesTest extends CakeTestSuite {
 		$suite->addTestFile(CakePlugin::path($plugin) . 'Test' . DS . 'Case' . '/Model/Behavior/QuestionnaireValidateBehavior/CheckDateCompTest.php');
 		$suite->addTestFile(CakePlugin::path($plugin) . 'Test' . DS . 'Case' . '/Model/Behavior/QuestionnaireValidateBehavior/CheckDateTimeTest.php');
 		$suite->addTestFile(CakePlugin::path($plugin) . 'Test' . DS . 'Case' . '/Model/Behavior/QuestionnaireValidateBehavior/RequireOtherFieldsTest.php');
-		/*
+
 		$suite->addTestFile(CakePlugin::path($plugin) . 'Test' . DS . 'Case' . '/Model/QuestionnaireAnswer/SaveAnswerTest.php');
 		$suite->addTestFile(CakePlugin::path($plugin) . 'Test' . DS . 'Case' . '/Model/QuestionnaireAnswer/ValidateAnswerDatetimeTest.php');
 		$suite->addTestFile(CakePlugin::path($plugin) . 'Test' . DS . 'Case' . '/Model/QuestionnaireAnswer/ValidateAnswerMultipleMatrixTest.php');
