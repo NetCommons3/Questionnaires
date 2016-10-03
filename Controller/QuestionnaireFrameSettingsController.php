@@ -121,6 +121,7 @@ class QuestionnaireFrameSettingsController extends QuestionnaireBlocksController
 				'Questionnaire.key',
 				'Questionnaire.status',
 				'Questionnaire.title',
+				'Questionnaire.answer_timing',
 				'Questionnaire.answer_start_period',
 				'Questionnaire.answer_end_period',
 				'Questionnaire.is_total_show',

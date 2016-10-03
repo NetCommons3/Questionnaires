@@ -29,6 +29,15 @@ class QuestionnaireMailSettingsControllerEditTest extends NetCommonsControllerTe
 	public $fixtures = array(
 		'plugin.mails.mail_setting',
 		'plugin.mails.mail_setting_fixed_phrase',
+		'plugin.questionnaires.questionnaire',
+		'plugin.questionnaires.block_setting_for_questionnaire',
+		'plugin.questionnaires.questionnaire_frame_setting',
+		'plugin.questionnaires.questionnaire_frame_display_questionnaire',
+		'plugin.questionnaires.questionnaire_page',
+		'plugin.questionnaires.questionnaire_question',
+		'plugin.questionnaires.questionnaire_choice',
+		'plugin.questionnaires.questionnaire_answer_summary',
+		'plugin.workflow.workflow_comment',
 	);
 
 /**

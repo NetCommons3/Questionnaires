@@ -107,6 +107,34 @@ class QuestionnairesAppController extends AppController {
 	}
 
 /**
+ * _changeBoolean
+ *
+ * JSから送られるデータはbooleanの値のものがtrueとかfalseの文字列データで来てしまうので
+ * 正式なbool値に変換しておく
+ *
+ * @param array $orig 元データ
+ * @return array 変換後の配列データ
+ */
+	protected function _changeBoolean($orig) {
+		$new = [];
+
+		foreach ($orig as $key => $value) {
+			if (is_array($value)) {
+				$new[$key] = $this->_changeBoolean($value);
+			} else {
+				if ($value === 'true') {
+					$value = true;
+				}
+				if ($value === 'false') {
+					$value = false;
+				}
+				$new[$key] = $value;
+			}
+		}
+		return $new;
+	}
+
+/**
  * _decideSettingLayout
  *
  * セッティング系の画面からの流れなのかどうかを判断し、レイアウトを決める
