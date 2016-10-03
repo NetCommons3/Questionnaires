@@ -13,6 +13,7 @@
 
 App::uses('View', 'View');
 App::uses('NetCommonsCakeTestCase', 'NetCommons.TestSuite');
+App::uses('NetCommonsHtmlHelper', 'NetCommons.View/Helper');
 App::uses('QuestionnaireAnswerHelper', 'Questionnaires.View/Helper');
 App::uses('QuestionnairesComponent', 'Questionnaires.Controller/Component');
 
@@ -31,6 +32,7 @@ class QuestionnaireAnswerHelperMatrixTest extends NetCommonsCakeTestCase {
 
 		$View = new View();
 		$this->QuestionnaireAnswer = new QuestionnaireAnswerHelper($View);
+		$this->NetCommonsHtml = new NetCommonsHtmlHelper($View);
 	}
 
 /**
