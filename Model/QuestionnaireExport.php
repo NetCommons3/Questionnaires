@@ -77,9 +77,7 @@ class QuestionnaireExport extends QuestionnairesAppModel {
 
 		// 言語数分
 		$Language = ClassRegistry::init('M17n.Language');
-		$languages = $Language->find('all', array(
-			'recursive' => -1
-		));
+		$languages = $Language->getLanguage();
 		$questionnaires = array();
 		foreach ($languages as $lang) {
 			// 指定のアンケートデータを取得
