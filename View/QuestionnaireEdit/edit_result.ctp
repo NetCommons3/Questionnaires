@@ -94,5 +94,8 @@ $jsPostData = $this->QuestionEdit->getJsPostData($questionnaireKey, $ajaxPostUrl
 				['type' => 'button', 'ng-click' => 'post(\'edit_result\')']); ?>
 		</div>
 	<?php echo $this->NetCommonsForm->end(); ?>
-	<?php echo $this->QuestionEdit->questionnaireGetFinallySubmit($postUrl); ?>
+	<?php echo $this->QuestionEdit->questionnaireGetFinallySubmit($postUrl, array(
+		'Questionnaire.is_total_show' => 'questionnaire.questionnaire.isTotalShow',
+		'Questionnaire.total_comment' => 'questionnaire.questionnaire.totalComment',
+		)); ?>
 </article>

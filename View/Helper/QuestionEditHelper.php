@@ -159,9 +159,10 @@ class QuestionEditHelper extends AppHelper {
  * 分割送信後、最終POSTをする時に使用するFormを作成する
  *
  * @param array $postUrl POST先URL情報
+ * @param array $ngValues 最終POSTに合わせて送る付加情報のフィールド名とng-Value名
  * @return string HTML
  */
-	public function questionnaireGetFinallySubmit($postUrl) {
+	public function questionnaireGetFinallySubmit($postUrl, $ngValues = array()) {
 		$html = '';
 		$html .= $this->NetCommonsForm->create('QuestionnaireQuestion',
 			Hash::merge(array('id' => 'finallySubmitForm'), $postUrl)
@@ -169,6 +170,12 @@ class QuestionEditHelper extends AppHelper {
 		$html .= $this->NetCommonsForm->hidden('Frame.id');
 		$html .= $this->NetCommonsForm->hidden('Block.id');
 		$html .= $this->NetCommonsForm->hidden('Questionnaire.key');
+		if (! empty($ngValues)) {
+			foreach ($ngValues as $hiddenName => $ngValue) {
+				$html .= $this->NetCommonsForm->hidden($hiddenName, array('ng-value' => $ngValue));
+				$this->NetCommonsForm->unlockField($hiddenName);
+			}
+		}
 		$this->NetCommonsForm->unlockField('QuestionnairePage');
 		$html .= $this->NetCommonsForm->end();
 		return $html;

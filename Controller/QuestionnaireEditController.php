@@ -229,6 +229,8 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 		if ($this->request->is('post') || $this->request->is('put')) {
 
 			$postQuestionnaire = $this->request->data;
+			// Page情報が一つも入ってきてないところが最終POSTです
+			// Page情報が入っていて、AjaxでのRequestのときは分割POSTの最中です
 			if (! empty($postQuestionnaire['QuestionnairePage'])) {
 				if ($this->request->is('ajax')) {
 					$this->_postPage($postQuestionnaire);
@@ -238,6 +240,11 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 			} else {
 				// バリデート
 				$questionnaire = $this->_questionnaire;
+
+				// resultのときはアンケート本体の設定が入っているので
+				$questionnaire['Questionnaire'] = Hash::merge(
+					$questionnaire['Questionnaire'], $postQuestionnaire['Questionnaire']
+				);
 
 				// 蓄積データを取り出す
 				$accumSessName =
