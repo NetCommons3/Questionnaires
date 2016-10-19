@@ -258,6 +258,13 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 				// 質問編集画面からのPOSTは、発行後は書き換えない 未発行の場合はPostデータを上書き設定
 				if ($this->action == 'edit_result' || $this->Questionnaire->hasPublished($questionnaire) == 0) {
 					$questionnaire['QuestionnairePage'] = $accumulationPost['QuestionnairePage'];
+				} else {
+					// セッションから取り出しただけの状態（＝DBから読みだしただけの状態）のとき
+					$this->Questionnaire->clearQuestionnaireId($questionnaire, true);
+					// booleanの値がPOST時と同じようになるように調整
+					$questionnaire['QuestionnairePage'] =
+						QuestionnairesAppController::changeBooleansToNumbers(
+							$questionnaire['QuestionnairePage']);
 				}
 
 				$this->Questionnaire->set($questionnaire);
