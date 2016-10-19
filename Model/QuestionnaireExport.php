@@ -101,7 +101,7 @@ class QuestionnaireExport extends QuestionnairesAppModel {
 			$questionnaires[] = $questionnaire;
 		}
 		// Exportするデータが一つも見つからないって
-		if (empty($questionnaire)) {
+		if (empty($questionnaires)) {
 			return false;
 		}
 		$zipData['Questionnaires'] = $questionnaires;
