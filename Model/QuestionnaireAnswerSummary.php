@@ -274,7 +274,8 @@ class QuestionnaireAnswerSummary extends QuestionnairesAppModel {
 		$baseConditions = $this->getResultCondition($questionnaire);
 
 		//質問毎に集計
-		foreach ($questions as &$question) {
+		$retQuestions = array();
+		foreach ($questions as $key => $question) {
 			if (QuestionnairesComponent::isOnlyInputType($question['question_type'])) {
 				continue;
 			}
@@ -294,8 +295,9 @@ class QuestionnaireAnswerSummary extends QuestionnairesAppModel {
 			} else {
 				$this->__aggregateAnswerForNotMatrix($question, $questionConditions);
 			}
+			$retQuestions[$key] = $question;
 		}
-		return $questions;
+		return $retQuestions;
 	}
 
 /**
