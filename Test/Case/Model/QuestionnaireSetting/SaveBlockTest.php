@@ -116,7 +116,7 @@ class QuestionnaireSettingSaveBlockTest extends NetCommonsModelTestCase {
  */
 	public function dataProviderSave() {
 		return array(
-			array($this->_getData(1, 'frame_3', 6)),
+			array($this->_getData(1, 'frame_3', '7')),
 			array($this->_getData(1, 'frame_7', null)),
 			array($this->_getData(4, 'frame_8', null)),
 		);

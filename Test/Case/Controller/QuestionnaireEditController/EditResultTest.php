@@ -146,7 +146,7 @@ class QuestionnaireEditControllerEditResultTest extends WorkflowControllerEditTe
 				'id' => $blockId,
 				'key' => $blockKey,
 				'language_id' => '2',
-				'room_id' => '1',
+				'room_id' => '2',
 				'plugin_key' => $this->plugin,
 			),
 			'Questionnaire' => array(

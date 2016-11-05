@@ -145,8 +145,8 @@ class QuestionnaireAfterFrameSaveTest extends NetCommonsModelTestCase {
 	public function dataProviderSave() {
 		return array(
 			array($this->__getData(6, 2, 1)), //
-			array($this->__getData(14, null, 1)), //
-			array($this->__getData(16, null, 4)), //
+			array($this->__getData(14, null, '2')), //
+			array($this->__getData(16, null, '5')), //
 		);
 	}
 

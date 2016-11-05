@@ -70,7 +70,7 @@ class QuestionnaireGetNextPageTest extends NetCommonsGetTest {
 		$this->$model->Behaviors->unload('AuthorizationKey');
 		Current::$current['Frame']['id'] = '6';
 		Current::$current['Frame']['key'] = 'frame_3';
-		Current::$current['Frame']['room_id'] = '1';
+		Current::$current['Frame']['room_id'] = '2';
 		Current::$current['Frame']['plugin_key'] = 'questionnaires';
 		Current::$current['Frame']['language_id'] = '2';
 	}
