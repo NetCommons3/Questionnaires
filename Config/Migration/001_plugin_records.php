@@ -9,6 +9,7 @@
  */
 
 App::uses('NetCommonsMigration', 'NetCommons.Config/Migration');
+App::uses('Space', 'Rooms.Model');
 
 /**
  * Add plugin migration
@@ -72,14 +73,7 @@ class PluginRecords extends NetCommonsMigration {
 				'plugin_key' => 'questionnaires'
 			),
 		),
-		'PluginsRoom' => array(
-			//パブリックスペース
-			array('room_id' => '2', 'plugin_key' => 'questionnaires', ),
-			////プライベートスペース
-			//array('room_id' => '3', 'plugin_key' => 'questionnaires', ),
-			//グループスペース
-			array('room_id' => '4', 'plugin_key' => 'questionnaires', ),
-		),
+		//PluginsRoomは、beforeでセットする
 	);
 
 /**
@@ -89,6 +83,29 @@ class PluginRecords extends NetCommonsMigration {
  * @return bool Should process continue
  */
 	public function before($direction) {
+		$pluginName = $this->records['Plugin'][0]['key'];
+		$this->records['PluginsRoom'] = array(
+			//サイト全体
+			array(
+				'room_id' => Space::getRoomIdRoot(Space::WHOLE_SITE_ID, 'Room'),
+				'plugin_key' => $pluginName
+			),
+			//パブリックスペース
+			array(
+				'room_id' => Space::getRoomIdRoot(Space::PUBLIC_SPACE_ID, 'Room'),
+				'plugin_key' => $pluginName
+			),
+			////プライベートスペース
+			//array(
+			//	'room_id' => Space::getRoomIdRoot(Space::PRIVATE_SPACE_ID, 'Room'),
+			//	'plugin_key' => $pluginName
+			//),
+			//グループスペース
+			array(
+				'room_id' => Space::getRoomIdRoot(Space::COMMUNITY_SPACE_ID, 'Room'),
+				'plugin_key' => $pluginName
+			),
+		);
 		return true;
 	}
 
