@@ -72,7 +72,7 @@ class QuestionnaireGetNextPageTest extends NetCommonsGetTest {
 		Current::$current['Frame']['key'] = 'frame_3';
 		Current::$current['Frame']['room_id'] = '2';
 		Current::$current['Frame']['plugin_key'] = 'questionnaires';
-		Current::$current['Frame']['language_id'] = '2';
+		Current::$current['FramesLanguage']['language_id'] = '2';
 	}
 
 /**
