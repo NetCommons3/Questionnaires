@@ -25,6 +25,15 @@ class QuestionnairePage extends QuestionnairesAppModel {
  */
 	public $actsAs = array(
 		'NetCommons.OriginalKey',
+		'M17n.M17n' => array(
+			'associations' => array(
+				'QuestionnaireQuestion' => array(
+					'class' => 'Questionnaires.QuestionnaireQuestion',
+					'foreignKey' => 'questionnaire_page_id',
+				),
+			),
+			'afterCallback' => false,
+		),
 	);
 
 /**
@@ -86,6 +95,64 @@ class QuestionnairePage extends QuestionnairesAppModel {
 		$this->loadModels([
 			'QuestionnaireQuestion' => 'Questionnaires.QuestionnaireQuestion',
 		]);
+	}
+
+/**
+ * Called before each find operation. Return false if you want to halt the find
+ * call, otherwise return the (modified) query data.
+ *
+ * @param array $query Data used to execute this query, i.e. conditions, order, etc.
+ * @return mixed true if the operation should continue, false if it should abort; or, modified
+ *  $query to continue with new $query
+ * @link http://book.cakephp.org/2.0/en/models/callback-methods.html#beforefind
+ */
+	public function beforeFind($query) {
+		//hasManyで実行されたとき、多言語の条件追加
+		if (! $this->id && isset($query['conditions']['questionnaire_id'])) {
+			$questionnaireId = $query['conditions']['questionnaire_id'];
+			$query['conditions']['questionnaire_id'] = $this->getQuestionnaireIdsForM17n($questionnaireId);
+			$query['conditions']['OR'] = array(
+				'language_id' => Current::read('Language.id'),
+				'is_translation' => false,
+			);
+
+			return $query;
+		}
+
+		return parent::beforeFind($query);
+	}
+
+/**
+ * 多言語データ取得のため、当言語のquestionnaire_idから全言語のquestionnaire_idを取得する
+ *
+ * @param id $questionnaireId 当言語のquestionnaire_id
+ * @return array
+ */
+	public function getQuestionnaireIdsForM17n($questionnaireId) {
+		$questionnaire = $this->Questionnaire->find('first', array(
+			'recursive' => -1,
+			'callbacks' => false,
+			'fields' => array('id', 'key', 'is_active', 'is_latest'),
+			'conditions' => array('id' => $questionnaireId),
+		));
+
+		$conditions = array(
+			'key' => Hash::get($questionnaire, 'Questionnaire.key', '')
+		);
+		if (Hash::get($questionnaire, 'Questionnaire.is_latest')) {
+			$conditions['is_latest'] = true;
+		} else {
+			$conditions['is_active'] = true;
+		}
+
+		$questionnaireIds = $this->Questionnaire->find('list', array(
+			'recursive' => -1,
+			'callbacks' => false,
+			'fields' => array('id', 'id'),
+			'conditions' => $conditions,
+		));
+
+		return array_values($questionnaireIds);
 	}
 
 /**

@@ -28,6 +28,31 @@ class QuestionnaireQuestion extends QuestionnairesAppModel {
 		'Wysiwyg.Wysiwyg' => array(
 			'fields' => array('question_value')
 		),
+		//多言語
+		'M17n.M17n' => array(
+			'commonFields' => array(
+				'question_sequence',
+				'question_type',
+				'is_require',
+				'question_type_option',
+				'is_choice_random',
+				'is_choice_horizon',
+				'is_skip',
+				'is_jump',
+				'is_range',
+				'min',
+				'max',
+				'is_result_display',
+				'result_display_type',
+			),
+			'associations' => array(
+				'QuestionnaireChoice' => array(
+					'class' => 'Questionnaires.QuestionnaireChoice',
+					'foreignKey' => 'questionnaire_question_id',
+				),
+			),
+			'afterCallback' => false,
+		),
 	);
 
 /**
@@ -91,6 +116,62 @@ class QuestionnaireQuestion extends QuestionnairesAppModel {
 		$this->loadModels([
 			'QuestionnaireChoice' => 'Questionnaires.QuestionnaireChoice',
 		]);
+	}
+
+/**
+ * Called before each find operation. Return false if you want to halt the find
+ * call, otherwise return the (modified) query data.
+ *
+ * @param array $query Data used to execute this query, i.e. conditions, order, etc.
+ * @return mixed true if the operation should continue, false if it should abort; or, modified
+ *  $query to continue with new $query
+ * @link http://book.cakephp.org/2.0/en/models/callback-methods.html#beforefind
+ */
+	public function beforeFind($query) {
+		//hasManyで実行されたとき、多言語の条件追加
+		if (! $this->id && isset($query['conditions']['questionnaire_page_id'])) {
+			$questionnairePageId = $query['conditions']['questionnaire_page_id'];
+			$query['conditions']['questionnaire_page_id'] =
+					$this->getQuestionnairePageIdsForM17n($questionnairePageId);
+			$query['conditions']['OR'] = array(
+				'QuestionnaireQuestion.language_id' => Current::read('Language.id'),
+				'QuestionnaireQuestion.is_translation' => false,
+			);
+
+			return $query;
+		}
+
+		return parent::beforeFind($query);
+	}
+
+/**
+ * 多言語データ取得のため、当言語のquestionnaire_page_idから全言語のquestionnaire_page_idを取得する
+ *
+ * @param id $questionnairePageId 当言語のquestionnaire_page_id
+ * @return array
+ */
+	public function getQuestionnairePageIdsForM17n($questionnairePageId) {
+		$questionnairePage = $this->QuestionnairePage->find('first', array(
+			'recursive' => -1,
+			'callbacks' => false,
+			'fields' => array('id', 'key', 'questionnaire_id'),
+			'conditions' => array('id' => $questionnairePageId),
+		));
+
+		$questionnaireIds = $this->QuestionnairePage->getQuestionnaireIdsForM17n(
+			$questionnairePage['QuestionnairePage']['questionnaire_id']
+		);
+		$questionnairePageIds = $this->QuestionnairePage->find('list', array(
+			'recursive' => -1,
+			'callbacks' => false,
+			'fields' => array('id', 'id'),
+			'conditions' => array(
+				'questionnaire_id' => $questionnaireIds,
+				'key' => $questionnairePage['QuestionnairePage']['key']
+			),
+		));
+
+		return array_values($questionnairePageIds);
 	}
 
 /**
