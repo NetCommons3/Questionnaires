@@ -90,6 +90,8 @@ class QuestionnairesSaveTest extends NetCommonsModelTestCase {
 			$data[$this->$model->alias][0],
 			array(
 				'id' => $id,
+				'is_origin' => true,
+				'is_translation' => false,
 			)
 		);
 		$expected[$this->$model->alias] = Hash::remove($expected[$this->$model->alias], 'modified');

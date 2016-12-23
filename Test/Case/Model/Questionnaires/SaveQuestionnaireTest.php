@@ -74,12 +74,13 @@ class QuestionnaireSaveQuestionnaireTest extends WorkflowSaveTest {
 	public function setUp() {
 		parent::setUp();
 		$model = $this->_modelName;
+
 		$this->$model->Behaviors->unload('AuthorizationKey');
 		Current::$current['Frame']['id'] = '6';
 		Current::$current['Frame']['key'] = 'frame_3';
 		Current::$current['Frame']['room_id'] = '2';
 		Current::$current['Frame']['plugin_key'] = 'questionnaires';
-		Current::$current['Frame']['language_id'] = '2';
+		Current::$current['FramesLanguage']['language_id'] = '2';
 		Current::$current['Plugin']['key'] = 'questionnaires';
 		$mailQueueMock = $this->getMock('MailQueueBehavior',
 			['setAddEmbedTagValue', 'afterSave']);
@@ -112,6 +113,17 @@ class QuestionnaireSaveQuestionnaireTest extends WorkflowSaveTest {
 		ClassRegistry::removeObject('TopicsBehavior');
 		ClassRegistry::addObject('TopicsBehavior', $topicsMock);
 		$this->$model->Behaviors->load('Topics');
+
+		//M17nのビヘイビアをモックに差し替え
+		$this->$model->Behaviors->unload('M17n');
+		$m17nMock = $this->getMock('M17nBehavior', ['saveM17nData']);
+		$m17nMock->expects($this->any())
+			->method('saveM17nData')
+			->will($this->returnValue(true));
+
+		ClassRegistry::removeObject('M17nBehavior');
+		ClassRegistry::addObject('M17nBehavior', $m17nMock);
+		$this->$model->Behaviors->load('M17n');
 	}
 
 /**

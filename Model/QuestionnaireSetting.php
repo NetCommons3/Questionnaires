@@ -130,7 +130,6 @@ class QuestionnaireSetting extends BlockBaseModel {
 				'conditions' => array(
 					'Block.room_id' => $frame['Frame']['room_id'],
 					'Block.plugin_key' => $frame['Frame']['plugin_key'],
-					'Block.language_id' => $frame['Frame']['language_id'],
 				)
 			));
 			// まだない場合
@@ -138,7 +137,6 @@ class QuestionnaireSetting extends BlockBaseModel {
 				// 作成する
 				$block = $this->Block->save(array(
 					'room_id' => $frame['Frame']['room_id'],
-					'language_id' => $frame['Frame']['language_id'],
 					'plugin_key' => $frame['Frame']['plugin_key'],
 				));
 				if (!$block) {

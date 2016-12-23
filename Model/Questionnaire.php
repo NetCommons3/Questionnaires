@@ -55,6 +55,51 @@ class Questionnaire extends QuestionnairesAppModel {
 		'Wysiwyg.Wysiwyg' => array(
 			'fields' => array('total_comment', 'thanks_content')
 		),
+		//多言語
+		'M17n.M17n' => array(
+			'commonFields' => array(
+				'title_icon',
+				'answer_timing',
+				'answer_start_period',
+				'answer_end_period',
+				'is_no_member_allow',
+				'is_anonymity',
+				'is_key_pass_use',
+				'is_repeat_allow',
+				'is_total_show',
+				'total_show_timing',
+				'total_show_start_period',
+				'total_comment',
+				'is_image_authentication',
+				'is_open_mail_send',
+				'is_answer_mail_send',
+				'is_page_random',
+				'import_key',
+				'export_key',
+			),
+			'associations' => array(
+				'QuestionnairePage' => array(
+					'class' => 'Questionnaires.QuestionnairePage',
+					'foreignKey' => 'questionnaire_id',
+					'associations' => array(
+						'QuestionnaireQuestion' => array(
+							'class' => 'Questionnaires.QuestionnaireQuestion',
+							'foreignKey' => 'questionnaire_page_id',
+							'associations' => array(
+								'QuestionnaireChoice' => array(
+									'class' => 'Questionnaires.QuestionnaireChoice',
+									'foreignKey' => 'questionnaire_question_id',
+									'isM17n' => true,
+								),
+							),
+							'isM17n' => true,
+						),
+					),
+					'isM17n' => true,
+				),
+			),
+			'afterCallback' => false,
+		),
 	);
 
 /**
@@ -577,22 +622,26 @@ class Questionnaire extends QuestionnairesAppModel {
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}
 			// フレーム内表示対象アンケートに登録する
-			if (! $this->QuestionnaireFrameDisplayQuestionnaire->saveDisplayQuestionnaire(array(
+			$result = $this->QuestionnaireFrameDisplayQuestionnaire->saveDisplayQuestionnaire(array(
 				'questionnaire_key' => $saveQuestionnaire['Questionnaire']['key'],
 				'frame_key' => Current::read('Frame.key')
-			))) {
+			));
+			if (! $result) {
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}
 			// これまでのテスト回答データを消す
 			$this->QuestionnaireAnswerSummary->deleteTestAnswerSummary(
 				$saveQuestionnaire['Questionnaire']['key'],
-				$status);
+				$status
+			);
+
+			//多言語化の処理
+			$this->set($saveQuestionnaire);
+			$this->saveM17nData();
 
 			$this->commit();
 		} catch (Exception $ex) {
-			$this->rollback();
-			CakeLog::error($ex);
-			throw $ex;
+			$this->rollback($ex);
 		}
 		return $saveQuestionnaire;
 	}

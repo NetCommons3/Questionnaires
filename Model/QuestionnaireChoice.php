@@ -33,6 +33,9 @@ class QuestionnaireChoice extends QuestionnairesAppModel {
  */
 	public $actsAs = array(
 		'NetCommons.OriginalKey',
+		'M17n.M17n' => array(
+			'afterCallback' => false,
+		),
 	);
 
 /**

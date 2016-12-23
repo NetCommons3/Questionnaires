@@ -15,30 +15,6 @@
 class QuestionnairePageFixture extends CakeTestFixture {
 
 /**
- * Fields
- *
- * @var array
- */
-	public $fields = array(
-		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false, 'key' => 'primary'),
-		'key' => array('type' => 'string', 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
-		'language_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false),
-		'questionnaire_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false, 'key' => 'index'),
-		'page_title' => array('type' => 'string', 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => 'ページ名', 'charset' => 'utf8'),
-		'route_number' => array('type' => 'integer', 'null' => false, 'default' => '0', 'unsigned' => false),
-		'page_sequence' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false, 'comment' => 'ページ表示順'),
-		'created_user' => array('type' => 'integer', 'null' => true, 'default' => null, 'unsigned' => false),
-		'created' => array('type' => 'datetime', 'null' => true, 'default' => null),
-		'modified_user' => array('type' => 'integer', 'null' => true, 'default' => null, 'unsigned' => false),
-		'modified' => array('type' => 'datetime', 'null' => true, 'default' => null),
-		'indexes' => array(
-			'PRIMARY' => array('column' => 'id', 'unique' => 1),
-			'fk_questionnaire_pages_questionnaires1_idx' => array('column' => 'questionnaire_id', 'unique' => 0)
-		),
-		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'InnoDB')
-	);
-
-/**
  * Records
  *
  * @var array
@@ -51,6 +27,9 @@ class QuestionnairePageFixture extends CakeTestFixture {
  * @return void
  */
 	public function init() {
+		require_once App::pluginPath('Questionnaires') . 'Config' . DS . 'Schema' . DS . 'schema.php';
+		$this->fields = (new QuestionnairesSchema())->tables[Inflector::tableize($this->name)];
+
 		$id = 1;
 		$sevenPages = [3];
 		$threePages = [7, 11, 35, 39, 43];
@@ -84,6 +63,8 @@ class QuestionnairePageFixture extends CakeTestFixture {
 			'id' => $id,
 			'key' => 'page_' . strval($key),
 			'language_id' => $langId,
+			'is_origin' => ($langId == 2),
+			'is_translation' => true,
 			'questionnaire_id' => $qId,
 			'page_title' => 'Page Title',
 			'route_number' => 0,
