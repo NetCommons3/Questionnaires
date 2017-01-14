@@ -34,7 +34,7 @@ class QuestionnaireStatusLabelHelper extends AppHelper {
 			//一時保存中
 			$lblColor = 'info';
 			$lblMsg = __d('net_commons', 'Temporary');
-		} elseif ($status == WorkflowComponent::STATUS_APPROVED) {
+		} elseif ($status == WorkflowComponent::STATUS_APPROVAL_WAITING) {
 			//承認待ち
 			$lblColor = 'warning';
 			$lblMsg = __d('net_commons', 'Approving');
