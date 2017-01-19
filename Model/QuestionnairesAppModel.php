@@ -12,6 +12,7 @@
  */
 
 App::uses('AppModel', 'Model');
+App::uses('QuestionnairesComponent', 'Questionnaires.Controller/Component');
 
 /**
  * Summary for QuestionnaireQuestion Model
