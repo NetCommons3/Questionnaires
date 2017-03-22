@@ -91,7 +91,7 @@ class QuestionnaireQuestion extends QuestionnairesAppModel {
 			'dependent' => true,
 			'conditions' => '',
 			'fields' => '',
-			'order' => '',
+			'order' => 'choice_sequence',
 			'limit' => '',
 			'offset' => '',
 			'exclusive' => '',
