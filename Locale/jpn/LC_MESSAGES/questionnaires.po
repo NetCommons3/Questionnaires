@@ -909,3 +909,6 @@ msgstr "作成できる選択肢の数は１質問につき%dまでです。%d�
 
 msgid "Failed to send data."
 msgstr "データの送信に失敗しました。"
+
+msgid "E-mail notifications are disabled"
+msgstr "メール通知は許可されていないため設定できません。"
