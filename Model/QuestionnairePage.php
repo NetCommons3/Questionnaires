@@ -359,4 +359,31 @@ class QuestionnairePage extends QuestionnairesAppModel {
 		}
 		return true;
 	}
+
+/**
+ * deleteQuestionnairePage
+ *
+ * アンケートページ情報削除、配下の質問情報に削除命令を実施
+ *
+ * @param int $questionnaireId アンケートID
+ * @return bool
+ */
+	public function deleteQuestionnairePage($questionnaireId) {
+		$pages = $this->find('all', array(
+			'conditions' => array(
+				'QuestionnairePage.questionnaire_id' => $questionnaireId
+			),
+			'recursive' => -1
+		));
+		foreach ($pages as $page) {
+			$pageId = $page['QuestionnairePage']['id'];
+			if (! $this->QuestionnaireQuestion->deleteQuestionnaireQuestion($pageId)) {
+				return false;
+			}
+			if (! $this->delete($pageId, false)) {
+				return false;
+			}
+		}
+		return true;
+	}
 }
