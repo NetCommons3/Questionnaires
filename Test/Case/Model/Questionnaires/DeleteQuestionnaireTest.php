@@ -191,7 +191,7 @@ class QuestionnaireDeleteQuestionnaireTest extends WorkflowDeleteTest {
 	public function dataProviderDeleteOnExceptionError() {
 		$data = $this->__getData(2, 'questionnaire_2');
 		return array(
-			array($data, 'Questionnaires.Questionnaire', 'deleteAll'),
+			array($data, 'Questionnaires.Questionnaire', 'delete'),
 			array($data, 'Questionnaires.QuestionnaireFrameDisplayQuestionnaire', 'deleteAll'),
 			array($data, 'Questionnaires.QuestionnaireAnswerSummary', 'deleteAll'),
 		);
