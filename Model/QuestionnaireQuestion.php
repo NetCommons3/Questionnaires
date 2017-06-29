@@ -451,4 +451,31 @@ class QuestionnaireQuestion extends QuestionnairesAppModel {
 		}
 		return array(QuestionnairesComponent::USES_USE, QuestionnairesComponent::USES_NOT_USE);
 	}
+
+/**
+ * deleteQuestionnaireQuestion
+ *
+ * アンケート質問情報削除、配下の選択肢も削除
+ *
+ * @param int $pageId アンケートページID
+ * @return bool
+ */
+	public function deleteQuestionnaireQuestion($pageId) {
+		$questions = $this->find('all', array(
+			'conditions' => array(
+				'QuestionnaireQuestion.questionnaire_page_id' => $pageId
+			),
+			'recursive' => -1
+		));
+		foreach ($questions as $question) {
+			if (! $this->QuestionnaireChoice->deleteAll(array(
+				'QuestionnaireChoice.questionnaire_question_id' => $question['QuestionnaireQuestion']['id']))) {
+				return false;
+			}
+			if (! $this->delete($question['QuestionnaireQuestion']['id'], false)) {
+				return false;
+			}
+		}
+		return true;
+	}
 }

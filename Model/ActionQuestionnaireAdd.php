@@ -300,6 +300,10 @@ class ActionQuestionnaireAdd extends QuestionnairesAppModel {
 			$jsonFilePath =
 				$questionnaireZip->path . DS . QuestionnairesComponent::QUESTIONNAIRE_JSON_FILENAME;
 			$jsonFile = new File($jsonFilePath);
+			if (! $jsonFile->exists()) {
+				// ファイルがない？
+				return null;
+			}
 			$jsonData = $jsonFile->read();
 			$jsonQuestionnaire = json_decode($jsonData, true);
 		} catch (Exception $ex) {
@@ -378,6 +382,10 @@ class ActionQuestionnaireAdd extends QuestionnairesAppModel {
 		$file = new File(
 				$folderPath . DS . QuestionnairesComponent::QUESTIONNAIRE_FINGER_PRINT_FILENAME,
 				false);
+		if (! $file->exists()) {
+			// フィンガープリントファイルがない？
+			return false;
+		}
 		$fingerPrint = $file->read();
 
 		// ファイル内容から算出されるハッシュ値と指定されたフットプリント値を比較し

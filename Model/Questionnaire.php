@@ -665,9 +665,18 @@ class Questionnaire extends QuestionnairesAppModel {
 		try {
 			// アンケート質問データ削除
 			$this->contentKey = $data['Questionnaire']['key'];
-			if (! $this->deleteAll(array(
-					'Questionnaire.key' => $data['Questionnaire']['key']), true, true)) {
-				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+			$deleteQs = $this->find('all', array(
+				'conditions' => array('Questionnaire.key' => $data['Questionnaire']['key']),
+				'recursive' => -1
+			));
+			foreach ($deleteQs as $questionnaire) {
+				$questionnaireId = $questionnaire['Questionnaire']['id'];
+				if (! $this->QuestionnairePage->deleteQuestionnairePage($questionnaireId)) {
+					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+				}
+				if (! $this->delete($questionnaireId, false)) {
+					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+				}
 			}
 
 			// アンケート表示設定削除

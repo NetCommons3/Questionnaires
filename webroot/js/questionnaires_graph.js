@@ -96,22 +96,25 @@ NetCommonsApp.controller('QuestionnairesAnswerSummary',
         };
         $scope.getBarConf = function(question) {
           var obj = new Object();
-          // 選択肢が１２超過、または画面幅が768より小さかったらXラベルを斜めにして納める
-          // 12 は　月の数より多い選択肢の場合は、という意味で決めた
-          // 768の画面サイズはbootstrapのxsの時のサイズに合わせた
           var colors = $scope.getColorArray(question);
-          var rotate = 0;
-          if (colors.length > 12 || $window.innerWidth < 768) {
-            rotate = 50;
+
+          var maxChoiceLen = 0;
+          for (var choiceKey in question.questionnaireChoice) {
+            var choice = question.questionnaireChoice[choiceKey];
+            var len = choice.choiceLabel.length;
+            if (len > maxChoiceLen) {
+              maxChoiceLen = len;
+            }
           }
+          var bottomHeight = maxChoiceLen * 10;
+          // 選択肢が長いとき、グラフ内に収まりきらないという問題に対応するため、
+          // デフォルトラベルを傾けることにした
           obj = {
             type: 'discreteBarChart',
             height: 450,
             margin: {
-              top: 20,
-              right: 20,
-              bottom: 60,
-              left: 55
+              bottom: bottomHeight,
+              left: 0
             },
             transitionDuration: 500,
             showValues: true,
@@ -122,7 +125,7 @@ NetCommonsApp.controller('QuestionnairesAnswerSummary',
             },
             xAxis: {
               //axisLabel: 'Time (ms)',
-              rotateLabels: rotate,
+              rotateLabels: 50,
               showMaxMin: false
               //tickFormat: function(d) {
               //  return d3.format(',f')(d);
@@ -141,19 +144,27 @@ NetCommonsApp.controller('QuestionnairesAnswerSummary',
         };
         $scope.getMatrixBarConf = function(question) {
           var obj = new Object();
+          var maxChoiceLen = 0;
+          for (var choiceKey in question.questionnaireChoice) {
+            var choice = question.questionnaireChoice[choiceKey];
+            if (choice.matrixType == '0') {
+              var len = choice.choiceLabel.length;
+              if (len > maxChoiceLen) {
+                maxChoiceLen = len;
+              }
+            }
+          }
+          var bottomHeight = maxChoiceLen * 10;
           obj = {
             type: 'multiBarChart',
             height: 450,
             margin: {
-              top: 20,
-              right: 20,
-              bottom: 60,
-              left: 55
+              bottom: bottomHeight,
+              left: 0
             },
             transitionDuration: 500,
             showValues: true,
-            clipEdge: true,
-            staggerLabels: true,
+            rotateLabels: 50,
             stacked: true,
             x: function(d) { return d.label; },
             y: function(d) { return d.value; },

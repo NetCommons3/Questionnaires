@@ -954,3 +954,5 @@ msgstr ""
 msgid "MailSetting.mail_fixed_phrase_body.popover"
 msgstr ""
 
+msgid "E-mail notifications are disabled"
+msgstr ""
