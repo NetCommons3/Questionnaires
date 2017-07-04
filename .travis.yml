@@ -21,8 +21,7 @@ before_script:
   - . tools/build/plugins/cakephp/travis/environment.sh
 
 script:
-  - travis_wait . tools/build/plugins/cakephp/travis/pre.sh
-  - . tools/build/plugins/cakephp/travis/main.sh
+  - travis_wait . tools/build/plugins/cakephp/travis/main.sh
 
 after_script:
   - . tools/build/plugins/cakephp/travis/post.sh
