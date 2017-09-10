@@ -22,7 +22,7 @@ App::uses('QuestionnaireChoiceFixture', 'Questionnaires.Test/Fixture');
  * @author Allcreator <info@allcreator.net>
  * @package NetCommons\Questionnaires\Test\Case\Model\QuestionnaireAnswer
  */
-class QuestionnaireAnswerValidateTest extends NetCommonsModelTestCase {
+abstract class QuestionnaireAnswerValidateTest extends NetCommonsModelTestCase {
 
 /**
  * Plugin name
