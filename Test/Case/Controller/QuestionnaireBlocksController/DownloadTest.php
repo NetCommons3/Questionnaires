@@ -72,7 +72,9 @@ class QuestionnaireBlocksControllerDownloadTest extends NetCommonsControllerTest
 		NetCommonsCakeTestCase::loadTestPlugin($this, 'Questionnaires', 'TestFiles');
 
 		//テストコントローラ生成
-		$this->generateNc('TestQuestionnaires.TestQuestionnaireBlocks');
+		$this->generateNc('TestQuestionnaires.TestQuestionnaireBlocks', array('components' => array(
+			'Flash' => array('set')
+		)));
 
 		//ログイン
 		TestAuthGeneral::login($this);
@@ -160,8 +162,8 @@ class QuestionnaireBlocksControllerDownloadTest extends NetCommonsControllerTest
 			'key' => 'questionnaire_4',
 			'frame_id' => $frameId
 		);
-		$this->controller->Session->expects($this->once())
-			->method('setFlash')
+		$this->controller->Flash->expects($this->once())
+			->method('set')
 			->with(__d('questionnaires', 'Designation of the questionnaire does not exist.'));
 		$result = $this->_testPostAction('post', array(
 			'AuthorizationKey' => array(
@@ -187,8 +189,8 @@ class QuestionnaireBlocksControllerDownloadTest extends NetCommonsControllerTest
 			'key' => 'questionnaire_2',
 			'frame_id' => $frameId
 		);
-		$this->controller->Session->expects($this->once())
-			->method('setFlash')
+		$this->controller->Flash->expects($this->once())
+			->method('set')
 			->with(__d('questionnaires', 'Setting of password is required always to download answers.'));
 		$result = $this->_testPostAction('post', array(
 			'AuthorizationKey' => array(
@@ -217,8 +219,8 @@ class QuestionnaireBlocksControllerDownloadTest extends NetCommonsControllerTest
 			'key' => 'questionnaire_2',
 			'frame_id' => $frameId
 		);
-		$this->controller->Session->expects($this->once())
-			->method('setFlash')
+		$this->controller->Flash->expects($this->once())
+			->method('set')
 			->with(__d('questionnaires', 'download error'));
 		$this->_testPostAction('post', array(
 			'AuthorizationKey' => array(

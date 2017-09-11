@@ -72,7 +72,9 @@ class QuestionnaireBlocksControllerExportTest extends NetCommonsControllerTestCa
 		NetCommonsCakeTestCase::loadTestPlugin($this, 'Questionnaires', 'TestFiles');
 
 		//テストコントローラ生成
-		$this->generateNc('TestQuestionnaires.TestQuestionnaireBlocks');
+		$this->generateNc('TestQuestionnaires.TestQuestionnaireBlocks', array('components' => array(
+			'Flash' => array('set')
+		)));
 
 		//ログイン
 		TestAuthGeneral::login($this);
@@ -152,8 +154,8 @@ class QuestionnaireBlocksControllerExportTest extends NetCommonsControllerTestCa
 			'key' => 'questionnaire_4',
 			'frame_id' => $frameId
 		);
-		$this->controller->Session->expects($this->once())
-			->method('setFlash')
+		$this->controller->Flash->expects($this->once())
+			->method('set')
 			->with(__d('questionnaires', 'Designation of the questionnaire does not exist.'));
 		$result = $this->_testNcAction($url);
 		$this->assertEmpty($result);
@@ -178,8 +180,8 @@ class QuestionnaireBlocksControllerExportTest extends NetCommonsControllerTestCa
 			'key' => 'questionnaire_6',
 			'frame_id' => $frameId
 		);
-		$this->controller->Session->expects($this->once())
-			->method('setFlash')
+		$this->controller->Flash->expects($this->once())
+			->method('set')
 			->with(__d('questionnaires', 'export error'));
 		$this->_testNcAction($url);
 	}
