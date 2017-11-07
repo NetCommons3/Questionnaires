@@ -13,7 +13,7 @@ env:
   matrix:
     - NETCOMMONS_VERSION=master DB=mysql
   global:
-    - secure: "OfqRkPfSzBeU288mu0hEktEoWMZxxcYJN9BzrDrrXgTPCev5C7URonk+71pCB3L5+pI8fD/mBanhqFgClpe1tJdmt0m6BJ6woLMSNJT/1jdxX6C55gIaKPfutO0Of1GQ8K6ibHnlgrgsk/mGwRDH01u3k0qkL3saPNrVlBgmC5E="
+    - secure: "cb32rUp2l+Zd991n/6fY18wudLW0EjqqqlvxpKMWZOUaJ6dS5+R+IcoV5Oo94TNUEgzOQ/7Ldp5PW+qGg0S5EDyQOHtLp7kmmGy9ST7EL0QNyWyfSGXl9FUCqKd/fP3WZVx8ci6MgfUtj5DfamqjRctpJy4uQapbZwtUDQWweGY="
     - GIT_COMMITTER_NAME=RikaFujiwara
     - GIT_COMMITTER_EMAIL=rika.fujiwara@allcreator.net
     - GIT_AUTHOR_NAME=RikaFujiwara
