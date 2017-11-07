@@ -10,7 +10,14 @@ php:
 sudo: false
 
 env:
-  - NETCOMMONS_VERSION=master DB=mysql
+  matrix:
+    - NETCOMMONS_VERSION=master DB=mysql
+  global:
+    - secure: "OfqRkPfSzBeU288mu0hEktEoWMZxxcYJN9BzrDrrXgTPCev5C7URonk+71pCB3L5+pI8fD/mBanhqFgClpe1tJdmt0m6BJ6woLMSNJT/1jdxX6C55gIaKPfutO0Of1GQ8K6ibHnlgrgsk/mGwRDH01u3k0qkL3saPNrVlBgmC5E="
+    - GIT_COMMITTER_NAME=RikaFujiwara
+    - GIT_COMMITTER_EMAIL=rika.fujiwara@allcreator.net
+    - GIT_AUTHOR_NAME=RikaFujiwara
+    - GIT_AUTHOR_EMAIL=rika.fujiwara@allcreator.net
 
 before_script:
   - export NETCOMMONS_BUILD_DIR=`dirname $TRAVIS_BUILD_DIR`/NetCommons3
