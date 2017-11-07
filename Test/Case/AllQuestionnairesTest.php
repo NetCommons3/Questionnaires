@@ -17,7 +17,7 @@ App::uses('NetCommonsTestSuite', 'NetCommons.TestSuite');
  * @codeCoverageIgnore
  */
 
-class AllQuestionnairesTest extends CakeTestSuite {
+class AllQuestionnairesTest extends NetCommonsTestSuite {
 
 /**
  * All test suite
