@@ -55,7 +55,8 @@ echo $this->NetCommonsHtml->script(array(
 				</thead>
 				<tbody>
 					<?php foreach ((array)$questionnaires as $questionnaire) : ?>
-					<?php echo $this->BlockIndex->startTableRow($questionnaire['Questionnaire']['key']); ?>
+					<?php echo $this->BlockIndex->startTableRow($questionnaire['Questionnaire']['key'],
+						'QuestionnaireFrameDisplayQuestionnaire.' . $questionnaire['Questionnaire']['key']); ?>
 						<?php echo $this->BlockIndex->tableData(
 						'',
 						$this->QuestionnaireStatusLabel->statusLabelManagementWidget($questionnaire),

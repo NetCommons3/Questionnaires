@@ -44,6 +44,7 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
 	public $uses = array(
 		'Questionnaires.Questionnaire',
 		'Questionnaires.QuestionnaireFrameSetting',
+		'Questionnaires.QuestionnaireFrameDisplayQuestionnaire',
 		'Questionnaires.QuestionnaireAnswerSummary',
 		'Questionnaires.QuestionnaireAnswerSummaryCsv',
 		'Blocks.Block',
@@ -139,7 +140,16 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
 			$this->view = 'not_found';
 			return;
 		}
-
+		$frame = $this->QuestionnaireFrameDisplayQuestionnaire->find('all', array(
+			'conditions' => array(
+				'frame_key' => Current::read('Frame.key'),
+			),
+			'recursive' => -1,
+		));
+		$frame = Hash::combine($frame,
+			'{n}.QuestionnaireFrameDisplayQuestionnaire.questionnaire_key',
+			'{n}.QuestionnaireFrameDisplayQuestionnaire.questionnaire_key');
+		$this->request->data['QuestionnaireFrameDisplayQuestionnaire'] = $frame;
 		$this->set('questionnaires', $questionnaire);
 	}
 
