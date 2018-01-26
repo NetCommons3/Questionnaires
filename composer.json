@@ -1,8 +1,9 @@
 {
-    "name":        "netcommons/questionnaires",
+    "name": "netcommons/questionnaires",
     "description": "Questionnaires for NetCommons Plugin",
-    "homepage":    "http://www.netcommons.org/",
-    "license":     "NetCommons License",
+    "homepage": "http://www.netcommons.org/",
+    "license": "LicenseRef-NetCommons",
+    "license-ref-net-commons": "https://raw.githubusercontent.com/NetCommons3/NetCommons3/master/license.txt",
     "authors": [
         {
             "name": "Toshihide Hashimoto(AllCreator Co., Ltd.)",
@@ -29,28 +30,33 @@
     ],
     "extra": {
         "installer-paths": {
-            "app/Plugin/{$name}": ["type:cakephp-plugin"]
+            "app/Plugin/{$name}": [
+                "type:cakephp-plugin"
+            ]
         }
     },
     "require": {
-        "cakedc/migrations":            "~2.2",
+        "cakedc/migrations": "~2.2",
         "netcommons/authorization-keys": "@dev",
-        "netcommons/blocks":            "@dev",
-        "netcommons/files":             "@dev",
-        "netcommons/frames":            "@dev",
-        "netcommons/m17n":              "@dev",
-        "netcommons/mails":             "@dev",
-        "netcommons/net-commons":       "@dev",
-        "netcommons/pages":             "@dev",
-        "netcommons/plugin-manager":    "@dev",
-        "netcommons/topics":            "@dev",
-        "netcommons/users":             "@dev",
-        "netcommons/workflow":          "@dev" ,
-        "netcommons/wysiwyg":           "@dev",
-        "netcommons/visual-captcha":    "@dev"
+        "netcommons/blocks": "@dev",
+        "netcommons/files": "@dev",
+        "netcommons/frames": "@dev",
+        "netcommons/m17n": "@dev",
+        "netcommons/mails": "@dev",
+        "netcommons/net-commons": "@dev",
+        "netcommons/pages": "@dev",
+        "netcommons/plugin-manager": "@dev",
+        "netcommons/topics": "@dev",
+        "netcommons/users": "@dev",
+        "netcommons/workflow": "@dev",
+        "netcommons/wysiwyg": "@dev",
+        "netcommons/visual-captcha": "@dev"
     },
-    "type":        "cakephp-plugin",
-    "keywords":    ["cakephp", "questionnaires"],
+    "type": "cakephp-plugin",
+    "keywords": [
+        "cakephp",
+        "questionnaires"
+    ],
     "config": {
         "vendor-dir": "vendors"
     }
