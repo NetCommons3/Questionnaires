@@ -9,7 +9,7 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 
-App::uses('AppController', 'Controller');
+App::uses('QuestionnairesAppController', 'Questionnaires.Controller');
 
 /**
  * QuestionnairesAddController
