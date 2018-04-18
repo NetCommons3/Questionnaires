@@ -23,8 +23,8 @@
 		<label class="checkbox-inline" ng-show="question.questionType != <?php echo QuestionnairesComponent::TYPE_SINGLE_SELECT_BOX; ?>">
 			<?php echo $this->NetCommonsForm->checkbox('QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.is_choice_horizon',
 			array(
-            'ng-true-value' => '"' . QuestionnairesComponent::USES_USE . '"',
-            'ng-false-value' => '"' . QuestionnairesComponent::USES_NOT_USE . '"',
+			'ng-true-value' => '"' . QuestionnairesComponent::USES_USE . '"',
+			'ng-false-value' => '"' . QuestionnairesComponent::USES_NOT_USE . '"',
 			'ng-model' => 'question.isChoiceHorizon',
 			'ng-checked' => 'question.isChoiceHorizon == ' . QuestionnairesComponent::USES_USE
 			));
@@ -39,8 +39,8 @@
 		<label class="checkbox-inline" ng-show="question.questionType != <?php echo QuestionnairesComponent::TYPE_SINGLE_SELECT_BOX; ?>">
 			<?php echo $this->NetCommonsForm->checkbox('QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.is_choice_random',
 			array(
-            'ng-true-value' => '"' . QuestionnairesComponent::USES_USE . '"',
-            'ng-false-value' => '"' . QuestionnairesComponent::USES_NOT_USE . '"',
+			'ng-true-value' => '"' . QuestionnairesComponent::USES_USE . '"',
+			'ng-false-value' => '"' . QuestionnairesComponent::USES_NOT_USE . '"',
 			'ng-model' => 'question.isChoiceRandom',
 			'ng-checked' => 'question.isChoiceRandom == ' . QuestionnairesComponent::USES_USE
 			));
@@ -55,8 +55,8 @@
 		<label class="checkbox-inline" ng-show="question.questionType != <?php echo QuestionnairesComponent::TYPE_MULTIPLE_SELECTION; ?>">
 			<?php echo $this->NetCommonsForm->checkbox('QuestionnairePage.{{pageIndex}}.QuestionnaireQuestion.{{qIndex}}.is_skip',
 			array(
-            'ng-true-value' => '"' . QuestionnairesComponent::SKIP_FLAGS_SKIP . '"',
-            'ng-false-value' => '"' . QuestionnairesComponent::SKIP_FLAGS_NO_SKIP . '"',
+			'ng-true-value' => '"' . QuestionnairesComponent::SKIP_FLAGS_SKIP . '"',
+			'ng-false-value' => '"' . QuestionnairesComponent::SKIP_FLAGS_NO_SKIP . '"',
 			'ng-model' => 'question.isSkip',
 			'ng-checked' => 'question.isSkip == ' . QuestionnairesComponent::SKIP_FLAGS_SKIP,
 			'ng-disabled' => 'isDisabledSetSkip(page, question)'

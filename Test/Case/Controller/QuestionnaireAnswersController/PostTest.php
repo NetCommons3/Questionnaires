@@ -71,7 +71,7 @@ class QuestionnaireAnswersControllerPostTest extends NetCommonsControllerTestCas
 	public function testKeyAuthPost() {
 		$controller = $this->generate('Questionnaires.QuestionnaireAnswers', array(
 			'components' => array(
-				'Auth' => array('user'),
+				'Auth' => array('login'),
 				'Session',
 				'Security',
 				'NetCommons.Permission',
