@@ -304,7 +304,7 @@ class QuestionnaireAnswerControllerViewTest extends WorkflowControllerViewTest {
 	public function testGetShuffle() {
 		$controller = $this->generate('Questionnaires.QuestionnaireAnswers', array(
 			'components' => array(
-				'Auth' => array('user'),
+				'Auth' => array('login'),
 				'Session',
 				'Security',
 				'NetCommons.Permission',

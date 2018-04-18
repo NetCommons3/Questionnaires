@@ -44,6 +44,10 @@ echo $this->NetCommonsHtml->script(array(
 						array('sort' => true, 'type' => 'datetime')
 					); ?>
 					<?php echo $this->BlockIndex->tableHeader(
+						'Quiz.all_answer_count', __d('questionnaires', 'Answers'),
+						array('sort' => false, 'type' => 'numeric')
+					); ?>
+					<?php echo $this->BlockIndex->tableHeader(
 						'', __d('questionnaires', 'Answer CSV'),
 						array('type' => 'center')
 					); ?>
@@ -81,6 +85,11 @@ echo $this->NetCommonsHtml->script(array(
 						'',
 						$questionnaire['Questionnaire']['modified'],
 						array('type' => 'datetime')
+						); ?>
+						<?php echo $this->BlockIndex->tableData(
+							'',
+							$questionnaire['Questionnaire']['all_answer_count'],
+							array('type' => 'numeric')
 						); ?>
 						<?php if ($questionnaire['Questionnaire']['all_answer_count'] > 0): ?>
 							<?php echo $this->BlockIndex->tableData(
