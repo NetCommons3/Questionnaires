@@ -111,7 +111,7 @@ class QuestionnaireAnswersControllerPostTest extends NetCommonsControllerTestCas
 	public function testKeyAuthPostNG() {
 		$controller = $this->generate('Questionnaires.QuestionnaireAnswers', array(
 			'components' => array(
-				'Auth' => array('user'),
+				'Auth' => array('login'),
 				'Session',
 				'Security',
 				'NetCommons.Permission',
@@ -152,7 +152,7 @@ class QuestionnaireAnswersControllerPostTest extends NetCommonsControllerTestCas
 	public function testImgAuthPost() {
 		$controller = $this->generate('Questionnaires.QuestionnaireAnswers', array(
 			'components' => array(
-				'Auth' => array('user'),
+				'Auth' => array('login'),
 				'Session',
 				'Security',
 				'NetCommons.Permission',
@@ -193,7 +193,7 @@ class QuestionnaireAnswersControllerPostTest extends NetCommonsControllerTestCas
 	public function testImgAuthPostNG() {
 		$controller = $this->generate('Questionnaires.QuestionnaireAnswers', array(
 			'components' => array(
-				'Auth' => array('user'),
+				'Auth' => array('login'),
 				'Session',
 				'Security',
 				'NetCommons.Permission',
