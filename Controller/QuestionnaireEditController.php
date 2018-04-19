@@ -102,7 +102,23 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 			'cancelUrl' => null
 		),
 		'Wysiwyg.Wysiwyg',
-		);
+		'Blocks.BlockTabs' => array(
+			'mainTabs' => array(
+				'block_index' => array(
+					'url' => array('controller' => 'questionnaire_blocks')
+				),
+				'role_permissions' => array(
+					'url' => array('controller' => 'questionnaire_block_role_permissions')
+				),
+				'frame_settings' => array(
+					'url' => array('controller' => 'questionnaire_frame_settings')
+				),
+				'mail_settings' => array(
+					'url' => array('controller' => 'questionnaire_mail_settings')
+				),
+			),
+		),
+	);
 
 /**
  * target questionnaire　
