@@ -89,7 +89,9 @@ $jsQuestions = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesAppCo
 	<?php if ($displayType == QuestionnairesComponent::DISPLAY_TYPE_LIST): ?>
 		<?php echo $this->LinkButton->toList(); ?>
 	<?php else:?>
-		<?php echo $this->LinkButton->toList(__d('questionnaires', 'End'), null, array('icon' => 'remove')); ?>
+		<?php echo $this->LinkButton->toList(__d('questionnaires', 'End'),
+            null,
+            array('icon' => 'remove', 'hiddenTitle' => false)); ?>
 	<?php endif;?>
 	</div>
 
