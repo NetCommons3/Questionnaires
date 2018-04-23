@@ -19,6 +19,9 @@ $jsQuestionnaire = NetCommonsAppController::camelizeKeyRecursive(QuestionnairesA
 $jsPostData = $this->QuestionEdit->getJsPostData($questionnaireKey, $ajaxPostUrl);
 ?>
 <?php echo $this->element('NetCommons.javascript_alert'); ?>
+<?php if (Current::permission('block_editable') && $this->PageLayout->layoutSetting) : ?>
+	<?php echo $this->BlockTabs->main(BlockTabsHelper::MAIN_TAB_BLOCK_INDEX); ?>
+<?php endif; ?>
 <article id="nc-questionnaires-question-edit-result"
 	 ng-controller="Questionnaires.edit.question"
 	 ng-init="initialize('<?php echo $ajaxPostUrl; ?>',
