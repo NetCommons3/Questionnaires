@@ -24,7 +24,7 @@
 
 		<div class="text-center">
 			<?php if ($displayType == QuestionnairesComponent::DISPLAY_TYPE_LIST): ?>
-				<?php echo $this->LinkButton->toList(__d('questionnaires', 'End'), null, array('icon' => 'remove')); ?>
+				<?php echo $this->LinkButton->toList(__d('questionnaires', 'End'), null, array('icon' => 'remove', 'hiddenTitle' => false)); ?>
 			<?php endif; ?>
 			<?php
 				echo $this->QuestionnaireUtil->getAggregateButtons($questionnaire,
