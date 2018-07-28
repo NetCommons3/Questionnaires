@@ -25,7 +25,6 @@ class QuestionnaireAddController extends QuestionnairesAppController {
  * @var array
  */
 	public $uses = array(
-		'Files.FileModel',					// FileUpload
 		'PluginManager.Plugin',
 	);
 
