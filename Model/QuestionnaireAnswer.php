@@ -232,6 +232,9 @@ class QuestionnaireAnswer extends QuestionnairesAppModel {
  * @param array $summary answer summary data
  * @throws InternalErrorException
  * @return bool
+ *
+ * 速度改善の修正に伴って発生したため抑制
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  */
 	public function saveAnswer($data, $questionnaire, $summary) {
 		//トランザクションBegin
