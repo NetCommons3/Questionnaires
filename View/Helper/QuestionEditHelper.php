@@ -55,10 +55,10 @@ class QuestionEditHelper extends AppHelper {
 
 		$type = $options['type'];
 		if ($this->_View->viewVars['isPublished']) {
-			$options = Hash::merge($options, array('disabled' => true));
+			$options = array_merge($options, array('disabled' => true));
 		}
 
-		$options = Hash::merge($options, array('div' => false, 'label' => false));
+		$options = array_merge($options, array('div' => false, 'label' => false));
 		if ($type == 'wysiwyg') {
 			if ($this->_View->viewVars['isPublished']) {
 				$ret .= '<div class="well well-sm" ng-bind-html="' . $ngModel . ' | ncHtmlContent"></div>';
@@ -66,7 +66,7 @@ class QuestionEditHelper extends AppHelper {
 				$ret .= $this->NetCommonsForm->wysiwyg($fieldName, $options);
 			}
 		} elseif ($type == 'checkbox') {
-			$options = Hash::merge($options, array('label' => $label));
+			$options = array_merge($options, array('label' => $label));
 			$ret .= $this->NetCommonsForm->checkbox($fieldName, $options);
 		} else {
 			$ret .= $this->NetCommonsForm->input($fieldName, $options);
@@ -94,7 +94,7 @@ class QuestionEditHelper extends AppHelper {
 		$fieldName, $label, $options = array(), $help = '') {
 		$ngModel = 'questionnaire.questionnaire.' . Inflector::variable($fieldName);
 		$ret = '<div class=" checkbox"><label>';
-		$options = Hash::merge(array(
+		$options = array_merge(array(
 			'type' => 'checkbox',
 			'div' => false,
 			'label' => false,
@@ -136,11 +136,11 @@ class QuestionEditHelper extends AppHelper {
 			'id' => $fieldName,
 			'ng-model' => $ngModel,
 		);
-		$options = Hash::merge($defaultOptions, $options);
+		$options = array_merge($defaultOptions, $options);
 		if (isset($options['min']) && isset($options['max'])) {
 			$min = $options['min'];
 			$max = $options['max'];
-			$options = Hash::merge($options, array(
+			$options = array_merge($options, array(
 				'ng-focus' => 'setMinMaxDate($event, \'' . $min . '\', \'' . $max . '\')',
 			));
 		}
@@ -165,7 +165,7 @@ class QuestionEditHelper extends AppHelper {
 	public function questionnaireGetFinallySubmit($postUrl, $ngValues = array()) {
 		$html = '';
 		$html .= $this->NetCommonsForm->create('QuestionnaireQuestion',
-			Hash::merge(array('id' => 'finallySubmitForm'), $postUrl)
+			array_merge(array('id' => 'finallySubmitForm'), $postUrl)
 		);
 		$html .= $this->NetCommonsForm->hidden('Frame.id');
 		$html .= $this->NetCommonsForm->hidden('Block.id');

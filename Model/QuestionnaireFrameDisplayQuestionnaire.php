@@ -85,15 +85,19 @@ class QuestionnaireFrameDisplayQuestionnaire extends QuestionnairesAppModel {
  */
 	public function beforeValidate($options = array()) {
 		// チェック用のアンケートリストを確保しておく
-		$conditions = $this->Questionnaire->getBaseCondition();
-		$questionnaires = $this->Questionnaire->find('all', array(
-			'conditions' => $conditions,
-			'recursive' => -1
-		));
-		$this->chkQuestionnaireList = Hash::combine(
-			$questionnaires, '{n}.Questionnaire.id', '{n}.Questionnaire.key');
+		if (empty($this->chkQuestionnaireList)) {
+			$conditions = $this->Questionnaire->getBaseCondition();
+			$questionnaires = $this->Questionnaire->find('all', array(
+				'conditions' => $conditions,
+				'recursive' => -1
+			));
+			foreach ($questionnaires as $questionnaire) {
+				$questionnaire = $questionnaire['Questionnaire'];
+				$this->chkQuestionnaireList[$questionnaire['id']] = $questionnaire['key'];
+			}
+		}
 
-		$this->validate = Hash::merge($this->validate, array(
+		$this->validate = array_merge($this->validate, array(
 			'questionnaire_key' => array(
 				'notBlank' => array(
 					'rule' => array('notBlank'),
@@ -124,14 +128,16 @@ class QuestionnaireFrameDisplayQuestionnaire extends QuestionnairesAppModel {
 		$frameSetting = $data['QuestionnaireFrameSetting'];
 
 		if ($frameSetting['display_type'] == QuestionnairesComponent::DISPLAY_TYPE_SINGLE) {
-			$saveData = Hash::extract($data, 'Single.QuestionnaireFrameDisplayQuestionnaire');
+			$saveData = isset($data['Single']['QuestionnaireFrameDisplayQuestionnaire'])
+				? $data['Single']['QuestionnaireFrameDisplayQuestionnaire']
+				: null;
 			if (! $saveData) {
 				return false;
 			}
 			$this->set($saveData);
 			$ret = $this->validates();
 		} else {
-			$saveData = Hash::extract($data, 'List.QuestionnaireFrameDisplayQuestionnaire');
+			$saveData = $data['List']['QuestionnaireFrameDisplayQuestionnaire'];
 			$ret = $this->saveAll($saveData, array('validate' => 'only'));
 		}
 		return $ret;
@@ -224,7 +230,7 @@ class QuestionnaireFrameDisplayQuestionnaire extends QuestionnairesAppModel {
 		);
 		$this->deleteAll($deleteQs, false);
 
-		$saveData = Hash::extract($data, 'Single.QuestionnaireFrameDisplayQuestionnaire');
+		$saveData = $data['Single']['QuestionnaireFrameDisplayQuestionnaire'];
 		$saveData['frame_key'] = $frameKey;
 		// この関数内部でエラーがあった時は、Exceptionなので戻りは見ない
 		$this->saveDisplayQuestionnaire($saveData);

@@ -94,9 +94,10 @@ class QuestionnaireExport extends QuestionnairesAppModel {
 			if (empty($questionnaire)) {
 				continue;
 			}
-			$questionnaire = Hash::remove($questionnaire, 'Block');
-			$questionnaire = Hash::remove($questionnaire, 'TrackableCreator');
-			$questionnaire = Hash::remove($questionnaire, 'TrackableUpdater');
+			$questionnaire = [
+				'Questionnaire' => $questionnaire['Questionnaire'],
+				'QuestionnairePage' => $questionnaire['QuestionnairePage'],
+			];
 			$this->Questionnaire->clearQuestionnaireId($questionnaire);
 			$questionnaires[] = $questionnaire;
 		}

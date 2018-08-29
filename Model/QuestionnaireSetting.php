@@ -62,7 +62,7 @@ class QuestionnaireSetting extends BlockBaseModel {
  * @return array QuestionnaireBlockSetting data
  */
 	public function getSetting() {
-		$blockSetting = $this->Block->find('all', array(
+		$blockSetting = $this->Block->find('first', array(
 			'recursive' => -1,
 			'conditions' => array(
 				'Block.id' => Current::read('Block.id')
@@ -71,7 +71,7 @@ class QuestionnaireSetting extends BlockBaseModel {
 		if (! $blockSetting) {
 			return $blockSetting;
 		}
-		return Hash::merge($blockSetting[0], $this->getBlockSetting());
+		return ($blockSetting + $this->getBlockSetting());
 	}
 
 /**

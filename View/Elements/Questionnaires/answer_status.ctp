@@ -17,7 +17,7 @@ $list = array(
 if (Current::permission('content_creatable')) {
 	$list[QuestionnairesComponent::QUESTIONNAIRE_ANSWER_TEST] = __d('questionnaires', 'Test');
 }
-$urlParams = Hash::merge(array(
+$urlParams = array_merge(array(
 	'controller' => 'questionnaires',
 	'action' => 'index'),
 	$this->params['named']);
@@ -41,7 +41,7 @@ if (isset($this->params['named']['answer_status']) && array_key_exists($this->pa
 			<?php foreach ($list as $key => $status) : ?>
 				<li>
 					<?php echo $this->NetCommonsHtml->link($status,
-						Hash::merge($urlParams, array('answer_status' => $key))
+						array_merge($urlParams, array('answer_status' => $key))
 					); ?>
 				</li>
 			<?php endforeach; ?>

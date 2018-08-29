@@ -166,12 +166,18 @@ class QuestionnaireAnswer extends QuestionnairesAppModel {
 			return $answers;
 		}
 		// 指定のサマリに該当するアンケートの質問ID配列を取得
-		$questionIds = Hash::extract(
-			$questionnaire,
-			'QuestionnairePage.{n}.QuestionnaireQuestion.{n}.id');
-		$choiceIds = Hash::extract(
-			$questionnaire,
-			'QuestionnairePage.{n}.QuestionnaireQuestion.{n}.QuestionnaireChoice.{n}.id');
+		$questionIds = [];
+		$choiceIds = [];
+		if ($questionnaire['QuestionnairePage']) {
+			foreach ($questionnaire['QuestionnairePage'] as $QuestionnairePage) {
+				foreach ($QuestionnairePage['QuestionnaireQuestion'] as $question) {
+					$questionIds[] = $question['id'];
+					foreach ($question['QuestionnaireChoice'] as $choice) {
+						$choiceIds[] = $choice['id'];
+					}
+				}
+			}
+		}
 		// その質問配列を取得条件に加える（間違った質問が入らないよう）
 		$answer = $this->find('all', array(
 			'conditions' => array(
@@ -237,9 +243,16 @@ class QuestionnaireAnswer extends QuestionnairesAppModel {
 			$validationErrors = array();
 			foreach ($data['QuestionnaireAnswer'] as $answer) {
 				$targetQuestionKey = $answer[0]['questionnaire_question_key'];
-				$targetQuestion = Hash::extract(
-					$questionnaire['QuestionnairePage'],
-					'{n}.QuestionnaireQuestion.{n}[key=' . $targetQuestionKey . ']');
+				$targetQuestion = [];
+				foreach ($questionnaire['QuestionnairePage'] as $QuestionnairePage) {
+					if (isset($QuestionnairePage['QuestionnaireQuestion'])) {
+						foreach ($QuestionnairePage['QuestionnaireQuestion'] as $Question) {
+							if ($Question['key'] === $targetQuestionKey) {
+								$targetQuestion = $Question;
+							}
+						}
+					}
+				}
 				if (! $targetQuestion) {
 					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 				}
@@ -250,13 +263,13 @@ class QuestionnaireAnswer extends QuestionnairesAppModel {
 				// Validate、Saveで使用するオプションデータ
 				$options = array(
 					'questionnaire_answer_summary_id' => $summaryId,
-					'question' => $targetQuestion[0],
+					'question' => $targetQuestion,
 					'allAnswers' => $data['QuestionnaireAnswer'],
 				);
 
 				if (! $this->saveMany($answer, $options)) {
 					$validationErrors[$targetQuestionKey] = $this->__errorMessageUnique(
-						$targetQuestion[0],
+						$targetQuestion,
 						Hash::filter($this->validationErrors));
 				}
 			}

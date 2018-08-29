@@ -137,9 +137,12 @@ class QuestionnairePage extends QuestionnairesAppModel {
 		));
 
 		$conditions = array(
-			'key' => Hash::get($questionnaire, 'Questionnaire.key', '')
+			'key' => isset($questionnaire['Questionnaire']['key'])
+				? $questionnaire['Questionnaire']['key']
+				: ''
 		);
-		if (Hash::get($questionnaire, 'Questionnaire.is_latest')) {
+		if (isset($questionnaire['Questionnaire']['is_latest']) &&
+			$questionnaire['Questionnaire']['is_latest']) {
 			$conditions['is_latest'] = true;
 		} else {
 			$conditions['is_active'] = true;
@@ -182,6 +185,10 @@ class QuestionnairePage extends QuestionnairesAppModel {
  * @param array $nowAnswers now answer
  *
  * @return array
+ *
+ * 速度改善の修正に伴って発生したため抑制
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+ * @SuppressWarnings(PHPMD.NPathComplexity)
  */
 	public function getNextPage($questionnaire, $nowPageSeq, $nowAnswers) {
 		// ページ情報がない？終わりにする
@@ -191,17 +198,23 @@ class QuestionnairePage extends QuestionnairesAppModel {
 		// 次ページはデフォルトならば＋１です
 		$nextPageSeq = $nowPageSeq + 1;
 
+		$map = [];
+		foreach ($questionnaire['QuestionnairePage'] as $QuestionnairePage) {
+			if (isset($QuestionnairePage['QuestionnaireQuestion'])) {
+				foreach ($QuestionnairePage['QuestionnaireQuestion'] as $question) {
+					$map[$question['key']] = $question;
+				}
+			}
+		}
 		// 回答にスキップロジックで指定されたものがないかチェックし、行き先があるならそのページ番号を返す
 		foreach ($nowAnswers as $answer) {
-
-			$targetQuestion = Hash::extract(
-				$questionnaire['QuestionnairePage'],
-				'{n}.QuestionnaireQuestion.{n}[key=' . $answer[0]['questionnaire_question_key'] . ']');
+			$targetQuestion = isset($map[$answer[0]['questionnaire_question_key']])
+				? $map[$answer[0]['questionnaire_question_key']]
+				: [];
 
 			if ($targetQuestion) {
-				$q = $targetQuestion[0];
 				// skipロジック対象の質問ならば次ページのチェックを行う
-				if ($q['is_skip'] == QuestionnairesComponent::SKIP_FLAGS_SKIP) {
+				if ($targetQuestion['is_skip'] == QuestionnairesComponent::SKIP_FLAGS_SKIP) {
 					if ($answer[0]['answer_value'] == '') {
 						// スキップロジックのところで未回答とされたら無条件に次ページとする
 						break;
@@ -209,12 +222,17 @@ class QuestionnairePage extends QuestionnairesAppModel {
 					$choiceIds = explode(QuestionnairesComponent::ANSWER_VALUE_DELIMITER,
 						trim($answer[0]['answer_value'], QuestionnairesComponent::ANSWER_DELIMITER));
 					// スキップロジックの選択肢みつけた
-					$choice = Hash::extract($q['QuestionnaireChoice'], '{n}[key=' . $choiceIds[0] . ']');
+					$choice = [];
+					foreach ($targetQuestion['QuestionnaireChoice'] as $item) {
+						if ($item['key'] === $choiceIds[0]) {
+							$choice = $item;
+							break;
+						}
+					}
 					if ($choice) {
-						$c = $choice[0];
-						if (!empty($c['skip_page_sequence'])) {
+						if (!empty($choice['skip_page_sequence'])) {
 							// スキップ先ページ
-							$nextPageSeq = $c['skip_page_sequence'];
+							$nextPageSeq = $choice['skip_page_sequence'];
 							break;
 						}
 					}
@@ -250,8 +268,11 @@ class QuestionnairePage extends QuestionnairesAppModel {
 				'order' => array('page_sequence ASC'),
 				'recursive' => -1));
 
-			$questionnaire['QuestionnairePage'] = Hash::combine($pages,
-				'{n}.QuestionnairePage.page_sequence', '{n}.QuestionnairePage');
+			$questionnaire['QuestionnairePage'] = [];
+			foreach ($pages as $page) {
+				$page = $page['QuestionnairePage'];
+				$questionnaire['QuestionnairePage'][$page['page_sequence']] = $page;
+			}
 		}
 		$questionnaire['Questionnaire']['page_count'] = 0;
 		if (isset($questionnaire['QuestionnairePage'])) {
@@ -344,7 +365,8 @@ class QuestionnairePage extends QuestionnairesAppModel {
 		foreach ($questionnairePages as &$page) {
 			// アンケートは履歴を取っていくタイプのコンテンツデータなのでSave前にはID項目はカット
 			// （そうしないと既存レコードのUPDATEになってしまうから）
-			$page = Hash::remove($page, 'QuestionnairePage.id');
+			// $page['QuestionnairePage']['id']の項目は入ってこないためコメントアウト
+			// $page = Hash::remove($page, 'QuestionnairePage.id');
 			$this->create();
 			if (! $this->save($page, false)) {	// validateは上位のquestionnaireで済んでいるはず
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
@@ -352,7 +374,9 @@ class QuestionnairePage extends QuestionnairesAppModel {
 
 			$pageId = $this->id;
 
-			$page = Hash::insert($page, 'QuestionnaireQuestion.{n}.questionnaire_page_id', $pageId);
+			foreach (array_keys($page['QuestionnaireQuestion']) as $key) {
+				$page['QuestionnaireQuestion'][$key]['questionnaire_page_id'] = $pageId;
+			}
 			// もしもQuestionやChoiceのsaveがエラーになった場合は、
 			// QuestionやChoiceのほうでInternalExceptionErrorが発行されるのでここでは何も行わない
 			$this->QuestionnaireQuestion->saveQuestionnaireQuestion($page['QuestionnaireQuestion']);

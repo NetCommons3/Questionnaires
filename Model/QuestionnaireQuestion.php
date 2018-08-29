@@ -253,7 +253,7 @@ class QuestionnaireQuestion extends QuestionnairesAppModel {
 		);
 		// 範囲制限設定された質問の場合
 		if ($this->data['QuestionnaireQuestion']['is_range'] == true) {
-			$this->validate = Hash::merge($this->validate, array(
+			$this->validate = array_merge($this->validate, array(
 				'min' => array(
 					'notBlank' => array(
 						'rule' => array('notBlank'),
@@ -377,7 +377,8 @@ class QuestionnaireQuestion extends QuestionnairesAppModel {
 		foreach ($questions as &$question) {
 			// アンケートは履歴を取っていくタイプのコンテンツデータなのでSave前にはID項目はカット
 			// （そうしないと既存レコードのUPDATEになってしまうから）
-			$question = Hash::remove($question, 'QuestionnaireQuestion.id');
+			// $question['QuestionnaireQuestion']['id']の項目は入ってこないためコメントアウト
+			// $question = Hash::remove($question, 'QuestionnaireQuestion.id');
 
 			$this->create();
 			if (! $this->save($question, false)) {
@@ -387,9 +388,9 @@ class QuestionnaireQuestion extends QuestionnairesAppModel {
 			$questionId = $this->id;
 
 			if (isset($question['QuestionnaireChoice'])) {
-				$question = Hash::insert(
-					$question,
-					'QuestionnaireChoice.{n}.questionnaire_question_id', $questionId);
+				foreach (array_keys($question['QuestionnaireChoice']) as $key) {
+					$question['QuestionnaireChoice'][$key]['questionnaire_question_id'] = $questionId;
+				}
 				// もしもChoiceのsaveがエラーになった場合は、
 				// ChoiceのほうでInternalExceptionErrorが発行されるのでここでは何も行わない
 				$this->QuestionnaireChoice->saveQuestionnaireChoice($question['QuestionnaireChoice']);
@@ -413,7 +414,7 @@ class QuestionnaireQuestion extends QuestionnairesAppModel {
 		}
 
 		// 上記以外の場合は最低１つは必要
-		if (! Hash::check($this->data, 'QuestionnaireChoice.{n}')) {
+		if (! isset($this->data['QuestionnaireChoice'][0])) {
 			$this->validationErrors['question_type'][] =
 				__d('questionnaires', 'please set at least one choice.');
 			return false;
@@ -422,13 +423,15 @@ class QuestionnaireQuestion extends QuestionnairesAppModel {
 		// マトリクスタイプの時は行に１つ列に一つ必要
 		// マトリクスタイプのときは、行、カラムの両方ともに最低一つは必要
 		if (QuestionnairesComponent::isMatrixInputType($questionType)) {
-			$rows = Hash::extract(
-				$this->data['QuestionnaireChoice'],
-				'{n}[matrix_type=' . QuestionnairesComponent::MATRIX_TYPE_ROW_OR_NO_MATRIX . ']');
-			$cols = Hash::extract(
-				$this->data['QuestionnaireChoice'],
-				'{n}[matrix_type=' . QuestionnairesComponent::MATRIX_TYPE_COLUMN . ']');
-
+			$rows = [];
+			$cols = [];
+			foreach ($this->data['QuestionnaireChoice'] as $choice) {
+				if ($choice['matrix_type'] === QuestionnairesComponent::MATRIX_TYPE_ROW_OR_NO_MATRIX) {
+					$rows[] = $choice;
+				} elseif ($choice['matrix_type'] === QuestionnairesComponent::MATRIX_TYPE_COLUMN) {
+					$cols[] = $choice;
+				}
+			}
 			if (empty($rows) || empty($cols)) {
 				$this->validationErrors['question_type'][] =
 					__d('questionnaires', 'please set at least one choice at row and column.');
