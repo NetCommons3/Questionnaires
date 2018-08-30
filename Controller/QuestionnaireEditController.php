@@ -188,7 +188,7 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 		//ウィザード
 		foreach ($this->helpers['NetCommons.Wizard']['navibar'] as &$actions) {
 			$urlParam = $actions['url'];
-			$urlParam = Hash::merge($urlParam, $this->request->params['named']);
+			$urlParam += $this->request->params['named'];
 			foreach ($this->request->params['pass'] as $passParam) {
 				$urlParam[$passParam] = null;
 			}
@@ -502,7 +502,9 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 
 		$this->set('questionTypeOptions', $this->Questionnaires->getQuestionTypeOptionsWithLabel());
 		$this->set('isPublished', $isPublished);
-		$this->set('questionnaireKey', Hash::get($questionnaire, 'Questionnaire.key'));
+		$this->set('questionnaireKey', isset($questionnaire['Questionnaire']['key'])
+			? $questionnaire['Questionnaire']['key']
+			: null);
 
 		$isMailSetting = $this->MailSetting->getMailSetting(
 			array(
@@ -510,8 +512,9 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 				'block_key' => Current::read('Block.key')
 			)
 		);
-		$isMailSetting = Hash::get($isMailSetting, 'MailSetting.is_mail_send');
-		$this->set('isMailSetting', $isMailSetting);
+		$this->set('isMailSetting', isset($isMailSetting['MailSetting']['is_mail_send'])
+			? $isMailSetting['MailSetting']['is_mail_send']
+			: null);
 
 		$this->request->data = $questionnaire;
 		$this->request->data['Frame'] = Current::read('Frame');

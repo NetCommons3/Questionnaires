@@ -96,7 +96,10 @@ class QuestionnaireAnswerMatrixSingleChoiceBehavior extends QuestionnaireAnswerB
 		}
 		$ret = true;
 		if (isset($model->data['QuestionnaireAnswer']['matrix_answer_values'])) {
-			$list = Hash::combine($question['QuestionnaireChoice'], '{n}.key', '{n}.key');
+			$list = [];
+			foreach ($question['QuestionnaireChoice'] as $item) {
+				$list[$item['key']] = $item['key'];
+			}
 			if (! $this->checkMatrixAnswerInList(
 				$model,
 				$model->data['QuestionnaireAnswer']['matrix_answer_values'],
@@ -126,7 +129,7 @@ class QuestionnaireAnswerMatrixSingleChoiceBehavior extends QuestionnaireAnswerB
  *
  * @param object &$model use model
  * @param string $answers answer value
- * @param int $list choice list ( choice key list)
+ * @param array $list choice list ( choice key list)
  * @return bool
  */
 	public function checkMatrixAnswerInList(&$model, $answers, $list) {
@@ -161,14 +164,18 @@ class QuestionnaireAnswerMatrixSingleChoiceBehavior extends QuestionnaireAnswerB
 		// 選択肢を何も選択しなかったらAnswerデータが飛んでこないからチェックにかからないか？
 		$rowIds = array_keys($answers);
 
+		$checkOtherChoiceArr = [];
+		foreach ($question['QuestionnaireChoice'] as $choice) {
+			$hasOtherChoice = false;
+			if ($choice['other_choice_type'] != QuestionnairesComponent::OTHER_CHOICE_TYPE_NO_OTHER_FILED) {
+				$hasOtherChoice = true;
+			}
+			$checkOtherChoiceArr[$choice['key']] = $hasOtherChoice;
+		}
 		foreach ($rowIds as $matrixRowId) {
 
-			$results = Hash::extract(
-				$question['QuestionnaireChoice'],
-				'{n}[key=' . $matrixRowId . ']');
-
-			if ($results &&
-				$results[0]['other_choice_type'] != QuestionnairesComponent::OTHER_CHOICE_TYPE_NO_OTHER_FILED) {
+			if (isset($checkOtherChoiceArr[$matrixRowId]) &&
+				$checkOtherChoiceArr[$matrixRowId]) {
 				if (empty($otherAnswer['other_answer_value'])) {
 					$model->validationErrors['answer_value'][] =
 						__d('questionnaires', 'Please enter something in other item');

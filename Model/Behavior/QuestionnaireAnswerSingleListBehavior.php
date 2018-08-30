@@ -82,6 +82,9 @@ class QuestionnaireAnswerSingleListBehavior extends QuestionnaireAnswerBehavior 
  * @param array $question 回答データに対応する質問
  * @param array $allAnswers 入力された回答すべて
  * @return bool
+ *
+ * 速度改善の修正に伴って発生したため抑制
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  */
 	public function answerChoiceValidation(&$model, $data, $question, $allAnswers) {
 		if (! in_array($question['question_type'], $this->_choiceValidateType)) {
@@ -91,22 +94,30 @@ class QuestionnaireAnswerSingleListBehavior extends QuestionnaireAnswerBehavior 
 			return true;
 		}
 		// 質問に設定されている選択肢を配列にまとめる
-		$list = Hash::combine($question['QuestionnaireChoice'], '{n}.id', '{n}.key');
+		$list = [];
+		$checkOtherChoiceArr = [];
+		foreach ($question['QuestionnaireChoice'] as $choice) {
+			$list[$choice['id']] = $choice['key'];
+			$hasOtherChoice = false;
+			if ($choice['other_choice_type'] != QuestionnairesComponent::OTHER_CHOICE_TYPE_NO_OTHER_FILED) {
+				$hasOtherChoice = true;
+			}
+			$checkOtherChoiceArr[$choice['key']] = $hasOtherChoice;
+		}
 
 		$ret = true;
 		// 選択された選択肢IDすべてについて調査する
-		$choiceIds = array_keys($model->data['QuestionnaireAnswer']['answer_values']);
-		foreach ($choiceIds as $choiceId) {
+		$choiceKeys = array_keys($model->data['QuestionnaireAnswer']['answer_values']);
+		foreach ($choiceKeys as $choiceKey) {
 			// 選択されたIDは、ちゃんと用意されている選択肢の中のひとつであるか
-			if ($choiceId != '' && !Validation::inList(strval($choiceId), $list)) {
+			if ($choiceKey != '' && !Validation::inList(strval($choiceKey), $list)) {
 				$ret = false;
 				$model->validationErrors['answer_value'][] =
 					__d('questionnaires', 'Invalid choice');
 			}
 			// チェックされている選択肢が「その他」の項目である場合は
-			$choice = Hash::extract($question['QuestionnaireChoice'], '{n}[key=' . $choiceId . ']');
-			if ($choice &&
-				$choice[0]['other_choice_type'] != QuestionnairesComponent::OTHER_CHOICE_TYPE_NO_OTHER_FILED) {
+			if (isset($checkOtherChoiceArr[$choiceKey]) &&
+				$checkOtherChoiceArr[$choiceKey]) {
 				// 具体的なテキストが書かれていないといけない
 				if (empty($model->data['QuestionnaireAnswer']['other_answer_value'])) {
 					$ret = false;

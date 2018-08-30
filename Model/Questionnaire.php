@@ -13,6 +13,9 @@ App::uses('NetCommonsUrl', 'NetCommons.Utility');
 
 /**
  * Summary for Questionnaire Model
+ *
+ * 速度改善の修正に伴って発生したため抑制
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class Questionnaire extends QuestionnairesAppModel {
 
@@ -192,10 +195,11 @@ class Questionnaire extends QuestionnairesAppModel {
 	public function beforeValidate($options = array()) {
 		// ウィザード画面中はstatusチェックをしないでほしいので
 		// ここに来る前にWorkflowBehaviorでつけられたstatus-validateを削除しておく
-		if (Hash::check($options, 'validate') == QuestionnairesComponent::QUESTIONNAIRE_VALIDATE_TYPE) {
-			$this->validate = Hash::remove($this->validate, 'status');
+		if (isset($options['validate']) &&
+			$options['validate'] === QuestionnairesComponent::QUESTIONNAIRE_VALIDATE_TYPE) {
+			unset($this->validate['status']);
 		}
-		$this->validate = Hash::merge($this->validate, array(
+		$this->validate = array_merge($this->validate, array(
 			'block_id' => array(
 				'numeric' => array(
 					'rule' => array('numeric'),
@@ -569,6 +573,9 @@ class Questionnaire extends QuestionnairesAppModel {
  * @param array &$questionnaire questionnaire
  * @throws InternalErrorException
  * @return bool
+ *
+ * 速度改善の修正に伴って発生したため抑制
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  */
 	public function saveQuestionnaire(&$questionnaire) {
 		// 設定画面を表示する前にこのルームのアンケートブロックがあるか確認
@@ -584,9 +591,8 @@ class Questionnaire extends QuestionnairesAppModel {
 			$questionnaire['Questionnaire']['block_id'] = Current::read('Frame.block_id');
 			// is_no_member_allowの値によってis_repeat_allowを決定する
 			$questionnaire['Questionnaire']['is_repeat_allow'] = QuestionnairesComponent::USES_NOT_USE;
-			if (Hash::get(
-					$questionnaire,
-					'Questionnaire.is_no_member_allow') == QuestionnairesComponent::USES_USE) {
+			if (isset($questionnaire['Questionnaire']['is_no_member_allow']) &&
+				$questionnaire['Questionnaire']['is_no_member_allow'] == QuestionnairesComponent::USES_USE) {
 				$questionnaire['Questionnaire']['is_repeat_allow'] = QuestionnairesComponent::USES_USE;
 			}
 			$status = $questionnaire['Questionnaire']['status'];
@@ -595,7 +601,7 @@ class Questionnaire extends QuestionnairesAppModel {
 			// （そうしないと既存レコードのUPDATEになってしまうから）
 			// （ちなみにこのカット処理をbeforeSaveで共通でやってしまおうとしたが、
 			//   beforeSaveでIDをカットしてもUPDATE動作になってしまっていたのでここに置くことにした)
-			$questionnaire = Hash::remove($questionnaire, 'Questionnaire.id');
+			unset($questionnaire['Questionnaire']['id']);
 
 			$this->set($questionnaire);
 			if (!$this->validates()) {
@@ -619,10 +625,9 @@ class Questionnaire extends QuestionnairesAppModel {
 			$questionnaireId = $this->id;
 
 			// ページ以降のデータを登録
-			$questionnaire = Hash::insert(
-				$questionnaire,
-				'QuestionnairePage.{n}.questionnaire_id',
-				$questionnaireId);
+			foreach (array_keys($questionnaire['QuestionnairePage']) as $key) {
+				$questionnaire['QuestionnairePage'][$key]['questionnaire_id'] = $questionnaireId;
+			}
 
 			if (! $this->QuestionnairePage->saveQuestionnairePage($questionnaire['QuestionnairePage'])) {
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));

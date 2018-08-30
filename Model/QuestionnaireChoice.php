@@ -154,7 +154,8 @@ class QuestionnaireChoice extends QuestionnairesAppModel {
 		foreach ($choices as &$choice) {
 			// アンケートは履歴を取っていくタイプのコンテンツデータなのでSave前にはID項目はカット
 			// （そうしないと既存レコードのUPDATEになってしまうから）
-			$choice = Hash::remove($choice, 'QuestionnaireChoice.id');
+			// $choice['QuestionnaireChoice']['id']の項目は入ってこないためコメントアウト
+			// $choice = Hash::remove($choice, 'QuestionnaireChoice.id');
 			$this->create();
 			if (!$this->save($choice, false)) {
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
