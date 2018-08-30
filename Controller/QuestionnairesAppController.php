@@ -47,38 +47,6 @@ class QuestionnairesAppController extends AppController {
 	);
 
 /**
- * _sorted method
- * to sort a given array by key
- *
- * @param array $obj data array
- * @return array ソート後配列
- */
-	protected function _sorted($obj) {
-		// シーケンス順に並び替え、かつ、インデックス値は０オリジン連番に変更
-		// ページ配列もないのでそのまま戻す
-		if (!Hash::check($obj, 'QuestionnairePage.{n}')) {
-			return $obj;
-		}
-		$obj['QuestionnairePage'] =
-			Hash::sort($obj['QuestionnairePage'], '{n}.page_sequence', 'asc', 'numeric');
-
-		foreach ($obj['QuestionnairePage'] as &$page) {
-			if (Hash::check($page, 'QuestionnaireQuestion.{n}')) {
-				$page['QuestionnaireQuestion'] =
-					Hash::sort($page['QuestionnaireQuestion'], '{n}.question_sequence', 'asc', 'numeric');
-
-				foreach ($page['QuestionnaireQuestion'] as &$question) {
-					if (Hash::check($question, 'QuestionnaireChoice.{n}')) {
-						$question['QuestionnaireChoice'] =
-							Hash::sort($question['QuestionnaireChoice'], '{n}.choice_sequence', 'asc', 'numeric');
-					}
-				}
-			}
-		}
-		return $obj;
-	}
-
-/**
  * changeBooleansToNumbers method
  * to change the Boolean value of a given array to 0,1
  *
@@ -142,8 +110,8 @@ class QuestionnairesAppController extends AppController {
  * @return void
  */
 	protected function _decideSettingLayout() {
-		$isSetting = Hash::get($this->request->params, 'named.q_mode');
-		if ($isSetting == 'setting') {
+		if (isset($this->request->params['named']['q_mode']) &&
+			$this->request->params['named']['q_mode'] == 'setting') {
 			if (Current::permission('block_editable')) {
 				$this->layout = 'NetCommons.setting';
 			}

@@ -92,9 +92,14 @@ class QuestionnaireAnswerHelper extends AppHelper {
 			$afterLabel = false;
 			$choices = Hash::sort($question['QuestionnaireChoice'], '{n}.other_choice_type', 'asc');
 			$options = $this->_getChoiceOptionElement($choices);
-			$otherChoice = Hash::extract($question['QuestionnaireChoice'],
-				'{n}[other_choice_type!=' . QuestionnairesComponent::OTHER_CHOICE_TYPE_NO_OTHER_FILED . ']');
-			if ($otherChoice) {
+			$hasOtherChoice = false;
+			foreach ($question['QuestionnaireChoice'] as $item) {
+				if ($item['other_choice_type'] != QuestionnairesComponent::OTHER_CHOICE_TYPE_NO_OTHER_FILED) {
+					$hasOtherChoice = true;
+					break;
+				}
+			}
+			if ($hasOtherChoice) {
 				$otherInput = $this->NetCommonsForm->input($otherAnswerFieldName, array(
 					'type' => 'text',
 					'label' => false,
@@ -144,9 +149,14 @@ class QuestionnaireAnswerHelper extends AppHelper {
 			$choices = Hash::sort($question['QuestionnaireChoice'], '{n}.other_choice_type', 'asc');
 			$options = $this->_getChoiceOptionElement($choices);
 
-			$otherChoice = Hash::extract($question['QuestionnaireChoice'],
-				'{n}[other_choice_type!=' . QuestionnairesComponent::OTHER_CHOICE_TYPE_NO_OTHER_FILED . ']');
-			if ($otherChoice) {
+			$hasOtherChoice = false;
+			foreach ($question['QuestionnaireChoice'] as $item) {
+				if ($item['other_choice_type'] != QuestionnairesComponent::OTHER_CHOICE_TYPE_NO_OTHER_FILED) {
+					$hasOtherChoice = true;
+					break;
+				}
+			}
+			if ($hasOtherChoice) {
 				$otherInput = $this->NetCommonsForm->input($otherAnswerFieldName, array(
 					'type' => 'text',
 					'label' => false,
@@ -276,11 +286,16 @@ class QuestionnaireAnswerHelper extends AppHelper {
  * @return string 複数選択肢回答のHTML
  */
 	public function matrix($index, $fieldName, $question, $readonly) {
+		$rowChoices = [];
 		if (isset($question['QuestionnaireChoice'])) {
-			$cols = Hash::extract($question['QuestionnaireChoice'],
-				'{n}[matrix_type=' . QuestionnairesComponent::MATRIX_TYPE_COLUMN . ']');
-			$rowChoices = Hash::extract($question['QuestionnaireChoice'],
-				'{n}[matrix_type!=' . QuestionnairesComponent::MATRIX_TYPE_COLUMN . ']');
+			$cols = [];
+			foreach ($question['QuestionnaireChoice'] as $item) {
+				if ($item['matrix_type'] == QuestionnairesComponent::MATRIX_TYPE_COLUMN) {
+					$cols[] = $item;
+				} elseif ($item['matrix_type'] != QuestionnairesComponent::MATRIX_TYPE_COLUMN) {
+					$rowChoices[] = $item;
+				}
+			}
 			$options = $this->_getChoiceOptionElement($cols);
 		}
 		$addClass = '';

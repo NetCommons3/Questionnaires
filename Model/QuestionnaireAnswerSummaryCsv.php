@@ -102,7 +102,7 @@ class QuestionnaireAnswerSummaryCsv extends QuestionnairesAppModel {
 	}
 
 /**
- * getAnswerSummaryCsv 
+ * getAnswerSummaryCsv
  *
  * @param array $questionnaire questionnaire data
  * @param int $limit record limit
@@ -151,9 +151,12 @@ class QuestionnaireAnswerSummaryCsv extends QuestionnairesAppModel {
 		}
 
 		// 質問のIDを取得
-		$questionIds = Hash::extract(
-			$questionnaire['QuestionnairePage'],
-			'{n}.QuestionnaireQuestion.{n}.id');
+		$questionIds = [];
+		foreach ($questionnaire['QuestionnairePage'] as $QuestionnairePage) {
+			foreach ($QuestionnairePage['QuestionnaireQuestion'] as $question) {
+				$questionIds[] = $question['id'];
+			}
+		}
 
 		// summary loop
 		foreach ($summaries as $summary) {
@@ -289,13 +292,21 @@ class QuestionnaireAnswerSummaryCsv extends QuestionnairesAppModel {
  * @param array $question question data
  * @param array $answers answer data
  * @return string
+ *
+ * 速度改善の修正に伴って発生したため抑制
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  */
 	protected function _getAns($question, $answers) {
 		$retAns = '';
 		// 回答配列データの中から、現在指定された質問に該当するものを取り出す
-		$ans = Hash::extract(
-			$answers,
-			'{n}.QuestionnaireAnswer[questionnaire_question_key=' . $question['key'] . ']');
+		$ans = [];
+		foreach ($answers as $answer) {
+			if ($answer['QuestionnaireAnswer']['questionnaire_question_key'] === $question['key']) {
+				$ans = $answer['QuestionnaireAnswer'];
+				break;
+			}
+		}
+
 		// 回答が存在するとき処理
 		if (! $ans) {
 			// 通常の処理ではこのような場面はありえない
@@ -306,8 +317,6 @@ class QuestionnaireAnswerSummaryCsv extends QuestionnairesAppModel {
 			return $retAns;
 		}
 
-		$ans = $ans[0];
-
 		// 単純入力タイプのときは回答の値をそのまま返す
 		if (QuestionnairesComponent::isOnlyInputType($question['question_type'])) {
 			$retAns = $ans['answer_value'];
@@ -316,11 +325,14 @@ class QuestionnaireAnswerSummaryCsv extends QuestionnairesAppModel {
 			// 選択されていた数分処理
 			foreach ($ans['answer_values'] as $choiceKey => $dividedAns) {
 				// idから判断して、その他が選ばれていた場合、other_answer_valueを入れる
-				$choice = Hash::extract(
-					$question['QuestionnaireChoice'],
-					'{n}[key=' . $choiceKey . ']');
+				$choice = [];
+				foreach ($question['QuestionnaireChoice'] as $item) {
+					if ($item['key'] === $choiceKey) {
+						$choice = $item;
+						break;
+					}
+				}
 				if ($choice) {
-					$choice = $choice[0];
 					if ($choice['other_choice_type'] !=
 						QuestionnairesComponent::OTHER_CHOICE_TYPE_NO_OTHER_FILED) {
 						$retAns .= $ans['other_answer_value'];
@@ -347,10 +359,14 @@ class QuestionnaireAnswerSummaryCsv extends QuestionnairesAppModel {
 		$retAns = '';
 		// 回答配列データの中から、現在指定された質問に該当するものを取り出す
 		// マトリクスタイプのときは複数存在する（行数分）
-		$anss = Hash::extract(
-			$answers,
-			'{n}.QuestionnaireAnswer[questionnaire_question_key=' . $question['key'] . ']');
-		if (empty($anss)) {
+		$answerArr = [];
+		foreach ($answers as $answer) {
+			if ($answer['QuestionnaireAnswer']['questionnaire_question_key']
+				=== $question['key']) {
+				$answerArr[] = $answer['QuestionnaireAnswer'];
+			}
+		}
+		if (empty($answerArr)) {
 			// 通常の処理ではこのような場面はありえない
 			// アンケートは空回答であっても回答レコードを作成するからです
 			// データレコード異常があった場合のみです
@@ -358,11 +374,16 @@ class QuestionnaireAnswerSummaryCsv extends QuestionnairesAppModel {
 			// 合わなくなって集計データが狂ってしまうので空回答だったように装って処理します
 			return $retAns;
 		}
-		// その中かから現在指定された選択肢行に該当するものを取り出す
-		$ans = Hash::extract($anss, '{n}[matrix_choice_key=' . $choice['key'] . ']');
+		// その中から現在指定された選択肢行に該当するものを取り出す
+		$ans = [];
+		foreach ($answerArr as $item) {
+			if ($item['matrix_choice_key'] === $choice['key']) {
+				$ans = $item;
+				break;
+			}
+		}
 		// 回答が存在するとき処理
 		if ($ans) {
-			$ans = $ans[0];
 			// idから判断して、その他が選ばれていた場合、other_answer_valueを入れる
 			if ($choice['other_choice_type'] != QuestionnairesComponent::OTHER_CHOICE_TYPE_NO_OTHER_FILED) {
 				$retAns = $ans['other_answer_value'] . QuestionnairesComponent::ANSWER_VALUE_DELIMITER;

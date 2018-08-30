@@ -45,7 +45,7 @@ class ActionQuestionnaireAdd extends QuestionnairesAppModel {
  * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
  */
 	public function beforeValidate($options = array()) {
-		$this->validate = Hash::merge($this->validate, array(
+		$this->validate = array_merge($this->validate, array(
 			'create_option' => array(
 				'rule' => array(
 					'inList', array(
@@ -215,7 +215,7 @@ class ActionQuestionnaireAdd extends QuestionnairesAppModel {
  */
 	protected function _getDefaultQuestionnaire($addData) {
 		$questionnaire = array();
-		$questionnaire['Questionnaire'] = Hash::merge(
+		$questionnaire['Questionnaire'] = array_merge(
 			array(
 				'block_id' => Current::read('Block.id'),
 				'title' => '',

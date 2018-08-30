@@ -105,13 +105,13 @@ class QuestionnaireAnswerBehavior extends ModelBehavior {
 						$val['QuestionnaireAnswer']['answer_value'],
 						QuestionnairesComponent::ANSWER_DELIMITER));
 				// valuesエリアに分割したデータを保存
-				$val['QuestionnaireAnswer']['answer_values'] = Hash::combine(
-					array_map(
-						'explode',
-						array_fill(0, count($answers), QuestionnairesComponent::ANSWER_VALUE_DELIMITER),
-						$answers),
-					'{n}.0',
-					'{n}.1');
+				$val['QuestionnaireAnswer']['answer_values'] = [];
+				foreach ($answers as $answer) {
+					$arr = explode(QuestionnairesComponent::ANSWER_VALUE_DELIMITER, $answer);
+					$val['QuestionnaireAnswer']['answer_values'][$arr[0]] = isset($arr[1])
+						? $arr[1]
+						: null;
+				}
 				// answer_valueは画面で回答してもらうための変数なので、画面に見合った形に整形
 				$val['QuestionnaireAnswer']['answer_value'] = array_map(
 					array($this, 'setDelimiter'),
@@ -163,14 +163,18 @@ class QuestionnaireAnswerBehavior extends ModelBehavior {
  * @return void
  */
 	protected function _setupOtherAnswerValue(Model $model, $question) {
-		$choice = Hash::extract(
-			$question['QuestionnaireChoice'],
-			'{n}[other_choice_type!=' . QuestionnairesComponent::OTHER_CHOICE_TYPE_NO_OTHER_FILED . ']');
+		$choice = [];
+		foreach ($question['QuestionnaireChoice'] as $item) {
+			if ($item['other_choice_type'] != QuestionnairesComponent::OTHER_CHOICE_TYPE_NO_OTHER_FILED) {
+				$choice = $item;
+				break;
+			}
+		}
 		if (! $choice) {
 			return;
 		}
-		$key = $choice[0]['key'];
-		if (! Hash::check($model->data, 'QuestionnaireAnswer.answer_values.' . $key) &&
+		$key = $choice['key'];
+		if (! isset($model->data['QuestionnaireAnswer']['answer_values'][$key]) &&
 			$model->data['QuestionnaireAnswer']['matrix_choice_key'] != $key) {
 			$model->data['QuestionnaireAnswer']['other_answer_value'] = '';
 		}

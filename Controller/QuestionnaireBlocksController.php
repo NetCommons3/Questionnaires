@@ -146,10 +146,12 @@ class QuestionnaireBlocksController extends QuestionnairesAppController {
 			),
 			'recursive' => -1,
 		));
-		$frame = Hash::combine($frame,
-			'{n}.QuestionnaireFrameDisplayQuestionnaire.questionnaire_key',
-			'{n}.QuestionnaireFrameDisplayQuestionnaire.questionnaire_key');
-		$this->request->data['QuestionnaireFrameDisplayQuestionnaire'] = $frame;
+		$frameInfo = [];
+		foreach ($frame as $item) {
+			$item = $item['QuestionnaireFrameDisplayQuestionnaire'];
+			$frameInfo[$item['questionnaire_key']] = $item['questionnaire_key'];
+		}
+		$this->request->data['QuestionnaireFrameDisplayQuestionnaire'] = $frameInfo;
 		$this->set('questionnaires', $questionnaire);
 	}
 

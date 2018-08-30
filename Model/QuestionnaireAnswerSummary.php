@@ -260,15 +260,18 @@ class QuestionnaireAnswerSummary extends QuestionnairesAppModel {
  * 集計処理の実施
  *
  * @param array $questionnaire アンケート情報
- * @return void
+ * @return array
  */
 	public function getAggregate($questionnaire) {
 		$this->QuestionnaireAnswer = ClassRegistry::init('Questionnaires.QuestionnaireAnswer', true);
 		// 質問データのとりまとめ
 		//$questionsは、questionnaire_question_keyをキーとし、questionnaire_question配下が代入されている。
-		$questions = Hash::combine($questionnaire,
-			'QuestionnairePage.{n}.QuestionnaireQuestion.{n}.key',
-			'QuestionnairePage.{n}.QuestionnaireQuestion.{n}');
+		$questions = [];
+		foreach ($questionnaire['QuestionnairePage'] as $QuestionnairePage) {
+			foreach ($QuestionnairePage['QuestionnaireQuestion'] as $question) {
+				$questions[$question['key']] = $question;
+			}
+		}
 
 		// 集計データを集める際の基本条件
 		$baseConditions = $this->getResultCondition($questionnaire);
@@ -310,9 +313,12 @@ class QuestionnaireAnswerSummary extends QuestionnairesAppModel {
  */
 	private function __aggregateAnswerForMatrix(&$question, $questionConditions) {
 		$rowCnt = 0;
-		$cols = Hash::extract(
-			$question['QuestionnaireChoice'],
-			'{n}[matrix_type=' . QuestionnairesComponent::MATRIX_TYPE_COLUMN . ']');
+		$cols = [];
+		foreach ($question['QuestionnaireChoice'] as $choice) {
+			if ($choice['matrix_type'] == QuestionnairesComponent::MATRIX_TYPE_COLUMN) {
+				$cols[] = $choice;
+			}
+		}
 
 		foreach ($question['QuestionnaireChoice'] as &$c) {
 			if ($c['matrix_type'] == QuestionnairesComponent::MATRIX_TYPE_ROW_OR_NO_MATRIX) {
