@@ -17,9 +17,15 @@
 
 	<div class="tab-content">
 		<div class="text-right clearfix">
-			<?php echo $this->element('Questionnaires.Questionnaires/add_button'); ?>
+			<?php echo $this->BlockIndex->addLink('',
+			array(
+				'controller' => 'questionnaire_add',
+				'action' => 'add',
+				'frame_id' => Current::read('Frame.id'),
+				'block_id' => Current::read('Block.id'),
+				'q_mode' => 'setting'
+			)); ?>
 		</div>
-
 		<div class="text-left">
 			<?php echo __d('net_commons', 'Not found.'); ?>
 		</div>
