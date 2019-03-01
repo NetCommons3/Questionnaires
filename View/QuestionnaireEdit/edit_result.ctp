@@ -33,7 +33,6 @@ $jsPostData = $this->QuestionEdit->getJsPostData($questionnaireKey, $ajaxPostUrl
 	<?php echo $this->Wizard->navibar('edit_result'); ?>
 
 	<div class="panel panel-default">
-
 	<?php echo $this->NetCommonsForm->create('QuestionnaireQuestion', $postUrl); ?>
 
 		<?php $this->NetCommonsForm->unlockField('QuestionnairePage'); ?>
@@ -96,7 +95,10 @@ $jsPostData = $this->QuestionEdit->getJsPostData($questionnaireKey, $ajaxPostUrl
 				$prevUrl,
 				['type' => 'button', 'ng-click' => 'post(\'edit_result\')']); ?>
 		</div>
+
 	<?php echo $this->NetCommonsForm->end(); ?>
+	</div>
+
 	<?php echo $this->QuestionEdit->questionnaireGetFinallySubmit($postUrl, array(
 		'Questionnaire.is_total_show' => 'questionnaire.questionnaire.isTotalShow',
 		'Questionnaire.total_comment' => 'questionnaire.questionnaire.totalComment',
