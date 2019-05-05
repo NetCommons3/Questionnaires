@@ -13,6 +13,7 @@
  */
 
 App::uses('QuestionnairesAppModel', 'Questionnaires.Model');
+App::uses('NetCommonsTime', 'NetCommons.Utility');
 
 /**
  * Summary for QuestionnaireAnswerSummary Model
@@ -185,7 +186,12 @@ class QuestionnaireAnswerSummaryCsv extends QuestionnairesAppModel {
 					)
 				)
 			));
-			$retArray[] = $this->_getRows($questionnaire, $summary, $answers);
+			//$retArray[] = $this->_getRows($questionnaire, $summary, $answers);
+			//回答日時は固定で1なので
+			$retArray[] = (new NetCommonsTime())->toUserDatetimeArray(
+				$this->_getRows($questionnaire, $summary, $answers),
+				array('1')
+			);
 		}
 
 		return $retArray;
