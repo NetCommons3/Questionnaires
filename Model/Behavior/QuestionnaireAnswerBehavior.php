@@ -183,12 +183,12 @@ class QuestionnaireAnswerBehavior extends ModelBehavior {
 /**
  * answerRequire 回答必須の質問の場合回答されているかの確認
  *
- * @param object &$model use model
+ * @param object $model use model
  * @param array $data Validation対象データ
  * @param array $question 回答データに対応する質問
  * @return bool
  */
-	public function answerRequire(&$model, $data, $question) {
+	public function answerRequire($model, $data, $question) {
 		if ($question['is_require'] != QuestionnairesComponent::REQUIRES_REQUIRE) {
 			return true;
 		}
