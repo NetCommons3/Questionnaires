@@ -22,14 +22,14 @@ class QuestionnaireValidateBehavior extends ModelBehavior {
 /**
  * Checks if flag is on, required other fields
  *
- * @param object &$model use model
+ * @param object $model use model
  * @param array $check check data array
  * @param mix $requireValue when check data value equal this value, then require other field
  * @param array $others require data field names
  * @param string $ope require condition AND or OR or XOR
  * @return bool
  */
-	public function requireOtherFields(&$model, $check, $requireValue, $others, $ope) {
+	public function requireOtherFields($model, $check, $requireValue, $others, $ope) {
 		$checkPatterns = array(
 			'AND' => array(
 				'midstream' => array(
@@ -86,11 +86,11 @@ class QuestionnaireValidateBehavior extends ModelBehavior {
 /**
  * Checks datetime null or datetime
  *
- * @param object &$model use model
+ * @param object $model use model
  * @param array $check check data array
  * @return bool
  */
-	public function checkDateTime(&$model, $check) {
+	public function checkDateTime($model, $check) {
 		foreach ($check as $val) {
 			if (Validation::blank($val)) {
 				continue;
@@ -106,7 +106,7 @@ class QuestionnaireValidateBehavior extends ModelBehavior {
 /**
  * Used to compare 2 datetime values.
  *
- * @param object &$model use model
+ * @param object $model use model
  * @param string|array $check datetime string
  * @param string $operator Can be either a word or operand
  *	is greater >, is less <, greater or equal >=
@@ -114,7 +114,7 @@ class QuestionnaireValidateBehavior extends ModelBehavior {
  * @param string $compare compare datetime string
  * @return bool Success
  */
-	public function checkDateComp(&$model, $check, $operator, $compare) {
+	public function checkDateComp($model, $check, $operator, $compare) {
 		// 比較対象がないので比較する必要なし
 		if (Validation::blank($model->data['Questionnaire'][$compare])) {
 			return true;
@@ -138,13 +138,13 @@ class QuestionnaireValidateBehavior extends ModelBehavior {
  * getPeriodStatus
  * get period status now and specified time
  *
- * @param object &$model use model
+ * @param object $model use model
  * @param bool $check flag data
  * @param string $startTime start time
  * @param string $endTime end time
  * @return int
  */
-	public function getPeriodStatus(&$model, $check, $startTime, $endTime) {
+	public function getPeriodStatus($model, $check, $startTime, $endTime) {
 		$ret = QuestionnairesComponent::QUESTIONNAIRE_PERIOD_STAT_IN;
 
 		if ($check == QuestionnairesComponent::USES_USE) {

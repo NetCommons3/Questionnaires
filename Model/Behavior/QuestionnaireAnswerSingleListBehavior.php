@@ -77,7 +77,7 @@ class QuestionnaireAnswerSingleListBehavior extends QuestionnaireAnswerBehavior 
 /**
  * answerValidation 回答内容の正当性
  *
- * @param object &$model use model
+ * @param object $model use model
  * @param array $data Validation対象データ
  * @param array $question 回答データに対応する質問
  * @param array $allAnswers 入力された回答すべて
@@ -86,7 +86,7 @@ class QuestionnaireAnswerSingleListBehavior extends QuestionnaireAnswerBehavior 
  * 速度改善の修正に伴って発生したため抑制
  * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  */
-	public function answerChoiceValidation(&$model, $data, $question, $allAnswers) {
+	public function answerChoiceValidation($model, $data, $question, $allAnswers) {
 		if (! in_array($question['question_type'], $this->_choiceValidateType)) {
 			return true;
 		}

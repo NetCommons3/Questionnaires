@@ -48,13 +48,13 @@ class QuestionnaireAnswerTextBehavior extends QuestionnaireAnswerBehavior {
 /**
  * answerMaxLength 回答がアンケートが許す最大長を超えていないかの確認
  *
- * @param object &$model use model
+ * @param object $model use model
  * @param array $data Validation対象データ
  * @param array $question 回答データに対応する質問
  * @param int $max 最大長
  * @return bool
  */
-	public function answerMaxLength(&$model, $data, $question, $max) {
+	public function answerMaxLength($model, $data, $question, $max) {
 		if (! in_array($question['question_type'], $this->_maxLengthCheckType)) {
 			return true;
 		}
@@ -64,13 +64,13 @@ class QuestionnaireAnswerTextBehavior extends QuestionnaireAnswerBehavior {
 /**
  * answerValidation 回答内容の正当性
  *
- * @param object &$model use model
+ * @param object $model use model
  * @param array $data Validation対象データ
  * @param array $question 回答データに対応する質問
  * @param array $allAnswers 入力された回答すべて
  * @return bool
  */
-	public function answerTextValidation(&$model, $data, $question, $allAnswers) {
+	public function answerTextValidation($model, $data, $question, $allAnswers) {
 		if (! in_array($question['question_type'], $this->_textValidateType)) {
 			return true;
 		}
