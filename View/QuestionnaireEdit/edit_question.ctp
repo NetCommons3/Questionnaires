@@ -93,6 +93,8 @@ $jsPostData = $this->QuestionEdit->getJsPostData($questionnaireKey, $ajaxPostUrl
 									__d('questionnaires', 'Required'),
 									array(
 									'type' => 'checkbox',
+									'ng-true-value' => '"' . QuestionnairesComponent::USES_USE . '"',
+									'ng-false-value' => '"' . QuestionnairesComponent::USES_NOT_USE . '"',
 									'ng-checked' => 'question.isRequire == ' . QuestionnairesComponent::USES_USE,
 									'ng-model' => 'question.isRequire',
 									),
