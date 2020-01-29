@@ -15,6 +15,9 @@
 		<h2>
 			<?php echo h($question['question_value']); ?>
 		</h2>
+		<p class="help-block clearfix">
+			<?php echo $question['description']; ?>
+		</p>
 	<?php endif; ?>
 	<p>
 		<?php echo __d('questionnaires', 'The total number of answers: ') . h($question['answer_total_cnt']); ?>

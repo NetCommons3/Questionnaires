@@ -41,6 +41,9 @@
 				<label>
 					<?php echo h($question['question_value']); ?>
 				</label>
+				<p class="help-block clearfix">
+					<?php echo $question['description']; ?>
+				</p>
 
 				<div class="well form-control-static">
 					<div class="form-group">
