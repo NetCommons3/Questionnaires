@@ -506,16 +506,6 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 			? $questionnaire['Questionnaire']['key']
 			: null);
 
-		$isMailSetting = $this->MailSetting->getMailSetting(
-			array(
-				'plugin_key' => 'questionnaires',
-				'block_key' => Current::read('Block.key')
-			)
-		);
-		$this->set('isMailSetting', isset($isMailSetting['MailSetting']['is_mail_send'])
-			? $isMailSetting['MailSetting']['is_mail_send']
-			: null);
-
 		$this->request->data = $questionnaire;
 		$this->request->data['Frame'] = Current::read('Frame');
 		$this->request->data['Block'] = Current::read('Block');
