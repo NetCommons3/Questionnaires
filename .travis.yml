@@ -20,6 +20,12 @@ env:
     - GIT_AUTHOR_NAME=RikaFujiwara
     - GIT_AUTHOR_EMAIL=rika.fujiwara@allcreator.net
 
+matrix:
+  allow_failures:
+    # PHP 7.4 testing is allowed to fail because the GD extension and ZipArchive is not packaged on Travis CI yet.
+    # See https://travis-ci.community/t/some-extensions-are-missing-in-php-7-4-0-zip-gmp-sodium/6320/9
+    - php: 7.4
+
 before_script:
   - export NETCOMMONS_BUILD_DIR=`dirname $TRAVIS_BUILD_DIR`/NetCommons3
   - git clone git://github.com/NetCommons3/NetCommons3 $NETCOMMONS_BUILD_DIR
