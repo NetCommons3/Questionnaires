@@ -12,7 +12,7 @@ dist: trusty
 
 env:
   matrix:
-    - NETCOMMONS_VERSION=master DB=mysql
+    - NETCOMMONS_VERSION=availability DB=mysql
   global:
     - secure: "cb32rUp2l+Zd991n/6fY18wudLW0EjqqqlvxpKMWZOUaJ6dS5+R+IcoV5Oo94TNUEgzOQ/7Ldp5PW+qGg0S5EDyQOHtLp7kmmGy9ST7EL0QNyWyfSGXl9FUCqKd/fP3WZVx8ci6MgfUtj5DfamqjRctpJy4uQapbZwtUDQWweGY="
     - GIT_COMMITTER_NAME=RikaFujiwara
