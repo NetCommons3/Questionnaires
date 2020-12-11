@@ -371,6 +371,11 @@ class Questionnaire extends QuestionnairesAppModel {
 					$validationErrors['QuestionnairePage'][$pageIndex] =
 						$this->QuestionnairePage->validationErrors;
 				}
+
+				$data = $this->QuestionnairePage->data['QuestionnairePage'];
+				unset($this->QuestionnairePage->data['QuestionnairePage']);
+				$this->data['QuestionnairePage'][$pageIndex] =
+						array_merge($data, $this->QuestionnairePage->data);
 			}
 			$this->validationErrors += $validationErrors;
 		}
@@ -618,18 +623,18 @@ class Questionnaire extends QuestionnairesAppModel {
 				$this->setTopicValue('answer_period_end', null);
 			}
 
-			$saveQuestionnaire = $this->save($questionnaire, false);
+			$saveQuestionnaire = $this->save(null, false);
 			if (! $saveQuestionnaire) {
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}
 			$questionnaireId = $this->id;
 
 			// ページ以降のデータを登録
-			foreach (array_keys($questionnaire['QuestionnairePage']) as $key) {
-				$questionnaire['QuestionnairePage'][$key]['questionnaire_id'] = $questionnaireId;
+			foreach (array_keys($saveQuestionnaire['QuestionnairePage']) as $key) {
+				$saveQuestionnaire['QuestionnairePage'][$key]['questionnaire_id'] = $questionnaireId;
 			}
 
-			if (! $this->QuestionnairePage->saveQuestionnairePage($questionnaire['QuestionnairePage'])) {
+			if (! $this->QuestionnairePage->saveQuestionnairePage($saveQuestionnaire['QuestionnairePage'])) {
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}
 			// フレーム内表示対象アンケートに登録する

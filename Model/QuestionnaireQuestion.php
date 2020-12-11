@@ -26,7 +26,7 @@ class QuestionnaireQuestion extends QuestionnairesAppModel {
 	public $actsAs = array(
 		'NetCommons.OriginalKey',
 		'Wysiwyg.Wysiwyg' => array(
-			'fields' => array('question_value')
+			'fields' => array('description')
 		),
 		//多言語
 		'M17n.M17n' => array(
