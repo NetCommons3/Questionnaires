@@ -338,6 +338,11 @@ class QuestionnairePage extends QuestionnairesAppModel {
 					$validationErrors['QuestionnaireQuestion'][$qIndex] =
 						$this->QuestionnaireQuestion->validationErrors;
 				}
+
+				$data = $this->QuestionnaireQuestion->data['QuestionnaireQuestion'];
+				unset($this->QuestionnaireQuestion->data['QuestionnaireQuestion']);
+				$this->data['QuestionnaireQuestion'][$qIndex] =
+						array_merge($data, $this->QuestionnaireQuestion->data);
 			}
 			$this->validationErrors += $validationErrors;
 		}
