@@ -496,4 +496,42 @@ class QuestionnaireQuestion extends QuestionnairesAppModel {
 		}
 		return true;
 	}
+
+/**
+ * getAliveCondition
+ * 現在使用中状態であるか判断する。CleanUpプラグインで使用
+ *
+ * @param array $key 
+ * @return array
+ */
+	public function getAliveCondition($key) {
+		return array(
+			'conditions' => array(
+				'QuestionnaireQuestion.key' => $key,
+				'OR' => array(
+					'Questionnaire.is_active' => true,
+					'Questionnaire.is_latest' => true,
+				),
+			),
+			'joins' => array(
+				array(
+					'table' => 'questionnaire_pages',
+					'alias' => 'QuestionnairePage',
+					'type' => 'INNER',
+					'conditions' => array(
+						$this->alias . '.questionnaire_page_id = QuestionnairePage.id'
+					)
+				),
+				array(
+					'table' => 'questionnaires',
+					'alias' => 'Questionnaire',
+					'type' => 'INNER',
+					'conditions' => array(
+						'QuestionnairePage.questionnaire_id = Questionnaire.id'
+					)
+				)
+			)
+		);
+	}
+
 }
