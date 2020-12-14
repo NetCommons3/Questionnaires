@@ -158,31 +158,32 @@ class QuestionnaireFrameSetting extends QuestionnairesAppModel {
 				'Questionnaires.QuestionnaireFrameDisplayQuestionnaire',
 		]);
 
+		// 現在のアンケート確認
+		$questionnaireCount = $this->Questionnaire->find('count', array(
+			'conditions' => $this->Questionnaire->getBaseCondition()
+		));
+		// フレーム設定のバリデート
+		$this->create();
+		$this->set($data);
+		if (! $this->validates()) {
+			return false;
+		}
+
+		// アンケートが存在する場合は
+		if ($questionnaireCount > 0) {
+			// フレームに表示するアンケート一覧設定のバリデート
+			// 一覧表示タイプと単独表示タイプ
+			$ret = $this->QuestionnaireFrameDisplayQuestionnaire->validateFrameDisplayQuestionnaire($data);
+			if ($ret === false) {
+				$this->validationErrors['QuestionnaireFrameDisplayQuestionnaire'] =
+					$this->QuestionnaireFrameDisplayQuestionnaire->validationErrors;
+				return false;
+			}
+		}
+
 		//トランザクションBegin
 		$this->begin();
 		try {
-			// 現在のアンケート確認
-			$questionnaireCount = $this->Questionnaire->find('count', array(
-				'conditions' => $this->Questionnaire->getBaseCondition()
-			));
-			// フレーム設定のバリデート
-			$this->create();
-			$this->set($data);
-			if (! $this->validates()) {
-				return false;
-			}
-
-			// アンケートが存在する場合は
-			if ($questionnaireCount > 0) {
-				// フレームに表示するアンケート一覧設定のバリデート
-				// 一覧表示タイプと単独表示タイプ
-				$ret = $this->QuestionnaireFrameDisplayQuestionnaire->validateFrameDisplayQuestionnaire($data);
-				if ($ret === false) {
-					$this->validationErrors['QuestionnaireFrameDisplayQuestionnaire'] =
-						$this->QuestionnaireFrameDisplayQuestionnaire->validationErrors;
-					return false;
-				}
-			}
 
 			// フレーム設定の登録
 			if (! $this->save($data, false)) {
