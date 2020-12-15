@@ -264,14 +264,7 @@ class ActionQuestionnaireAdd extends QuestionnairesAppModel {
 		$wysiswyg = new WysiwygZip();
 		$flatQuestionnaire = Hash::flatten($questionnaire);
 		foreach ($flatQuestionnaire as $key => &$value) {
-			$model = null;
-			if (strpos($key, 'QuestionnaireQuestion.') !== false) {
-				$model = $this->QuestionnaireQuestion;
-			} elseif (strpos($key, 'QuestionnairePage.') !== false) {
-				$model = $this->QuestionnairePage;
-			} elseif (strpos($key, 'Questionnaire.') !== false) {
-				$model = $this->Questionnaire;
-			}
+			$model = $this->__getModelFromDataName($key);
 			if (!$model) {
 				continue;
 			}
@@ -381,14 +374,7 @@ class ActionQuestionnaireAdd extends QuestionnairesAppModel {
 			// WysIsWygのデータを入れなおす
 			$flatQuestionnaire = Hash::flatten($q);
 			foreach ($flatQuestionnaire as $key => &$value) {
-				$model = null;
-				if (strpos($key, 'QuestionnaireQuestion.') !== false) {
-					$model = $this->QuestionnaireQuestion;
-				} elseif (strpos($key, 'QuestionnairePage.') !== false) {
-					$model = $this->QuestionnairePage;
-				} elseif (strpos($key, 'Questionnaire.') !== false) {
-					$model = $this->Questionnaire;
-				}
+				$model = $this->__getModelFromDataName($key);
 				if (!$model) {
 					continue;
 				}
@@ -408,6 +394,24 @@ class ActionQuestionnaireAdd extends QuestionnairesAppModel {
 			$q['Questionnaire']['import_key'] = $importKey;
 		}
 		return $questionnaires;
+	}
+/**
+ * __getModelFromDataName
+ *
+ * @param string $keyName モデルのデータのフィールド名
+ * @return Model
+ */
+	private function __getModelFromDataName($keyName) {
+		if (strpos($keyName, 'QuestionnaireQuestion.') !== false) {
+			$model = $this->QuestionnaireQuestion;
+		} elseif (strpos($keyName, 'QuestionnairePage.') !== false) {
+			$model = $this->QuestionnairePage;
+		} elseif (strpos($keyName, 'Questionnaire.') !== false) {
+			$model = $this->Questionnaire;
+		} else {
+			$model = null;
+		}
+		return $model;
 	}
 /**
  * __checkFingerPrint
