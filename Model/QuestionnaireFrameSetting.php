@@ -173,6 +173,8 @@ class QuestionnaireFrameSetting extends QuestionnairesAppModel {
 		if ($questionnaireCount > 0) {
 			// フレームに表示するアンケート一覧設定のバリデート
 			// 一覧表示タイプと単独表示タイプ
+			//バリデートチェックリストを初期化
+			$this->QuestionnaireFrameDisplayQuestionnaire->chkQuestionnaireList = array();
 			$ret = $this->QuestionnaireFrameDisplayQuestionnaire->validateFrameDisplayQuestionnaire($data);
 			if ($ret === false) {
 				$this->validationErrors['QuestionnaireFrameDisplayQuestionnaire'] =
