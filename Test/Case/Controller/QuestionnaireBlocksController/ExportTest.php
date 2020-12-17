@@ -67,6 +67,9 @@ class QuestionnaireBlocksControllerExportTest extends NetCommonsControllerTestCa
 	public function setUp() {
 		parent::setUp();
 
+		// テストZipDownloaderに差し替え
+		App::uses('ZipDownloader', 'Questionnaires.Test/test_app/Plugin/TestFiles/Utility');
+
 		//テストプラグインのロード
 		NetCommonsCakeTestCase::loadTestPlugin($this, 'Questionnaires', 'TestQuestionnaires');
 		NetCommonsCakeTestCase::loadTestPlugin($this, 'Questionnaires', 'TestFiles');
@@ -101,9 +104,6 @@ class QuestionnaireBlocksControllerExportTest extends NetCommonsControllerTestCa
  * @return void
  */
 	public function testExport() {
-		// テストZipDownloaderに差し替え
-		App::uses('ZipDownloader', 'Questionnaires.Test/test_app/Plugin/TestFiles/Utility');
-
 		//テスト実施
 		$frameId = '6';
 		$blockId = '2';
