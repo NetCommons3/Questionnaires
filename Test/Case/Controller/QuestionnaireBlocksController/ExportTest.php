@@ -11,7 +11,6 @@
 
 App::uses('NetCommonsControllerTestCase', 'NetCommons.TestSuite');
 App::uses('QuestionnairesComponent', 'Questionnaires.Controller/Component');
-App::uses('ZipDownloader', 'TestFiles.Utility');
 
 /**
  * QuestionnaireBlocksController Test Case
@@ -102,6 +101,9 @@ class QuestionnaireBlocksControllerExportTest extends NetCommonsControllerTestCa
  * @return void
  */
 	public function testExport() {
+		// テストZipDownloaderに差し替え
+		App::uses('ZipDownloader', 'Questionnaires.Test/test_app/Plugin/TestFiles/Utility');
+
 		//テスト実施
 		$frameId = '6';
 		$blockId = '2';
