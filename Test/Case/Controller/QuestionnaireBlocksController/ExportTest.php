@@ -11,6 +11,7 @@
 
 App::uses('NetCommonsControllerTestCase', 'NetCommons.TestSuite');
 App::uses('QuestionnairesComponent', 'Questionnaires.Controller/Component');
+App::uses('ZipDownloader', 'TestFiles.Utility');
 
 /**
  * QuestionnaireBlocksController Test Case
