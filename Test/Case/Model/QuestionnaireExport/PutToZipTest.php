@@ -92,8 +92,8 @@ class QuestionnaireExportPutToZipTest extends NetCommonsGetTest {
 		$model = $this->_modelName;
 		$method = $this->_methodName;
 
-		//App::uses('ZipDownloader', 'TestFiles.Utility');
-		App::uses('ZipDownloader', 'Questionnaires.Test/test_app/Plugin/TestFiles/Utility');
+		//App::uses('ZipDownloader', 'Questionnaires.Test/test_app/Plugin/TestFiles/Utility');
+		App::uses('ZipDownloader', 'TestFiles.Utility');
 
 		$langCount = 2;	// 2 = 言語数
 		$questionnaireId = intval($expected['questionnaireId']);
