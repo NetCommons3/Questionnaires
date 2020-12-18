@@ -40,6 +40,10 @@ class AllQuestionnairesTest extends NetCommonsTestSuite {
 			}
 		}
 		*/
+		// ZipDownloaderは用意したテスト用モックを読み込ませるようにする
+		App::uses('ZipDownloader', 'Questionnaires.Test/test_app/Plugin/TestFiles/Utility');
+		// 前もって一度newしておかないと、実コードの中で本体側のZipDownloderがインスタンス化
+		$zip = new ZipDownloader();
 		$suite->addTestDirectoryRecursive(CakePlugin::path($plugin) . 'Test' . DS . 'Case');
 		/*
 		$suite->addTestFile(CakePlugin::path($plugin) . 'Test' . DS . 'Case' . '/Controller/Component/QuestionnaireOwnAnswerComponent/GetConfirmSummaryOfThisUserTest.php');
