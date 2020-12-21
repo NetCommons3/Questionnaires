@@ -246,9 +246,40 @@ class ActionQuestionnaireAdd extends QuestionnairesAppModel {
 		));
 		// ID値のみクリア
 		$this->Questionnaire->clearQuestionnaireId($questionnaire);
+		// Wysiwygエディタ内のファイルの複製処理
+		$questionnaire = $this->_copyWysiwygFiles($questionnaire);
 
 		return $questionnaire;
 	}
+/**
+ * _copyWysiwygFiles 
+ * 
+ * 引数で指定されたアンケートの中を分析し、
+ * ウィジウィグに設定されているファイルは複製を作ります
+ * 
+ * @param array $questionnaire アンケートデータ
+ * @return array $questionnaire 複製を作り終えたアンケートデータ
+ */
+	protected function _copyWysiwygFiles($questionnaire) {
+		$wysiswyg = new WysiwygZip();
+		$flatQuestionnaire = Hash::flatten($questionnaire);
+		foreach ($flatQuestionnaire as $key => &$value) {
+			$model = $this->__getModelFromDataName($key);
+			if (!$model) {
+				continue;
+			}
+			$columnName = substr($key, strrpos($key, '.') + 1);
+			if ($model->hasField($columnName)) {
+				if ($model->getColumnType($columnName) == 'text') {
+					$wysiswygZipFile = $wysiswyg->createWysiwygZip($value);
+					$value = $wysiswyg->getFromWysiwygZip($wysiswygZipFile);
+				}
+			}
+		}
+		$questionnaire = Hash::expand($flatQuestionnaire);
+		return $questionnaire;
+	}
+
 /**
  * _createFromTemplate
  *
@@ -343,14 +374,7 @@ class ActionQuestionnaireAdd extends QuestionnairesAppModel {
 			// WysIsWygのデータを入れなおす
 			$flatQuestionnaire = Hash::flatten($q);
 			foreach ($flatQuestionnaire as $key => &$value) {
-				$model = null;
-				if (strpos($key, 'QuestionnaireQuestion.') !== false) {
-					$model = $this->QuestionnaireQuestion;
-				} elseif (strpos($key, 'QuestionnairePage.') !== false) {
-					$model = $this->QuestionnairePage;
-				} elseif (strpos($key, 'Questionnaire.') !== false) {
-					$model = $this->Questionnaire;
-				}
+				$model = $this->__getModelFromDataName($key);
 				if (!$model) {
 					continue;
 				}
@@ -370,6 +394,24 @@ class ActionQuestionnaireAdd extends QuestionnairesAppModel {
 			$q['Questionnaire']['import_key'] = $importKey;
 		}
 		return $questionnaires;
+	}
+/**
+ * __getModelFromDataName
+ *
+ * @param string $keyName モデルのデータのフィールド名
+ * @return Model
+ */
+	private function __getModelFromDataName($keyName) {
+		if (strpos($keyName, 'QuestionnaireQuestion.') !== false) {
+			$model = $this->QuestionnaireQuestion;
+		} elseif (strpos($keyName, 'QuestionnairePage.') !== false) {
+			$model = $this->QuestionnairePage;
+		} elseif (strpos($keyName, 'Questionnaire.') !== false) {
+			$model = $this->Questionnaire;
+		} else {
+			$model = null;
+		}
+		return $model;
 	}
 /**
  * __checkFingerPrint

@@ -361,10 +361,11 @@ class QuestionnaireQuestion extends QuestionnairesAppModel {
  * save QuestionnaireQuestion data
  *
  * @param array &$questions questionnaire questions
+ * @param array $block ブロック情報
  * @throws InternalErrorException
  * @return bool
  */
-	public function saveQuestionnaireQuestion(&$questions) {
+	public function saveQuestionnaireQuestion(&$questions, $block) {
 		$this->loadModels([
 			'QuestionnaireChoice' => 'Questionnaires.QuestionnaireChoice',
 		]);
@@ -374,14 +375,28 @@ class QuestionnaireQuestion extends QuestionnairesAppModel {
 		// 決まり処理は上位で行われる
 		// ここでは行わない
 
+		// ブロック情報の準備
+		// ここで準備したブロック情報は、saveに含まれ、
+		// WysiwygBehaviorのafterSaveでblock_keyが設定される
+		$block = [
+			'Block' => $block
+		];
+
 		foreach ($questions as &$question) {
 			// アンケートは履歴を取っていくタイプのコンテンツデータなのでSave前にはID項目はカット
 			// （そうしないと既存レコードのUPDATEになってしまうから）
 			// $question['QuestionnaireQuestion']['id']の項目は入ってこないためコメントアウト
 			// $question = Hash::remove($question, 'QuestionnaireQuestion.id');
 
+			// WysiwygBehaviorのafterSaveでblock_keyを参照できるように
+			// RegistrationQuestionとBlockは同一次元に配置する
+			$questionForSave = [
+				$this->alias => $question
+			];
+			$questionForSave = array_merge($questionForSave, $block);
+
 			$this->create();
-			if (! $this->save($question, false)) {
+			if (! $this->save($questionForSave, false)) {
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}
 
@@ -481,4 +496,42 @@ class QuestionnaireQuestion extends QuestionnairesAppModel {
 		}
 		return true;
 	}
+
+/**
+ * getAliveCondition
+ * 現在使用中状態であるか判断する。CleanUpプラグインで使用
+ *
+ * @param array $key 判断対象のデータのキー
+ * @return array
+ */
+	public function getAliveCondition($key) {
+		return array(
+			'conditions' => array(
+				'QuestionnaireQuestion.key' => $key,
+				'OR' => array(
+					'Questionnaire.is_active' => true,
+					'Questionnaire.is_latest' => true,
+				),
+			),
+			'joins' => array(
+				array(
+					'table' => 'questionnaire_pages',
+					'alias' => 'QuestionnairePage',
+					'type' => 'INNER',
+					'conditions' => array(
+						$this->alias . '.questionnaire_page_id = QuestionnairePage.id'
+					)
+				),
+				array(
+					'table' => 'questionnaires',
+					'alias' => 'Questionnaire',
+					'type' => 'INNER',
+					'conditions' => array(
+						'QuestionnairePage.questionnaire_id = Questionnaire.id'
+					)
+				)
+			)
+		);
+	}
+
 }

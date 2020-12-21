@@ -53,7 +53,11 @@ abstract class QuestionnairesSaveTest extends NetCommonsModelTestCase {
 		}
 
 		//テスト実行
-		$result = $this->$model->$method($data[$model]);
+		if ($method == 'saveQuestionnaireQuestion' || $method == 'saveQuestionnairePage') {
+			$result = $this->$model->$method($data[$model], $data['Block']);
+		} else {
+			$result = $this->$model->$method($data[$model]);
+		}
 		$this->assertNotEmpty($result);
 
 		//idのチェック
@@ -119,7 +123,11 @@ abstract class QuestionnairesSaveTest extends NetCommonsModelTestCase {
 		$this->_mockForReturnFalse($model, $mockModel, $mockMethod);
 
 		$this->setExpectedException('InternalErrorException');
-		$this->$model->$method($data);
+		if ($method == 'saveQuestionnaireQuestion' || $method == 'saveQuestionnairePage') {
+			$this->$model->$method($data, $data['Block']);
+		} else {
+			$this->$model->$method($data);
+		}
 	}
 
 /**
