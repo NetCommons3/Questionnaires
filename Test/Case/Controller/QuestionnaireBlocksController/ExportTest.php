@@ -67,6 +67,10 @@ class QuestionnaireBlocksControllerExportTest extends NetCommonsControllerTestCa
 	public function setUp() {
 		parent::setUp();
 
+		// テストZipDownloaderに差し替え
+		//App::uses('ZipDownloader', 'Questionnaires.Test/test_app/Plugin/TestFiles/Utility');
+		//App::uses('ZipDownloader', 'TestFiles.Utility');
+
 		//テストプラグインのロード
 		NetCommonsCakeTestCase::loadTestPlugin($this, 'Questionnaires', 'TestQuestionnaires');
 		NetCommonsCakeTestCase::loadTestPlugin($this, 'Questionnaires', 'TestFiles');

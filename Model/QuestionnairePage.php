@@ -353,10 +353,11 @@ class QuestionnairePage extends QuestionnairesAppModel {
  * save QuestionnairePage data
  *
  * @param array &$questionnairePages questionnaire pages
+ * @param array $block ブロック情報
  * @throws InternalErrorException
  * @return bool
  */
-	public function saveQuestionnairePage(&$questionnairePages) {
+	public function saveQuestionnairePage(&$questionnairePages, $block) {
 		$this->loadModels([
 			'QuestionnaireQuestion' => 'Questionnaires.QuestionnaireQuestion',
 		]);
@@ -384,7 +385,7 @@ class QuestionnairePage extends QuestionnairesAppModel {
 			}
 			// もしもQuestionやChoiceのsaveがエラーになった場合は、
 			// QuestionやChoiceのほうでInternalExceptionErrorが発行されるのでここでは何も行わない
-			$this->QuestionnaireQuestion->saveQuestionnaireQuestion($page['QuestionnaireQuestion']);
+			$this->QuestionnaireQuestion->saveQuestionnaireQuestion($page['QuestionnaireQuestion'], $block);
 		}
 		return true;
 	}

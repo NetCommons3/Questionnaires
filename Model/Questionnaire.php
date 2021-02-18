@@ -634,7 +634,9 @@ class Questionnaire extends QuestionnairesAppModel {
 				$saveQuestionnaire['QuestionnairePage'][$key]['questionnaire_id'] = $questionnaireId;
 			}
 
-			if (! $this->QuestionnairePage->saveQuestionnairePage($saveQuestionnaire['QuestionnairePage'])) {
+			if (! $this->QuestionnairePage->saveQuestionnairePage(
+				$saveQuestionnaire['QuestionnairePage'], $saveQuestionnaire['Block']
+			)) {
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}
 			// フレーム内表示対象アンケートに登録する
