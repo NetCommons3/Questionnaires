@@ -727,7 +727,7 @@ class Questionnaire extends QuestionnairesAppModel {
 			$this->id = $questionnaireId;
 			$this->Behaviors->unload('Mails.MailQueue');
 			$this->Behaviors->unload('Wysiwyg.Wysiwyg');
-			if (! $this->saveField('export_key', $exportKey)) {
+			if (! $this->saveField('export_key', $exportKey, ['callbacks' => false])) {
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}
 			$this->commit();
