@@ -156,6 +156,9 @@ class QuestionnaireSaveQuestionnaireTest extends WorkflowSaveTest {
 		}
 
 		$data['Frame']['id'] = 6;
+
+		$data['Block']['id'] = '2';
+		$data['Block']['key'] = 'block_1';
 		return $data;
 	}
 

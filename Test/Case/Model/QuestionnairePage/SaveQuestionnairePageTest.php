@@ -74,6 +74,9 @@ class QuestionnaireSaveQuestionnairePageTest extends QuestionnairesSaveTest {
 		if (! is_null($key)) {
 			$data['QuestionnairePage'][0]['key'] = $key;
 		}
+
+		$data['Block']['id'] = '2';
+		$data['Block']['key'] = 'block_1';
 		return $data;
 	}
 

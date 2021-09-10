@@ -273,7 +273,9 @@ class QuestionnaireEditController extends QuestionnairesAppController {
 				// 集計結果編集画面からのPOSTの場合は無条件で上書き
 				// 質問編集画面からのPOSTは、発行後は書き換えない 未発行の場合はPostデータを上書き設定
 				if ($this->action == 'edit_result' || $this->Questionnaire->hasPublished($questionnaire) == 0) {
-					$questionnaire['QuestionnairePage'] = $accumulationPost['QuestionnairePage'];
+					// php7.4でSessionから取得できなかった場合、$accumulationPostがnullになり、
+					// Warningが発生する可能性がある。
+					$questionnaire['QuestionnairePage'] = $accumulationPost['QuestionnairePage'] ?? [];
 				} else {
 					// セッションから取り出しただけの状態（＝DBから読みだしただけの状態）のとき
 					$this->Questionnaire->clearQuestionnaireId($questionnaire, true);
