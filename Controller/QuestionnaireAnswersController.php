@@ -181,11 +181,6 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 				!isset($this->request->data['QuestionnairePage']['page_sequence'])) {
 				// 認証キーコンポーネントお約束：
 				if ($quest['is_key_pass_use'] == QuestionnairesComponent::USES_USE) {
-					$this->AuthorizationKey->contentId = $quest['id'];
-					$this->AuthorizationKey->guard(
-						AuthorizationKeyComponent::OPERATION_EMBEDDING,
-						'Questionnaire',
-						$this->__questionnaire);
 					$this->setAction('key_auth');
 					return;
 				}
@@ -208,6 +203,15 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
  * @return void
  */
 	public function key_auth() {
+		$this->AuthorizationKey->contentId = $this->__questionnaire['Questionnaire']['id'];
+		$this->AuthorizationKey->guard(
+			AuthorizationKeyComponent::OPERATION_EMBEDDING,
+			'Questionnaire',
+			$this->__questionnaire);
+		if ($this->request->is('ajax')) {
+			return;
+		}
+
 		$isKeyPassUse = $this->__questionnaire['Questionnaire']['is_key_pass_use'];
 		if ($isKeyPassUse != QuestionnairesComponent::USES_USE) {
 			$this->_redirectAnswerPage();
