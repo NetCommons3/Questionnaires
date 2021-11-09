@@ -15,5 +15,3 @@
 	array('ng-value' => 'page.pageSequence'));
 	echo $this->NetCommonsForm->hidden('QuestionnairePage.{{pageIndex}}.key',
 	array('ng-value' => 'page.key'));
-	$this->NetCommonsForm->hidden('QuestionnairePage.{{pageIndex}}.page_title',
-	array('ng-value' => 'page.pageTitle'));
