@@ -31,7 +31,7 @@ jobs:
     runs-on: ubuntu-18.04
     strategy:
       matrix:
-        php: [ '7.1', '7.2', '7.3', '7.4' ]
+        php: [ '7.2', '7.3', '7.4' ]
         mysql: [ '5.7', '8.0' ]
 
     env:
@@ -44,6 +44,7 @@ jobs:
         MYSQL_VERSION: ${{ matrix.mysql }}
         MYSQL_ROOT_PASSWORD: root
         MYSQL_DATABASE: cakephp_test
+        COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
       - uses: actions/checkout@v2

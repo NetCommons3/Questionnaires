@@ -325,7 +325,8 @@ class QuestionnaireAnswerControllerViewTest extends WorkflowControllerViewTest {
 			'action' => 'view',
 			'frame_id' => 6,
 			'block_id' => 2,
-			'key' => 'questionnaire_4'
+			'key' => 'questionnaire_4',
+			'?' => ['lang' => 'ja']
 		);
 		$assert = array('method' => 'assertTextContains', 'expected' => __d('questionnaires', 'This questionnaire is being temporarily stored . You can questionnaire test before performed in this page . If you want to modify or change the questionnaire , you will be able to edit by pressing the [ Edit question ] button in the upper-right corner .'));
 
