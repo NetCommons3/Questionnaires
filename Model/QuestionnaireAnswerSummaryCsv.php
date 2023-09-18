@@ -257,7 +257,12 @@ class QuestionnaireAnswerSummaryCsv extends QuestionnairesAppModel {
 		$cols = array();
 
 		$cols[] = $this->_getUserName($questionnaire, $summary);
-		$cols[] = $summary['QuestionnaireAnswerSummaryCsv']['modified'];
+		if (isset($summary['QuestionnaireAnswerSummaryCsv']['answer_time'])) {
+			$anserTime = $summary['QuestionnaireAnswerSummaryCsv']['answer_time'];
+		} else {
+			$anserTime = $summary['QuestionnaireAnswerSummaryCsv']['modified'];
+		}
+		$cols[] = $anserTime;
 		$cols[] = $summary['QuestionnaireAnswerSummaryCsv']['answer_number'];
 
 		foreach ($questionnaire['QuestionnairePage'] as $page) {
