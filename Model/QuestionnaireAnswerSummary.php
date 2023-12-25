@@ -113,11 +113,13 @@ class QuestionnaireAnswerSummary extends QuestionnairesAppModel {
  */
 	public function saveAnswerStatus($questionnaire, $summary, $status) {
 		$summary['QuestionnaireAnswerSummary']['answer_status'] = $status;
+		if ($status == QuestionnairesComponent::ACTION_ACT) {
+			// サマリの状態を完了にして確定する
+			$summary['QuestionnaireAnswerSummary']['answer_time'] = (new NetCommonsTime())->getNowDatetime();
+		}
 
 		if ($status == QuestionnairesComponent::ACTION_ACT &&
 			$questionnaire['Questionnaire']['is_answer_mail_send']) {
-			// サマリの状態を完了にして確定する
-			$summary['QuestionnaireAnswerSummary']['answer_time'] = (new NetCommonsTime())->getNowDatetime();
 			// メールのembed のURL設定を行っておく
 			$url = NetCommonsUrl::actionUrl(array(
 				'controller' => 'questionnaire_blocks',
