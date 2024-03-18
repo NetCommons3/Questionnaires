@@ -349,11 +349,15 @@ class QuestionnaireAnswersController extends QuestionnairesAppController {
 			}
 		}
 		if (! ($this->request->is('post') && $nextPageSeq == $postPageSeq)) {
-			$summary = $this->QuestionnairesOwnAnswer->getProgressiveSummaryOfThisUser(
-				$questionnaireKey);
-			$setAnswers = $this->QuestionnaireAnswer->getProgressiveAnswerOfThisSummary(
-				$questionnaire,
-				$summary);
+			if (empty($this->request->params['requested'])) {
+				$summary = $this->QuestionnairesOwnAnswer->getProgressiveSummaryOfThisUser(
+					$questionnaireKey);
+				$setAnswers = $this->QuestionnaireAnswer->getProgressiveAnswerOfThisSummary(
+					$questionnaire,
+					$summary);
+			} else {
+				$setAnswers = [];
+			}
 			$this->set('answers', $setAnswers);
 			$this->request->data['QuestionnaireAnswer'] = $setAnswers;
 
