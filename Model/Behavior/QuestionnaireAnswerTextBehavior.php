@@ -69,6 +69,7 @@ class QuestionnaireAnswerTextBehavior extends QuestionnaireAnswerBehavior {
  * @param array $question 回答データに対応する質問
  * @param array $allAnswers 入力された回答すべて
  * @return bool
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  */
 	public function answerTextValidation($model, $data, $question, $allAnswers) {
 		if (! in_array($question['question_type'], $this->_textValidateType)) {
@@ -77,7 +78,7 @@ class QuestionnaireAnswerTextBehavior extends QuestionnaireAnswerBehavior {
 		$ret = true;
 		// 数値型回答を望まれている場合
 		if ($question['question_type_option'] == QuestionnairesComponent::TYPE_OPTION_NUMERIC) {
-			if (!Validation::numeric($data['answer_value'])) {
+			if (mb_strlen($data['answer_value']) !== 0 && !Validation::numeric($data['answer_value'])) {
 				$ret = false;
 				$model->validationErrors['answer_value'][] = __d('questionnaires', 'Number required');
 			}
@@ -86,7 +87,7 @@ class QuestionnaireAnswerTextBehavior extends QuestionnaireAnswerBehavior {
 					$data['answer_value'],
 					intval($question['min']),
 					intval($question['max']));
-				if (!$rangeRes) {
+				if (mb_strlen($data['answer_value']) !== 0 && !$rangeRes) {
 					$ret = false;
 					$model->validationErrors['answer_value'][] = __d('questionnaires',
 						'Please enter the answer between %s and %s.',
