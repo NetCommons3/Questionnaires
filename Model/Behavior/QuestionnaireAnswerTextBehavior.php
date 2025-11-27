@@ -77,7 +77,7 @@ class QuestionnaireAnswerTextBehavior extends QuestionnaireAnswerBehavior {
 		$ret = true;
 		// 数値型回答を望まれている場合
 		if ($question['question_type_option'] == QuestionnairesComponent::TYPE_OPTION_NUMERIC) {
-			if (!Validation::numeric($data['answer_value'])) {
+			if (mb_strlen($data['answer_value']) !== 0 && !Validation::numeric($data['answer_value'])) {
 				$ret = false;
 				$model->validationErrors['answer_value'][] = __d('questionnaires', 'Number required');
 			}
@@ -86,7 +86,7 @@ class QuestionnaireAnswerTextBehavior extends QuestionnaireAnswerBehavior {
 					$data['answer_value'],
 					intval($question['min']),
 					intval($question['max']));
-				if (!$rangeRes) {
+				if (mb_strlen($data['answer_value']) !== 0 && !$rangeRes) {
 					$ret = false;
 					$model->validationErrors['answer_value'][] = __d('questionnaires',
 						'Please enter the answer between %s and %s.',
