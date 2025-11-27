@@ -30,8 +30,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: [ '7.2', '7.3', '7.4' ]
-        mysql: [ '5.7', '8.0' ]
+        php: [ '7.4' ]
+        mysql: [ '8.0' ]
 
     env:
         NC3_BUILD_DIR: "/opt/nc3"
