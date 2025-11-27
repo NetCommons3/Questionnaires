@@ -69,6 +69,7 @@ class QuestionnaireAnswerTextBehavior extends QuestionnaireAnswerBehavior {
  * @param array $question 回答データに対応する質問
  * @param array $allAnswers 入力された回答すべて
  * @return bool
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  */
 	public function answerTextValidation($model, $data, $question, $allAnswers) {
 		if (! in_array($question['question_type'], $this->_textValidateType)) {
